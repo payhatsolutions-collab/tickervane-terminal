@@ -1,0 +1,127 @@
+{
+  "origin": "https://tickervane.vercel.app",
+  "pages": [
+    {
+      "url": "https://tickervane.vercel.app/",
+      "status": 200,
+      "canonical_matches": true,
+      "indexable": true,
+      "h1_count": 1
+    },
+    {
+      "url": "https://tickervane.vercel.app/stock-prices.html",
+      "status": 200,
+      "canonical_matches": true,
+      "indexable": true,
+      "h1_count": 1
+    },
+    {
+      "url": "https://tickervane.vercel.app/stock-market-app.html",
+      "status": 200,
+      "canonical_matches": true,
+      "indexable": true,
+      "h1_count": 1
+    },
+    {
+      "url": "https://tickervane.vercel.app/stock-screener.html",
+      "status": 200,
+      "canonical_matches": true,
+      "indexable": true,
+      "h1_count": 1
+    },
+    {
+      "url": "https://tickervane.vercel.app/delivery-radar.html",
+      "status": 200,
+      "canonical_matches": true,
+      "indexable": true,
+      "h1_count": 1
+    },
+    {
+      "url": "https://tickervane.vercel.app/about.html",
+      "status": 200,
+      "canonical_matches": true,
+      "indexable": true,
+      "h1_count": 1
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/delivery-accumulation.html",
+      "status": 200,
+      "canonical_matches": true,
+      "indexable": true,
+      "h1_count": 1
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/volume-surge.html",
+      "status": 200,
+      "canonical_matches": true,
+      "indexable": true,
+      "h1_count": 1
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/20-day-breakout.html",
+      "status": 200,
+      "canonical_matches": true,
+      "indexable": true,
+      "h1_count": 1
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/near-52-week-high.html",
+      "status": 200,
+      "canonical_matches": true,
+      "indexable": true,
+      "h1_count": 1
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/relative-strength.html",
+      "status": 200,
+      "canonical_matches": true,
+      "indexable": true,
+      "h1_count": 1
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/minervini-trend-template.html",
+      "status": 200,
+      "canonical_matches": true,
+      "indexable": true,
+      "h1_count": 1
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens.html",
+      "status": 200,
+      "canonical_matches": true,
+      "indexable": true,
+      "h1_count": 1
+    },
+    {
+      "url": "https://tickervane.vercel.app/methodology.html",
+      "status": 200,
+      "canonical_matches": true,
+      "indexable": true,
+      "h1_count": 1
+    },
+    {
+      "url": "https://tickervane.vercel.app/pricing.html",
+      "status": 200,
+      "canonical_matches": true,
+      "indexable": true,
+      "h1_count": 1
+    }
+  ],
+  "old_origin": [
+    {
+      "url": "https://alphanova48.in/",
+      "status": 200,
+      "canonical": [
+        "https://tickervane.vercel.app/"
+      ]
+    },
+    {
+      "url": "https://alphanova48.in/about.html",
+      "status": 200,
+      "canonical": [
+        "https://tickervane.vercel.app/about.html"
+      ]
+    }
+  ],
+  "search_console": "User reports submitted and in progress. No authenticated inspection access; actual index status unverified."
+}

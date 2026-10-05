@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-05",
+  "deployment": "https://alphanova2-ma2ab75p2-wdcre.vercel.app",
+  "deploymentId": "dpl_Hn374GkeJDvzwGcqCxVRRBg8YmCs",
+  "rollback": "https://alphanova2-7vct8ner7-wdcre.vercel.app",
+  "build": "passed",
+  "tests": 197,
+  "stagedFeeds": {
+    "RELIANCE.NS": {
+      "bars": 251,
+      "signal": "Bearish",
+      "score": -5,
+      "currency": "INR"
+    },
+    "AAPL": {
+      "bars": 251,
+      "signal": "Bullish",
+      "score": 4,
+      "currency": "USD"
+    }
+  },
+  "checks": [
+    {
+      "origin": "https://alphanova48.in",
+      "status": 200,
+      "bundle": "/assets/index-EcHdXozl.js",
+      "bundleStatus": 200,
+      "exactBuildMatch": true,
+      "stylesStatus": 200
+    },
+    {
+      "origin": "https://tickervane.vercel.app",
+      "status": 200,
+      "bundle": "/assets/index-EcHdXozl.js",
+      "bundleStatus": 200,
+      "exactBuildMatch": true,
+      "stylesStatus": 200
+    }
+  ],
+  "ui": {
+    "origin": "https://alphanova48.in",
+    "watchlist": "signals and real OHLC candlesticks rendered",
+    "verifiedSignal": {
+      "symbol": "RELIANCE.NS",
+      "verdict": "Bearish",
+      "score": -5,
+      "lastCompleted": "2026-10-01"
+    },
+    "browserErrors": [],
+    "screenshot": "docs/watchlist-technicals-live-2026-10-05.png"
+  }
+}

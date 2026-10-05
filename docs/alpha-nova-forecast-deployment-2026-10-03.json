@@ -1,0 +1,101 @@
+{
+  "checkedAt": "2026-10-03T06:18:22.607Z",
+  "deployment": "dpl_Go86n9h5BoxMfs8ndc4QqS4s632y",
+  "deploymentUrl": "https://alphanova2-cykpknnvk-wdcre.vercel.app",
+  "productionOrigin": "https://tickervane.vercel.app",
+  "previousDeployment": "dpl_9tPAR3D6ZNJWbnQfvw25DRR73843",
+  "publicPages": [
+    {
+      "url": "https://tickervane.vercel.app/",
+      "status": 200,
+      "title": "Alpha Nova (AlphaNova) | Indian Stock Screener"
+    },
+    {
+      "url": "https://tickervane.vercel.app/stock-prices.html",
+      "status": 200,
+      "title": "Indian Stock Prices &amp; NSE Share Charts | Alpha Nova"
+    },
+    {
+      "url": "https://tickervane.vercel.app/stock-market-app.html",
+      "status": 200,
+      "title": "Free Stock Market App for India | Alpha Nova"
+    },
+    {
+      "url": "https://tickervane.vercel.app/stock-screener.html",
+      "status": 200,
+      "title": "Nifty 500 Stock Screener | Alpha Nova Terminal"
+    },
+    {
+      "url": "https://tickervane.vercel.app/delivery-radar.html",
+      "status": 200,
+      "title": "NSE Delivery Radar and Stock Delivery Analysis | Alpha Nova"
+    },
+    {
+      "url": "https://tickervane.vercel.app/about.html",
+      "status": 200,
+      "title": "About Alpha Nova | Stock Market App &amp; Data"
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/delivery-accumulation.html",
+      "status": 200,
+      "title": "Delivery accumulation screener | Alpha Nova"
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/volume-surge.html",
+      "status": 200,
+      "title": "Volume surge stock screener | Alpha Nova"
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/20-day-breakout.html",
+      "status": 200,
+      "title": "20-day breakout stock screener | Alpha Nova"
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/near-52-week-high.html",
+      "status": 200,
+      "title": "Near 52-week high stock screener | Alpha Nova"
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/relative-strength.html",
+      "status": 200,
+      "title": "Relative strength stock screener | Alpha Nova"
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/minervini-trend-template.html",
+      "status": 200,
+      "title": "Minervini trend template screener | Alpha Nova"
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens.html",
+      "status": 200,
+      "title": "Nifty 500 screener guides | Alpha Nova"
+    },
+    {
+      "url": "https://tickervane.vercel.app/methodology.html",
+      "status": 200,
+      "title": "Stock screener methodology and data | Alpha Nova"
+    },
+    {
+      "url": "https://tickervane.vercel.app/pricing.html",
+      "status": 200,
+      "title": "Alpha Nova pricing | Alpha Nova"
+    }
+  ],
+  "forecast": {
+    "chunk": "Forecast-_H91MhuX.js",
+    "chunkStatus": 200,
+    "symbol": "TCS.NS",
+    "adjusted": true,
+    "bars": 251,
+    "source": "Yahoo Finance"
+  },
+  "manifest": {
+    "name": "Alpha Nova Terminal",
+    "shortName": "Alpha Nova"
+  },
+  "previousDomain": {
+    "url": "https://alphanova48.in/",
+    "status": 200,
+    "updated": true
+  }
+}

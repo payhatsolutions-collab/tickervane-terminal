@@ -1,0 +1,53 @@
+/* Theme tokens override the original dark color fallbacks in styles.css. */
+:root { color-scheme: dark; }
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f4f7fb;
+  --text: #203047;
+  --muted: #56677e;
+  --line: #d5deea;
+  --panel: #ffffff;
+  --accent: #245ec9;
+  --green: #147653;
+  --red: #bb354b;
+  --theme-canvas: var(--bg);
+  --theme-surface: #ffffff;
+  --theme-subtle: #edf2f8;
+  --theme-selected: #dce8f8;
+  --theme-accent-surface: #c9dcff;
+  --theme-text: var(--text);
+  --theme-ink: #20334e;
+  --theme-muted: var(--muted);
+  --theme-accent: var(--accent);
+  --theme-border: var(--line);
+  --theme-accent-border: #9bb8e6;
+  --theme-positive: var(--green);
+  --theme-negative: var(--red);
+  --theme-warning: #8b620e;
+  --theme-purple: #7250b7;
+  --theme-positive-surface: #e3f3eb;
+  --theme-negative-surface: #fbe8ec;
+  --theme-warning-surface: #fff3d9;
+  --theme-purple-surface: #efe8fb;
+}
+
+.nav-bottom { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--line); }
+.nav-bottom .nav-refresh { margin-top: 6px; border-top: 0; }
+.theme-toggle { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 42px; padding: 9px 10px; border-radius: 8px; color: var(--text); font-size: 12px; text-align: left; }
+.theme-toggle:hover { background: var(--theme-subtle, #1b293c); color: var(--text); }
+.theme-toggle > svg { color: var(--accent); }
+.theme-switch-track { width: 30px; height: 18px; flex-shrink: 0; margin-left: auto; padding: 3px; border-radius: 20px; background: var(--line); }
+.theme-switch-track > span { display: block; width: 12px; height: 12px; border-radius: 50%; background: var(--muted); transition: transform .15s; }
+.theme-toggle[aria-checked="true"] .theme-switch-track { background: var(--accent); }
+.theme-toggle[aria-checked="true"] .theme-switch-track > span { transform: translateX(12px); background: #fff; }
+.navigation-menu-theme { border-top: 1px solid var(--line); margin-top: 16px; padding-top: 12px; }
+
+/* The expandable research guide is outside the React root. */
+:root[data-theme="light"] .site-overview { color: var(--text); background: var(--panel); }
+:root[data-theme="light"] .site-overview-grid article { background: var(--bg); border-color: var(--line); }
+:root[data-theme="light"] .site-overview-inner p { color: var(--muted); }
+:root[data-theme="light"] .site-overview-inner a,
+:root[data-theme="light"] .site-overview-kicker { color: var(--accent); }
+:root[data-theme="light"] .site-overview-inner a:hover { color: var(--text); }
+:root[data-theme="light"] .site-overview-note { color: var(--muted) !important; }
+@media (prefers-reduced-motion: reduce) { .theme-switch-track > span { transition: none; } }

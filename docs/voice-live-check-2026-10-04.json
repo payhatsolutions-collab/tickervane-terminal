@@ -1,0 +1,40 @@
+[
+  {
+    "domain": "https://alphanova48.in",
+    "status": 200,
+    "bundle": "assets/index-DCYbQ-Du.js",
+    "microphone": "camera=(), microphone=(self), geolocation=()"
+  },
+  {
+    "domain": "https://tickervane.vercel.app",
+    "status": 200,
+    "bundle": "assets/index-DCYbQ-Du.js",
+    "microphone": "camera=(), microphone=(self), geolocation=()"
+  },
+  {
+    "voiceOrigin": "https://alphanova48.in",
+    "status": 200,
+    "signedURL": true
+  },
+  {
+    "voiceOrigin": "https://evil.example",
+    "status": 403,
+    "signedURL": false,
+    "error": "Start Jarvis from the Alpha Nova website."
+  },
+  {
+    "path": "/voice/rawAudioProcessor.js",
+    "status": 200,
+    "type": "application/javascript; charset=utf-8"
+  },
+  {
+    "path": "/voice/audioConcatProcessor.js",
+    "status": 200,
+    "type": "application/javascript; charset=utf-8"
+  },
+  {
+    "path": "/voice/libsamplerate.js",
+    "status": 200,
+    "type": "application/javascript; charset=utf-8"
+  }
+]

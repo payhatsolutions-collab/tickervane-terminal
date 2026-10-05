@@ -1,0 +1,89 @@
+{
+  "date": "2026-10-04",
+  "deployment": "https://alphanova2-gfz9q7ug8-wdcre.vercel.app",
+  "deploymentId": "dpl_62iQAVMPxX9DLYsvyCbN8p8Zoans",
+  "status": "promoted",
+  "previousDeployment": "https://alphanova2-dxg7j9snk-wdcre.vercel.app",
+  "domains": [
+    "https://alphanova48.in",
+    "https://tickervane.vercel.app"
+  ],
+  "agentId": "agent_3001m42njx9vev4a29trqvnx9vd0",
+  "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+  "name": "Alpha Nova — Jarvis",
+  "auth": "signed URL",
+  "maxDurationSeconds": 180,
+  "dailyLimit": 20,
+  "concurrency": 2,
+  "tests": {
+    "passed": 196,
+    "failed": 0
+  },
+  "build": "passed locally and on Vercel",
+  "credential": "Existing Jarvis key, explicitly approved for Vercel Production and Preview; server-only Secret; browser build credential scan clean",
+  "providerVerification": {
+    "voiceConnection": "passed",
+    "events": [
+      "conversation_initiation_metadata",
+      "agent_chat_response_part",
+      "audio",
+      "agent_response",
+      "ping"
+    ],
+    "audioBytes": 188808,
+    "microphone": "No user microphone used; server-generated greeting audio verified"
+  },
+  "browserChecks": [
+    "text chat connection and metric answer",
+    "Reliance chart navigation",
+    "Nifty quote with currency, source and timestamp",
+    "voice session using synthetic microphone and forced resampling under production CSP",
+    "microphone mute and session end",
+    "phone layout fits 390 x 844",
+    "Live alphanova48.in text session connected with greeting and no browser errors"
+  ],
+  "liveChecks": [
+    {
+      "domain": "https://alphanova48.in",
+      "status": 200,
+      "bundle": "assets/index-DCYbQ-Du.js",
+      "microphone": "camera=(), microphone=(self), geolocation=()"
+    },
+    {
+      "domain": "https://tickervane.vercel.app",
+      "status": 200,
+      "bundle": "assets/index-DCYbQ-Du.js",
+      "microphone": "camera=(), microphone=(self), geolocation=()"
+    },
+    {
+      "voiceOrigin": "https://alphanova48.in",
+      "status": 200,
+      "signedURL": true
+    },
+    {
+      "voiceOrigin": "https://evil.example",
+      "status": 403,
+      "signedURL": false,
+      "error": "Start Jarvis from the Alpha Nova website."
+    },
+    {
+      "path": "/voice/rawAudioProcessor.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/voice/audioConcatProcessor.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/voice/libsamplerate.js",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8"
+    }
+  ],
+  "screenshots": [
+    "voice-live-2026-10-04.jpg",
+    "voice-mobile-preview-2026-10-04.jpg"
+  ]
+}

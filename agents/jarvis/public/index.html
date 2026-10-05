@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jarvis</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='13' fill='none' stroke='%237c9cf0' stroke-width='2.5'/><circle cx='16' cy='16' r='4' fill='%237c9cf0'/></svg>">
+<style>
+:root{
+  --bg:#0a0d12; --panel:#10151d; --raised:#151c26; --line:#212b38;
+  --text:#e7ecf4; --muted:#8a97ab; --dim:#5f6b7d;
+  --accent:#7c9cf0; --green:#54cf9b; --amber:#e8b86a; --red:#f07f8d;
+  --mono:'SF Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--text); font-size:14px; line-height:1.5;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2,h3,h4,p{margin:0}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ── shell ─────────────────────────────────────────────── */
+header{
+  position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:14px;
+  padding:14px 22px;background:#0c1118;border-bottom:1px solid var(--line);
+}
+.mark{width:26px;height:26px;flex-shrink:0}
+.title{font-size:15px;font-weight:650;letter-spacing:-.2px}
+.title span{color:var(--muted);font-weight:400;margin-left:8px;font-size:12px;letter-spacing:.3px}
+.spacer{flex:1}
+.sync{font-size:11px;color:var(--dim);font-family:var(--mono)}
+.icon-btn{width:30px;height:30px;display:grid;place-content:center;border-radius:6px;color:var(--muted)}
+.icon-btn:hover{background:var(--raised);color:var(--text)}
+main{max-width:1180px;margin:0 auto;padding:20px 22px 60px}
+
+.grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:18px;align-items:start}
+section{min-width:0;display:flex;flex-direction:column;gap:10px}
+.label{font-size:10px;letter-spacing:1.1px;text-transform:uppercase;color:var(--dim);font-weight:650}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}
+
+/* ── now ───────────────────────────────────────────────── */
+.now{border-left:3px solid var(--line)}
+.now.notable{border-left-color:var(--accent)}
+.now.elevated{border-left-color:var(--amber)}
+.now.urgent{border-left-color:var(--red)}
+.now .sev{font-size:10px;letter-spacing:.8px;text-transform:uppercase;font-weight:650;color:var(--muted)}
+.now.notable .sev{color:var(--accent)} .now.elevated .sev{color:var(--amber)} .now.urgent .sev{color:var(--red)}
+.now h4{font-size:14px;font-weight:600;margin:6px 0 4px;line-height:1.4}
+.now p{font-size:12.5px;color:#aab6c8;margin:0}
+.quiet{border:1px dashed var(--line);background:transparent}
+.quiet p{color:var(--muted);font-size:13px}
+.quiet small{color:var(--dim);display:block;margin-top:5px;line-height:1.55}
+
+/* ── agents ────────────────────────────────────────────── */
+.agent{display:grid;grid-template-columns:8px 78px 1fr auto auto;align-items:center;gap:9px;
+  padding:7px 10px;border-radius:7px;font-size:12px}
+.agent+.agent{margin-top:2px}
+.agent:nth-child(odd){background:#0d131b}
+.agent i{width:7px;height:7px;border-radius:50%;background:#3b4656}
+.agent.ok i{background:var(--green)} .agent.running i{background:var(--accent)}
+.agent.degraded i{background:var(--amber)} .agent.error i{background:var(--red)}
+.agent b{font-weight:600}
+.agent>span,.agent>small{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.agent small{font-size:11px;font-family:var(--mono);color:var(--dim)}
+.agent .why{color:var(--amber);max-width:160px}
+
+.meter{height:5px;border-radius:3px;background:#1c2431;overflow:hidden;margin:8px 0 6px}
+.meter i{display:block;height:100%;background:var(--green);transition:width .4s}
+.budget.degraded .meter i{background:var(--amber)}
+.budget.critical .meter i{background:var(--red)}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:11px;color:var(--muted)}
+
+/* ── approvals ─────────────────────────────────────────── */
+.await{border-color:#3a4354;background:var(--raised)}
+.await h4{font-size:13px;font-weight:600;line-height:1.4}
+.await .meta{font-size:11px;color:var(--muted);margin-top:3px}
+.await .acts{display:flex;gap:8px;margin-top:11px}
+.btn{padding:6px 14px;border-radius:6px;font-size:12px;font-weight:500;border:1px solid var(--line)}
+.btn:hover{background:#1b2331}
+.btn.go{background:#1d3a2c;border-color:#2c5a43;color:#8fe3bb}
+.btn.go:hover{background:#245040}
+.ticket{margin-top:10px;padding:10px;border-radius:7px;background:#0a0e14;border:1px solid var(--line);
+  font-family:var(--mono);font-size:11px;color:#aab6c8;white-space:pre-wrap;word-break:break-word;max-height:220px;overflow:auto}
+.note{font-size:11px;color:var(--dim);line-height:1.55;margin-top:8px}
+
+/* ── stream ────────────────────────────────────────────── */
+.stream{margin-top:22px}
+.stream-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.filters{display:flex;gap:4px;flex-wrap:wrap}
+.filters button{padding:5px 11px;border-radius:6px;font-size:11px;color:var(--muted);border:1px solid transparent}
+.filters button:hover{color:var(--text)}
+.filters button.on{background:var(--raised);border-color:#2c3644;color:var(--text)}
+
+.sig{border-radius:8px}
+.sig-head{display:grid;grid-template-columns:12px 44px 66px 64px minmax(0,1fr) auto;align-items:center;
+  gap:9px;width:100%;text-align:left;padding:9px 10px;border-radius:8px}
+.sig-head:hover{background:var(--panel)}
+.sig-head .tw{color:var(--dim);font-size:11px;font-family:var(--mono)}
+.sig-head .ag{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.sig-head h4{font-size:12.5px;font-weight:400;line-height:1.45;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sig-head .cf{font-size:10px;color:var(--dim);font-family:var(--mono)}
+.chev{color:var(--dim);font-size:10px;transition:transform .15s}
+.sig.open .chev{transform:rotate(90deg)}
+.pill{font-size:9px;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px;border-radius:4px;
+  text-align:center;background:#1a222e;color:var(--dim)}
+.pill.notable{background:#182643;color:var(--accent)}
+.pill.elevated{background:#332a18;color:var(--amber)}
+.pill.urgent{background:#38202a;color:var(--red)}
+.sig-body{padding:0 10px 14px 43px}
+.sig-body pre{margin:0 0 10px;font-family:inherit;font-size:12.5px;color:#aab6c8;
+  line-height:1.6;white-space:pre-wrap;word-break:break-word}
+.subj{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px}
+.subj span{font-size:10px;padding:2px 7px;border-radius:4px;background:#1a222e;color:var(--muted);font-family:var(--mono)}
+
+.ev{list-style:none;margin:0;padding:0 0 0 11px;border-left:2px solid var(--line);
+  display:flex;flex-direction:column;gap:5px}
+.ev li{display:flex;align-items:baseline;gap:9px;font-size:11.5px;flex-wrap:wrap}
+.ev .what{display:inline-flex;align-items:baseline;gap:6px;flex-shrink:0;font-family:var(--mono)}
+.ev .what b{font-weight:600}
+.ev .what em{font-style:normal;color:#aab6c8}
+.ev .up{color:var(--green)} .ev .down{color:var(--red)} .ev .neutral{color:var(--dim)}
+.ev .src{color:var(--muted);min-width:0;overflow:hidden;text-overflow:ellipsis}
+.ev time{margin-left:auto;font-size:10px;color:var(--dim);font-family:var(--mono)}
+.stale{font-size:10px;color:var(--amber)}
+
+.empty{text-align:center;padding:40px 20px;color:var(--muted)}
+.empty h3{font-size:14px;font-weight:600;margin-bottom:6px;color:var(--text)}
+.empty p{font-size:12.5px;line-height:1.6}
+.empty code{font-family:var(--mono);font-size:11.5px;background:var(--raised);
+  padding:3px 7px;border-radius:5px;display:inline-block;margin-top:9px}
+.err{border-color:#4a2c33;background:#1a1216}
+footer{max-width:1180px;margin:0 auto;padding:0 22px 40px;color:var(--dim);font-size:11px;line-height:1.7}
+
+@media (max-width:880px){
+  .grid{grid-template-columns:minmax(0,1fr)}
+  main,footer,header{padding-left:16px;padding-right:16px}
+  .sig-head{grid-template-columns:12px 42px 1fr auto;row-gap:4px}
+  .sig-head .ag{grid-column:3}
+  .sig-head h4{grid-column:1/-1;white-space:normal}
+  .sig-body{padding-left:16px}
+  .agent{grid-template-columns:8px 70px 1fr auto auto}
+  .agent .why{max-width:90px}
+}
+</style>
+</head>
+<body>
+<header>
+  <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">
+    <circle cx="16" cy="16" r="13" fill="none" stroke="#7c9cf0" stroke-width="2.5"/>
+    <circle cx="16" cy="16" r="4" fill="#7c9cf0"/>
+  </svg>
+  <div class="title">Jarvis<span>Chief of Staff</span></div>
+  <div class="spacer"></div>
+  <div class="sync" id="sync">connecting…</div>
+  <button class="icon-btn" id="refresh" title="Refresh" aria-label="Refresh">⟳</button>
+</header>
+
+<main>
+  <div id="error"></div>
+  <div class="grid">
+    <section>
+      <div class="label">Now</div>
+      <div id="now"></div>
+      <div class="label" style="margin-top:8px">Latest brief</div>
+      <div id="brief"></div>
+    </section>
+    <section>
+      <div class="label">Agents</div>
+      <div class="card" id="agents"></div>
+      <div id="budget"></div>
+      <div class="label" style="margin-top:8px">Awaiting you <span id="pendcount"></span></div>
+      <div id="await"></div>
+    </section>
+  </div>
+
+  <div class="stream">
+    <div class="stream-head">
+      <div class="label">Signal stream</div>
+      <div class="filters" id="filters"></div>
+    </div>
+    <div id="stream"></div>
+  </div>
+</main>
+
+<footer>
+  Every signal carries the evidence behind it — expand one to see sources, values and timestamps.
+  Approving records your decision and prints the ticket; Jarvis never transmits an order.
+  This dashboard is served by the Jarvis daemon on your machine and is not reachable from the network.
+</footer>
+
+<script>
+const AGENTS = ['macro','options','momentum','errands','jarvis'];
+const RANK = {urgent:0, elevated:1, notable:2, routine:3};
+const POLL = 20000;
+
+let filter = '';
+let open = new Set();
+let tickets = {};
+let timer = null;
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c =>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ist = ts => {
+  const t = Date.parse(ts);
+  return Number.isFinite(t)
+    ? new Date(t).toLocaleTimeString('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit'})
+    : '';
+};
+const ago = ts => {
+  const s = Math.max(0, Math.round((Date.now() - Date.parse(ts))/1000));
+  return s < 60 ? s+'s ago' : s < 3600 ? Math.round(s/60)+'m ago' : Math.round(s/3600)+'h ago';
+};
+const num = n => Number.isFinite(n) ? n.toLocaleString('en-IN',{maximumFractionDigits:2}) : n;
+
+async function api(path, options) {
+  const r = await fetch(path, options);
+  const j = await r.json();
+  if (!r.ok) throw new Error(j.error || ('Request failed ('+r.status+')'));
+  return j;
+}
+
+/* ── render ──────────────────────────────────────────── */
+
+function evidenceHTML(list) {
+  if (!list || !list.length) return '';
+  return '<ul class="ev">' + list.map(e => {
+    const bits = [];
+    if (e.symbol) bits.push('<b>'+esc(e.symbol)+'</b>');
+    if (e.value !== undefined && e.value !== null) bits.push('<em>'+esc(num(e.value))+'</em>');
+    if (Number.isFinite(e.changePct))
+      bits.push('<span class="'+(e.changePct>=0?'up':'down')+'">'+(e.changePct>=0?'+':'')+e.changePct+'%</span>');
+    if (Number.isFinite(e.sigma))
+      bits.push('<span class="neutral">'+(e.sigma>=0?'+':'')+e.sigma.toFixed(2)+'σ</span>');
+    if (e.agreed !== undefined)
+      bits.push('<span class="'+(e.agreed?'up':'down')+'">'+(e.agreed?'aligned':'against')+'</span>');
+    // Only https survives here; anything else renders as plain text.
+    const safe = typeof e.url === 'string' && e.url.startsWith('https://');
+    const src = safe
+      ? '<a class="src" href="'+esc(e.url)+'" target="_blank" rel="noreferrer noopener">'+esc(e.title || e.source)+' ↗</a>'
+      : '<span class="src">'+esc(e.title || e.source)+'</span>';
+    const when = e.publishedAt || e.fetchedAt;
+    return '<li><span class="what">'+bits.join(' ')+'</span>'+src+
+      (when ? '<time>'+ist(when)+'</time>' : '')+'</li>';
+  }).join('') + '</ul>';
+}
+
+function renderNow(signals) {
+  const top = signals.filter(s => s.severity !== 'routine')
+    .sort((a,b) => (RANK[a.severity]-RANK[b.severity]) || (Date.parse(b.ts)-Date.parse(a.ts)))
+    .slice(0,3);
+  if (!top.length) {
+    $('now').innerHTML = '<div class="card quiet"><p>Nothing above routine.</p>' +
+      '<small>Most hours are routine. The materiality gate reports that rather than manufacturing a story.</small></div>';
+    return;
+  }
+  $('now').innerHTML = top.map(s =>
+    '<div class="card now '+s.severity+'" style="margin-bottom:8px">' +
+      '<div class="sev">'+s.severity+'</div>' +
+      '<h4>'+esc(s.title)+'</h4>' +
+      '<p>'+esc(String(s.body||'').split('\n')[0])+'</p>' +
+      evidenceHTML(s.evidence) +
+    '</div>').join('');
+}
+
+function renderBrief(b) {
+  if (!b || b.total === undefined) { $('brief').innerHTML = ''; return; }
+  const gap = b.coverage !== 'complete'
+    ? '<p class="note" style="color:var(--amber)">⚠ '+esc(b.coverage)+'</p>' : '';
+  $('brief').innerHTML = '<div class="card">' +
+    '<h4 style="font-size:13px;font-weight:600">'+esc(b.label)+'</h4>' +
+    '<div class="row" style="margin-top:4px"><span>'+ist(b.window.from)+'–'+ist(b.window.to)+' IST</span>' +
+    '<span class="mono">'+b.total+' signal'+(b.total===1?'':'s')+'</span></div>' + gap + '</div>';
+}
+
+function renderAgents(h) {
+  const by = new Map((h.agents||[]).map(a => [a.agent, a]));
+  $('agents').innerHTML = AGENTS.map(name => {
+    const a = by.get(name);
+    const cls = !a ? '' : a.status === 'ok' ? 'ok' : a.status === 'running' ? 'running'
+      : a.status === 'error' || a.status === 'timeout' ? 'error' : a.error ? 'degraded' : '';
+    const right = a && a.error ? '<small class="why" title="'+esc(a.error)+'">'+esc(a.error)+'</small>'
+      : a && a.signals ? '<small>'+a.signals+' sig</small>' : '<small></small>';
+    return '<div class="agent '+cls+'"><i></i><b>'+name+'</b>' +
+      '<span>'+esc(a ? (a.status + (a.intent ? ' · '+a.intent : '')) : 'not built yet')+'</span>' +
+      '<small>'+(a && a.startedAt ? ist(a.startedAt) : '')+'</small>'+right+'</div>';
+  }).join('');
+
+  const b = h.budget || {};
+  const pct = b.limit ? Math.min(100, Math.round(b.tokens/b.limit*100)) : 0;
+  $('budget').innerHTML = '<div class="card budget '+(b.level||'ok')+'">' +
+    '<div class="row"><span>Today’s budget</span>' +
+    '<span class="mono">'+(b.tokens||0).toLocaleString('en-IN')+' / '+(b.limit||0).toLocaleString('en-IN')+'</span></div>' +
+    '<div class="meter"><i style="width:'+pct+'%"></i></div>' +
+    '<div class="row"><span>'+(b.runs||0)+' runs · '+(b.toolCalls||0)+' tool calls</span>' +
+    '<span>'+(b.level && b.level!=='ok' ? 'cadence '+b.level : '')+'</span></div></div>';
+}
+
+function renderAwaiting(pending) {
+  $('pendcount').textContent = pending.length ? '('+pending.length+')' : '';
+
+  const cards = pending.map(s =>
+    '<div class="card await" style="margin-bottom:8px">' +
+      '<h4>'+esc(s.title)+'</h4>' +
+      '<div class="meta">'+esc(s.action.type)+' · '+ist(s.ts)+' IST</div>' +
+      (s.body ? '<p class="note">'+esc(s.body)+'</p>' : '') +
+      '<div class="acts">' +
+        '<button class="btn go" data-decide="approve" data-id="'+esc(s.id)+'">Approve</button>' +
+        '<button class="btn" data-decide="dismiss" data-id="'+esc(s.id)+'">Dismiss</button>' +
+      '</div>' +
+    '</div>');
+
+  // An approved proposal leaves the pending queue, but its ticket is the whole
+  // point of approving — it has to stay on screen until you have placed it.
+  // These cards persist until dismissed by hand.
+  const approved = Object.values(tickets).map(t =>
+    '<div class="card await" style="margin-bottom:8px;border-color:#2c5a43">' +
+      '<h4>'+esc(t.title)+'</h4>' +
+      '<div class="meta" style="color:#8fe3bb">Approved '+ist(t.at)+' IST — not sent anywhere</div>' +
+      '<div class="ticket">'+esc(JSON.stringify(t.ticket, null, 2))+'</div>' +
+      '<p class="note">Place this yourself. Jarvis records the decision and never transmits an order.</p>' +
+      '<div class="acts"><button class="btn" data-clear="'+esc(t.id)+'">Done</button></div>' +
+    '</div>');
+
+  $('await').innerHTML = (cards.length || approved.length)
+    ? approved.join('') + cards.join('')
+    : '<p class="note">No proposals pending. Approving records your decision and shows the ' +
+      'order ticket — it never places an order.</p>';
+}
+
+function renderStream(signals) {
+  if (!signals.length) {
+    $('stream').innerHTML = '<div class="empty"><h3>No signals yet</h3>' +
+      '<p>Start the daemon, or run one scan by hand:</p>' +
+      '<code>npm run jarvis -- run macro overnight_wrap</code></div>';
+    return;
+  }
+  $('stream').innerHTML = signals.map(s => {
+    const isOpen = open.has(s.id);
+    const expired = s.expiresAt && Date.parse(s.expiresAt) < Date.now();
+    return '<div class="sig'+(isOpen?' open':'')+'">' +
+      '<button class="sig-head" data-sig="'+esc(s.id)+'" aria-expanded="'+isOpen+'">' +
+        '<span class="chev">›</span>' +
+        '<span class="tw">'+ist(s.ts)+'</span>' +
+        '<span class="ag">'+esc(s.agent)+'</span>' +
+        '<span class="pill '+s.severity+'">'+s.severity+'</span>' +
+        '<h4>'+esc(s.title)+'</h4>' +
+        '<span class="cf">'+(Number.isFinite(s.confidence)?Math.round(s.confidence*100)+'%':'')+
+          (expired?' <span class="stale">stale</span>':'')+'</span>' +
+      '</button>' +
+      (isOpen ? '<div class="sig-body">' +
+        (s.body ? '<pre>'+esc(s.body)+'</pre>' : '') +
+        (s.subjects && s.subjects.length
+          ? '<div class="subj">'+s.subjects.map(x=>'<span title="'+esc(x.type)+'">'+esc(x.ref)+'</span>').join('')+'</div>'
+          : '') +
+        evidenceHTML(s.evidence) + '</div>' : '') +
+    '</div>';
+  }).join('');
+}
+
+function renderFilters() {
+  $('filters').innerHTML = ['', ...AGENTS].map(a =>
+    '<button data-filter="'+a+'" class="'+(filter===a?'on':'')+'">'+(a||'all')+'</button>').join('');
+}
+
+/* ── load ────────────────────────────────────────────── */
+
+async function load() {
+  try {
+    const q = '/api/signals?limit=80' + (filter ? '&agent='+encodeURIComponent(filter) : '');
+    const [sig, health, brief] = await Promise.all([
+      api(q), api('/api/health'), api('/api/brief').catch(() => null)
+    ]);
+    $('error').innerHTML = '';
+    renderNow(sig.signals);
+    renderStream(sig.signals);
+    renderAgents(health);
+    renderAwaiting(sig.pending || []);
+    renderBrief(brief);
+    $('sync').textContent = 'synced ' + ago(sig.updatedAt);
+  } catch (e) {
+    $('error').innerHTML = '<div class="card err" style="margin-bottom:16px">' +
+      '<h4 style="font-size:13px;font-weight:600">Jarvis daemon unreachable</h4>' +
+      '<p class="note">'+esc(e.message)+' — is the daemon running?</p></div>';
+    $('sync').textContent = 'offline';
+  }
+}
+
+/* One delegated listener rather than per-card handlers, so re-rendering the
+   whole list does not leak listeners. */
+document.addEventListener('click', async ev => {
+  const sig = ev.target.closest('[data-sig]');
+  if (sig) {
+    const id = sig.dataset.sig;
+    open.has(id) ? open.delete(id) : open.add(id);
+    return load();
+  }
+  const f = ev.target.closest('[data-filter]');
+  if (f) { filter = f.dataset.filter; renderFilters(); return load(); }
+
+  const clear = ev.target.closest('[data-clear]');
+  if (clear) { delete tickets[clear.dataset.clear]; return load(); }
+
+  const d = ev.target.closest('[data-decide]');
+  if (d) {
+    const { decide, id } = d.dataset;
+    if (decide === 'approve' && !confirm('Approve this proposal?\n\nThis records your decision and shows the order ticket. It does not place an order.')) return;
+    const title = d.closest('.await')?.querySelector('h4')?.textContent || id;
+    try {
+      const r = await api('/api/decide', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ signalId: id, decision: decide })
+      });
+      if (r.ticket) tickets[id] = { id, title, ticket: r.ticket, at: new Date().toISOString() };
+      await load();
+    } catch (e) { alert(e.message); }
+  }
+});
+
+$('refresh').addEventListener('click', load);
+
+/* Poll only while visible — a hidden tab should cost nothing. */
+function schedule() {
+  clearTimeout(timer);
+  if (document.visibilityState === 'visible') timer = setTimeout(tick, POLL);
+}
+async function tick() { await load(); schedule(); }
+document.addEventListener('visibilitychange', () => {
+  clearTimeout(timer);
+  if (document.visibilityState === 'visible') tick();
+});
+
+renderFilters();
+tick();
+</script>
+</body>
+</html>

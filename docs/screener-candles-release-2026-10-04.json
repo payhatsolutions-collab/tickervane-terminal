@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-04",
+  "deployment": "https://alphanova2-dxg7j9snk-wdcre.vercel.app",
+  "deploymentId": "dpl_7BZQBzr226AZuGvdFkmrGstmBsjY",
+  "status": "promoted",
+  "domains": ["https://alphanova48.in", "https://tickervane.vercel.app"],
+  "previousDeployment": "https://alphanova2-myzc1550p-wdcre.vercel.app",
+  "tests": {"passed": 188, "failed": 0},
+  "build": "passed locally and on Vercel",
+  "liveChecks": {
+    "bothDomainBundles": "index-BhqfI7s1.js",
+    "OHLC": {"symbol": "AETHER.NS", "bars": 251, "lastDate": "2026-10-01", "complete": true},
+    "screener": "Candlestick snapshots render beside stock names; enlarged preview opens without leaving the screener"
+  },
+  "browserChecks": ["desktop thumbnails", "enlarged chart", "1M and 3M daily candles", "1Y calendar-week OHLC aggregation", "mobile enlarged preview and period controls"],
+  "screenshots": ["screener-candles-live-2026-10-04.png", "screener-candles-expanded-live-2026-10-04.png"],
+  "data": "Real Yahoo Finance daily OHLC. History requests are limited to visible rows with three concurrent requests and reuse the existing client cache."
+}

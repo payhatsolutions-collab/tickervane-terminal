@@ -1,0 +1,163 @@
+{
+  "deployment": "dpl_6UtmPe1eKhYRTGSSsMKQc7tP4tz8",
+  "origin": "https://tickervane.vercel.app",
+  "testsPassed": 178,
+  "checks": [
+    {
+      "path": "/",
+      "status": 200,
+      "title": "TickerVane — Indian Stock Screener &amp; Market Research",
+      "canonical": "https://tickervane.vercel.app/"
+    },
+    {
+      "path": "/sitemap.xml",
+      "status": 200,
+      "urls": [
+        "https://tickervane.vercel.app/",
+        "https://tickervane.vercel.app/stock-prices.html",
+        "https://tickervane.vercel.app/stock-market-app.html",
+        "https://tickervane.vercel.app/stock-screener.html",
+        "https://tickervane.vercel.app/delivery-radar.html",
+        "https://tickervane.vercel.app/about.html",
+        "https://tickervane.vercel.app/screens/delivery-accumulation.html",
+        "https://tickervane.vercel.app/screens/volume-surge.html",
+        "https://tickervane.vercel.app/screens/20-day-breakout.html",
+        "https://tickervane.vercel.app/screens/near-52-week-high.html",
+        "https://tickervane.vercel.app/screens/relative-strength.html",
+        "https://tickervane.vercel.app/screens/minervini-trend-template.html",
+        "https://tickervane.vercel.app/screens.html",
+        "https://tickervane.vercel.app/methodology.html",
+        "https://tickervane.vercel.app/pricing.html"
+      ]
+    },
+    {
+      "path": "/robots.txt",
+      "status": 200,
+      "body": "User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: https://tickervane.vercel.app/sitemap.xml\n"
+    },
+    {
+      "path": "/manifest.webmanifest",
+      "status": 200,
+      "name": "TickerVane Terminal"
+    },
+    {
+      "path": "/stock-market-app.html",
+      "status": 200
+    },
+    {
+      "path": "/screens/volume-surge.html",
+      "status": 200
+    },
+    {
+      "path": "/icon-192.png",
+      "status": 200
+    },
+    {
+      "path": "/api/market?op=quotes&symbols=RELIANCE.NS",
+      "status": 200,
+      "keys": [
+        "quotes",
+        "errors",
+        "fetchedAt"
+      ],
+      "hasReliance": true
+    },
+    {
+      "path": "/api/push?op=vapid",
+      "status": 200,
+      "configured": true
+    }
+  ],
+  "canonicalPages": [
+    {
+      "url": "https://tickervane.vercel.app/",
+      "status": 200,
+      "canonicalMatches": true,
+      "newBrand": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/stock-prices.html",
+      "status": 200,
+      "canonicalMatches": true,
+      "newBrand": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/stock-market-app.html",
+      "status": 200,
+      "canonicalMatches": true,
+      "newBrand": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/stock-screener.html",
+      "status": 200,
+      "canonicalMatches": true,
+      "newBrand": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/delivery-radar.html",
+      "status": 200,
+      "canonicalMatches": true,
+      "newBrand": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/about.html",
+      "status": 200,
+      "canonicalMatches": true,
+      "newBrand": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/delivery-accumulation.html",
+      "status": 200,
+      "canonicalMatches": true,
+      "newBrand": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/volume-surge.html",
+      "status": 200,
+      "canonicalMatches": true,
+      "newBrand": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/20-day-breakout.html",
+      "status": 200,
+      "canonicalMatches": true,
+      "newBrand": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/near-52-week-high.html",
+      "status": 200,
+      "canonicalMatches": true,
+      "newBrand": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/relative-strength.html",
+      "status": 200,
+      "canonicalMatches": true,
+      "newBrand": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/minervini-trend-template.html",
+      "status": 200,
+      "canonicalMatches": true,
+      "newBrand": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens.html",
+      "status": 200,
+      "canonicalMatches": true,
+      "newBrand": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/methodology.html",
+      "status": 200,
+      "canonicalMatches": true,
+      "newBrand": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/pricing.html",
+      "status": 200,
+      "canonicalMatches": true,
+      "newBrand": true
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "voiceConnection": "passed",
+  "events": [
+    "conversation_initiation_metadata",
+    "agent_chat_response_part",
+    "audio",
+    "agent_response",
+    "ping"
+  ],
+  "audioBytes": 188808,
+  "microphone": "No user microphone used; server-generated greeting audio verified"
+}

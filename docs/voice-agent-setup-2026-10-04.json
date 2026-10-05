@@ -1,0 +1,9 @@
+{
+  "agentId": "agent_3001m42njx9vev4a29trqvnx9vd0",
+  "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+  "name": "Alpha Nova — Jarvis",
+  "auth": "signed URL",
+  "maxDurationSeconds": 180,
+  "dailyLimit": 20,
+  "concurrency": 2
+}

@@ -1,0 +1,17 @@
+node_modules
+tests
+README.md
+.env*
+.claude
+agents
+docs
+
+*.mp4
+reel*_gen.py
+
+*.docx
+reel_fresh.py
+
+outputs
+
+back-navigation-preview.png

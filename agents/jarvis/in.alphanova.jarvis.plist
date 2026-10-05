@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Jarvis daemon. Install with:
+    cp agents/jarvis/in.alphanova.jarvis.plist ~/Library/LaunchAgents/
+    launchctl load  ~/Library/LaunchAgents/in.alphanova.jarvis.plist
+
+  Stop / restart:
+    launchctl unload ~/Library/LaunchAgents/in.alphanova.jarvis.plist
+    launchctl kickstart -k gui/$(id -u)/in.alphanova.jarvis
+
+  The daemon owns its own scheduler, so there is no StartCalendarInterval here:
+  the schedule lives in schedule.json where it is data and can be tested.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>in.alphanova.jarvis</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/sarda/.local/bin/node</string>
+    <string>/Users/sarda/Downloads/alphanova-terminal/agents/jarvis/runtime.mjs</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>/Users/sarda/Downloads/alphanova-terminal</string>
+
+  <key>RunAtLoad</key>
+  <true/>
+
+  <!-- Restart on crash. Combined with the daemon's own SIGTERM handling, an
+       unload is graceful and an unexpected exit is recovered. -->
+  <key>KeepAlive</key>
+  <true/>
+
+  <!-- Back off before restarting, so a crash-on-startup bug does not spin. -->
+  <key>ThrottleInterval</key>
+  <integer>30</integer>
+
+  <key>StandardOutPath</key>
+  <string>/Users/sarda/.alphanova/logs/launchd.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/sarda/.alphanova/logs/launchd.err.log</string>
+
+  <!-- launchd does not inherit a login shell's PATH. Secrets are NOT passed
+       here: the daemon reads them from the Keychain at start (config.mjs). -->
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/Users/sarda/.local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+
+  <key>ProcessType</key>
+  <string>Background</string>
+</dict>
+</plist>

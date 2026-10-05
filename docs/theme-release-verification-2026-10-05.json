@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-05",
+  "deployment": "https://alphanova2-q70sbjg6k-wdcre.vercel.app",
+  "deploymentId": "dpl_FqyYeHzgZu61CLe4Eg1qjqzSZp13",
+  "rollback": "https://alphanova2-dxg7j9snk-wdcre.vercel.app",
+  "tests": 188,
+  "build": "passed",
+  "checks": [
+    {
+      "origin": "https://alphanova48.in",
+      "status": 200,
+      "themeScriptStatus": 200,
+      "bundle": "/assets/index-BfzhrZ_s.js",
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://query1.finance.yahoo.com https://query2.finance.yahoo.com https://feeds.finance.yahoo.com https://news.google.com; worker-src 'self'; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://kite.zerodha.com"
+    },
+    {
+      "origin": "https://tickervane.vercel.app",
+      "status": 200,
+      "themeScriptStatus": 200,
+      "bundle": "/assets/index-BfzhrZ_s.js",
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://query1.finance.yahoo.com https://query2.finance.yahoo.com https://feeds.finance.yahoo.com https://news.google.com; worker-src 'self'; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://kite.zerodha.com"
+    }
+  ]
+}

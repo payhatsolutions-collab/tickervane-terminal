@@ -1,0 +1,42 @@
+{
+  "status": "rolled back",
+  "deployment": "https://alphanova2-dxg7j9snk-wdcre.vercel.app",
+  "agentArchived": true,
+  "agentDailyLimit": 0,
+  "agentConcurrencyLimit": 0,
+  "vercelSecretsRemoved": [
+    "ELEVENLABS_API_KEY",
+    "ELEVENLABS_AGENT_ID"
+  ],
+  "environments": [
+    "production",
+    "preview"
+  ],
+  "checks": [
+    {
+      "domain": "https://alphanova48.in",
+      "status": 200,
+      "bundle": "assets/index-BhqfI7s1.js",
+      "voiceUIAbsent": true,
+      "microphone": "camera=(), microphone=(), geolocation=()",
+      "voiceEndpointStatus": 404
+    },
+    {
+      "domain": "https://tickervane.vercel.app",
+      "status": 200,
+      "bundle": "assets/index-BhqfI7s1.js",
+      "voiceUIAbsent": true,
+      "microphone": "camera=(), microphone=(), geolocation=()",
+      "voiceEndpointStatus": 404
+    }
+  ],
+  "local": {
+    "integrationRemoved": true,
+    "sourceArchived": "outputs/voice-feature-rollback-2026-10-04",
+    "tests": {
+      "passed": 188,
+      "failed": 0
+    },
+    "build": "passed"
+  }
+}

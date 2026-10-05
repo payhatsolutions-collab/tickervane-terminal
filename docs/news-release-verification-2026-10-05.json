@@ -1,0 +1,93 @@
+{
+  "checkedAt": "2026-10-05T12:03:57.568Z",
+  "deployment": "https://alphanova2-975pjcbvq-wdcre.vercel.app",
+  "deploymentId": "dpl_HzK9Zaa1JrX1RaYRmoGmk841ujDC",
+  "rollback": "https://alphanova2-dd49y4k4b-wdcre.vercel.app",
+  "tests": 42,
+  "build": "passed locally and on Vercel",
+  "checks": [
+    {
+      "origin": "https://alphanova48.in",
+      "status": 200,
+      "bundle": "/assets/index-CxdA9dL7.js",
+      "bundleStatus": 200,
+      "exactBuildMatch": true
+    },
+    {
+      "origin": "https://tickervane.vercel.app",
+      "status": 200,
+      "bundle": "/assets/index-CxdA9dL7.js",
+      "bundleStatus": 200,
+      "exactBuildMatch": true
+    }
+  ],
+  "feeds": [
+    {
+      "symbol": "^NSEI",
+      "status": 200,
+      "headlines": 25,
+      "failedSources": [],
+      "publishers": [
+        "Reuters",
+        "Investing.com India",
+        "Investing.com",
+        "Moneycontrol.com",
+        "News On AIR",
+        "The Hindu",
+        "HDFC Sky",
+        "ETV Bharat",
+        "Outlook Money",
+        "India Today",
+        "Bloomberg.com",
+        "NDTV Profit",
+        "Livemint",
+        "theweek.in"
+      ]
+    },
+    {
+      "symbol": "^GSPC",
+      "status": 200,
+      "headlines": 30,
+      "failedSources": [],
+      "publishers": [
+        "Investing.com",
+        "وكالة الأنباء السورية – سانا",
+        "This is Money",
+        "Αθηναϊκό Πρακτορείο Ειδήσεων",
+        "BNN Bloomberg",
+        "Business Insider",
+        "Investing.com South Africa",
+        "The Economic Times",
+        "The Australian",
+        "Investment Week",
+        "Edward Jones",
+        "Sunlife",
+        "CNBC",
+        "Global Finance Magazine",
+        "Audacy",
+        "CommBank",
+        "PBS",
+        "Reuters",
+        "Anadolu Ajansı",
+        "ThinkChina",
+        "Morningstar"
+      ]
+    },
+    {
+      "symbol": "RELIANCE.NS",
+      "status": 200,
+      "headlines": 14,
+      "failedSources": [],
+      "publishers": [
+        "Goodreturns",
+        "ad-hoc-news.de",
+        "Livemint",
+        "Bhaskar English",
+        "Univest",
+        "telecomtalk.info",
+        "Motilal Oswal",
+        "Business Standard"
+      ]
+    }
+  ]
+}

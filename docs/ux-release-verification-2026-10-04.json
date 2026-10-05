@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-04",
+  "version": "2.5",
+  "deployment": "https://alphanova2-myzc1550p-wdcre.vercel.app",
+  "deploymentId": "dpl_8qRgG6rq1Ae2XjZqwqfqiXCAQsHL",
+  "status": "promoted",
+  "domains": [
+    "https://alphanova48.in",
+    "https://tickervane.vercel.app"
+  ],
+  "rollback": "https://alphanova2-dvesaep0r-wdcre.vercel.app",
+  "tests": {
+    "passed": 185,
+    "failed": 0
+  },
+  "build": "passed",
+  "stagedChecks": {
+    "html": 200,
+    "quotes": {
+      "http": 200,
+      "quotes": 2
+    },
+    "adjustedForecastHistory": {
+      "http": 200,
+      "bars": 251,
+      "symbol": "RELIANCE.NS"
+    },
+    "screener": {
+      "http": 200,
+      "stocks": 499,
+      "date": "2026-10-01"
+    }
+  },
+  "liveChecks": {
+    "bothDomainBundles": "index-BmT-N7eO.js",
+    "guidesCollapsed": true,
+    "liveScreener": "rendered 499-stock universe; filter preserved after research return",
+    "liveForecast": "RELIANCE.NS, 251 adjusted daily prices, median and model interval rendered"
+  },
+  "browserChecks": [
+    "desktop grouped navigation",
+    "phone layout and More menu",
+    "browser Back, in-app Back, Forward",
+    "Forecast search preserves workspace",
+    "instrument switch clears old chart data",
+    "screener filters persist when returning from stock research"
+  ],
+  "screenshots": [
+    "ux-overview-live-2026-10-04.jpg",
+    "ux-screener-live-2026-10-04.jpg",
+    "ux-forecast-live-2026-10-04.jpg"
+  ],
+  "limits": [
+    "Public market feeds can be delayed or unavailable.",
+    "Live broker order submission and push permission flows were not exercised."
+  ]
+}

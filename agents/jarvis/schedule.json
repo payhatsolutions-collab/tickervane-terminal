@@ -1,0 +1,94 @@
+[
+  {
+    "rule": "macro.overnight",
+    "cron": "30 6 * * 1-5",
+    "agent": "macro",
+    "intent": "overnight_wrap",
+    "note": "US close + Asia open read, before pre-open"
+  },
+  {
+    "rule": "macro.intraday",
+    "cron": "*/15 9-15 * * 1-5",
+    "agent": "macro",
+    "intent": "delta_scan",
+    "guard": "market_open"
+  },
+  {
+    "rule": "macro.geopol",
+    "cron": "0 */2 * * *",
+    "agent": "macro",
+    "intent": "geopolitical_scan",
+    "note": "24x7 - Hormuz does not keep market hours"
+  },
+  {
+    "rule": "options.preopen",
+    "cron": "5 9 * * 1-5",
+    "agent": "options",
+    "intent": "scan_monthly_expiry"
+  },
+  {
+    "rule": "options.intraday",
+    "cron": "*/10 9-15 * * 1-5",
+    "agent": "options",
+    "intent": "monitor_open_proposals",
+    "guard": "market_open"
+  },
+  {
+    "rule": "momentum.eod",
+    "cron": "45 18 * * 1-5",
+    "agent": "momentum",
+    "intent": "rank_universe",
+    "note": "after NSE publishes the delivery bhavcopy around 18:00 IST"
+  },
+  {
+    "rule": "momentum.preopen",
+    "cron": "0 9 * * 1-5",
+    "agent": "momentum",
+    "intent": "gap_watch"
+  },
+  {
+    "rule": "errands.morning",
+    "cron": "0 7 * * *",
+    "agent": "errands",
+    "intent": "triage_inbox"
+  },
+  {
+    "rule": "errands.evening",
+    "cron": "0 19 * * *",
+    "agent": "errands",
+    "intent": "triage_inbox"
+  },
+  {
+    "rule": "errands.bills",
+    "cron": "0 10 * * *",
+    "agent": "errands",
+    "intent": "bill_sweep"
+  },
+  {
+    "rule": "jarvis.brief.overnight",
+    "cron": "45 6 * * 1-5",
+    "agent": "jarvis",
+    "intent": "compose_brief",
+    "params": { "brief": "overnight" }
+  },
+  {
+    "rule": "jarvis.brief.close",
+    "cron": "45 15 * * 1-5",
+    "agent": "jarvis",
+    "intent": "compose_brief",
+    "params": { "brief": "close" }
+  },
+  {
+    "rule": "jarvis.brief.evening",
+    "cron": "15 19 * * *",
+    "agent": "jarvis",
+    "intent": "compose_brief",
+    "params": { "brief": "evening" }
+  },
+  {
+    "rule": "jarvis.prune",
+    "cron": "30 3 * * *",
+    "agent": "jarvis",
+    "intent": "prune_memory"
+  }
+]

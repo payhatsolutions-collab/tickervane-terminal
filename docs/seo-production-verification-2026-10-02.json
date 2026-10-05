@@ -1,0 +1,82 @@
+{
+  "base": "https://alphanova48.in",
+  "pages": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/stock-prices.html",
+      "status": 200
+    },
+    {
+      "path": "/stock-market-app.html",
+      "status": 200
+    },
+    {
+      "path": "/stock-screener.html",
+      "status": 200
+    },
+    {
+      "path": "/delivery-radar.html",
+      "status": 200
+    },
+    {
+      "path": "/about.html",
+      "status": 200
+    },
+    {
+      "path": "/screens/delivery-accumulation.html",
+      "status": 200
+    },
+    {
+      "path": "/screens/volume-surge.html",
+      "status": 200
+    },
+    {
+      "path": "/screens/20-day-breakout.html",
+      "status": 200
+    },
+    {
+      "path": "/screens/near-52-week-high.html",
+      "status": 200
+    },
+    {
+      "path": "/screens/relative-strength.html",
+      "status": 200
+    },
+    {
+      "path": "/screens/minervini-trend-template.html",
+      "status": 200
+    },
+    {
+      "path": "/screens.html",
+      "status": 200
+    },
+    {
+      "path": "/methodology.html",
+      "status": 200
+    },
+    {
+      "path": "/pricing.html",
+      "status": 200
+    },
+    {
+      "path": "/llms.txt",
+      "status": 200
+    },
+    {
+      "path": "/pricing.md",
+      "status": 200
+    },
+    {
+      "path": "/robots.txt",
+      "status": 200
+    }
+  ],
+  "sitemap_urls": 15,
+  "schema": "valid JSON",
+  "guide_cta": "correct",
+  "callback": "noindex",
+  "missing_page": 404
+}

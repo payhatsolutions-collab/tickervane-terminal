@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-05",
+  "deployment": "https://alphanova2-i9x4b2y8a-wdcre.vercel.app",
+  "deploymentId": "dpl_DzRBeVmpztDHZxErhi1yy6cW4DBF",
+  "domains": [
+    "https://alphanova48.in",
+    "https://tickervane.vercel.app"
+  ],
+  "bundle": "index-BTW3BynW.js",
+  "checks": {
+    "marketTests": 23,
+    "hostedBuild": "passed",
+    "publicBundles": "passed",
+    "publicScreener": "passed",
+    "publicQuotes": "passed"
+  },
+  "rollback": "https://alphanova2-ma2ab75p2-wdcre.vercel.app",
+  "limitations": "Yahoo Finance quotes may be delayed; derivative premiums remain end-of-day."
+}

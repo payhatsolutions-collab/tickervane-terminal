@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-05",
+  "deployment": "https://alphanova2-dd49y4k4b-wdcre.vercel.app",
+  "deploymentId": "dpl_413cXCpVVT7wuzgLwc4As6GbiAxP",
+  "rollback": "https://alphanova2-i9x4b2y8a-wdcre.vercel.app",
+  "change": "Backup import validates saved screens with the existing cleanScreen validator before display and filtering.",
+  "tests": 199,
+  "build": "passed locally and on Vercel",
+  "stagedBundleExactMatch": true,
+  "checks": [
+    {
+      "origin": "https://alphanova48.in",
+      "status": 200,
+      "bundle": "/assets/index-BbkHmuP-.js",
+      "bundleStatus": 200,
+      "exactBuildMatch": true
+    },
+    {
+      "origin": "https://tickervane.vercel.app",
+      "status": 200,
+      "bundle": "/assets/index-BbkHmuP-.js",
+      "bundleStatus": 200,
+      "exactBuildMatch": true
+    }
+  ],
+  "ui": {
+    "origin": "https://alphanova48.in",
+    "workspace": "Screener",
+    "rendered": true,
+    "screenCoverage": "499/501 with 1Y history",
+    "applicationBrowserErrors": []
+  },
+  "limitations": "Malformed backup regression verified through import and screen description/filtering tests; no production backup was imported into browser storage."
+}

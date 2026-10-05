@@ -1,0 +1,126 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "final_url": "https://alphanova48.in/",
+    "title": [
+      "AlphaNova (Alpha Nova) | Stock Prices &amp; Stock Market App"
+    ],
+    "canonical": [
+      "https://alphanova48.in/"
+    ],
+    "robots": [
+      "index, follow, max-image-preview:large"
+    ],
+    "bytes": 7683
+  },
+  {
+    "path": "/stock-prices.html",
+    "status": 200,
+    "final_url": "https://alphanova48.in/stock-prices.html",
+    "title": [
+      "Indian Stock Prices &amp; NSE Share Charts | AlphaNova"
+    ],
+    "canonical": [
+      "https://alphanova48.in/stock-prices.html"
+    ],
+    "robots": [
+      "index, follow, max-image-preview:large"
+    ],
+    "bytes": 7901
+  },
+  {
+    "path": "/stock-market-app.html",
+    "status": 200,
+    "final_url": "https://alphanova48.in/stock-market-app.html",
+    "title": [
+      "Free Stock Market App for India | AlphaNova (Alpha Nova)"
+    ],
+    "canonical": [
+      "https://alphanova48.in/stock-market-app.html"
+    ],
+    "robots": [
+      "index, follow, max-image-preview:large"
+    ],
+    "bytes": 8298
+  },
+  {
+    "path": "/stock-screener.html",
+    "status": 200,
+    "final_url": "https://alphanova48.in/stock-screener.html",
+    "title": [
+      "Nifty 500 Stock Screener | AlphaNova Terminal"
+    ],
+    "canonical": [
+      "https://alphanova48.in/stock-screener.html"
+    ],
+    "robots": [
+      "index, follow, max-image-preview:large"
+    ],
+    "bytes": 6104
+  },
+  {
+    "path": "/delivery-radar.html",
+    "status": 200,
+    "final_url": "https://alphanova48.in/delivery-radar.html",
+    "title": [
+      "NSE Delivery Radar and Stock Delivery Analysis | AlphaNova"
+    ],
+    "canonical": [
+      "https://alphanova48.in/delivery-radar.html"
+    ],
+    "robots": [
+      "index, follow, max-image-preview:large"
+    ],
+    "bytes": 6011
+  },
+  {
+    "path": "/about.html",
+    "status": 200,
+    "final_url": "https://alphanova48.in/about.html",
+    "title": [
+      "About AlphaNova (Alpha Nova) | Stock Market App &amp; Data"
+    ],
+    "canonical": [
+      "https://alphanova48.in/about.html"
+    ],
+    "robots": [
+      "index, follow, max-image-preview:large"
+    ],
+    "bytes": 6544
+  },
+  {
+    "path": "/sitemap.xml",
+    "status": 200,
+    "final_url": "https://alphanova48.in/sitemap.xml",
+    "title": [],
+    "canonical": [],
+    "robots": [],
+    "bytes": 658
+  },
+  {
+    "path": "/index.html",
+    "error": "HTTP Error 308: Permanent Redirect"
+  },
+  {
+    "path": "/broker-return.html",
+    "status": 200,
+    "final_url": "https://alphanova48.in/broker-return.html",
+    "title": [
+      "Return from broker \u00b7 AlphaNova"
+    ],
+    "canonical": [],
+    "robots": [
+      "noindex"
+    ],
+    "bytes": 834
+  },
+  {
+    "path": "/llms.txt",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "path": "/pricing.md",
+    "error": "HTTP Error 404: Not Found"
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-05",
+  "deployment": "https://alphanova2-7vct8ner7-wdcre.vercel.app",
+  "deploymentId": "dpl_Caa1AFartb82rQU6o841BUc77D4Q",
+  "rollback": "https://alphanova2-q70sbjg6k-wdcre.vercel.app",
+  "build": "passed",
+  "tests": 195,
+  "checks": [
+    {
+      "origin": "https://alphanova48.in",
+      "status": 200,
+      "bundle": "/assets/index-BSX65KTm.js",
+      "bundleStatus": 200,
+      "onboarding": true,
+      "watchlist": true,
+      "activation": true,
+      "retention": true,
+      "watchlistShortcut": true,
+      "analyticsScriptStatus": 200
+    },
+    {
+      "origin": "https://tickervane.vercel.app",
+      "status": 200,
+      "bundle": "/assets/index-BSX65KTm.js",
+      "bundleStatus": 200,
+      "onboarding": true,
+      "watchlist": true,
+      "activation": true,
+      "retention": true,
+      "watchlistShortcut": true,
+      "analyticsScriptStatus": 200
+    }
+  ],
+  "ui": {
+    "origin": "https://alphanova48.in",
+    "overviewShortcut": "opens Watchlist",
+    "existingWatchlist": "preserved",
+    "guide": "reopens with return link and skip option",
+    "browserErrors": [],
+    "screenshot": "docs/watchlist-onboarding-live-2026-10-05.jpg"
+  }
+}

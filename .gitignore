@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.vercel/
+.env*
+.claude/
+outputs/
+.DS_Store
+*.mp4
+*.docx
+back-navigation-preview.png
+reel_fresh.py
+reel*_gen.py

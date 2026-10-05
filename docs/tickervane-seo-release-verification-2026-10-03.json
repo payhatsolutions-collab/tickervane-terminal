@@ -1,0 +1,88 @@
+{
+  "date": "2026-10-03",
+  "deployment": "dpl_9tPAR3D6ZNJWbnQfvw25DRR73843",
+  "deployment_url": "https://alphanova2-8vl5ovds1-wdcre.vercel.app",
+  "production_origin": "https://tickervane.vercel.app",
+  "tests_passed": 178,
+  "pages": [
+    {
+      "url": "https://tickervane.vercel.app/",
+      "status": 200,
+      "canonical_matches": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/stock-prices.html",
+      "status": 200,
+      "canonical_matches": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/stock-market-app.html",
+      "status": 200,
+      "canonical_matches": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/stock-screener.html",
+      "status": 200,
+      "canonical_matches": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/delivery-radar.html",
+      "status": 200,
+      "canonical_matches": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/about.html",
+      "status": 200,
+      "canonical_matches": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/delivery-accumulation.html",
+      "status": 200,
+      "canonical_matches": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/volume-surge.html",
+      "status": 200,
+      "canonical_matches": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/20-day-breakout.html",
+      "status": 200,
+      "canonical_matches": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/near-52-week-high.html",
+      "status": 200,
+      "canonical_matches": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/relative-strength.html",
+      "status": 200,
+      "canonical_matches": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens/minervini-trend-template.html",
+      "status": 200,
+      "canonical_matches": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/screens.html",
+      "status": 200,
+      "canonical_matches": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/methodology.html",
+      "status": 200,
+      "canonical_matches": true
+    },
+    {
+      "url": "https://tickervane.vercel.app/pricing.html",
+      "status": 200,
+      "canonical_matches": true
+    }
+  ],
+  "rendered_homepage_title_verified": true,
+  "rendered_schema_verified": true,
+  "guide_display_dates_correct": true,
+  "search_console": "Owner reports submitted and in progress; indexed status and Google-selected canonical not verified."
+}
