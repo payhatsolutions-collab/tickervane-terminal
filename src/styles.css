@@ -185,6 +185,9 @@ body{line-height:1.5}button,input,select,textarea{font-family:inherit}button:foc
 .fore-kicker{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:0 0 16px}
 .fore-number{display:block;font:600 clamp(56px,11vw,112px)/1.1 'IBM Plex Mono',monospace;letter-spacing:-2px;color:var(--text);font-variant-numeric:tabular-nums;animation:fore-rise .3s ease-out;overflow-wrap:anywhere}
 .fore-number small{font-size:.28em;font-weight:400;letter-spacing:0;color:var(--muted);margin-left:8px}
+.fore-sub{margin:14px 0 0;font-size:13px;color:var(--muted)}
+.fore-sub .positive{color:var(--green)}
+.fore-sub .negative{color:var(--red)}
 @keyframes fore-rise{from{opacity:0;transform:translateY(10px)}}
 .fore-skel{width:min(420px,80%);height:clamp(56px,11vw,112px);border-radius:14px;background:linear-gradient(90deg,#1b2a40 25%,#243c5b 50%,#1b2a40 75%);background-size:200% 100%;animation:fore-pulse 1.4s infinite}
 @keyframes fore-pulse{to{background-position:-200% 0}}

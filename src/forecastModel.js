@@ -9,7 +9,7 @@
 // seeded arithmetic, so every projection is exactly reproducible.
 import { forecastDates } from './forecastCalendar.js';
 
-export const FORECAST_VERSION = '3.0.0';
+export const FORECAST_VERSION = '3.1.0';
 
 const mean = xs => xs.reduce((a, b) => a + b, 0) / xs.length;
 const quantile = (xs, p) => { const x = (xs.length - 1) * p, i = Math.floor(x); return xs[i] + (xs[Math.min(i + 1, xs.length - 1)] - xs[i]) * (x - i); };
@@ -22,6 +22,25 @@ const candidates = [
   { id: 'har', label: 'HAR volatility · Student-t', window: 504, type: 'har' },
   { id: 'har-trend', label: 'HAR volatility · Ridge momentum', window: 504, type: 'har-trend' },
 ];
+
+// ---------------------------------------------------------------------------
+// Headline trend drift: linear trend of cumulative log-returns over the last
+// 30 sessions, clamped to ±1%/day. Zero-drift medians are statistically safe
+// but read as "just the LTP" — this gives the headline number a direction
+// while bands still carry the volatility-model uncertainty. Experimental.
+// ---------------------------------------------------------------------------
+export function trendDriftPerDay(returns) {
+  const window = returns.slice(-30);
+  if (window.length < 10 || window.some(x => !Number.isFinite(x))) return 0;
+  const n = window.length;
+  let cum = 0;
+  const ys = window.map(r => (cum += r));
+  const mx = (n - 1) / 2, my = mean(ys);
+  let num = 0, den = 0;
+  for (let i = 0; i < n; i++) { num += (i - mx) * (ys[i] - my); den += (i - mx) * (i - mx); }
+  if (!(den > 0)) return 0;
+  return Math.max(-0.01, Math.min(0.01, num / den));
+}
 
 // ---------------------------------------------------------------------------
 // Learned conditional-mean models. Features are stationary (all in
@@ -300,15 +319,21 @@ export function projectForecast(bars, horizon = 10, options = {}) {
   });
   const simulation = simulate(fit(returns, selected), horizon, 4096, 20261007);
   const calendar = forecastDates(bars.at(-1).time, horizon, options.symbol);
-  const last = logs.at(-1);
+  const last = logs.at(-1), lastClose = bars.at(-1).close;
+  const drift = trendDriftPerDay(returns);
   const points = simulation.map((samples, i) => {
-    const q = summarize(samples), price = value => Math.exp(last + value);
-    return { date: calendar.dates[i], close: price(q.median), lower: price(q.low95), upper: price(q.high95), lower80: price(q.low80), upper80: price(q.high80), lower50: price(q.low50), upper50: price(q.high50) };
+    const q = summarize(samples);
+    // Headline path follows the 30-session trend; bands keep the
+    // volatility-model spreads so uncertainty stays honest.
+    const center = last + drift * (i + 1) + q.median;
+    const price = offset => Math.exp(center + offset);
+    return { date: calendar.dates[i], close: Math.exp(center), lower: price(q.low95 - q.median), upper: price(q.high95 - q.median), lower80: price(q.low80 - q.median), upper80: price(q.high80 - q.median), lower50: price(q.low50 - q.median), upper50: price(q.high50 - q.median) };
   });
   if (points.some(p => Object.entries(p).some(([k, v]) => k !== 'date' && (!Number.isFinite(v) || v <= 0)))) throw new Error('This price series cannot produce a stable projection.');
   const gaps = times.slice(1).filter((t, i) => t - times[i] > 7 * 86400000).length;
   return { points, model: selected.label, modelId: selected.id, version: FORECAST_VERSION, observations: bars.length, trainingWindow: Math.min(returns.length, selected.window), trainedThrough: bars.at(-1).time,
-    change: (points.at(-1).close / bars.at(-1).close - 1) * 100, samples: simulation.at(-1), calendar: calendar.note,
+    lastClose, driftPerDay: drift, trend: { driftPerDay: drift, method: '30-session log-price trend, ±1%/day clamp, experimental' },
+    change: (points.at(-1).close / lastClose - 1) * 100, samples: simulation.at(-1), calendar: calendar.note,
     quality: gaps ? `${gaps} gaps longer than seven calendar days; interpret results cautiously.` : null,
     evaluation: { count: records.length, tuningCount: enough ? tuning.length : 0, start: records.length ? bars[records[0].origin].time : null, end: records.length ? bars[records.at(-1).origin + horizon].time : null, selected: aggregate('selected'), baseline: aggregate('baseline'), calibration, tuningScores,
       selectionEnd: enough ? bars[tuning.at(-1) + horizon].time : null,

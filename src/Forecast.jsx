@@ -74,7 +74,11 @@ export default function Forecast({ symbol, refresh, onRefresh, onSymbol }) {
   };
 
   const name = directory.get(symbol)?.name || data?.name || short(symbol);
-  const point = forecast?.result?.points.at(-1);
+  const result = forecast?.result ?? null;
+  const point = result?.points.at(-1);
+  const lastClose = result?.lastClose ?? bars.at(-1)?.close ?? data?.price ?? null;
+  const change = point && lastClose ? (point.close / lastClose - 1) * 100 : null;
+  const direction = change == null ? "" : change > 0.05 ? " ▲" : change < -0.05 ? " ▼" : " ·";
   const loadError = !data ? feed.error : null;
 
   return (
@@ -154,11 +158,18 @@ export default function Forecast({ symbol, refresh, onRefresh, onSymbol }) {
         {point ? (
           <div aria-live="polite">
             <p className="fore-kicker">
-              {name} · {point.date}
+              {name} · {point.date} · in {HORIZON} sessions{direction}
             </p>
             <strong className="fore-number">
               {fmt(point.close)} <small>{data.currency}</small>
             </strong>
+            <p className="fore-sub">
+              Last {fmt(lastClose)} ·{" "}
+              <span className={change >= 0 ? "positive" : "negative"}>
+                {change == null ? "—" : `${change >= 0 ? "+" : ""}${fmt(change, 2)}%`}
+              </span>{" "}
+              trend projection · experimental
+            </p>
           </div>
         ) : forecast?.error || loadError ? (
           <div>

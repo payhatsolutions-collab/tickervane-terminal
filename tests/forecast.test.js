@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { projectForecast, forecastProbabilities, compareForecasts, FORECAST_VERSION } from '../src/forecastModel.js';
+import { projectForecast, forecastProbabilities, compareForecasts, trendDriftPerDay, FORECAST_VERSION } from '../src/forecastModel.js';
 import { forecastDates } from '../src/forecastCalendar.js';
 import { chart } from '../api/market.js';
 function history(n = 1000) {
@@ -76,11 +76,24 @@ test('daily five-year history uses daily upstream interval and a separate cache 
     assert.ok(urls[1].includes('interval=1wk'));
   } finally { global.fetch = original; }
 });
+test('headline follows the 30-session trend so it reads as a forecast, not the LTP', () => {
+  const bars = history(1000);
+  const r = projectForecast(bars, 10);
+  assert.ok(Number.isFinite(r.driftPerDay));
+  assert.ok(Math.abs(r.driftPerDay) <= 0.01);
+  assert.ok(Math.abs(r.change) > 0.05, `expected a visible move, got ${r.change}%`);
+  assert.ok(Math.abs(r.points.at(-1).close / r.lastClose - 1) > 0.0005);
+  // Flat history stays flat; bands remain nested and positive.
+  const flat = bars.map(b => ({ ...b, close: 100 }));
+  const rf = projectForecast(flat, 10);
+  assert.ok(Math.abs(rf.change) < 1e-9);
+  assert.equal(trendDriftPerDay([0.001, 0.001, NaN]), 0);
+});
 test('v3 evaluates six candidates and reads ties as ties, not failures', () => {
   const bars = history();
   const r = projectForecast(bars, 20);
-  assert.equal(r.version, '3.0.0');
-  assert.equal(FORECAST_VERSION, '3.0.0');
+  assert.equal(r.version, '3.1.0');
+  assert.equal(FORECAST_VERSION, '3.1.0');
   assert.equal(r.evaluation.tuningScores.length, 6);
   assert.ok(['baseline', 'ewma', 'garch', 'garch-drift', 'har', 'har-trend'].includes(r.modelId));
   assert.equal(compareForecasts(1, 1), 'tie');
