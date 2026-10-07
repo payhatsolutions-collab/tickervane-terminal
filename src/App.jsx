@@ -2086,8 +2086,7 @@ export default function App() {
               symbol={symbol}
               refresh={refresh}
               onRefresh={() => setRefresh((x) => x + 1)}
-              onSearch={() => openSearch("forecast")}
-              onOpenChart={() => setPage("Terminal")}
+              onSymbol={choose}
             />
           )}
           {page === "Screener" && (
