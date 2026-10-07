@@ -201,3 +201,13 @@ Deployed and promoted `https://alphanova2-ma2ab75p2-wdcre.vercel.app` (`dpl_Hn37
 Backup imports now validate saved screens with the shared screen validator, preventing malformed rules from crashing the Screener. Valid rules retain their filtering behavior. The regression reproduces the crash before the fix and passes afterward.
 
 Deployed and promoted `https://alphanova2-dd49y4k4b-wdcre.vercel.app` (`dpl_413cXCpVVT7wuzgLwc4As6GbiAxP`). All 199 tests and local/hosted builds passed. Both public domains serve the exact tested bundle, `index-BbkHmuP-.js`; the live Screener renders successfully. Release record: `docs/backup-restore-release-2026-10-05.json`. Rollback: `vercel promote https://alphanova2-i9x4b2y8a-wdcre.vercel.app --yes`.
+
+## Forecast model v2 (2026-10-07)
+
+Forecast requests five years of adjusted **daily** history (`daily=1` preserves weekly bars for ordinary long-range charts). A background worker compares a constant-volatility random walk, EWMA, and variance-targeted GARCH(1,1) with fixed Student-t(7) shocks, with or without shrunk drift. GARCH parameters use a bounded likelihood grid; this is deliberately a small candidate family, not an unrestricted optimizer.
+
+Non-overlapping forecast targets are split chronologically: the first 60% select the model by weighted interval score, requiring a 5% improvement over baseline; the remaining 40% report untouched evaluation metrics. Each origin refits on prior data only. Fewer than eight tuning or five evaluation origins falls back to baseline without reporting accuracy. Evaluation paths number 512; current forecast paths number 4,096, seeded with antithetic pairs. The UI shows interval coverage, log-return error, Brier score, calibration bins, terminal threshold probabilities and 50/80/95% marginal prediction bands. Adjusted-price equivalents are not promised future quoted prices. Parameter/selection uncertainty is not included.
+
+NSE 2026 dates follow [CMTR71775](https://nsearchives.nseindia.com/content/circulars/CMTR71775.pdf) and [CMTR72260](https://nsearchives.nseindia.com/content/circulars/CMTR72260.pdf), including the Muhurat session. Crypto uses calendar days; unsupported exchanges/years explicitly show estimated weekday dates. Calendars need maintenance as new exchange circulars appear.
+
+Checks: `node --test tests/forecast.test.js tests/market.test.js tests/ux.test.js`. Model tests cover evaluation leakage, nested intervals, determinism, insufficient/invalid history, threshold probabilities, calendar behavior and daily-feed cache separation. A passing test suite validates implementation, not future predictive skill.
