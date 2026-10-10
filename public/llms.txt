@@ -1,6 +1,6 @@
 # Alpha Nova
 
-> Alpha Nova (also written AlphaNova) is a free browser-based research app for Indian and global markets. Canonical website: https://tickervane.vercel.app/
+> Alpha Nova (also written AlphaNova) is a free browser-based research app for Indian and global markets. Canonical website: https://alphanova48.in/
 
 Alpha Nova is also known as AlphaNova Terminal. Personal research is stored on the device; use Portfolio backup and restore to move it between browsers or websites.
 
@@ -14,22 +14,22 @@ AlphaNova was founded by Yash Sarda, based in Kolkata.
 
 ## Product and data
 
-- [About and data sources](https://tickervane.vercel.app/about.html)
-- [Stock market app](https://tickervane.vercel.app/stock-market-app.html)
-- [Pricing](https://tickervane.vercel.app/pricing.html): INR 0; current features and limitations.
-- [Pricing in Markdown](https://tickervane.vercel.app/pricing.md)
-- [Calculation methodology](https://tickervane.vercel.app/methodology.html)
-- [Nifty 500 screener](https://tickervane.vercel.app/stock-screener.html)
-- [Delivery radar](https://tickervane.vercel.app/delivery-radar.html)
+- [About and data sources](https://alphanova48.in/about.html)
+- [Stock market app](https://alphanova48.in/stock-market-app.html)
+- [Pricing](https://alphanova48.in/pricing.html): INR 0; current features and limitations.
+- [Pricing in Markdown](https://alphanova48.in/pricing.md)
+- [Calculation methodology](https://alphanova48.in/methodology.html)
+- [Nifty 500 screener](https://alphanova48.in/stock-screener.html)
+- [Delivery radar](https://alphanova48.in/delivery-radar.html)
 
 ## Screener guides
 
-- [Guide index](https://tickervane.vercel.app/screens.html)
-- [Delivery accumulation screener](https://tickervane.vercel.app/screens/delivery-accumulation.html): Explore Alpha Nova’s NSE delivery accumulation screen: delivered quantity, delivery percentage and price-change rules, with examples and data limitations.
-- [Volume surge stock screener](https://tickervane.vercel.app/screens/volume-surge.html): Find how Alpha Nova screens for NSE volume surges: at least twice the prior 20-session average and a non-negative daily change, with a worked example.
-- [20-day breakout stock screener](https://tickervane.vercel.app/screens/20-day-breakout.html): Understand Alpha Nova’s 20-day breakout screen: NSE closing price above prior session highs with at least 1.3× volume, plus checks and limitations.
-- [Near 52-week high stock screener](https://tickervane.vercel.app/screens/near-52-week-high.html): See Alpha Nova’s near-52-week-high screen rules: within 3% of the highest available daily close and at least 1.5× volume, with calculation examples.
-- [Relative strength stock screener](https://tickervane.vercel.app/screens/relative-strength.html): Learn Alpha Nova’s relative strength screen: stock return minus Nifty 50 over 63 sessions, a 10-point threshold and non-negative one-month return.
-- [Minervini trend template screener](https://tickervane.vercel.app/screens/minervini-trend-template.html): Review Alpha Nova’s adapted Minervini trend template: moving-average structure, rising 200 DMA, high-low distance and the app’s composite score filter.
+- [Guide index](https://alphanova48.in/screens.html)
+- [Delivery accumulation screener](https://alphanova48.in/screens/delivery-accumulation.html): Explore Alpha Nova’s NSE delivery accumulation screen: delivered quantity, delivery percentage and price-change rules, with examples and data limitations.
+- [Volume surge stock screener](https://alphanova48.in/screens/volume-surge.html): Find how Alpha Nova screens for NSE volume surges: at least twice the prior 20-session average and a non-negative daily change, with a worked example.
+- [20-day breakout stock screener](https://alphanova48.in/screens/20-day-breakout.html): Understand Alpha Nova’s 20-day breakout screen: NSE closing price above prior session highs with at least 1.3× volume, plus checks and limitations.
+- [Near 52-week high stock screener](https://alphanova48.in/screens/near-52-week-high.html): See Alpha Nova’s near-52-week-high screen rules: within 3% of the highest available daily close and at least 1.5× volume, with calculation examples.
+- [Relative strength stock screener](https://alphanova48.in/screens/relative-strength.html): Learn Alpha Nova’s relative strength screen: stock return minus Nifty 50 over 63 sessions, a 10-point threshold and non-negative one-month return.
+- [Minervini trend template screener](https://alphanova48.in/screens/minervini-trend-template.html): Review Alpha Nova’s adapted Minervini trend template: moving-average structure, rising 200 DMA, high-low distance and the app’s composite score filter.
 
 Documentation updated: 2026-10-03. This is not a market-data timestamp.

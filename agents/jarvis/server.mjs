@@ -135,6 +135,21 @@ export function createDashboard({ store = new Memory(), onDecision = null } = {}
         return json(res, 200, compose(kind, store.listSignals({ since, limit: 500 })));
       }
 
+      if (path === '/api/watchlist') {
+        if (req.method === 'GET') return json(res, 200, { watchlist: store.getWatchlist() });
+        if (req.method !== 'POST') return json(res, 405, { error: 'GET or POST' });
+        const body = await readBody(req);
+        if (Array.isArray(body.add)) {
+          const r = store.addToWatchlist(body.add.slice(0, 50), 'manual');
+          return json(res, 200, { ...r, watchlist: store.getWatchlist() });
+        }
+        if (typeof body.remove === 'string') {
+          const removed = store.removeFromWatchlist(body.remove);
+          return json(res, removed ? 200 : 404, { removed, watchlist: store.getWatchlist() });
+        }
+        return json(res, 400, { error: 'Send {add: ["SYMBOL"]} or {remove: "SYMBOL"}' });
+      }
+
       if (path === '/api/decide') {
         if (req.method !== 'POST') return json(res, 405, { error: 'POST only' });
         const body = await readBody(req);

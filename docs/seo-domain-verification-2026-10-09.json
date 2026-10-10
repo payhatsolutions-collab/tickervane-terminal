@@ -1,0 +1,232 @@
+{
+  "checkedAt": "2026-10-08T23:35:48.546Z",
+  "base": "https://alphanova48.in",
+  "pages": [
+    {
+      "url": "https://alphanova48.in/",
+      "status": 200,
+      "canonical": "https://alphanova48.in/",
+      "schema": "passed"
+    },
+    {
+      "url": "https://alphanova48.in/stock-prices.html",
+      "status": 200,
+      "canonical": "https://alphanova48.in/stock-prices.html",
+      "schema": "passed"
+    },
+    {
+      "url": "https://alphanova48.in/stock-market-app.html",
+      "status": 200,
+      "canonical": "https://alphanova48.in/stock-market-app.html",
+      "schema": "passed"
+    },
+    {
+      "url": "https://alphanova48.in/stock-screener.html",
+      "status": 200,
+      "canonical": "https://alphanova48.in/stock-screener.html",
+      "schema": "passed"
+    },
+    {
+      "url": "https://alphanova48.in/delivery-radar.html",
+      "status": 200,
+      "canonical": "https://alphanova48.in/delivery-radar.html",
+      "schema": "passed"
+    },
+    {
+      "url": "https://alphanova48.in/about.html",
+      "status": 200,
+      "canonical": "https://alphanova48.in/about.html",
+      "schema": "passed"
+    },
+    {
+      "url": "https://alphanova48.in/screens/delivery-accumulation.html",
+      "status": 200,
+      "canonical": "https://alphanova48.in/screens/delivery-accumulation.html",
+      "schema": "passed"
+    },
+    {
+      "url": "https://alphanova48.in/screens/volume-surge.html",
+      "status": 200,
+      "canonical": "https://alphanova48.in/screens/volume-surge.html",
+      "schema": "passed"
+    },
+    {
+      "url": "https://alphanova48.in/screens/20-day-breakout.html",
+      "status": 200,
+      "canonical": "https://alphanova48.in/screens/20-day-breakout.html",
+      "schema": "passed"
+    },
+    {
+      "url": "https://alphanova48.in/screens/near-52-week-high.html",
+      "status": 200,
+      "canonical": "https://alphanova48.in/screens/near-52-week-high.html",
+      "schema": "passed"
+    },
+    {
+      "url": "https://alphanova48.in/screens/relative-strength.html",
+      "status": 200,
+      "canonical": "https://alphanova48.in/screens/relative-strength.html",
+      "schema": "passed"
+    },
+    {
+      "url": "https://alphanova48.in/screens/minervini-trend-template.html",
+      "status": 200,
+      "canonical": "https://alphanova48.in/screens/minervini-trend-template.html",
+      "schema": "passed"
+    },
+    {
+      "url": "https://alphanova48.in/screens.html",
+      "status": 200,
+      "canonical": "https://alphanova48.in/screens.html",
+      "schema": "passed"
+    },
+    {
+      "url": "https://alphanova48.in/methodology.html",
+      "status": 200,
+      "canonical": "https://alphanova48.in/methodology.html",
+      "schema": "passed"
+    },
+    {
+      "url": "https://alphanova48.in/pricing.html",
+      "status": 200,
+      "canonical": "https://alphanova48.in/pricing.html",
+      "schema": "passed"
+    }
+  ],
+  "redirects": [
+    {
+      "path": "/",
+      "status": 308,
+      "destination": "https://alphanova48.in/"
+    },
+    {
+      "path": "/stock-prices.html",
+      "status": 308,
+      "destination": "https://alphanova48.in/stock-prices.html"
+    },
+    {
+      "path": "/stock-market-app.html",
+      "status": 308,
+      "destination": "https://alphanova48.in/stock-market-app.html"
+    },
+    {
+      "path": "/stock-screener.html",
+      "status": 308,
+      "destination": "https://alphanova48.in/stock-screener.html"
+    },
+    {
+      "path": "/delivery-radar.html",
+      "status": 308,
+      "destination": "https://alphanova48.in/delivery-radar.html"
+    },
+    {
+      "path": "/about.html",
+      "status": 308,
+      "destination": "https://alphanova48.in/about.html"
+    },
+    {
+      "path": "/screens/delivery-accumulation.html",
+      "status": 308,
+      "destination": "https://alphanova48.in/screens/delivery-accumulation.html"
+    },
+    {
+      "path": "/screens/volume-surge.html",
+      "status": 308,
+      "destination": "https://alphanova48.in/screens/volume-surge.html"
+    },
+    {
+      "path": "/screens/20-day-breakout.html",
+      "status": 308,
+      "destination": "https://alphanova48.in/screens/20-day-breakout.html"
+    },
+    {
+      "path": "/screens/near-52-week-high.html",
+      "status": 308,
+      "destination": "https://alphanova48.in/screens/near-52-week-high.html"
+    },
+    {
+      "path": "/screens/relative-strength.html",
+      "status": 308,
+      "destination": "https://alphanova48.in/screens/relative-strength.html"
+    },
+    {
+      "path": "/screens/minervini-trend-template.html",
+      "status": 308,
+      "destination": "https://alphanova48.in/screens/minervini-trend-template.html"
+    },
+    {
+      "path": "/screens.html",
+      "status": 308,
+      "destination": "https://alphanova48.in/screens.html"
+    },
+    {
+      "path": "/methodology.html",
+      "status": 308,
+      "destination": "https://alphanova48.in/methodology.html"
+    },
+    {
+      "path": "/pricing.html",
+      "status": 308,
+      "destination": "https://alphanova48.in/pricing.html"
+    },
+    {
+      "path": "/robots.txt",
+      "status": 308,
+      "destination": "https://alphanova48.in/robots.txt"
+    },
+    {
+      "path": "/sitemap.xml",
+      "status": 308,
+      "destination": "https://alphanova48.in/sitemap.xml"
+    },
+    {
+      "path": "/llms.txt",
+      "status": 308,
+      "destination": "https://alphanova48.in/llms.txt"
+    },
+    {
+      "path": "/pricing.md",
+      "status": 308,
+      "destination": "https://alphanova48.in/pricing.md"
+    },
+    {
+      "path": "/?page=Screener&screen=momentum",
+      "status": 308,
+      "destination": "https://alphanova48.in/?page=Screener&screen=momentum"
+    },
+    {
+      "path": "/index.html?symbol=RELIANCE.NS&page=Forecast",
+      "status": 308,
+      "destination": "https://alphanova48.in/?symbol=RELIANCE.NS&page=Forecast"
+    }
+  ],
+  "legacyBackup": {
+    "status": 200,
+    "noindex": true,
+    "assetStatus": 200
+  },
+  "legacyApi": {
+    "status": 400,
+    "redirected": false
+  },
+  "missingPage": 404,
+  "deployment": "https://alphanova2-9al6egxk0-wdcre.vercel.app",
+  "deploymentId": "dpl_6Mxx7pWCrXvzXAPz72r6A3MkUgNG",
+  "previousDeployment": "https://alphanova2-oidisks74-wdcre.vercel.app",
+  "rollback": "npx --offline vercel promote https://alphanova2-oidisks74-wdcre.vercel.app --yes",
+  "validation": {
+    "seoTestsPassed": 2,
+    "localBuild": "passed",
+    "vercelBuild": "passed",
+    "stagedPagesPassed": 15,
+    "renderedCanonical": "https://alphanova48.in/",
+    "renderedWebsiteSchema": "https://alphanova48.in/",
+    "unchangedAppBundle": "assets/index-T9ztCMoo.js"
+  },
+  "notes": [
+    "abovealphasolutions.com was not changed and is not attached to this Vercel project.",
+    "Public pages on tickervane.vercel.app redirect permanently with paths and query strings preserved.",
+    "The legacy /?page=Portfolio page remains available with X-Robots-Tag: noindex for exporting device-local research; APIs and assets remain available.",
+    "Search Console submission, Google-selected canonical, and reindexing have not been verified."
+  ]
+}

@@ -12,6 +12,16 @@
   },
   "headers": [
     {
+      "source": "/",
+      "has": [
+        { "type": "host", "value": "tickervane.vercel.app" },
+        { "type": "query", "key": "page", "value": "Portfolio" }
+      ],
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex" }
+      ]
+    },
+    {
       "source": "/sw.js",
       "headers": [
         {
@@ -76,6 +86,25 @@
     }
   ],
   "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "tickervane.vercel.app" }],
+      "missing": [{ "type": "query", "key": "page", "value": "Portfolio" }],
+      "destination": "https://alphanova48.in/",
+      "permanent": true
+    },
+    {
+      "source": "/index.html",
+      "has": [{ "type": "host", "value": "tickervane.vercel.app" }],
+      "destination": "https://alphanova48.in/",
+      "permanent": true
+    },
+    {
+      "source": "/:path(.*\\.html|sitemap\\.xml|robots\\.txt|llms\\.txt|pricing\\.md)",
+      "has": [{ "type": "host", "value": "tickervane.vercel.app" }],
+      "destination": "https://alphanova48.in/:path",
+      "permanent": true
+    },
     {
       "source": "/index.html",
       "destination": "/",

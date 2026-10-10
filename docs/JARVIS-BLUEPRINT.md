@@ -241,7 +241,9 @@ holds no tool credentials of its own beyond the signal bus and the ingest endpoi
 ### 4.2 Schedule (IST)
 
 ```jsonc
-// agents/jarvis/schedule.json
+// agents/jarvis/schedule.json — ORIGINAL DRAFT. As built (2026-10-09), the macro
+// agent runs one intent, research_brief, at 06:30, 09:30, 12:00, 15:45, 20:00 and
+// 23:30 on weekdays and 10:00 / 20:00 at weekends. See agents/jarvis/schedule.json.
 [
   {"rule":"macro.overnight",  "cron":"30 6  * * 1-5", "agent":"macro",
    "intent":"overnight_wrap", "note":"US close + Asia open read, before pre-open"},

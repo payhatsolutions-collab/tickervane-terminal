@@ -9,7 +9,7 @@ import {
 } from '../agents/jarvis/materiality.mjs';
 import { THEMES, themeNames } from '../api/market.js';
 import { compose, render, BRIEFS } from '../agents/jarvis/brief.mjs';
-import { macro, GLOBAL_CUES } from '../agents/jarvis/agents/macro.mjs';
+import { macro, SNAPSHOT, snapshotRows, HEADLINE_WEIGHT } from '../agents/jarvis/agents/macro.mjs';
 import { registerAll } from '../agents/jarvis/agents/index.mjs';
 import { Registry, ALLOWLISTS } from '../agents/jarvis/registry.mjs';
 import { Memory } from '../agents/jarvis/memory.mjs';
@@ -269,9 +269,37 @@ test('KOSPI is in the instrument directory and the Indices group', () => {
   assert.ok(groups.Indices.includes('^KS11'));
 });
 
-test('KOSPI is among the macro agent global cues', () => {
-  assert.ok(GLOBAL_CUES.some(([s]) => s === '^KS11'));
-  assert.ok(GLOBAL_CUES.some(([s]) => s === '^N225'), 'Nikkei should sit beside it');
+test('the snapshot covers every market the brief was asked for', () => {
+  const syms = SNAPSHOT.map(s => s.symbol);
+  for (const s of ['BZ=F', 'GC=F', '^IXIC', '^GSPC', '^N225', '^KS11']) {
+    assert.ok(syms.includes(s), `${s} missing from the snapshot`);
+  }
+});
+
+test('snapshot rows use plain names, round figures, and compute the 5-day change', () => {
+  const [brent] = snapshotRows({
+    'BZ=F': { price: 104.4251, change: 0.13333, spark: [100, 101, 104.4251], marketTime: 1791560000 }
+  });
+  assert.equal(brent.name, 'Brent crude');
+  assert.equal(brent.price, 104.43);
+  assert.equal(brent.change, 0.13);
+  assert.equal(brent.change5d, 4.43);
+  assert.ok(Date.parse(brent.asOf));
+});
+
+test('a market with no quote shows as missing, never as zero', () => {
+  const rows = snapshotRows({});
+  assert.ok(rows.every(r => r.price === null && r.change === null));
+});
+
+test('India VIX, USD/INR and US yields are marked inverse (up is bad for Indian equities)', () => {
+  const inverse = SNAPSHOT.filter(s => s.inverse).map(s => s.symbol).sort();
+  assert.deepEqual(inverse, ['INR=X', '^INDIAVIX', '^TNX']);
+});
+
+test('India stories outweigh US stories for the headline when no analysis is available', () => {
+  // An RBI story from 8 outlets should lead a US story from 14.
+  assert.ok(8 * HEADLINE_WEIGHT.india > 14 * HEADLINE_WEIGHT.fed);
 });
 
 // ---------------------------------------------------------------------------
@@ -298,11 +326,8 @@ test('every scheduled agent/intent pair now has a handler or is a known future p
   );
 });
 
-test('macro exposes exactly the three scheduled intents', () => {
-  assert.deepEqual(
-    Object.keys(macro.intents).sort(),
-    ['delta_scan', 'geopolitical_scan', 'overnight_wrap']
-  );
+test('macro produces one research brief per run', () => {
+  assert.deepEqual(Object.keys(macro.intents), ['research_brief']);
 });
 
 // ---------------------------------------------------------------------------

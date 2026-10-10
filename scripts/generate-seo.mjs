@@ -2,7 +2,7 @@ import { writeFile, mkdir } from 'node:fs/promises';
 import { PRESETS, describe } from '../src/screens.js';
 import { guides, updated } from '../content/seo/screens.mjs';
 
-const origin = 'https://tickervane.vercel.app';
+const origin = 'https://alphanova48.in';
 const updatedLabel = new Intl.DateTimeFormat('en-GB', {day:'numeric', month:'long', year:'numeric', timeZone:'UTC'}).format(new Date(updated+'T00:00:00Z'));
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const link = (path, name) => `<a href="${esc(path)}">${esc(name)}</a>`;

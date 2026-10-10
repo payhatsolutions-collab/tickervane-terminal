@@ -211,3 +211,10 @@ Non-overlapping forecast targets are split chronologically: the first 60% select
 NSE 2026 dates follow [CMTR71775](https://nsearchives.nseindia.com/content/circulars/CMTR71775.pdf) and [CMTR72260](https://nsearchives.nseindia.com/content/circulars/CMTR72260.pdf), including the Muhurat session. Crypto uses calendar days; unsupported exchanges/years explicitly show estimated weekday dates. Calendars need maintenance as new exchange circulars appear.
 
 Checks: `node --test tests/forecast.test.js tests/market.test.js tests/ux.test.js`. Model tests cover evaluation leakage, nested intervals, determinism, insufficient/invalid history, threshold probabilities, calendar behavior and daily-feed cache separation. A passing test suite validates implementation, not future predictive skill.
+
+
+## Live NSE futures and options — 2026-10-07
+
+The F&O tab now uses NSE's current `option-chain-contract-info` / `option-chain-v3` endpoints, with 30-second visible-tab refresh, a 15-second server cache, and no downstream caching. Option data includes exchange timestamps, selected expiry, LTP, IV, bid/ask and OI. Bullish / Bearish / Range is a transparent, unvalidated positioning heuristic; stale or incomplete data suppresses the signal. Outside regular hours the last-session read is explicitly dated. NSE futures contracts use `liveEquity-derivatives`; the broader OI build-up scanner remains labelled end-of-day.
+
+All 225 tests and local/hosted builds passed. Promoted `https://alphanova2-oidisks74-wdcre.vercel.app` to both existing public domains, verified live endpoints and rendered UI. Release evidence: `docs/fno-release-verification-2026-10-07.json`. Rollback: `npx --yes vercel promote https://alphanova2-xh3fo97ta-wdcre.vercel.app --yes`.

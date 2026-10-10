@@ -43,23 +43,67 @@ npm run jarvis -- tick              # run one scheduler tick right now
 npm run jarvis -- serve             # dashboard without the agent loop
 ```
 
-Run the macro agent and read the brief it feeds:
+Run the market research agent now, off-schedule:
 
 ```bash
-npm run jarvis -- run macro overnight_wrap
-npm run jarvis -- run macro geopolitical_scan
-npm run jarvis -- brief overnight
+npm run jarvis -- run macro research_brief
 ```
+
+Each run produces **one research brief**: a snapshot of Brent, gold, the S&P 500,
+Nasdaq, Nikkei, KOSPI, Nifty, Bank Nifty, India VIX, USD/INR and the US 10Y; the news
+turned into stories (the same event from ten outlets is one story, "10×"), grouped by
+topic with new stories marked; and Claude's read of what it means for Indian markets,
+with every point citing the stories it rests on and any figure not found in the source
+data flagged.
+
+The analysis runs on **your Claude subscription** through the Claude Code command-line
+tool: no API key and no per-call charge, though it counts toward your plan's usage
+limits. Log in once:
+
+```bash
+claude auth login
+```
+
+The call is locked down: no built-in tools, no MCP connectors (your Kite connector can
+place orders; it is not reachable from here), your settings and hooks ignored, and an
+empty working directory. It can only return JSON. Any `ANTHROPIC_API_KEY` in the
+environment is removed before the call, so it can never bill an API key by accident.
+Set `JARVIS_CLAUDE_MODEL=opus` to pin a model; unset uses your plan's default.
+
+Logged out, out of usage, or not installed, the brief still publishes prices and news
+and says why the analysis is off.
+A price move of 1.5σ or more that lines up with wide coverage raises the brief's
+severity; it no longer decides whether you hear the news at all.
+
+### Momentum agent
+
+```bash
+npm run jarvis -- run momentum momentum_brief
+```
+
+Runs every weekday at 18:45 IST, after NSE publishes delivery data. Ranks all Nifty 500
+stocks on a 0–100 blend of 6-month (35%), 3-month (25%) and 1-year (20%) returns and
+3-month strength vs the Nifty (20%), each as a percentile — continuous, so stocks don't
+tie the way the screener's capped score does. The brief shows the leaders (liquid, above
+the 200-day average, within 15% of the 52-week high), today's breakouts on volume, new
+highs, golden crosses and delivery surges, which industries the leaders come from, what
+entered or left the top 25 since the last run, and where each stock on **your watchlist**
+stands. Watchlist stocks outside the Nifty 500 are measured from their own price history
+and placed on the same scale (shown as ≈#rank). No model call: it costs nothing and
+cannot invent anything.
+
+The watchlist was seeded from your Kite holdings on 2026-10-09 (symbols only — no
+quantities, prices or P&L). Add or remove stocks on the dashboard.
 
 ### Data source
 
 Agents read quotes, charts and news from `JARVIS_MARKET_BASE` (default
-`https://alphanova48.in`, which exposes the market API in this checkout). It is a
-backend detail behind one module, [market.mjs](market.mjs) — nothing in the Jarvis UI
-refers to it, and swapping in a direct feed or a broker API is a single file.
+`https://tickervane.vercel.app`). It is a backend detail behind one module,
+[market.mjs](market.mjs) — nothing in the Jarvis UI refers to it, and swapping in a
+direct feed or a broker API is a single file.
 
 ```bash
-JARVIS_MARKET_BASE=http://localhost:5177 npm run jarvis -- run macro delta_scan
+JARVIS_MARKET_BASE=http://localhost:5177 npm run jarvis -- run macro research_brief
 ```
 
 Emit a signal by hand to see the envelope rules bite:
@@ -79,10 +123,13 @@ npm run jarvis -- emit '{"agent":"macro","kind":"observation","title":"Feels bul
 
 ```bash
 cp agents/jarvis/in.alphanova.jarvis.plist ~/Library/LaunchAgents/
-launchctl load ~/Library/LaunchAgents/in.alphanova.jarvis.plist
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/in.alphanova.jarvis.plist
 ```
 
-`launchctl unload …` stops it gracefully. The plist hardcodes this checkout's path and
+Installed on this Mac on 2026-10-09. It starts at login, restarts itself if it crashes,
+and runs the schedule and the dashboard together. Restart after changing agent code with
+`launchctl kickstart -k gui/$(id -u)/in.alphanova.jarvis`; stop it with
+`launchctl bootout gui/$(id -u)/in.alphanova.jarvis`. Logs: `~/.alphanova/logs/`. The plist hardcodes this checkout's path and
 `/Users/sarda/.local/bin/node`; edit both if either moves.
 
 ## Layout

@@ -1,6 +1,7 @@
+import { liveOptions, liveFutures, FUTURES_GROUPS } from '../lib/nseOptions.js';
 import { stockDirectory } from '../src/stocks.js';
 import { recentSessions, nifty500, buildRadar, buildScreen, deliveryStats, deliverySignal, BASELINE } from '../lib/nse.js';
-import { latestFo, optionChain, underlyings, futuresBuildup, participants, fiiDii, deals } from '../lib/fno.js';
+import { latestFo, futuresBuildup, participants, fiiDii, deals } from '../lib/fno.js';
 import { rotation } from '../lib/indices.js';
 const cache = new Map();
 // Basic per-instance rate limiting so one client cannot exhaust Yahoo upstream
@@ -444,13 +445,15 @@ export default async function handler(req,res){
    cacheControl='public, max-age=300, s-maxage=900, stale-while-revalidate=3600';
    data=await buildScreen();
   }else if(op==='options'){
-   // End-of-day chain from the F&O bhavcopy; NSE publishes it after the close.
    const s=String(req.query.symbol||'NIFTY').trim().toUpperCase(),exp=String(req.query.expiry||'');
    if(!/^[A-Z0-9&-]{1,20}$/.test(s)||(exp&&!/^\d{4}-\d{2}-\d{2}$/.test(exp)))return res.status(400).json({error:'Invalid symbol or expiry'});
-   const fo=await latestFo();const chain=optionChain(fo,s,exp);
-   if(!chain)return res.status(404).json({error:`${s} has no listed options in the ${fo.date} F&O bhavcopy`,symbols:underlyings(fo)});
-   data={...chain,symbols:underlyings(fo),fetchedAt:new Date().toISOString()};
-   cacheControl='public, max-age=300, s-maxage=1800, stale-while-revalidate=21600';
+   data=await liveOptions(s,exp);
+   cacheControl='no-store';
+  }else if(op==='live-futures'){
+   const group=String(req.query.group||'nse50_fut');
+   if(!FUTURES_GROUPS.includes(group))return res.status(400).json({error:'Invalid futures group'});
+   data=await liveFutures(group);
+   cacheControl='no-store';
   }else if(op==='futures'){
    data=futuresBuildup(await latestFo());
    cacheControl='public, max-age=300, s-maxage=1800, stale-while-revalidate=21600';

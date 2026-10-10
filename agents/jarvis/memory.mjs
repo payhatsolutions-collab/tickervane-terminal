@@ -7,7 +7,7 @@
 import { DatabaseSync } from 'node:sqlite';
 import { paths, ensureDirs } from './config.mjs';
 
-const SCHEMA_VERSION = 1;
+const SCHEMA_VERSION = 2;
 
 const SCHEMA = `
 CREATE TABLE IF NOT EXISTS signals (
@@ -70,7 +70,26 @@ CREATE TABLE IF NOT EXISTS runs (
 );
 CREATE INDEX IF NOT EXISTS runs_started ON runs(started_at DESC);
 CREATE INDEX IF NOT EXISTS runs_agent   ON runs(agent, started_at DESC);
+
+-- Your stocks. Symbols only: no quantities, prices or P&L are stored.
+CREATE TABLE IF NOT EXISTS watchlist (
+  symbol   TEXT PRIMARY KEY,
+  source   TEXT NOT NULL,      -- kite | manual
+  added_at TEXT NOT NULL
+);
+
+-- One row per stock per trading day, so the momentum agent can say what
+-- entered, left or climbed the ranking since the last run.
+CREATE TABLE IF NOT EXISTS momentum_ranks (
+  date     TEXT NOT NULL,      -- the screener's trading date, YYYY-MM-DD
+  symbol   TEXT NOT NULL,
+  rank     INTEGER NOT NULL,
+  momentum REAL NOT NULL,
+  PRIMARY KEY (date, symbol)
+);
 `;
+
+export const SYMBOL_RE = /^[A-Z0-9&-]{1,20}$/;
 
 export class Memory {
   constructor(file = paths.db) {
@@ -251,6 +270,54 @@ export class Memory {
     return this.db.prepare(`SELECT COUNT(*) AS n FROM outcomes WHERE decision IS NOT NULL`).get().n;
   }
 
+  // ---- watchlist --------------------------------------------------------
+
+  getWatchlist() {
+    return this.db.prepare('SELECT symbol, source, added_at AS addedAt FROM watchlist ORDER BY symbol').all();
+  }
+
+  /** Adds valid NSE symbols; returns which were added and which were rejected. */
+  addToWatchlist(symbols, source = 'manual') {
+    const added = [], rejected = [];
+    const stmt = this.db.prepare(
+      'INSERT OR IGNORE INTO watchlist (symbol, source, added_at) VALUES (?, ?, ?)'
+    );
+    for (const raw of symbols || []) {
+      const s = String(raw || '').trim().toUpperCase().replace(/\.NS$/, '');
+      if (!SYMBOL_RE.test(s)) { rejected.push(String(raw)); continue; }
+      if (stmt.run(s, source, new Date().toISOString()).changes) added.push(s);
+    }
+    return { added, rejected };
+  }
+
+  removeFromWatchlist(symbol) {
+    return this.db.prepare('DELETE FROM watchlist WHERE symbol = ?')
+      .run(String(symbol || '').trim().toUpperCase()).changes > 0;
+  }
+
+  // ---- momentum ranks ---------------------------------------------------
+
+  saveRanks(date, rows) {
+    const stmt = this.db.prepare(
+      'INSERT OR REPLACE INTO momentum_ranks (date, symbol, rank, momentum) VALUES (?, ?, ?, ?)'
+    );
+    this.db.exec('BEGIN');
+    try {
+      for (const r of rows) stmt.run(date, r.symbol, r.rank, r.momentum);
+      this.db.exec('COMMIT');
+    } catch (e) { this.db.exec('ROLLBACK'); throw e; }
+  }
+
+  /** The most recent stored ranking from a trading date before `date`. */
+  previousRanks(date) {
+    const row = this.db.prepare('SELECT MAX(date) AS d FROM momentum_ranks WHERE date < ?').get(date);
+    if (!row?.d) return { date: null, ranks: [] };
+    return {
+      date: row.d,
+      ranks: this.db.prepare('SELECT symbol, rank, momentum FROM momentum_ranks WHERE date = ?').all(row.d)
+    };
+  }
+
   // ---- retention --------------------------------------------------------
 
   /** Signals 180 days, runs 30. Returns what it removed, for the log. */
@@ -261,6 +328,7 @@ export class Memory {
       'DELETE FROM signal_subjects WHERE signal_id NOT IN (SELECT id FROM signals)'
     ).run();
     const runs = this.db.prepare('DELETE FROM runs WHERE started_at < ?').run(cut(30)).changes;
+    this.db.prepare('DELETE FROM momentum_ranks WHERE date < ?').run(cut(400).slice(0, 10));
     return { signals, runs };
   }
 }

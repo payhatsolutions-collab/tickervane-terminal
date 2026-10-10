@@ -128,6 +128,19 @@ export function normalizeSignal(input) {
   const subjects = checkSubjects(input.subjects, errors);
   const action = checkAction(input.action, input.kind, errors);
 
+  // Structured payload for the dashboard to render (a market snapshot table, a
+  // story list). Optional, and capped so one signal cannot bloat the store.
+  let data;
+  if (input.data !== undefined) {
+    if (!input.data || typeof input.data !== 'object' || Array.isArray(input.data)) {
+      errors.push('data must be an object');
+    } else if (JSON.stringify(input.data).length > 200_000) {
+      errors.push('data must be under 200KB');
+    } else {
+      data = input.data;
+    }
+  }
+
   if (errors.length) throw new EnvelopeError(errors);
 
   return {
@@ -143,7 +156,8 @@ export function normalizeSignal(input) {
     evidence,
     ...(input.expiresAt ? { expiresAt: new Date(input.expiresAt).toISOString() } : {}),
     ...(input.supersedes ? { supersedes: input.supersedes } : {}),
-    ...(action ? { action } : {})
+    ...(action ? { action } : {}),
+    ...(data ? { data } : {})
   };
 }
 

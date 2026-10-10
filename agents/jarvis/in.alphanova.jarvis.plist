@@ -3,11 +3,12 @@
 <!--
   Jarvis daemon. Install with:
     cp agents/jarvis/in.alphanova.jarvis.plist ~/Library/LaunchAgents/
-    launchctl load  ~/Library/LaunchAgents/in.alphanova.jarvis.plist
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/in.alphanova.jarvis.plist
 
-  Stop / restart:
-    launchctl unload ~/Library/LaunchAgents/in.alphanova.jarvis.plist
+  Restart / stop / uninstall:
     launchctl kickstart -k gui/$(id -u)/in.alphanova.jarvis
+    launchctl bootout gui/$(id -u)/in.alphanova.jarvis
+    rm ~/Library/LaunchAgents/in.alphanova.jarvis.plist
 
   The daemon owns its own scheduler, so there is no StartCalendarInterval here:
   the schedule lives in schedule.json where it is data and can be tested.

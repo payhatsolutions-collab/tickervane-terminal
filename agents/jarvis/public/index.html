@@ -35,6 +35,12 @@ header{
 .title{font-size:15px;font-weight:650;letter-spacing:-.2px}
 .title span{color:var(--muted);font-weight:400;margin-left:8px;font-size:12px;letter-spacing:.3px}
 .spacer{flex:1}
+.secnav{display:flex;gap:2px;margin-left:18px}
+.secnav a{font-size:12px;color:var(--muted);padding:6px 10px;border-radius:6px;text-decoration:none}
+.secnav a:hover{background:var(--raised);color:var(--text);text-decoration:none}
+.secnav a.on{color:var(--text);background:var(--raised)}
+[id^="sec-"]{scroll-margin-top:72px}
+@media (max-width:880px){.secnav{margin-left:6px}.secnav a{padding:6px 7px;font-size:11px}.title span{display:none}}
 .sync{font-size:11px;color:var(--dim);font-family:var(--mono)}
 .icon-btn{width:30px;height:30px;display:grid;place-content:center;border-radius:6px;color:var(--muted)}
 .icon-btn:hover{background:var(--raised);color:var(--text)}
@@ -130,6 +136,89 @@ section{min-width:0;display:flex;flex-direction:column;gap:10px}
 .ev time{margin-left:auto;font-size:10px;color:var(--dim);font-family:var(--mono)}
 .stale{font-size:10px;color:var(--amber)}
 
+/* ── research brief ────────────────────────────────────── */
+.research{padding:18px 18px 20px}
+.r-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.r-head h2{font-size:17px;font-weight:650;line-height:1.35;letter-spacing:-.2px}
+.r-meta{font-size:11px;color:var(--dim);font-family:var(--mono);white-space:nowrap;margin-top:3px}
+.r-summary{margin-top:8px;color:#b9c4d4;font-size:13.5px;line-height:1.6}
+.r-status{margin-top:10px;font-size:11.5px;color:var(--muted);line-height:1.55;padding:8px 10px;border-radius:7px;background:#0d131b}
+.r-status.off{color:var(--amber)}
+.r-status code{font-family:var(--mono);font-size:11px;color:#c9d3e1;word-break:break-all}
+.r-section{margin-top:18px}
+.r-section>.label{margin-bottom:8px}
+
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:8px}
+.tile{background:#0d131b;border:1px solid var(--line);border-radius:8px;padding:9px 10px;min-width:0}
+.tile .n{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .p{font-size:15px;font-weight:600;font-family:var(--mono);margin-top:3px;font-variant-numeric:tabular-nums}
+.tile .c{display:flex;gap:8px;font-size:11px;font-family:var(--mono);margin-top:2px}
+.tile .c .d5{color:var(--dim)}
+.good{color:var(--green)} .bad{color:var(--red)} .flat{color:var(--dim)}
+
+.impacts{display:flex;flex-direction:column;gap:6px}
+.impact{display:grid;grid-template-columns:150px 72px minmax(0,1fr);gap:10px;align-items:baseline;font-size:12.5px;
+  padding:8px 10px;border-radius:7px;background:#0d131b}
+.impact b{font-weight:600}
+.dir{font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px;border-radius:4px;text-align:center;background:#1a222e;color:var(--dim)}
+.dir.positive{background:#163326;color:var(--green)} .dir.negative{background:#38202a;color:var(--red)}
+.dir.mixed{background:#332a18;color:var(--amber)}
+.impact .rsn{color:#b3bfd0;line-height:1.5}
+.refs{color:var(--dim);font-family:var(--mono);font-size:10px;margin-left:4px}
+
+.topic{padding:10px 0;border-top:1px solid #18202b}
+.topic:first-child{border-top:0;padding-top:2px}
+.topic h4{font-size:13px;font-weight:600}
+.topic p{font-size:12.5px;color:#b3bfd0;line-height:1.55;margin-top:3px}
+.topic p.why{color:var(--muted)}
+
+.theme{margin-top:12px}
+.theme:first-child{margin-top:0}
+.theme-h{font-size:11px;color:var(--muted);font-weight:600;margin-bottom:4px}
+.story{display:grid;grid-template-columns:30px minmax(0,1fr);gap:8px;padding:6px 0;align-items:baseline}
+.story .cnt{font-family:var(--mono);font-size:11px;color:var(--accent);text-align:right}
+.story .cnt.one{color:var(--dim)}
+.story a{color:var(--text);font-size:12.8px;line-height:1.45}
+.story a:hover{color:var(--accent);text-decoration:none}
+.story .src{font-size:10.5px;color:var(--dim);margin-top:2px}
+.new{font-size:9px;font-weight:700;letter-spacing:.5px;color:#0a0d12;background:var(--accent);
+  border-radius:3px;padding:1px 4px;margin-right:6px;vertical-align:1px}
+.watch{margin:0;padding-left:18px;font-size:12.5px;color:#b3bfd0;line-height:1.7}
+.gatenote{font-size:11px;color:var(--dim);line-height:1.6}
+
+/* ── momentum ──────────────────────────────────────────── */
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:11px;padding:3px 9px;border-radius:12px;background:#151c26;border:1px solid var(--line);color:#b3bfd0}
+.chip b{color:var(--text);font-weight:600;margin-left:3px}
+.mtable{width:100%;border-collapse:collapse;font-size:12.5px}
+.mtable th{font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:var(--dim);font-weight:600;text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+.mtable td{padding:8px;border-bottom:1px solid #161e29;vertical-align:top}
+.mtable tr:last-child td{border-bottom:0}
+.mtable .num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.mtable .sym b{font-family:var(--mono);font-weight:600}
+.mtable .sym small{display:block;color:var(--dim);font-size:10.5px;margin-top:1px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mtable .why{color:#aab6c8;font-size:12px;line-height:1.5}
+.bar{height:5px;width:64px;border-radius:3px;background:#1c2431;overflow:hidden;margin-top:5px}
+.bar i{display:block;height:100%;background:var(--accent)}
+.evs{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.evc{font-size:10px;padding:1px 6px;border-radius:4px;background:#1a222e;color:var(--muted)}
+.evc.breakout{background:#163326;color:var(--green)} .evc.delivery{background:#182643;color:var(--accent)}
+.evc.cross{background:#182643;color:var(--accent)} .evc.high{background:#1d2a20;color:#9fd8b8}
+.evc.stretched{background:#332a18;color:var(--amber)}
+.stand{font-size:9.5px;font-weight:650;letter-spacing:.5px;text-transform:uppercase;padding:2px 7px;border-radius:4px;white-space:nowrap}
+.stand.good{background:#163326;color:var(--green)} .stand.bad{background:#38202a;color:var(--red)}
+.stand.flat{background:#1a222e;color:var(--dim)}
+.est{color:var(--muted)}
+.rm{color:var(--dim);font-size:14px;padding:0 4px}
+.rm:hover{color:var(--red)}
+.addrow{display:flex;gap:8px;margin-top:10px}
+.addrow input{flex:1;min-width:0;background:#0d131b;border:1px solid var(--line);border-radius:6px;padding:7px 10px;
+  color:var(--text);font-family:var(--mono);font-size:12px;text-transform:uppercase}
+.addrow input:focus{outline:none;border-color:var(--accent)}
+.scroll{overflow-x:auto}
+.changes{font-size:12.5px;color:#b3bfd0;line-height:1.7}
+.changes b{font-family:var(--mono);color:var(--text)}
+
 .empty{text-align:center;padding:40px 20px;color:var(--muted)}
 .empty h3{font-size:14px;font-weight:600;margin-bottom:6px;color:var(--text)}
 .empty p{font-size:12.5px;line-height:1.6}
@@ -147,6 +236,9 @@ footer{max-width:1180px;margin:0 auto;padding:0 22px 40px;color:var(--dim);font-
   .sig-body{padding-left:16px}
   .agent{grid-template-columns:8px 70px 1fr auto auto}
   .agent .why{max-width:90px}
+  .impact{grid-template-columns:1fr auto}
+  .impact .rsn{grid-column:1/-1}
+  .r-head{flex-direction:column;gap:4px}
 }
 </style>
 </head>
@@ -157,6 +249,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 22px 40px;color:var(--dim);font-
     <circle cx="16" cy="16" r="4" fill="#7c9cf0"/>
   </svg>
   <div class="title">Jarvis<span>Chief of Staff</span></div>
+  <nav class="secnav"><a href="#sec-research">Research</a><a href="#sec-momentum">Momentum</a><a href="#sec-agents">Agents</a><a href="#sec-stream">Signals</a></nav>
   <div class="spacer"></div>
   <div class="sync" id="sync">connecting…</div>
   <button class="icon-btn" id="refresh" title="Refresh" aria-label="Refresh">⟳</button>
@@ -164,12 +257,14 @@ footer{max-width:1180px;margin:0 auto;padding:0 22px 40px;color:var(--dim);font-
 
 <main>
   <div id="error"></div>
+  <div class="label" id="sec-research" style="margin-bottom:10px">Market research</div>
+  <div id="research" style="margin-bottom:22px"></div>
+  <div class="label" id="sec-momentum" style="margin-bottom:10px">Momentum</div>
+  <div id="momentum" style="margin-bottom:22px"></div>
   <div class="grid">
     <section>
-      <div class="label">Now</div>
+      <div class="label" id="sec-agents">Needs attention</div>
       <div id="now"></div>
-      <div class="label" style="margin-top:8px">Latest brief</div>
-      <div id="brief"></div>
     </section>
     <section>
       <div class="label">Agents</div>
@@ -182,7 +277,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 22px 40px;color:var(--dim);font-
 
   <div class="stream">
     <div class="stream-head">
-      <div class="label">Signal stream</div>
+      <div class="label" id="sec-stream">Signal stream</div>
       <div class="filters" id="filters"></div>
     </div>
     <div id="stream"></div>
@@ -252,13 +347,162 @@ function evidenceHTML(list) {
   }).join('') + '</ul>';
 }
 
+/* ── research brief ──────────────────────────────────── */
+
+const pctHTML = (v, inverse) => {
+  if (!Number.isFinite(v)) return '<span class="flat">—</span>';
+  const up = v > 0, cls = v === 0 ? 'flat' : (up !== Boolean(inverse) ? 'good' : 'bad');
+  return '<span class="'+cls+'">'+(up?'+':'')+v.toFixed(2)+'%</span>';
+};
+const priceHTML = r => r.price === null ? '—'
+  : (r.unit === '$' ? '$' : '') + r.price.toLocaleString('en-IN', {maximumFractionDigits: 2}) + (r.unit === '%' ? '%' : '');
+const refsHTML = ids => ids && ids.length ? '<span class="refs">['+ids.map(i=>'#'+i).join(' ')+']</span>' : '';
+
+function storyHTML(s) {
+  const link = s.links && s.links[0];
+  const title = link && link.url && link.url.startsWith('https://')
+    ? '<a href="'+esc(link.url)+'" target="_blank" rel="noreferrer noopener">'+esc(s.title)+'</a>'
+    : esc(s.title);
+  const more = s.sources.length > 3 ? ' +' + (s.sources.length - 3) + ' more' : '';
+  return '<div class="story" id="story-'+s.id+'">' +
+    '<span class="cnt'+(s.outlets===1?' one':'')+'" title="Outlets that carried this story">'+s.outlets+'×</span>' +
+    '<div>'+(s.isNew?'<span class="new">NEW</span>':'')+title +
+      // <bdi> keeps a right-to-left outlet name (Arabic, Persian) from
+      // reordering the rest of the line.
+      '<div class="src">#'+s.id+' · '+s.sources.slice(0,3).map(x=>'<bdi>'+esc(x)+'</bdi>').join(', ')+more +
+      (s.latest ? ' · '+ist(s.latest)+' IST' : '')+'</div></div></div>';
+}
+
+function renderResearch(sig) {
+  if (!sig) {
+    $('research').innerHTML = '<div class="card empty"><h3>No research brief yet</h3>' +
+      '<p>Run one now:</p><code>npm run jarvis -- run macro research_brief</code></div>';
+    return;
+  }
+  const d = sig.data, a = d.analysis || {};
+  const ok = a.status === 'ok';
+  const byTheme = {};
+  for (const s of d.stories) (byTheme[s.theme] ??= []).push(s);
+
+  let status;
+  if (ok) {
+    status = '<div class="r-status">Analysis by '+esc(a.model||'Claude')+(a.via?' via your '+esc(a.via):'')+', from the snapshot and the stories below — each point cites its story numbers.' +
+      (a.unverified && a.unverified.length
+        ? ' <span style="color:var(--amber)">Figures not found in the source data: '+esc(a.unverified.join(', '))+'.</span>' : '') + '</div>';
+  } else if (a.status === 'off') {
+    status = '<div class="r-status off">Analysis is off — '+esc(a.reason||'not configured')+'. This brief shows prices and news only.' +
+      (a.fix ? ' To turn it on, run this once in Terminal:<br><code>'+esc(a.fix)+'</code>' : '') + '</div>';
+  } else {
+    status = '<div class="r-status off">Analysis failed: '+esc(a.reason||'unknown error')+'. Prices and news below are unaffected.</div>';
+  }
+
+  const tiles = d.snapshot.map(r =>
+    '<div class="tile" title="'+esc(r.symbol)+(r.asOf?' · as of '+ist(r.asOf)+' IST':'')+'">' +
+      '<div class="n">'+esc(r.name)+'</div><div class="p">'+priceHTML(r)+'</div>' +
+      '<div class="c">'+pctHTML(r.change, r.inverse)+'<span class="d5">5D '+(Number.isFinite(r.change5d)?(r.change5d>0?'+':'')+r.change5d.toFixed(1)+'%':'—')+'</span></div></div>'
+  ).join('');
+
+  const impact = ok && a.india_impact.length ? '<div class="r-section"><div class="label">What it means for India</div><div class="impacts">' +
+    a.india_impact.map(i => '<div class="impact"><b>'+esc(i.area)+'</b><span class="dir '+esc(i.direction)+'">'+esc(i.direction)+'</span>' +
+      '<span class="rsn">'+esc(i.reason)+refsHTML(i.story_ids)+'</span></div>').join('') + '</div></div>' : '';
+
+  const topics = ok && a.topics.length ? '<div class="r-section"><div class="label">What happened</div>' +
+    a.topics.map(t => '<div class="topic"><h4>'+esc(t.title)+refsHTML(t.story_ids)+'</h4>' +
+      '<p>'+esc(t.what_happened)+'</p><p class="why">'+esc(t.why_it_matters)+'</p></div>').join('') + '</div>' : '';
+
+  const watch = ok && a.watch.length ? '<div class="r-section"><div class="label">Watch next session</div><ul class="watch">' +
+    a.watch.map(w => '<li>'+esc(w)+'</li>').join('') + '</ul></div>' : '';
+
+  const stories = '<div class="r-section"><div class="label">'+(ok?'Sources':'The news')+' — grouped, with how many outlets carried each story</div>' +
+    Object.keys(byTheme).map(t => '<div class="theme"><div class="theme-h">'+esc(d.themes[t]||t)+'</div>' +
+      byTheme[t].map(storyHTML).join('') + '</div>').join('') +
+    (d.feedErrors && d.feedErrors.length ? '<p class="gatenote">Unavailable: '+esc(d.feedErrors.map(f=>f.theme).join(', '))+'</p>' : '') + '</div>';
+
+  const gates = (d.gates||[]).filter(g => Number.isFinite(g.sigma));
+  const gateNote = gates.length ? '<div class="r-section"><p class="gatenote">Price check — how unusual each lead market’s move is against its own last 20 sessions: ' +
+    gates.map(g => esc(d.themes[g.theme]||g.theme).split(' · ')[0]+' '+(g.sigma>0?'+':'')+g.sigma+'σ'+(g.material?' (confirmed)':'')).join(' · ') +
+    '. A move of 1.5σ or more alongside wide coverage raises this brief’s severity.</p></div>' : '';
+
+  $('research').innerHTML = '<div class="card research">' +
+    '<div class="r-head"><h2>'+esc(sig.title)+'</h2><div class="r-meta">'+ist(sig.ts)+' IST · '+sig.severity+'</div></div>' +
+    (ok ? '<p class="r-summary">'+esc(a.summary)+'</p>' : '') + status +
+    '<div class="r-section"><div class="label">Markets</div><div class="tiles">'+tiles+'</div></div>' +
+    impact + topics + watch + stories + gateNote + '</div>';
+}
+
+/* ── momentum brief ──────────────────────────────────── */
+
+const pct1 = v => Number.isFinite(v) ? (v > 0 ? '+' : '') + v.toFixed(2) + '%' : '—';
+const evHTML = list => list && list.length
+  ? '<div class="evs">' + list.map(e => '<span class="evc '+esc(e.kind)+'">'+esc(e.text)+'</span>').join('') + '</div>' : '';
+const barHTML = m => Number.isFinite(m) ? '<div class="bar"><i style="width:'+Math.max(2, Math.min(100, m))+'%"></i></div>' : '';
+
+function renderMomentum(sig) {
+  if (!sig) {
+    $('momentum').innerHTML = '<div class="card empty"><h3>No momentum brief yet</h3>' +
+      '<p>It runs every weekday at 18:45 IST, after NSE publishes delivery data. Run one now:</p>' +
+      '<code>npm run jarvis -- run momentum momentum_brief</code></div>';
+    return;
+  }
+  const d = sig.data;
+
+  const watchRows = d.watch.length ? d.watch.map(w =>
+    '<tr><td class="sym"><b>'+esc(w.symbol)+'</b>'+(w.inUniverse===false && w.rank ? '<small>outside Nifty 500 · estimated</small>' : '')+'</td>' +
+    '<td><span class="stand '+esc(w.standing.tone)+'">'+esc(w.standing.label)+'</span></td>' +
+    '<td class="num">'+(w.rank ? (w.inUniverse===false?'<span class="est">≈</span>':'')+'#'+w.rank : '—')+barHTML(w.momentum)+'</td>' +
+    '<td class="num">'+(Number.isFinite(w.price)?w.price.toLocaleString('en-IN'):'—')+'<div>'+pctHTML(w.change)+'</div></td>' +
+    '<td class="why">'+esc(w.why||'')+evHTML(w.events)+'</td>' +
+    '<td><button class="rm" data-unwatch="'+esc(w.symbol)+'" title="Remove from watchlist">×</button></td></tr>'
+  ).join('') : '<tr><td colspan="6" class="why">No stocks on your watchlist yet — add some below.</td></tr>';
+
+  const leaderRows = d.leaders.map(l =>
+    '<tr><td class="num">#'+l.rank+'</td>' +
+    '<td class="sym"><b>'+esc(l.symbol)+'</b><small title="'+esc(l.name)+'">'+esc(l.name)+'</small></td>' +
+    '<td class="why">'+esc(l.industry||'')+'</td>' +
+    '<td class="num">'+l.momentum+barHTML(l.momentum)+'</td>' +
+    '<td class="num">'+(Number.isFinite(l.price)?l.price.toLocaleString('en-IN'):'—')+'<div>'+pctHTML(l.change)+'</div></td>' +
+    '<td class="why">'+esc(l.why)+evHTML(l.events)+'</td></tr>'
+  ).join('');
+
+  const today = d.todays.length ? '<table class="mtable"><tbody>' + d.todays.map(t =>
+    '<tr><td class="sym" style="width:110px"><b>'+esc(t.symbol)+'</b><small>#'+t.rank+' · '+esc(t.industry||'')+'</small></td>' +
+    '<td>'+evHTML(t.events)+'</td></tr>').join('') + '</tbody></table>'
+    : '<p class="gatenote">No breakouts, new highs or delivery surges among the top 150 today.</p>';
+
+  const c = d.changes;
+  const changes = c.first
+    ? '<p class="gatenote">First ranking stored today. From the next run Jarvis will show which stocks entered, left or climbed the top '+25+'.</p>'
+    : '<div class="changes">' +
+        (c.entered.length ? 'Entered the top 25: '+c.entered.map(e=>'<b>'+esc(e.symbol)+'</b> #'+e.rank+(e.from?' (from #'+e.from+')':'')).join(', ')+'<br>' : '') +
+        (c.left.length ? 'Left the top 25: '+c.left.map(e=>'<b>'+esc(e.symbol)+'</b>'+(e.rank?' now #'+e.rank:'')).join(', ')+'<br>' : '') +
+        (c.climbers.length ? 'Biggest climbers: '+c.climbers.map(e=>'<b>'+esc(e.symbol)+'</b> #'+e.from+' → #'+e.rank).join(', ') : '') +
+        (!c.entered.length && !c.left.length && !c.climbers.length ? 'No changes in the top 25 since '+esc(c.since)+'.' : '') +
+      '</div>';
+
+  $('momentum').innerHTML = '<div class="card research">' +
+    '<div class="r-head"><h2>'+esc(sig.title.replace(/^Momentum:\s*/, ''))+'</h2><div class="r-meta">'+esc(d.date)+' · '+sig.severity+'</div></div>' +
+    '<div class="r-section"><div class="label">Where the strength is — industries among the top 50</div><div class="chips">' +
+      d.sectors.map(s => '<span class="chip">'+esc(s.industry)+'<b>'+s.count+'</b></span>').join('') + '</div></div>' +
+    '<div class="r-section"><div class="label">Your stocks ('+d.watch.length+') — ranked against all '+d.universe+' Nifty 500 stocks</div>' +
+      '<div class="scroll"><table class="mtable"><thead><tr><th>Stock</th><th>Standing</th><th>Rank</th><th>Price</th><th>Why</th><th></th></tr></thead><tbody>'+watchRows+'</tbody></table></div>' +
+      '<div class="addrow"><input id="addsym" placeholder="Add NSE symbols, e.g. TATAMOTORS, HAL" autocomplete="off">' +
+      '<button class="btn" id="addbtn">Add</button></div>' +
+      '<p class="gatenote" style="margin-top:6px">Changes apply from the next run. Only symbols are stored — no quantities or prices.</p></div>' +
+    '<div class="r-section"><div class="label">Leaders — '+esc(d.rules.toLowerCase())+'</div>' +
+      '<div class="scroll"><table class="mtable"><thead><tr><th>Rank</th><th>Stock</th><th>Industry</th><th>Score</th><th>Price</th><th>Why</th></tr></thead><tbody>'+leaderRows+'</tbody></table></div></div>' +
+    '<div class="r-section"><div class="label">Today — breakouts, new highs and delivery surges, most significant first</div>'+today+'</div>' +
+    '<div class="r-section"><div class="label">What changed</div>'+changes+'</div>' +
+    '<div class="r-section"><p class="gatenote">Score: a 0–100 blend of 6-month (35%), 3-month (25%) and 1-year (20%) returns and 3-month strength against the Nifty (20%), each as a percentile of the Nifty 500. Stocks outside the Nifty 500 are measured from their own price history and placed on the same scale (≈).</p></div>' +
+  '</div>';
+}
+
 function renderNow(signals) {
-  const top = signals.filter(s => s.severity !== 'routine')
+  const top = signals.filter(s => s.severity !== 'routine' && !(s.data && s.data.kind === 'research_brief'))
     .sort((a,b) => (RANK[a.severity]-RANK[b.severity]) || (Date.parse(b.ts)-Date.parse(a.ts)))
     .slice(0,3);
   if (!top.length) {
-    $('now').innerHTML = '<div class="card quiet"><p>Nothing above routine.</p>' +
-      '<small>Most hours are routine. The materiality gate reports that rather than manufacturing a story.</small></div>';
+    $('now').innerHTML = '<div class="card quiet"><p>Nothing needs your attention.</p>' +
+      '<small>Alerts, conflicts between agents and proposals that have gone stale will appear here.</small></div>';
     return;
   }
   $('now').innerHTML = top.map(s =>
@@ -268,16 +512,6 @@ function renderNow(signals) {
       '<p>'+esc(String(s.body||'').split('\n')[0])+'</p>' +
       evidenceHTML(s.evidence) +
     '</div>').join('');
-}
-
-function renderBrief(b) {
-  if (!b || b.total === undefined) { $('brief').innerHTML = ''; return; }
-  const gap = b.coverage !== 'complete'
-    ? '<p class="note" style="color:var(--amber)">⚠ '+esc(b.coverage)+'</p>' : '';
-  $('brief').innerHTML = '<div class="card">' +
-    '<h4 style="font-size:13px;font-weight:600">'+esc(b.label)+'</h4>' +
-    '<div class="row" style="margin-top:4px"><span>'+ist(b.window.from)+'–'+ist(b.window.to)+' IST</span>' +
-    '<span class="mono">'+b.total+' signal'+(b.total===1?'':'s')+'</span></div>' + gap + '</div>';
 }
 
 function renderAgents(h) {
@@ -375,15 +609,19 @@ function renderFilters() {
 async function load() {
   try {
     const q = '/api/signals?limit=80' + (filter ? '&agent='+encodeURIComponent(filter) : '');
-    const [sig, health, brief] = await Promise.all([
-      api(q), api('/api/health'), api('/api/brief').catch(() => null)
+    const [sig, health, research, mom] = await Promise.all([
+      api(q), api('/api/health'), api('/api/signals?agent=macro&limit=20'), api('/api/signals?agent=momentum&limit=10')
     ]);
     $('error').innerHTML = '';
+    renderResearch(research.signals.find(s => s.data && s.data.kind === 'research_brief'));
+    // Don't rebuild the momentum card while you are typing a symbol into it.
+    if (document.activeElement?.id !== 'addsym') {
+      renderMomentum(mom.signals.find(s => s.data && s.data.kind === 'momentum_brief'));
+    }
     renderNow(sig.signals);
     renderStream(sig.signals);
     renderAgents(health);
     renderAwaiting(sig.pending || []);
-    renderBrief(brief);
     $('sync').textContent = 'synced ' + ago(sig.updatedAt);
   } catch (e) {
     $('error').innerHTML = '<div class="card err" style="margin-bottom:16px">' +
@@ -404,6 +642,30 @@ document.addEventListener('click', async ev => {
   }
   const f = ev.target.closest('[data-filter]');
   if (f) { filter = f.dataset.filter; renderFilters(); return load(); }
+
+  const unwatch = ev.target.closest('[data-unwatch]');
+  if (unwatch) {
+    const sym = unwatch.dataset.unwatch;
+    if (!confirm('Remove ' + sym + ' from your watchlist?')) return;
+    try {
+      await api('/api/watchlist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ remove: sym }) });
+      unwatch.closest('tr').style.opacity = '.35';
+      unwatch.closest('tr').querySelector('.why').textContent = 'Removed — drops off at the next run.';
+    } catch (e) { alert(e.message); }
+    return;
+  }
+  if (ev.target.id === 'addbtn') {
+    const input = $('addsym');
+    const add = input.value.split(/[\s,]+/).map(s => s.trim().toUpperCase()).filter(Boolean);
+    if (!add.length) return;
+    try {
+      const r = await api('/api/watchlist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ add }) });
+      input.value = '';
+      input.placeholder = (r.added.length ? 'Added ' + r.added.join(', ') + ' — they appear at the next run' : 'Already on your watchlist')
+        + (r.rejected.length ? ' · not valid: ' + r.rejected.join(', ') : '');
+    } catch (e) { alert(e.message); }
+    return;
+  }
 
   const clear = ev.target.closest('[data-clear]');
   if (clear) { delete tickets[clear.dataset.clear]; return load(); }
@@ -438,7 +700,11 @@ document.addEventListener('visibilitychange', () => {
 });
 
 renderFilters();
-tick();
+let jumped = false;
+const firstLoad = load().then(() => {
+  if (!jumped && location.hash) { jumped = true; document.querySelector(location.hash)?.scrollIntoView(); }
+});
+firstLoad.then(schedule);
 </script>
 </body>
 </html>

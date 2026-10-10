@@ -1,0 +1,76 @@
+{
+  "date": "2026-10-07",
+  "deployment": "https://alphanova2-oidisks74-wdcre.vercel.app",
+  "deploymentId": "dpl_2PzMBeuwRdf7xrQZM1p71GX1jQDX",
+  "promoted": true,
+  "previousDeployment": "https://alphanova2-xh3fo97ta-wdcre.vercel.app",
+  "rollback": "npx --yes vercel promote https://alphanova2-xh3fo97ta-wdcre.vercel.app --yes",
+  "tests": {
+    "passed": 225,
+    "failed": 0,
+    "productionBuild": "passed"
+  },
+  "publicChecks": [
+    {
+      "url": "https://alphanova48.in/?page=FnO",
+      "status": 200,
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "bundle": "assets/index-T9ztCMoo.js"
+    },
+    {
+      "url": "https://alphanova48.in/api/market?op=options&symbol=BANKNIFTY",
+      "status": 200,
+      "cacheControl": "no-store",
+      "rows": 157,
+      "source": "NSE option chain",
+      "asOf": "2026-10-07T10:10:00.000Z",
+      "signal": "Range"
+    },
+    {
+      "url": "https://alphanova48.in/api/market?op=live-futures&group=stock_fut",
+      "status": 200,
+      "cacheControl": "no-store",
+      "rows": 20,
+      "asOf": "2026-10-07T10:10:00.000Z"
+    },
+    {
+      "url": "https://tickervane.vercel.app/?page=FnO",
+      "status": 200,
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "bundle": "assets/index-T9ztCMoo.js"
+    },
+    {
+      "url": "https://tickervane.vercel.app/api/market?op=options&symbol=BANKNIFTY",
+      "status": 200,
+      "cacheControl": "no-store",
+      "rows": 157,
+      "source": "NSE option chain",
+      "asOf": "2026-10-07T10:10:00.000Z",
+      "signal": "Range"
+    },
+    {
+      "url": "https://tickervane.vercel.app/api/market?op=live-futures&group=stock_fut",
+      "status": 200,
+      "cacheControl": "no-store",
+      "rows": 20,
+      "asOf": "2026-10-07T10:10:00.000Z"
+    }
+  ],
+  "uiChecks": [
+    "Live NSE option-chain rendering",
+    "NIFTY expiry switch 13-Oct to 19-Oct",
+    "BANKNIFTY resets expiry and renders Range",
+    "Stock futures category and HDFCBANK filtering",
+    "390px mobile layout",
+    "Production browser console: no errors"
+  ],
+  "screenshot": "docs/fno-live-2026-10-07.jpg",
+  "notes": [
+    "NSE feed tested after market close; exchange timestamps are preserved and displayed as session snapshots.",
+    "Signal is an unvalidated positioning heuristic using near-spot PCR, net OI changes and spot versus max pain.",
+    "The futures live watch displays the contracts returned by NSE (stock_fut returned 20 contracts during verification).",
+    "Broad futures OI build-up scanner remains explicitly end-of-day.",
+    "No stale archive is substituted for failed live option requests.",
+    "Public NSE endpoints can refuse requests; errors are surfaced and signals withheld."
+  ]
+}

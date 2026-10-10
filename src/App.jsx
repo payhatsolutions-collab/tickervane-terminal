@@ -2018,7 +2018,7 @@ export default function App() {
                   {(isNS || symbol === "^NSEI" || symbol === "^NSEBANK") && (
                     <button
                       className="button"
-                      title="End-of-day option chain, if this stock trades in F&O"
+                      title="NSE option chain, if this stock trades in F&O"
                       onClick={() => {
                         try {
                           localStorage.setItem(

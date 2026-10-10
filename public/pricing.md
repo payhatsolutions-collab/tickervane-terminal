@@ -1,7 +1,7 @@
 # Alpha Nova pricing
 
 Updated: 2026-10-03
-Canonical page: https://tickervane.vercel.app/pricing.html
+Canonical page: https://alphanova48.in/pricing.html
 
 Price: INR 0. No subscription or Alpha Nova account required for the current browser app.
 

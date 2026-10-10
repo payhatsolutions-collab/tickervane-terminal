@@ -1,24 +1,58 @@
 [
   {
-    "rule": "macro.overnight",
+    "rule": "macro.preopen",
     "cron": "30 6 * * 1-5",
     "agent": "macro",
-    "intent": "overnight_wrap",
-    "note": "US close + Asia open read, before pre-open"
+    "intent": "research_brief",
+    "note": "Overnight: US close, Asia open, oil and the geopolitical picture before the Indian pre-open"
   },
   {
-    "rule": "macro.intraday",
-    "cron": "*/15 9-15 * * 1-5",
+    "rule": "macro.open",
+    "cron": "30 9 * * 1-5",
     "agent": "macro",
-    "intent": "delta_scan",
-    "guard": "market_open"
+    "intent": "research_brief",
+    "note": "First 15 minutes of the session"
   },
   {
-    "rule": "macro.geopol",
-    "cron": "0 */2 * * *",
+    "rule": "macro.midday",
+    "cron": "0 12 * * 1-5",
     "agent": "macro",
-    "intent": "geopolitical_scan",
-    "note": "24x7 - Hormuz does not keep market hours"
+    "intent": "research_brief"
+  },
+  {
+    "rule": "macro.close",
+    "cron": "45 15 * * 1-5",
+    "agent": "macro",
+    "intent": "research_brief",
+    "note": "After the close"
+  },
+  {
+    "rule": "macro.evening",
+    "cron": "0 20 * * 1-5",
+    "agent": "macro",
+    "intent": "research_brief",
+    "note": "Europe and the US open"
+  },
+  {
+    "rule": "macro.late",
+    "cron": "30 23 * * 1-5",
+    "agent": "macro",
+    "intent": "research_brief",
+    "note": "Late US session"
+  },
+  {
+    "rule": "macro.weekend",
+    "cron": "0 10,20 * * 0,6",
+    "agent": "macro",
+    "intent": "research_brief",
+    "note": "Hormuz does not keep market hours"
+  },
+  {
+    "rule": "momentum.eod",
+    "cron": "45 18 * * 1-5",
+    "agent": "momentum",
+    "intent": "momentum_brief",
+    "note": "After NSE publishes the delivery bhavcopy around 18:00 IST"
   },
   {
     "rule": "options.preopen",
@@ -32,19 +66,6 @@
     "agent": "options",
     "intent": "monitor_open_proposals",
     "guard": "market_open"
-  },
-  {
-    "rule": "momentum.eod",
-    "cron": "45 18 * * 1-5",
-    "agent": "momentum",
-    "intent": "rank_universe",
-    "note": "after NSE publishes the delivery bhavcopy around 18:00 IST"
-  },
-  {
-    "rule": "momentum.preopen",
-    "cron": "0 9 * * 1-5",
-    "agent": "momentum",
-    "intent": "gap_watch"
   },
   {
     "rule": "errands.morning",
@@ -63,27 +84,6 @@
     "cron": "0 10 * * *",
     "agent": "errands",
     "intent": "bill_sweep"
-  },
-  {
-    "rule": "jarvis.brief.overnight",
-    "cron": "45 6 * * 1-5",
-    "agent": "jarvis",
-    "intent": "compose_brief",
-    "params": { "brief": "overnight" }
-  },
-  {
-    "rule": "jarvis.brief.close",
-    "cron": "45 15 * * 1-5",
-    "agent": "jarvis",
-    "intent": "compose_brief",
-    "params": { "brief": "close" }
-  },
-  {
-    "rule": "jarvis.brief.evening",
-    "cron": "15 19 * * *",
-    "agent": "jarvis",
-    "intent": "compose_brief",
-    "params": { "brief": "evening" }
   },
   {
     "rule": "jarvis.prune",

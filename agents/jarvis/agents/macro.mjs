@@ -1,234 +1,203 @@
-// Agent 1 — Market Research & News (blueprint §6).
+// Agent 1 — Market Research & News.
 //
-// Three steps per theme, and only the third would ever need a model:
-//   1. FETCH    quotes + lead instrument history + theme headlines
-//   2. DETECT   materiality.assess() — deterministic, no model call
-//   3. NARRATE  phrase the detected fact
+// One run produces ONE research brief:
+//   1. a market snapshot — Brent, gold, US and Asian indices, India, rupee, yields
+//   2. the news, turned into stories: the same event from ten outlets is one
+//      story "reported by 10 outlets", grouped by topic, new ones marked
+//   3. an analysis of what it means for Indian markets, from Claude, when an
+//      API key is configured — stated plainly as off when it is not
 //
-// Phase 2 implements 1 and 2 and writes step 3 from a template. That is not a
-// placeholder for lack of time: the template can only restate numbers that are
-// already in evidence[], which is exactly the constraint the narration step is
-// supposed to operate under. Swapping in a model call later changes the prose,
-// not the claims.
+// The materiality gate no longer decides whether you hear about the news. It
+// only sets how loudly: a price-confirmed move raises the brief's severity.
 import { assess } from '../materiality.mjs';
 import { MarketClient } from '../market.mjs';
+import { storiesFor, storyKey, THEME_LABELS } from '../news.mjs';
+import { analyse } from '../analyst.mjs';
 
-/** Global cues for the overnight read. KOSPI joins the row it belongs in. */
-export const GLOBAL_CUES = [
-  ['^GSPC', 'S&P 500'], ['^IXIC', 'Nasdaq'], ['^N225', 'Nikkei'], ['^KS11', 'KOSPI'],
-  ['BZ=F', 'Brent'], ['GC=F', 'Gold'], ['INR=X', 'USD/INR'], ['^TNX', 'US 10Y'],
-  ['^NSEI', 'Nifty 50'], ['^INDIAVIX', 'India VIX']
+/** The snapshot, in the order a trader reads it. `inverse`: up is bad for Indian equities. */
+export const SNAPSHOT = [
+  { symbol: 'BZ=F', name: 'Brent crude', unit: '$' },
+  { symbol: 'GC=F', name: 'Gold', unit: '$' },
+  { symbol: '^GSPC', name: 'S&P 500' },
+  { symbol: '^IXIC', name: 'Nasdaq' },
+  { symbol: '^N225', name: 'Nikkei 225' },
+  { symbol: '^KS11', name: 'KOSPI' },
+  { symbol: '^NSEI', name: 'Nifty 50' },
+  { symbol: '^NSEBANK', name: 'Bank Nifty' },
+  { symbol: '^INDIAVIX', name: 'India VIX', inverse: true },
+  { symbol: 'INR=X', name: 'USD/INR', inverse: true },
+  { symbol: '^TNX', name: 'US 10Y yield', unit: '%', inverse: true }
 ];
 
-const THEMES_BY_INTENT = {
-  overnight_wrap: ['fed', 'asia', 'hormuz'],
-  delta_scan: ['india', 'hormuz'],
-  geopolitical_scan: ['hormuz']
+export const THEMES = ['hormuz', 'india', 'fed', 'asia'];
+
+/** Story at least this widely covered, and new since the last brief, makes the brief notable. */
+export const WIDE_COVERAGE = 8;
+
+const round = (n, d = 2) => (Number.isFinite(n) ? Number(n.toFixed(d)) : null);
+const fiveDay = spark => {
+  const s = (spark || []).filter(Number.isFinite);
+  return s.length > 1 && s[0] > 0 ? (s.at(-1) / s[0] - 1) * 100 : null;
 };
 
-const pct = n => (Number.isFinite(n) ? `${n >= 0 ? '+' : ''}${n.toFixed(2)}%` : 'n/a');
-const num = n => (Number.isFinite(n) ? n.toLocaleString('en-IN', { maximumFractionDigits: 2 }) : 'n/a');
+export function snapshotRows(quotes) {
+  return SNAPSHOT.map(({ symbol, name, unit, inverse }) => {
+    const q = quotes[symbol];
+    return {
+      symbol, name, unit: unit || '', inverse: Boolean(inverse),
+      price: round(q?.price),
+      change: round(q?.change),
+      change5d: round(fiveDay(q?.spark)),
+      asOf: Number.isFinite(q?.marketTime) ? new Date(q.marketTime * 1000).toISOString() : null
+    };
+  });
+}
 
-/** Subjects a theme signal is about — the refs Jarvis correlates on (§4.3a). */
-function subjectsFor(theme, lead, linked) {
-  return [
-    { type: 'theme', ref: theme },
-    { type: 'instrument', ref: lead },
-    ...linked.map(l => ({
-      type: String(l.symbol).startsWith('^CNX') || String(l.symbol).startsWith('^NSEBANK')
-        ? 'sector' : 'instrument',
-      ref: l.symbol
-    }))
-  ];
+/** The last brief's stories, so this one can mark what is new. */
+function previousKeys(store) {
+  const last = store.listSignals({ agent: 'macro', limit: 10 }).find(s => s.data?.kind === 'research_brief');
+  return new Set((last?.data?.stories || []).map(s => s.key));
 }
 
 /**
- * Evidence for a theme verdict: the price reading, the coherence votes, and up to
- * three headlines. Every number the narration may use has to appear here — that
- * is what makes the envelope's evidence rule bite rather than decorate.
+ * How much a theme's stories count toward the headline when no analysis is
+ * available to judge. This brief is for an Indian trader: an RBI move covered by
+ * 8 outlets should lead over a US political story covered by 16.
  */
-function evidenceFor({ verdict, lead, leadQuote, items, sessions }) {
-  const evidence = [{
-    source: 'Yahoo Finance via /api/market',
-    value: leadQuote?.price ?? null,
-    symbol: lead,
-    changePct: Number.isFinite(leadQuote?.change) ? Number(leadQuote.change.toFixed(2)) : null,
-    sigma: verdict.sigma === null ? null : Number(verdict.sigma.toFixed(2)),
-    baselineSessions: sessions,
-    fetchedAt: leadQuote?.fetchedAt || new Date().toISOString()
-  }];
+export const HEADLINE_WEIGHT = { india: 2, hormuz: 1.6, fed: 1, asia: 0.8 };
 
-  for (const d of verdict.coherence.detail) {
-    evidence.push({
-      source: 'Yahoo Finance via /api/market',
-      symbol: d.symbol,
-      value: Number(d.change.toFixed(2)),
-      expectedDirection: d.expected > 0 ? 'up' : 'down',
-      agreed: d.agreed
-    });
-  }
-
-  for (const item of (items || []).slice(0, 3)) {
-    if (!item.url) continue;
-    evidence.push({
-      source: `${item.source || 'Google News'} via Google News`,
-      url: item.url,
-      title: item.title,
-      publishedAt: item.date || null
-    });
-  }
-  return evidence;
-}
-
-function narrate({ theme, verdict, lead, leadQuote, items }) {
-  const move = `${lead} ${pct(leadQuote?.change)} at ${num(leadQuote?.price)}`;
-  if (!verdict.material) {
-    return {
-      title: `${theme}: no material development (${move})`,
-      body: [
-        `Gate not met, so this is logged as routine rather than escalated.`,
-        ...verdict.failed.map(f => `· ${f}`),
-        ...verdict.reasons.map(r => `· ${r} (met)`)
-      ].join('\n')
-    };
-  }
-  const headline = items?.[0]?.title;
-  const aligned = verdict.coherence.detail
-    .filter(d => d.agreed)
-    .map(d => `${d.symbol} ${pct(d.change)}`)
-    .join(', ');
+/** A readable headline and body for when the analysis step is off or failed. */
+function plainSummary(rows, stories) {
+  const weight = s => s.outlets * (HEADLINE_WEIGHT[s.theme] || 1);
+  const byWeight = list => [...list].sort((a, b) => weight(b) - weight(a));
+  const top = byWeight(stories.filter(s => s.isNew))[0] || byWeight(stories)[0];
+  const move = r => r && r.price !== null
+    ? `${r.name} ${r.unit === '$' ? '$' : ''}${r.price.toLocaleString('en-IN')}${r.unit === '%' ? '%' : ''} (${r.change >= 0 ? '+' : ''}${r.change}%)`
+    : null;
+  const pick = sym => rows.find(r => r.symbol === sym);
+  const markets = ['BZ=F', 'GC=F', '^NSEI', '^GSPC', 'INR=X'].map(s => move(pick(s))).filter(Boolean).join(' · ');
   return {
-    title: `${move} on ${theme} coverage${headline ? ` — ${headline.slice(0, 90)}` : ''}`,
+    title: top ? `${top.title} (${top.outlets} outlet${top.outlets === 1 ? '' : 's'})` : `Markets: ${markets}`,
     body: [
-      `${move}, ${verdict.sigma >= 0 ? '+' : ''}${verdict.sigma.toFixed(2)}σ against its trailing 20-session daily return.`,
-      `${verdict.publishers.length} publishers carried the theme in the last 6 hours: ${verdict.publishers.slice(0, 4).join(', ')}.`,
-      aligned ? `Moving with it: ${aligned}.` : '',
-      `Co-occurrence of a move and coverage. Not a causal claim — see evidence for sources.`
-    ].filter(Boolean).join('\n')
+      markets,
+      ...THEMES.map(t => {
+        const s = stories.filter(x => x.theme === t);
+        return s.length ? `${THEME_LABELS[t]}: ${s.slice(0, 2).map(x => x.title).join('; ')}` : null;
+      }).filter(Boolean)
+    ].join('\n')
   };
 }
 
-/** Run one theme end to end. Returns the emitted signal, or null on data failure. */
-async function runTheme(theme, { client, bus, now }) {
-  let feed;
-  try {
-    feed = await client.theme(theme);
-  } catch (e) {
-    // A dead upstream is reported, not narrated around.
-    bus.tryEmit({
-      agent: 'macro', kind: 'observation', severity: 'routine',
-      title: `${theme}: news feed unavailable`,
-      body: e.message,
-      subjects: [{ type: 'theme', ref: theme }],
-      evidence: [{ source: 'Google News via /api/market', value: 'unavailable', error: e.message }]
-    });
-    return null;
-  }
-
-  const { lead, linked, items } = feed;
-  const symbols = [lead, ...linked.map(l => l.symbol)];
-  const [{ quotes }, leadCloses] = await Promise.all([
-    client.quotes(symbols),
-    client.dailyCloses(lead).catch(() => [])
-  ]);
-
-  const leadQuote = quotes[lead];
-  const verdict = assess({
-    theme,
-    leadChange: leadQuote?.change,
-    leadCloses,
-    items,
-    linked,
-    quotes,
-    now
-  });
-
-  const { title, body } = narrate({ theme, verdict, lead, leadQuote, items });
-  const result = bus.tryEmit({
-    agent: 'macro',
-    kind: 'observation',
-    severity: verdict.severity,
-    confidence: verdict.confidence,
-    title,
-    body,
-    subjects: subjectsFor(theme, lead, linked),
-    evidence: evidenceFor({ verdict, lead, leadQuote, items, sessions: leadCloses.length }),
-    // Routine readings go stale fast; a material one is worth carrying to the
-    // next brief so correlation and the stale-conviction check can see it.
-    expiresAt: new Date(now.getTime() + (verdict.material ? 6 : 1) * 3600_000).toISOString()
-  });
-
-  return result.ok ? result.signal : null;
-}
-
-/** Cross-asset snapshot for the overnight brief. */
-async function overnightCues({ client, bus, now }) {
-  const { quotes, missing } = await client.quotes(GLOBAL_CUES.map(c => c[0]));
-  const present = GLOBAL_CUES.filter(([s]) => Number.isFinite(quotes[s]?.change));
-  if (!present.length) {
-    bus.tryEmit({
-      agent: 'macro', kind: 'observation', severity: 'routine',
-      title: 'Overnight cues unavailable',
-      body: `No quotes returned for ${missing.length} symbol(s).`,
-      evidence: [{ source: '/api/market', value: 'unavailable', missing: missing.join(',') }]
-    });
-    return null;
-  }
-
-  const ranked = present
-    .map(([symbol, name]) => ({ symbol, name, change: quotes[symbol].change, price: quotes[symbol].price }))
-    .sort((a, b) => b.change - a.change);
-
-  const result = bus.tryEmit({
-    agent: 'macro',
-    kind: 'observation',
-    severity: 'routine',
-    title: `Overnight: ${ranked[0].name} ${pct(ranked[0].change)}, ${ranked.at(-1).name} ${pct(ranked.at(-1).change)}`,
-    body: ranked.map(r => `${r.name.padEnd(10)} ${num(r.price).padStart(12)}  ${pct(r.change)}`).join('\n')
-      + (missing.length ? `\n\nUnavailable: ${missing.join(', ')}` : ''),
-    subjects: ranked.map(r => ({ type: 'instrument', ref: r.symbol })),
-    evidence: ranked.map(r => ({
-      source: 'Yahoo Finance via /api/market', symbol: r.symbol,
-      value: r.price, changePct: Number(r.change.toFixed(2))
-    })),
-    expiresAt: new Date(now.getTime() + 8 * 3600_000).toISOString()
-  });
-  return result.ok ? result.signal : null;
-}
-
-async function scan(intent, { bus, task, now = new Date() }) {
+async function researchBrief({ bus, store, now = new Date() }) {
   const client = new MarketClient();
-  let signals = 0;
 
-  if (intent === 'overnight_wrap' && await overnightCues({ client, bus, now })) signals++;
+  // 1. News for every theme, in parallel. A failed theme is noted, not fatal.
+  const feeds = await Promise.all(THEMES.map(t =>
+    client.theme(t, { days: 2 }).then(f => ({ theme: t, feed: f })).catch(e => ({ theme: t, error: e.message }))
+  ));
 
-  for (const theme of THEMES_BY_INTENT[intent] || []) {
-    // Themes are independent; one failing must not lose the others.
-    try {
-      if (await runTheme(theme, { client, bus, now })) signals++;
-    } catch (e) {
-      bus.tryEmit({
-        agent: 'macro', kind: 'observation', severity: 'routine',
-        title: `${theme}: scan failed`,
-        body: e.message,
-        subjects: [{ type: 'theme', ref: theme }],
-        evidence: [{ source: 'jarvis/macro', value: 'error', error: e.message }]
-      });
+  // 2. One quote call covers the snapshot and every theme's linked instruments.
+  const symbols = new Set(SNAPSHOT.map(s => s.symbol));
+  for (const { feed } of feeds) {
+    if (!feed) continue;
+    symbols.add(feed.lead);
+    for (const l of feed.linked || []) symbols.add(l.symbol);
+  }
+  const { quotes, missing } = await client.quotes([...symbols]);
+  const rows = snapshotRows(quotes);
+
+  // 3. Stories, numbered across themes so the analysis can cite them.
+  const seen = previousKeys(store);
+  const stories = [];
+  for (const { theme, feed } of feeds) {
+    if (!feed) continue;
+    for (const s of storiesFor(theme, feed.items, { now })) {
+      const key = storyKey(s);
+      stories.push({ ...s, id: stories.length + 1, key, isNew: !seen.has(key), themeLabel: THEME_LABELS[theme] });
     }
   }
 
-  // No model calls yet, so tokens are genuinely zero. Reporting a made-up number
-  // here would corrupt the budget governor's only input.
-  return { signals, tokens: 0, toolCalls: client.calls };
+  if (!stories.length && !rows.some(r => r.price !== null)) {
+    bus.emit({
+      agent: 'macro', kind: 'observation', severity: 'routine',
+      title: 'Market research unavailable — no news or prices could be fetched',
+      body: [...feeds.filter(f => f.error).map(f => `${f.theme}: ${f.error}`), missing.length ? `quotes missing: ${missing.join(', ')}` : ''].filter(Boolean).join('\n'),
+      evidence: [{ source: 'market API', value: 'unavailable' }]
+    });
+    return { signals: 1, tokens: 0, toolCalls: client.calls };
+  }
+
+  // 4. Price confirmation per theme — sets severity only.
+  const gates = [];
+  for (const { theme, feed } of feeds) {
+    if (!feed) continue;
+    const closes = await client.dailyCloses(feed.lead).catch(() => []);
+    const v = assess({
+      theme, leadChange: quotes[feed.lead]?.change, leadCloses: closes,
+      items: feed.items, linked: feed.linked, quotes, now
+    });
+    gates.push({ theme, lead: feed.lead, material: v.material, severity: v.severity, sigma: round(v.sigma), failed: v.failed });
+  }
+
+  // 5. Analysis.
+  const result = await analyse({ snapshot: rows, stories });
+
+  const priceSeverity = gates.some(g => g.severity === 'elevated') ? 'elevated'
+    : gates.some(g => g.severity === 'notable') ? 'notable' : 'routine';
+  const bigNewStory = stories.some(s => s.isNew && s.outlets >= WIDE_COVERAGE);
+  const severity = priceSeverity !== 'routine' ? priceSeverity : bigNewStory ? 'notable' : 'routine';
+
+  const plain = plainSummary(rows, stories);
+  const title = result.status === 'ok' ? result.analysis.headline : plain.title;
+  const body = result.status === 'ok' ? result.analysis.summary : plain.body;
+
+  bus.emit({
+    agent: 'macro',
+    kind: 'observation',
+    severity,
+    title: title.length > 200 ? `${title.slice(0, 197)}…` : title,
+    body,
+    subjects: [
+      ...THEMES.map(t => ({ type: 'theme', ref: t })),
+      ...rows.filter(r => r.price !== null).map(r => ({ type: 'instrument', ref: r.symbol }))
+    ],
+    evidence: [
+      ...rows.filter(r => r.price !== null).map(r => ({
+        source: 'Yahoo Finance via market API', symbol: r.symbol, value: r.price, changePct: r.change, fetchedAt: r.asOf || undefined
+      })),
+      ...[...stories].sort((a, b) => b.outlets - a.outlets).slice(0, 4).map(s => ({
+        source: `${s.links[0]?.source || 'news'} (${s.outlets} outlet${s.outlets === 1 ? '' : 's'})`,
+        url: s.links[0]?.url, title: s.title, publishedAt: s.latest || undefined
+      })).filter(e => e.url)
+    ],
+    data: {
+      kind: 'research_brief',
+      generatedAt: now.toISOString(),
+      snapshot: rows,
+      missing,
+      stories,
+      themes: THEME_LABELS,
+      gates,
+      feedErrors: feeds.filter(f => f.error).map(f => ({ theme: f.theme, error: f.error })),
+      analysis: result.status === 'ok'
+        ? { status: 'ok', model: result.model, via: result.via, unverified: result.unverified, ...result.analysis }
+        : { status: result.status, reason: result.reason, ...(result.fix ? { fix: result.fix } : {}) }
+    },
+    expiresAt: new Date(now.getTime() + 6 * 3600_000).toISOString()
+  });
+
+  return {
+    signals: 1,
+    tokens: result.tokens || 0,
+    toolCalls: client.calls + (result.status === 'off' ? 0 : 1)
+  };
 }
 
 export const macro = {
   name: 'macro',
   tools: ['market'],
   intents: {
-    overnight_wrap: ctx => scan('overnight_wrap', ctx),
-    delta_scan: ctx => scan('delta_scan', ctx),
-    geopolitical_scan: ctx => scan('geopolitical_scan', ctx)
+    research_brief: ctx => researchBrief(ctx)
   }
 };
 

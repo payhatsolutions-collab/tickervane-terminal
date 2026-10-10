@@ -9,7 +9,7 @@ export function clearCache() {
 
 export async function load(url, force = false) {
   const cached = memory.get(url);
-  if (!force && cached && Date.now() - cached.at < (/op=(quotes|chart)\b/.test(url) ? 15000 : 300000)) return cached.data;
+  if (!force && cached && Date.now() - cached.at < (/op=(quotes|chart|options|live-futures)\b/.test(url) ? 15000 : 300000)) return cached.data;
   if (pending.has(url)) return pending.get(url);
   // Timeout so a stalled upstream becomes a retryable error instead of an endless spinner.
   const p = fetch(url, { signal: AbortSignal.timeout?.(30000) })

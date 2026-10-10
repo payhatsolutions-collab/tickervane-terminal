@@ -65,6 +65,11 @@ export class MarketClient {
     return bars.slice(-sessions).map(b => b.close).filter(Number.isFinite);
   }
 
+  /** Nifty 500 screener: returns, trend, relative strength, volume, delivery per stock. */
+  screen() {
+    return this.get('screen');
+  }
+
   /** Theme news plus the theme's lead/linked configuration (api THEMES). */
   theme(name, { days = 3 } = {}) {
     return this.get('macronews', { theme: name, days });

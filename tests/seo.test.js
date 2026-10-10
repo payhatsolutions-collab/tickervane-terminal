@@ -5,7 +5,7 @@ import { execFileSync } from 'node:child_process';
 import { PRESETS, describe, presetFromSearch } from '../src/screens.js';
 import { guides } from '../content/seo/screens.mjs';
 
-const origin = 'https://tickervane.vercel.app';
+const origin = 'https://alphanova48.in';
 const decode = s => s.replaceAll('&amp;','&').replaceAll('&lt;','<').replaceAll('&gt;','>').replaceAll('&quot;','"').replaceAll('&#39;',"'");
 const localFile = path => path === '/' ? 'index.html' : 'public'+(path.endsWith('/')?path+'index.html':path);
 
@@ -26,6 +26,7 @@ test('public guide generation preserves rules, canonicals, structured data and l
     assert.equal(new URL(url).origin,origin);
     assert.equal(new URL(url).search,'');
     const html = await readFile(localFile(new URL(url).pathname),'utf8');
+    assert.ok(!html.includes('tickervane.vercel.app'),`Old domain in public metadata: ${url}`);
     assert.equal((html.match(/<h1[ >]/g)||[]).length,1,url);
     assert.equal((html.match(/rel="canonical"/g)||[]).length,1,url);
     assert.ok(html.includes(`rel="canonical" href="${url}"`),url);
@@ -56,6 +57,8 @@ test('public guide generation preserves rules, canonicals, structured data and l
     assert.ok(urls.includes(origin+'/screens/'+guide.slug+'.html'));
   }
   const root = await readFile('index.html','utf8');
+  const robots = await readFile('public/robots.txt','utf8');
+  assert.ok(robots.includes(`Sitemap: ${origin}/sitemap.xml`));
   const hub = await readFile('public/screens.html','utf8');
   assert.ok(root.includes('href="/screens.html"'));
   for (const g of guides) assert.ok(hub.includes(`/screens/${g.slug}.html`));
