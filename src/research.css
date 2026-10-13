@@ -1,0 +1,48 @@
+/* The first screen prioritizes research; personal tools follow useful results. */
+.overview-intro h1{font-size:30px;line-height:1.15;margin:8px 0 10px;letter-spacing:-.8px}
+.overview-intro p{max-width:620px;line-height:1.6}
+.overview-start{display:flex;flex-direction:column;align-items:stretch;gap:10px;flex-shrink:0}
+.overview-start .button{justify-content:center;min-height:44px}
+.overview-search{display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 14px;border:1px solid var(--line);border-radius:8px;color:var(--theme-text,#dce6f4);font-size:13px;background:var(--theme-surface,#101b2b)}
+.overview-free{font-size:11px;color:var(--muted);text-align:center}
+.research-save{display:flex;align-items:center;gap:12px;border-top:1px solid var(--line);padding:14px 16px;background:var(--theme-subtle,#1b2738)}
+.research-save>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;font-size:13px}
+.research-save>div>span{font-size:12px;color:var(--muted)}
+.research-save .button{min-height:44px;flex-shrink:0}
+.research-save .icon-button{width:44px;height:44px;flex-shrink:0}
+.first-visit-slots{grid-template-columns:1fr}
+.global-search .search-label-mobile{display:none}
+@media(max-width:760px){
+  .research-home .topbar{position:sticky;top:0;height:56px;padding:0 12px;gap:10px}
+  .research-home .brand small{display:none}
+  .research-home .global-search{display:flex;width:auto;flex:1;min-width:0;max-width:none;min-height:40px;justify-content:flex-start;padding:0 10px}
+  .research-home .global-search span{display:block;font-size:12px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  .research-home .global-search .search-label-wide{display:none}
+  .research-home .global-search kbd,.research-home .top-right{display:none}
+  .research-home .benchmark-strip>button{flex-basis:125px;padding:7px 12px;gap:2px}
+  .research-home .benchmark-strip span{font-size:9px}
+  .research-home .benchmark-strip strong{font-size:12px}
+  .research-home .benchmark-strip .spark{display:none}
+  .research-home main{padding:12px 12px 24px}
+  .research-home .swing-desk{gap:12px}
+  .research-home .overview-intro{padding:16px;gap:12px}
+  .research-home .overview-intro .desk-kicker,.research-home .overview-search{display:none}
+  .overview-intro h1{font-size:25px;margin:6px 0 8px;letter-spacing:-.6px}
+  .overview-intro p{font-size:13px;margin:0;line-height:1.5}
+  .overview-start{width:100%;gap:6px}
+  .overview-start .button{font-size:13px}
+  .overview-free{font-size:10px}
+  .research-home .desk-kicker{font-size:9px;letter-spacing:.7px}
+  .research-home .desk-playbooks{padding:8px 10px;gap:5px}
+  .research-home .desk-candidates{padding:0 10px 10px}
+  .research-home .desk-candidates article{padding:12px}
+  .research-home .desk-candidate-bottom .button{min-height:44px}
+  .research-home .desk-candidate-top .icon-button{width:44px;height:44px}
+  .research-home .setup-rules{margin-bottom:8px}
+  .research-home .setup-rules summary{min-height:32px;display:flex;align-items:center}
+  .research-save{flex-wrap:wrap;padding:12px;gap:8px}
+  .research-save>div{flex-basis:calc(100% - 56px)}
+  .research-save .button{order:3;width:100%;justify-content:center}
+  .research-save>.icon-button{order:2}
+  .screen-filters input,.screen-filters select{font-size:16px;min-height:44px}
+}

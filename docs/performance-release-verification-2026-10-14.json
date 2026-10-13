@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-14",
+  "production": "https://alphanova48.in",
+  "deployment": "https://alphanova2-besfggbhp-wdcre.vercel.app",
+  "deploymentId": "dpl_HXL1mfHVyrrEDRJaPvumbj81z67R",
+  "rollback": "https://alphanova2-2xri97mko-wdcre.vercel.app",
+  "bundle": "index-B7DciLUs.js",
+  "bundleMatchedLocal": true,
+  "testsPassed": 278,
+  "stagedQuotes": [
+    "RELIANCE.NS",
+    "^NSEI"
+  ],
+  "stagedScreenRows": 499,
+  "liveMobile": {
+    "viewport": [
+      360,
+      740
+    ],
+    "contentWidth": 352,
+    "homeFirstCardBottom": 654.421875,
+    "navigationTop": 676,
+    "marketHeatmapTiles": 60,
+    "rotationRendered": true,
+    "filterTCSWorked": true,
+    "heatmapPeriodChangeWorked": true,
+    "browserErrors": []
+  }
+}

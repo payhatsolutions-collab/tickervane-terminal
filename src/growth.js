@@ -1,5 +1,5 @@
 import { track } from "@vercel/analytics";
-import { GROWTH_KEY, visitTransition, activationTransition } from "./activation.js";
+import { GROWTH_KEY, visitTransition, activationTransition, firstStockTransition } from "./activation.js";
 
 let memory = {};
 function read() {
@@ -13,6 +13,7 @@ function commit({ state, events }) {
 }
 export function growthEvent(name, properties = {}) {
   try {
+    if (import.meta.env?.DEV) console.debug("[Alpha Nova engagement]", name, JSON.stringify(properties));
     // App effects can run before the Analytics sibling initializes its queue.
     if (typeof window.va !== "function") {
       window.vaq = window.vaq || [];
@@ -25,4 +26,8 @@ export function recordVisit(existing) {
 }
 export function recordActivation(watch) {
   commit(activationTransition(read(), watch, Date.now()));
+}
+
+export function recordFirstStockSaved() {
+  commit(firstStockTransition(read(), Date.now()));
 }

@@ -1,0 +1,513 @@
+{
+  "date": "2026-10-11",
+  "deployment": "https://alphanova2-a32qgahr9-wdcre.vercel.app",
+  "rollback": "https://alphanova2-hbr3bjcxt-wdcre.vercel.app",
+  "tests": 8,
+  "previousFullSuiteTests": 272,
+  "pages": [
+    {
+      "url": "https://alphanova48.in/",
+      "status": 200,
+      "title": "Alpha Nova (AlphaNova) | Indian Stock Screener",
+      "titleLength": 46,
+      "description": "Track Indian stock prices with Alpha Nova. Explore NSE charts, the Nifty 500 screener, delivery analysis, watchlists and alerts in one stock market app.",
+      "descriptionLength": 152,
+      "canonical": "https://alphanova48.in/",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/stock-prices.html",
+      "status": 200,
+      "title": "Indian Stock Prices & NSE Share Charts | Alpha Nova",
+      "titleLength": 51,
+      "description": "Explore Indian stock prices with Alpha Nova. Open NSE share charts, compare price trends and volume, and track companies with watchlists and price alerts.",
+      "descriptionLength": 154,
+      "canonical": "https://alphanova48.in/stock-prices.html",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/stock-market-app.html",
+      "status": 200,
+      "title": "Free Stock Market App for India | Alpha Nova",
+      "titleLength": 44,
+      "description": "Meet Alpha Nova, a free stock market app for India. Research stocks with charts, a Nifty 500 screener, delivery radar, watchlists and price alerts.",
+      "descriptionLength": 147,
+      "canonical": "https://alphanova48.in/stock-market-app.html",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/stock-screener.html",
+      "status": 200,
+      "title": "Nifty 500 Stock Screener | Alpha Nova Terminal",
+      "titleLength": 46,
+      "description": "Screen Nifty 500 stocks by momentum, relative strength, RSI, moving averages, volume and NSE delivery. See how Alpha Nova calculates and uses each metric.",
+      "descriptionLength": 154,
+      "canonical": "https://alphanova48.in/stock-screener.html",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/delivery-radar.html",
+      "status": 200,
+      "title": "NSE Delivery Radar and Stock Delivery Analysis | Alpha Nova",
+      "titleLength": 59,
+      "description": "Analyze NSE stock delivery spikes against recent daily averages. Learn how Alpha Nova identifies accumulation, distribution and unusual delivery activity.",
+      "descriptionLength": 154,
+      "canonical": "https://alphanova48.in/delivery-radar.html",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/about.html",
+      "status": 200,
+      "title": "About Alpha Nova, Its Founder & Market Data",
+      "titleLength": 43,
+      "description": "Meet Yash Sarda, founder of AlphaNova in Kolkata. Learn about the stock research app, its market data sources, charts, screener, watchlists and alerts.",
+      "descriptionLength": 151,
+      "canonical": "https://alphanova48.in/about.html",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/screens/delivery-accumulation.html",
+      "status": 200,
+      "title": "Delivery accumulation screener | Alpha Nova",
+      "titleLength": 43,
+      "description": "Explore Alpha Nova’s NSE delivery accumulation screen: delivered quantity, delivery percentage and price-change rules, with examples and data limitations.",
+      "descriptionLength": 154,
+      "canonical": "https://alphanova48.in/screens/delivery-accumulation.html",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/screens/volume-surge.html",
+      "status": 200,
+      "title": "Volume surge stock screener | Alpha Nova",
+      "titleLength": 40,
+      "description": "Find how Alpha Nova screens for NSE volume surges: at least twice the prior 20-session average and a non-negative daily change, with a worked example.",
+      "descriptionLength": 150,
+      "canonical": "https://alphanova48.in/screens/volume-surge.html",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/screens/20-day-breakout.html",
+      "status": 200,
+      "title": "20-day breakout stock screener | Alpha Nova",
+      "titleLength": 43,
+      "description": "Understand Alpha Nova’s 20-day breakout screen: NSE closing price above prior session highs with at least 1.3× volume, plus checks and limitations.",
+      "descriptionLength": 147,
+      "canonical": "https://alphanova48.in/screens/20-day-breakout.html",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/screens/near-52-week-high.html",
+      "status": 200,
+      "title": "Near 52-week high stock screener | Alpha Nova",
+      "titleLength": 45,
+      "description": "See Alpha Nova’s near-52-week-high screen rules: within 3% of the highest available daily close and at least 1.5× volume, with calculation examples.",
+      "descriptionLength": 148,
+      "canonical": "https://alphanova48.in/screens/near-52-week-high.html",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/screens/relative-strength.html",
+      "status": 200,
+      "title": "Relative strength stock screener | Alpha Nova",
+      "titleLength": 45,
+      "description": "Learn Alpha Nova’s relative strength screen: stock return minus Nifty 50 over 63 sessions, a 10-point threshold and non-negative one-month return.",
+      "descriptionLength": 146,
+      "canonical": "https://alphanova48.in/screens/relative-strength.html",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/screens/minervini-trend-template.html",
+      "status": 200,
+      "title": "Minervini trend template screener | Alpha Nova",
+      "titleLength": 46,
+      "description": "Review Alpha Nova’s adapted Minervini trend template: moving-average structure, rising 200 DMA, high-low distance and the app’s composite score filter.",
+      "descriptionLength": 151,
+      "canonical": "https://alphanova48.in/screens/minervini-trend-template.html",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/screens.html",
+      "status": 200,
+      "title": "Nifty 500 Stock Screener Guides & Rules | Alpha Nova",
+      "titleLength": 52,
+      "description": "Compare six Alpha Nova screens with exact rules, worked examples and data limits. Open delivery, volume, breakout, trend and relative strength presets.",
+      "descriptionLength": 151,
+      "canonical": "https://alphanova48.in/screens.html",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/methodology.html",
+      "status": 200,
+      "title": "Stock screener methodology and data | Alpha Nova",
+      "titleLength": 48,
+      "description": "Learn how Alpha Nova calculates delivery and volume ratios, relative strength, moving averages and composite scores, including coverage and timing limits.",
+      "descriptionLength": 154,
+      "canonical": "https://alphanova48.in/methodology.html",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/pricing.html",
+      "status": 200,
+      "title": "Free Stock Research Tools and Pricing | Alpha Nova",
+      "titleLength": 50,
+      "description": "Alpha Nova is free to use in a browser with no subscription or account required. See included research tools, saved-screen limits and third-party costs.",
+      "descriptionLength": 152,
+      "canonical": "https://alphanova48.in/pricing.html",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/charts",
+      "status": 200,
+      "title": "Stock Charts, Technical Analysis & Trade Plans | Alpha Nova",
+      "titleLength": 59,
+      "description": "Explore stock price charts, volume and technical indicators with Alpha Nova. Plan entries, stops and position sizes, then review research before trading.",
+      "descriptionLength": 153,
+      "canonical": "https://alphanova48.in/charts",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/forecast",
+      "status": 200,
+      "title": "Stock Price Forecast & Market Research | Alpha Nova",
+      "titleLength": 51,
+      "description": "Explore stock price forecasts with Alpha Nova using adjusted daily price history. Compare statistical projections with current prices for market research.",
+      "descriptionLength": 154,
+      "canonical": "https://alphanova48.in/forecast",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/markets",
+      "status": 200,
+      "title": "Indian & Global Stock Market Overview | Alpha Nova",
+      "titleLength": 50,
+      "description": "Explore Indian and global markets with Alpha Nova. Compare stock prices, market indices, sector rotation and index valuations in one research workspace.",
+      "descriptionLength": 152,
+      "canonical": "https://alphanova48.in/markets",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/screener",
+      "status": 200,
+      "title": "Nifty 500 Screener: Momentum & Delivery | Alpha Nova",
+      "titleLength": 52,
+      "description": "Filter Nifty 500 stocks by momentum, relative strength, volume and delivery in Alpha Nova. Apply presets, build filters, save screens and export results.",
+      "descriptionLength": 153,
+      "canonical": "https://alphanova48.in/screener",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/delivery",
+      "status": 200,
+      "title": "NSE Stock Delivery Spikes & Volume Radar | Alpha Nova",
+      "titleLength": 53,
+      "description": "Compare NSE stock delivery percentages, delivered quantities and volume with recent averages. Explore delivery activity with Alpha Nova research tools.",
+      "descriptionLength": 151,
+      "canonical": "https://alphanova48.in/delivery",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/futures-options",
+      "status": 200,
+      "title": "NSE Option Chain & Futures Open Interest | Alpha Nova",
+      "titleLength": 53,
+      "description": "Explore NSE option chains and futures with Alpha Nova. Review available prices, open interest, expiries and positioning metrics with source timestamps.",
+      "descriptionLength": 151,
+      "canonical": "https://alphanova48.in/futures-options",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/institutional-flows",
+      "status": 200,
+      "title": "FII DII Flows, Bulk Deals & Derivatives | Alpha Nova",
+      "titleLength": 52,
+      "description": "Review available FII and DII cash flows, participant derivatives positions, and bulk and block deals with Alpha Nova. Check source dates and coverage.",
+      "descriptionLength": 150,
+      "canonical": "https://alphanova48.in/institutional-flows",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/news",
+      "status": 200,
+      "title": "Stock Market News & Company Headlines | Alpha Nova",
+      "titleLength": 50,
+      "description": "Explore stock market news and company headlines with Alpha Nova. Find stories for your selected stock, check publication times and open original sources.",
+      "descriptionLength": 153,
+      "canonical": "https://alphanova48.in/news",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/watchlist",
+      "status": 200,
+      "title": "Stock Watchlist, Charts & Technical Signals | Alpha Nova",
+      "titleLength": 56,
+      "description": "Build a stock watchlist in Alpha Nova. Track available quotes, review chart snapshots and technical signals, and keep companies saved in this browser.",
+      "descriptionLength": 150,
+      "canonical": "https://alphanova48.in/watchlist",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/portfolio",
+      "status": 200,
+      "title": "Stock Portfolio Tracker & Holdings Tools | Alpha Nova",
+      "titleLength": 53,
+      "description": "Track holdings in Alpha Nova with available market quotes. Review your portfolio, manage local records and export a backup to move data between browsers.",
+      "descriptionLength": 153,
+      "canonical": "https://alphanova48.in/portfolio",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/trade-journal",
+      "status": 200,
+      "title": "Trading Journal & Stock Trade Review Tools | Alpha Nova",
+      "titleLength": 55,
+      "description": "Record and review trades in the Alpha Nova trading journal. Keep manual trade records in your browser and revisit entries, exits and trading decisions.",
+      "descriptionLength": 151,
+      "canonical": "https://alphanova48.in/trade-journal",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    },
+    {
+      "url": "https://alphanova48.in/price-alerts",
+      "status": 200,
+      "title": "Stock Price Alerts & Watchlist Notifications | Alpha Nova",
+      "titleLength": 57,
+      "description": "Set stock price alerts with Alpha Nova and manage alert levels for watched stocks. Enable optional push notifications on supported browsers and devices.",
+      "descriptionLength": 152,
+      "canonical": "https://alphanova48.in/price-alerts",
+      "checks": {
+        "title": true,
+        "description": true,
+        "url": true,
+        "canonical": true
+      },
+      "socialURL": true,
+      "structuredData": true,
+      "h1Count": 1
+    }
+  ],
+  "redirects": [
+    {
+      "path": "/?symbol=RELIANCE.NS&page=Terminal&range=6mo",
+      "status": 308,
+      "location": "/charts?symbol=RELIANCE.NS&page=Terminal&range=6mo"
+    },
+    {
+      "path": "/charts.html",
+      "status": 308,
+      "location": "/charts"
+    },
+    {
+      "path": "/screener.html",
+      "status": 308,
+      "location": "/screener"
+    }
+  ],
+  "pass": true
+}

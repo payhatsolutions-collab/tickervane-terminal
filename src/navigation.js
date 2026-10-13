@@ -1,3 +1,5 @@
+import { WORKSPACE_SEO } from "./seo.js";
+
 export const NAV_GROUPS = [
   { label: "Workspace", pages: ["Today", "Terminal", "Forecast"] },
   {
@@ -39,11 +41,33 @@ export function viewFromSearch(search, fallback = {}) {
   };
 }
 
-export function viewURL(href, view) {
+export function viewFromLocation(location, fallback = {}) {
+  const path = location.pathname.replace(/\/$/, '') || '/';
+  const page = Object.keys(WORKSPACE_SEO).find(key => WORKSPACE_SEO[key].path === path);
+  // Named routes take precedence; the root continues to accept old shared links.
+  const params = new URLSearchParams(location.search);
+  if (path !== "/" && page) params.delete("page");
+  return viewFromSearch(params.toString(), { ...fallback, page: page || fallback.page });
+}
+
+export function workspaceSearch(location) {
+  const params = new URLSearchParams(location.search);
+  params.set("page", viewFromLocation(location).page);
+  return params.toString();
+}
+
+export function workspaceURL(page) {
+  return (WORKSPACE_SEO[page] || WORKSPACE_SEO.Today).path;
+}
+
+export function viewURL(href, view, { share = true } = {}) {
   const url = new URL(href);
-  for (const key of ["page", "symbol", "range"])
-    url.searchParams.set(key, view[key]);
-  if (view.page === "Screener" && view.screen && view.screen !== "custom")
+  url.pathname = workspaceURL(view.page);
+  url.searchParams.delete("page");
+  for (const key of ["symbol", "range"])
+    if (share) url.searchParams.set(key, view[key]);
+    else url.searchParams.delete(key);
+  if (share && view.page === "Screener" && view.screen && view.screen !== "custom")
     url.searchParams.set("screen", view.screen);
   else url.searchParams.delete("screen");
   url.hash = "";

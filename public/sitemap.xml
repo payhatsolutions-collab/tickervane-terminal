@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://alphanova48.in/</loc><lastmod>2026-10-04</lastmod></url>
+  <url><loc>https://alphanova48.in/</loc><lastmod>2026-10-12</lastmod></url>
   <url><loc>https://alphanova48.in/stock-prices.html</loc><lastmod>2026-10-03</lastmod></url>
   <url><loc>https://alphanova48.in/stock-market-app.html</loc><lastmod>2026-10-03</lastmod></url>
   <url><loc>https://alphanova48.in/stock-screener.html</loc><lastmod>2026-10-03</lastmod></url>
   <url><loc>https://alphanova48.in/delivery-radar.html</loc><lastmod>2026-10-03</lastmod></url>
-  <url><loc>https://alphanova48.in/about.html</loc><lastmod>2026-10-04</lastmod></url>
+  <url><loc>https://alphanova48.in/about.html</loc><lastmod>2026-10-11</lastmod></url>
   <url><loc>https://alphanova48.in/screens/delivery-accumulation.html</loc><lastmod>2026-10-03</lastmod></url>
   <url><loc>https://alphanova48.in/screens/volume-surge.html</loc><lastmod>2026-10-03</lastmod></url>
   <url><loc>https://alphanova48.in/screens/20-day-breakout.html</loc><lastmod>2026-10-03</lastmod></url>
@@ -15,4 +15,12 @@
   <url><loc>https://alphanova48.in/screens.html</loc><lastmod>2026-10-03</lastmod></url>
   <url><loc>https://alphanova48.in/methodology.html</loc><lastmod>2026-10-03</lastmod></url>
   <url><loc>https://alphanova48.in/pricing.html</loc><lastmod>2026-10-03</lastmod></url>
+  <url><loc>https://alphanova48.in/charts</loc><lastmod>2026-10-12</lastmod></url>
+  <url><loc>https://alphanova48.in/forecast</loc><lastmod>2026-10-12</lastmod></url>
+  <url><loc>https://alphanova48.in/markets</loc><lastmod>2026-10-12</lastmod></url>
+  <url><loc>https://alphanova48.in/screener</loc><lastmod>2026-10-12</lastmod></url>
+  <url><loc>https://alphanova48.in/delivery</loc><lastmod>2026-10-12</lastmod></url>
+  <url><loc>https://alphanova48.in/futures-options</loc><lastmod>2026-10-12</lastmod></url>
+  <url><loc>https://alphanova48.in/institutional-flows</loc><lastmod>2026-10-12</lastmod></url>
+  <url><loc>https://alphanova48.in/news</loc><lastmod>2026-10-12</lastmod></url>
 </urlset>

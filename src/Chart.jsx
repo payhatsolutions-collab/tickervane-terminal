@@ -17,7 +17,11 @@ export default function Chart({
   reset,
   levels,
   plan,
+  onReady,
+  onInteract,
 }) {
+  const readyCallback = useRef(onReady);
+  readyCallback.current = onReady;
   const el = useRef(),
     [hover, setHover] = useState(null);
   const chartRef = useRef(null);
@@ -219,6 +223,7 @@ export default function Chart({
       setHover(b || null);
     });
     chart.timeScale().fitContent();
+    readyCallback.current?.();
     return () => {
       chart.remove();
       chartRef.current = null;
@@ -303,6 +308,7 @@ export default function Chart({
       <div
         ref={el}
         className="chart-canvas"
+        onPointerDown={onInteract}
         aria-label="Interactive price chart: drag to pan and scroll to zoom"
       />
     </>

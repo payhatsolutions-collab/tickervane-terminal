@@ -1,8 +1,7 @@
 import { useMemo, useState } from "react";
 import {
   ArrowRight,
-  Globe2,
-  Target,
+  Search,
   ShieldCheck,
   BookOpen,
   Star,
@@ -12,6 +11,7 @@ import { useFeed } from "./hooks";
 import { PRESETS, runScreen } from "./screens";
 import { journalStats } from "./tradeMath";
 import { fmt, pct, short } from "./data";
+import { growthEvent } from "./growth.js";
 
 const playbooks = [
   {
@@ -42,6 +42,7 @@ export default function SwingDesk({
   onRefresh,
   onOpen,
   onPage,
+  onSearch,
   watch,
   toggleWatch,
   journal,
@@ -82,30 +83,21 @@ export default function SwingDesk({
     <div className="swing-desk">
       <section className="overview-intro">
         <div>
-          <span className="desk-kicker">YOUR MARKET WORKSPACE</span>
-          <h2>A clearer view of the market.</h2>
-          <p>Discover setups. Plan your risk. Track your trades.</p>
+          <span className="desk-kicker">ALPHA NOVA · FREE STOCK MARKET RESEARCH</span>
+          <h1>Find stocks to research.</h1>
+          <p>Explore Nifty 500 breakouts, pullbacks and delivery activity. Open a chart to take a closer look.</p>
         </div>
-        <button className="button primary" onClick={() => onPage("Markets")}>
-          Explore markets
+        <div className="overview-start">
+        <button className="button primary" onClick={() => { growthEvent("research_cta_clicked", { source: "home" }); onPage("Screener"); }}>
+          Find stocks to research
           <ArrowRight size={16} />
         </button>
+        <button className="overview-search" onClick={onSearch}>
+          <Search size={16} /> Search a stock or company
+        </button>
+        <span className="overview-free">Free · No sign-up needed</span>
+        </div>
       </section>
-      <div className="overview-shortcuts" aria-label="Quick actions">
-        {[
-          [Globe2, "Market pulse", "Markets"],
-          [Target, "Find stocks", "Screener"],
-          [BookOpen, "Trade journal", "Journal"],
-        ].map(([Icon, title, page]) => (
-          <button key={page} onClick={() => onPage(page)}>
-            <span className="shortcut-icon">
-              <Icon size={19} />
-            </span>
-            <strong>{title}</strong>
-            <ArrowRight size={15} />
-          </button>
-        ))}
-      </div>
       <div className="desk-columns">
         <section className="panel desk-opportunities" id="desk-opportunities">
           <div className="panel-title">
@@ -127,7 +119,7 @@ export default function SwingDesk({
                 key={item.id}
                 className={selected === item.id ? "active" : ""}
                 aria-pressed={selected === item.id}
-                onClick={() => setSelected(item.id)}
+                onClick={() => { setSelected(item.id); growthEvent("setup_filter_used", { preset: item.id }); }}
               >
                 <strong>
                   {item.title}
@@ -153,10 +145,16 @@ export default function SwingDesk({
             </div>
           )}
           {loading && !data ? (
-            <div className="empty">
-              <RefreshCw className="spin" size={24} />
-              <h3>Finding setups…</h3>
-              <p>Checking the latest available daily data.</p>
+            <div className="desk-candidates" role="status" aria-label="Finding setups" aria-busy="true">
+              {Array.from({ length: 6 }, (_, i) => <article key={i} aria-hidden="true">
+                <div className="desk-candidate-top"><div>
+                  <span className="skeleton-line" /><p><span className="skeleton-line skeleton-short" /></p>
+                </div></div>
+                <span className="desk-evidence"><span className="skeleton-line" /></span>
+                <div className="desk-candidate-bottom"><span>Last close<b>—</b></span>
+                  <span className="button skeleton-button">View chart</span>
+                </div>
+              </article>)}
             </div>
           ) : !data ? (
             <div className="empty">
@@ -267,7 +265,7 @@ export default function SwingDesk({
               </button>
             </div>
           </section>
-          <section className="panel desk-performance">
+          {trades.length > 0 && <section className="panel desk-performance">
             <div className="panel-title">
               <div>
                 <BookOpen size={16} />
@@ -316,7 +314,7 @@ export default function SwingDesk({
                 </p>
               </details>
             </div>
-          </section>
+          </section>}
         </aside>
       </div>
       <div className="overview-note">

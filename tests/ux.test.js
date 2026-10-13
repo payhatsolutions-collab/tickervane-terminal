@@ -5,6 +5,8 @@ import {
   PAGE_LABELS,
   PAGES,
   viewFromSearch,
+  viewFromLocation,
+  workspaceURL,
   viewURL,
 } from "../src/navigation.js";
 import { serializeCSV } from "../src/csv.js";
@@ -49,6 +51,8 @@ test("workspace URLs preserve forecast horizon and remove irrelevant screen and 
     ),
     "https://alphanova48.in",
   );
+  assert.equal(url.pathname, "/forecast");
+  assert.equal(url.searchParams.has("page"), false);
   assert.equal(url.searchParams.get("horizon"), "20");
   assert.equal(url.searchParams.has("screen"), false);
   assert.equal(url.hash, "");
@@ -88,4 +92,19 @@ test("table sorting keeps missing numbers last in both directions and sorts fals
     [false, true],
   );
   assert.equal(rows[0].id, "missing");
+});
+
+
+test("clean workspace navigation and shared URLs resolve every page without losing state", () => {
+  for (const page of PAGES) {
+    const view = { page, symbol: "TCS.NS", range: "1y" };
+    const shared = new URL(viewURL("https://alphanova48.in/?page=Today", view), "https://alphanova48.in");
+    assert.deepEqual(viewFromLocation(shared), view);
+    const clean = new URL(viewURL(shared.href, view, { share: false }), shared.origin);
+    assert.equal(clean.pathname, workspaceURL(page));
+    assert.equal(clean.search, "");
+    assert.deepEqual(viewFromLocation(clean, view), view, "Back button restores history state");
+  }
+  assert.equal(viewFromLocation(new URL("https://alphanova48.in/charts?page=Today")).page, "Terminal");
+  assert.equal(viewFromLocation(new URL("https://alphanova48.in/?page=Terminal")).page, "Terminal");
 });

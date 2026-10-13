@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { fmt, pct, short, compact } from './data';
 import { PanelTitle } from './ui';
 
@@ -28,8 +28,8 @@ export function ResearchCharts({ bars = [], delivery = [], loading, error, isNSE
   </section>;
 }
 
-export function MarketMap({ rows = [], onOpen, date }) {
+export function MarketMap({ rows = [], onOpen, date, loading = false }) {
   const [metric,setMetric] = useState('change');
-  const liquid = rows.filter(r => Number.isFinite(r.turnoverCr)).sort((a,b) => b.turnoverCr-a.turnoverCr).slice(0,60);
-  return <section className="market-map"><div className="visual-heading"><h3>Market heatmap <small>60 most traded · avg turnover</small></h3><div className="segments">{[['change','1D'],['r1m','1M'],['r3m','3M']].map(([key,label])=><button key={key} className={metric===key?'active':''} aria-pressed={metric===key} onClick={()=>setMetric(key)}>{label}</button>)}</div></div>{liquid.length ? <Heatmap rows={liquid.map(r=>({...r,symbol:r.symbol+'.NS',change:r[metric]}))} onOpen={onOpen}/> : <div className="visual-empty">Heatmap awaiting market data</div>}<div className="map-legend"><span className="negative">−5%</span><i/><span className="positive">+5%</span><span>Equal-size tiles · {date || '—'} · delayed</span></div></section>;
+  const liquid = useMemo(() => rows.filter(r => Number.isFinite(r.turnoverCr)).sort((a,b) => b.turnoverCr-a.turnoverCr).slice(0,60), [rows]);
+  return <section className="market-map"><div className="visual-heading"><h3>Market heatmap <small>60 most traded · avg turnover</small></h3><div className="segments">{[['change','1D'],['r1m','1M'],['r3m','3M']].map(([key,label])=><button key={key} className={metric===key?'active':''} aria-pressed={metric===key} onClick={()=>setMetric(key)}>{label}</button>)}</div></div>{liquid.length ? <Heatmap rows={liquid.map(r=>({...r,symbol:r.symbol+'.NS',change:r[metric]}))} onOpen={onOpen}/> : loading ? <div role="status" aria-label="Loading market heatmap" aria-busy="true" className="heatmap heatmap-placeholder">{Array.from({ length: 60 }, (_, i) => <i key={i} aria-hidden="true" />)}</div> : <div className="visual-empty">Heatmap awaiting market data</div>}<div className="map-legend"><span className="negative">−5%</span><i/><span className="positive">+5%</span><span>Equal-size tiles · {date || '—'} · delayed</span></div></section>;
 }

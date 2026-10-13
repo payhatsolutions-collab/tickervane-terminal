@@ -30,12 +30,12 @@ export default function Pulse({ onOpen, refresh }) {
   return <section className="panel pulse-panel">
     <PanelTitle title="Market pulse" tag="PULSE"><span className="muted small">{screen.data?.date ? `Breadth as of ${screen.data.date}` : ''}</span></PanelTitle>
     <div className="pulse-cards">
-      <div className={`radar-card ${read.tone}`}><span>India VIX</span><strong>{fmt(vix?.price)}</strong><small><b className={tone(-(vix?.change ?? NaN))}>{pct(vix?.change)}</b> · {read.label}</small><small>{implied ? `Nifty 1σ day ≈ ±${fmt(implied, 0)} pts (${fmt(vix.price / Math.sqrt(252))}%)` : ''}</small></div>
+      <div className={`radar-card ${read.tone}`}><span>India VIX</span><strong>{fmt(vix?.price)}</strong><small><b className={tone(-(vix?.change ?? NaN))}>{pct(vix?.change)}</b> · {read.label}</small><small>{implied ? `Nifty 1σ day ≈ ±${fmt(implied, 0)} pts (${fmt(vix.price / Math.sqrt(252))}%)` : 'Nifty 1σ day ≈ — pts (—)'}</small></div>
       <div className={`radar-card ${b && b.adv >= b.dec ? 'positive' : 'negative'}`}><span>Advance / decline</span><strong>{b ? `${b.adv} : ${b.dec}` : '—'}</strong><small>{b ? `A/D ratio ${b.ratio == null ? '—' : fmt(b.ratio)} · Nifty 500` : screen.loading ? 'Scanning Nifty 500…' : 'Unavailable'}</small></div>
       <div className={`radar-card ${b?.above50 >= 50 ? 'positive' : 'negative'}`}><span>Above 50 / 200 DMA</span><strong>{b ? `${fmt(b.above50, 0)}% · ${fmt(b.above200, 0)}%` : '—'}</strong><small>Nifty 500 · trend breadth</small></div>
       <div className="radar-card accent"><span>At 52W high / low</span><strong>{b ? `${b.nearHigh} / ${b.nearLow}` : '—'}</strong><small>Within 1% of extreme</small></div>
     </div>
-    <MarketMap rows={rows} onOpen={onOpen} date={screen.data?.date}/>
+    <MarketMap rows={rows} onOpen={onOpen} date={screen.data?.date} loading={screen.loading}/>
     <div className="pulse-grid">
       <div className="pulse-block">
         <h3>Sector rotation <small className="muted">1D · 5D</small></h3>

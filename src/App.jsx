@@ -1,10 +1,13 @@
-import News from "./News.jsx";
+import { WORKSPACE_SEO, updatePageMetadata } from "./seo.js";
+const News = lazy(() => import("./News.jsx"));
 import Navigation from "./Navigation.jsx";
-import Onboarding from "./Onboarding.jsx";
-import Watchlist from "./Watchlist.jsx";
-import { growthEvent, recordVisit, recordActivation } from "./growth.js";
-import "./onboarding.css";
-import { PAGES, PAGE_LABELS, viewFromSearch, viewURL } from "./navigation.js";
+const Onboarding = lazy(() => import("./Onboarding.jsx"));
+const Watchlist = lazy(() => import("./Watchlist.jsx"));
+import { growthEvent, recordVisit, recordActivation, recordFirstStockSaved } from "./growth.js";
+
+import "./research.css";
+import { SpeedInsights } from "@vercel/speed-insights/react";
+import { PAGES, PAGE_LABELS, viewFromSearch, viewFromLocation, workspaceSearch, viewURL } from "./navigation.js";
 import { exportCSV, sortRows } from "./ui";
 import { buildBackup, parseBackup } from "./backup";
 import { presetFromSearch } from "./screens";
@@ -53,17 +56,19 @@ import {
   Wallet,
   X,
 } from "lucide-react";
-import { TradePlanner, TradeJournal, KeyLevels } from "./TradeDesk";
+const TradePlanner = lazy(() => import("./TradeDesk").then(module => ({ default: module.TradePlanner })));
+const TradeJournal = lazy(() => import("./TradeDesk").then(module => ({ default: module.TradeJournal })));
+const KeyLevels = lazy(() => import("./TradeDesk").then(module => ({ default: module.KeyLevels })));
 import { completedDailyBars, dailyLevels } from "./tradeMath";
 const Forecast = lazy(() => import("./Forecast"));
-const SwingDesk = lazy(() => import("./SwingDesk"));
+import SwingDesk from "./SwingDesk";
 const DeliveryRadar = lazy(() => import("./DeliveryRadar"));
 const Pulse = lazy(() => import("./Pulse"));
 const Screener = lazy(() => import("./Screener"));
 const FnO = lazy(() => import("./FnO"));
 const Flows = lazy(() => import("./Flows"));
 const Rotation = lazy(() => import("./Rotation"));
-import FairValue from "./FairValue";
+const FairValue = lazy(() => import("./FairValue"));
 import { Heatmap, ResearchCharts } from "./VisualData";
 import {
   enablePush,
@@ -76,7 +81,7 @@ import {
   isIOS,
   isStandalone,
 } from "./push";
-const Chart = lazy(() => import("./Chart"));
+const ResearchChart = lazy(() => import("./ResearchChart.jsx"));
 import { useFeed, useQuotes, useSaved } from "./hooks";
 import {
   benchmarks,
@@ -104,7 +109,7 @@ const tone = (n) =>
   Number.isFinite(n) ? (n >= 0 ? "positive" : "negative") : "muted";
 function Spark({ values = [], change }) {
   const v = (values || []).filter(Number.isFinite);
-  if (v.length < 2) return <span className="muted">—</span>;
+  if (v.length < 2) return <svg className="spark muted" viewBox="0 0 100 30" aria-hidden="true" />;
   const min = Math.min(...v),
     max = Math.max(...v);
   return (
@@ -219,37 +224,17 @@ function Clock() {
     </span>
   );
 }
-class ChartErrorBoundary extends React.Component {
-  constructor(p) {
-    super(p);
-    this.state = { failed: false };
-  }
-  static getDerivedStateFromError() {
-    return { failed: true };
-  }
-  render() {
-    if (this.state.failed)
-      return (
-        <div className="empty">
-          <Activity size={28} />
-          <h3>Chart failed to render</h3>
-          <p>Try another range or reload.</p>
-        </div>
-      );
-    return this.props.children;
-  }
-}
 export default function App() {
   const [existingVisitor] = useState(() => {
     try { return localStorage.getItem("an2-watch") !== null; } catch { return false; }
   });
   const [onboarding, setOnboarding] = useSaved("an2-onboarding-v1", {
-    status: existingVisitor ? "hidden" : "welcome",
+    status: "hidden",
   });
+  const [guideOpen, setGuideOpen] = useState(false);
   const [page, applyPage] = useState(() => {
       try {
-        const pg = new URLSearchParams(location.search).get("page");
-        return PAGES.includes(pg) ? pg : "Today";
+        return viewFromLocation(location).page;
       } catch {
         return "Today";
       }
@@ -320,8 +305,8 @@ export default function App() {
   const [backStack, setBackStack] = useState(() => window.history.state?.anBackStack || []);
   const [screenerView, setScreenerView] = useState(() => ({
     active:
-      presetFromSearch(
-        typeof location === "undefined" ? "" : location.search,
+      window.history.state?.anView?.screenerView?.active || presetFromSearch(
+        typeof location === "undefined" ? "" : workspaceSearch(location),
       ) || "momentum",
   }));
   const currentView = () => ({
@@ -349,7 +334,7 @@ export default function App() {
     window.history.pushState(
       { anView: target, anBackStack: stack },
       "",
-      viewURL(location.href, { ...target, screen: target.screenerView.active }),
+      viewURL(location.href, { ...target, screen: target.screenerView.active }, { share: false }),
     );
     setBackStack(stack);
     applyPage(target.page);
@@ -363,7 +348,9 @@ export default function App() {
   };
   const setPage = (next) => navigate({ page: next });
   const openGuide = () => {
-    setOnboarding({ status: watchedStocks.length >= 3 ? "return" : "choose" });
+    setOnboarding({ status: watchedStocks.length >= 1 ? "return" : "choose" });
+    setGuideOpen(true);
+    navigate({ page: "Watchlist" });
     growthEvent("onboarding_reopened");
     window.scrollTo?.({ top: 0, behavior: "instant" });
   };
@@ -380,7 +367,7 @@ export default function App() {
   };
   useEffect(() => {
     const restore = (event) => {
-      const urlView = viewFromSearch(location.search);
+      const urlView = viewFromLocation(location, event.state?.anView);
       const view = { ...event.state?.anView, ...urlView };
       applyPage(view.page);
       setSymbol(view.symbol);
@@ -391,7 +378,7 @@ export default function App() {
       setDirection(view.direction || 1);
       setScreenerView(
         view.screenerView || {
-          active: presetFromSearch(location.search) || "momentum",
+          active: presetFromSearch(workspaceSearch(location)) || "momentum",
         },
       );
       setBackStack(event.state?.anBackStack || []);
@@ -410,7 +397,7 @@ export default function App() {
   const fileRef = useRef(),
     watchPanelRef = useRef(),
     initialQuery = useRef(
-      typeof location !== "undefined" ? location.search : "",
+      typeof location !== "undefined" ? workspaceSearch(location) : "",
     );
   const [searchTarget, setSearchTarget] = useState(null),
     [undo, setUndo] = useState(null);
@@ -494,7 +481,7 @@ export default function App() {
   const signal = useMemo(() => signalSnapshot(dailyBars), [dailyBars]);
   const regime = useMemo(() => marketRegime(dailyBars), [dailyBars]);
   const levels = useMemo(() => dailyLevels(dailyBars), [dailyBars]);
-  const results = search(query);
+  const results = useMemo(() => showSearch ? search(query) : [], [query, showSearch]);
   const choose = (s) => {
     if (searchTarget === "position" || searchTarget === "alert") {
       setSymbol(s);
@@ -565,30 +552,11 @@ export default function App() {
   }, []);
   useEffect(() => {
     try {
-      const u = new URL(location.href);
-      if (u.searchParams.get("symbol") !== symbol)
-        u.searchParams.set("symbol", symbol);
-      if (u.searchParams.get("page") !== page) u.searchParams.set("page", page);
-      if (u.searchParams.get("range") !== range)
-        u.searchParams.set("range", range);
-      if (
-        page === "Screener" &&
-        screenerView.active &&
-        screenerView.active !== "custom"
-      )
-        u.searchParams.set("screen", screenerView.active);
-      else u.searchParams.delete("screen");
-      const next = u.pathname + u.search;
-      if (location.pathname + location.search !== next)
-        window.history.replaceState(window.history.state, "", next);
+      const next = viewURL(location.href, { ...currentView(), screen: screenerView.active }, { share: false });
+      window.history.replaceState({ ...window.history.state, anView: currentView() }, "", next);
     } catch {}
   }, [symbol, page, range, screenerView.active]);
-  useEffect(() => {
-    document.title =
-      page === "Today" || page === "Terminal"
-        ? "Alpha Nova (AlphaNova) | Indian Stock Screener"
-        : `${page === "Screener" ? "Nifty 500 Stock Screener" : page === "Delivery" ? "NSE Delivery Radar" : page === "FnO" ? "NSE Option Chain & Futures OI" : page === "Flows" ? "FII DII Flows & Bulk Deals" : page} | Alpha Nova Terminal`;
-  }, [page]);
+  useEffect(() => { updatePageMetadata(page); }, [page]);
   useEffect(() => {
     setActiveIdx(0);
   }, [query, showSearch]);
@@ -738,6 +706,7 @@ export default function App() {
       notify("Watchlists support up to 40 symbols.");
     else {
       setWatch([...watch, s]);
+      if (!watchedStocks.length && ["India", "US"].includes(directory.get(s)?.market) && directory.get(s)?.sector !== "Index") recordFirstStockSaved();
       growthEvent("watchlist_stock_saved", { stock_count: watch.length + 1 });
       notify("Added to watchlist");
     }
@@ -1015,14 +984,13 @@ export default function App() {
     rd.readAsText(file);
   };
   const tableSymbols = page === "Markets" ? groupSymbols : watch;
-  let rows = (tableSymbols || [])
-    .map((s) => ({ ...directory.get(s), symbol: s, ...quotes[s] }))
-    .filter(
-      (x) =>
-        (x.name || x.symbol).toLowerCase().includes(filter.toLowerCase()) ||
-        x.symbol.toLowerCase().includes(filter.toLowerCase()),
-    );
-  rows = sortRows(rows, [sort, direction]);
+  const rows = useMemo(() => {
+    const needle = filter.toLowerCase();
+    return sortRows((tableSymbols || [])
+      .map((s) => ({ ...directory.get(s), symbol: s, ...quotes[s] }))
+      .filter((x) => (x.name || x.symbol).toLowerCase().includes(needle) ||
+        x.symbol.toLowerCase().includes(needle)), [sort, direction]);
+  }, [tableSymbols, quotes, filter, sort, direction]);
   const changeSort = (s) => {
     setSort(s);
     setDirection(s === sort ? -direction : s === "symbol" ? 1 : -1);
@@ -1211,7 +1179,8 @@ export default function App() {
     setForm(null);
   }
   return (
-    <div className={`app ${focus ? "chart-focus" : ""}`}>
+    <div className={`app ${page === "Today" ? "research-home" : ""} ${focus ? "chart-focus" : ""}`}>
+      <SpeedInsights route={(WORKSPACE_SEO[page] || WORKSPACE_SEO.Today).path} />
       <a href="#main-content" className="skip-link">
         Skip to content
       </a>
@@ -1236,7 +1205,8 @@ export default function App() {
           onClick={() => openSearch()}
         >
           <Search size={16} />
-          <span>Search symbol or company</span>
+          <span className="search-label-wide">Search symbol or company</span>
+          <span className="search-label-mobile">Search stocks</span>
           <kbd>⌘ K</kbd>
         </button>
         <div className="top-right">
@@ -1276,9 +1246,9 @@ export default function App() {
         ))}
       </div>
       <main id="main-content" tabIndex={-1}>
-        <Onboarding state={onboarding} onState={setOnboarding} watch={watchedStocks}
+        {guideOpen && page === "Watchlist" && <Suspense fallback={<div className="loading" role="status">Loading guide…</div>}><Onboarding state={onboarding} onState={setOnboarding} watch={watchedStocks}
           onToggle={toggleWatch} onNavigate={navigate} onAlert={openWatchAlert}
-          alerts={alerts} pushOn={!!alertPrefs?.push} />
+          alerts={alerts} pushOn={!!alertPrefs?.push} /></Suspense>}
         {previousView && (
           <div className="history-navigation">
             <button
@@ -1301,34 +1271,9 @@ export default function App() {
             {previousView && <span className="muted">to {previousLabel}</span>}
           </div>
         )}
-        <Suspense fallback={<div className="loading">Loading workspace…</div>}>
-          <div className="workspace-heading">
+          {page !== "Today" && <div className="workspace-heading">
             <div>
-              <h1>
-                {page === "Today"
-                  ? "Overview"
-                  : page === "Terminal"
-                    ? "Research & plan"
-                    : page === "Markets"
-                      ? "Markets"
-                      : page === "Forecast"
-                        ? "Price forecast"
-                        : page === "Screener"
-                          ? "Market screener"
-                          : page === "Delivery"
-                            ? "Delivery radar"
-                            : page === "FnO"
-                              ? "Futures & options"
-                              : page === "Flows"
-                                ? "Institutional flows"
-                                : page === "News"
-                                  ? "The newswire"
-                                  : page === "Portfolio"
-                                    ? "Portfolio"
-                                    : page === "Journal"
-                                      ? "Journal"
-                                      : page === "Watchlist" ? "Watchlist" : "Price alerts"}
-              </h1>
+              <h1>{(WORKSPACE_SEO[page] || WORKSPACE_SEO.Today).heading}</h1>
             </div>
             <div className="heading-actions">
               <span className="feed-status">
@@ -1358,7 +1303,8 @@ export default function App() {
                 <Search size={15} /> Find instrument
               </button>
             </div>
-          </div>
+          </div>}
+        <Suspense fallback={<div className="loading">Loading workspace…</div>}>
           {quotesError && (
             <div className="notice" role="status">
               {quotesError}
@@ -1370,6 +1316,7 @@ export default function App() {
               onRefresh={() => setRefresh((x) => x + 1)}
               onOpen={openSymbol}
               onPage={setPage}
+              onSearch={() => openSearch()}
               watch={watch}
               toggleWatch={toggleWatch}
               journal={journal}
@@ -1572,11 +1519,14 @@ export default function App() {
                       </button>
                     </Empty>
                   ) : (
-                    <ChartErrorBoundary key={symbol + range}>
                       <Suspense
                         fallback={<div className="loading">Loading chart…</div>}
                       >
-                        <Chart
+                        <ResearchChart
+                          key={symbol}
+                          symbol={symbol}
+                          saved={watch.includes(symbol)}
+                          onSave={() => toggleWatch(symbol)}
                           bars={bars}
                           levels={
                             indicators.includes("Key levels") ? levels : null
@@ -1588,7 +1538,6 @@ export default function App() {
                           reset={reset}
                         />
                       </Suspense>
-                    </ChartErrorBoundary>
                   )}
                 </div>
                 <div className="chart-caption">
@@ -1602,11 +1551,11 @@ export default function App() {
                 </div>
                 <details className="compact-details">
                   <summary>Daily levels & pivots</summary>
-                  <KeyLevels
+                  <Suspense fallback={<div className="loading" role="status">Loading daily levels…</div>}><KeyLevels
                     levels={levels}
                     loading={daily.loading}
                     error={daily.error}
-                  />
+                  /></Suspense>
                 </details>
                 <div className="quote-stats">
                   {[
@@ -1926,12 +1875,12 @@ export default function App() {
                     "Crypto",
                     "Yield",
                   ].includes(meta.sector) && (
-                    <FairValue
+                    <Suspense fallback={<div className="loading" role="status">Loading valuation…</div>}><FairValue
                       key={symbol}
                       fund={fund}
                       price={quote?.price}
                       currency={quote?.currency || fund?.currency}
-                    />
+                    /></Suspense>
                   )}
                 <div className="company-ranges">
                   {(() => {
@@ -2042,7 +1991,7 @@ export default function App() {
                 <div className="panel-foot">Delayed · research only</div>
               </section>
               <section id="trade-planner" className="planner-disclosure panel">
-                <TradePlanner
+                <Suspense fallback={<div className="loading" role="status">Loading trade planner…</div>}><TradePlanner
                   symbol={symbol}
                   currency={quote?.currency}
                   quote={quote}
@@ -2074,10 +2023,10 @@ export default function App() {
                     notify("Plan saved to journal. No order placed.");
                     setPage("Journal");
                   }}
-                />
+                /></Suspense>
               </section>
 
-              <News symbol={symbol} refresh={refresh} />
+              <Suspense fallback={<div className="loading" role="status">Loading news…</div>}><News symbol={symbol} refresh={refresh} /></Suspense>
             </div>
           )}
           {page === "Forecast" && (
@@ -2130,10 +2079,10 @@ export default function App() {
             </div>
           )}
           {page === "Markets" && (
-            <Pulse onOpen={openSymbol} refresh={refresh} />
+            <Suspense fallback={<div className="loading market-pulse-pending" role="status">Loading market pulse…</div>}><Pulse onOpen={openSymbol} refresh={refresh} /></Suspense>
           )}
           {page === "Markets" && (
-            <Rotation onOpen={openSymbol} refresh={refresh} />
+            <Suspense fallback={<div className="loading" role="status">Loading sector rotation…</div>}><Rotation onOpen={openSymbol} refresh={refresh} /></Suspense>
           )}
           {page === "FnO" && (
             <FnO
@@ -2248,7 +2197,7 @@ export default function App() {
                 </button>
                 <span className="muted">Showing {meta.name}</span>
               </div>
-              <News key={symbol} symbol={symbol} refresh={refresh} full />
+              <Suspense fallback={<div className="loading" role="status">Loading news…</div>}><News key={symbol} symbol={symbol} refresh={refresh} full /></Suspense>
             </>
           )}
           {page === "Portfolio" && (

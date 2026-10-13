@@ -1,0 +1,15 @@
+{
+  "environment": "Local Chromium browser at 390x844; public production data through a test proxy. Unthrottled desktop CPU; illustrative local samples, not field metrics.",
+  "home": {
+    "lcpMs": 68,
+    "cls": 0.000008024488722952203,
+    "longTaskBlockingMs": 0,
+    "screenRequests": 1
+  },
+  "markets": {
+    "lcpMs": 92,
+    "cls": 0.0000743661114656052,
+    "longTaskBlockingMs": 0,
+    "screenRequests": 1
+  }
+}

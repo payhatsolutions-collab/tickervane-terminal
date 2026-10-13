@@ -1,0 +1,341 @@
+{
+  "desktopChecks": [
+    {
+      "canonical": "https://alphanova48.in/",
+      "h1": [
+        "Alpha Nova: Indian Stock Market Overview"
+      ],
+      "path": "/",
+      "robots": "index, follow, max-image-preview:large"
+    },
+    {
+      "canonical": "https://alphanova48.in/charts",
+      "h1": [
+        "Stock Charts & Technical Analysis"
+      ],
+      "path": "/charts",
+      "robots": "index, follow, max-image-preview:large"
+    },
+    {
+      "canonical": "https://alphanova48.in/forecast",
+      "h1": [
+        "Stock Price Forecast"
+      ],
+      "path": "/forecast",
+      "robots": "index, follow, max-image-preview:large"
+    },
+    {
+      "canonical": "https://alphanova48.in/markets",
+      "h1": [
+        "Indian & Global Stock Markets"
+      ],
+      "path": "/markets",
+      "robots": "index, follow, max-image-preview:large"
+    },
+    {
+      "canonical": "https://alphanova48.in/screener",
+      "h1": [
+        "Nifty 500 Stock Screener"
+      ],
+      "path": "/screener",
+      "robots": "index, follow, max-image-preview:large"
+    },
+    {
+      "canonical": "https://alphanova48.in/delivery",
+      "h1": [
+        "NSE Delivery Volume & Percentage Analysis"
+      ],
+      "path": "/delivery",
+      "robots": "index, follow, max-image-preview:large"
+    },
+    {
+      "canonical": "https://alphanova48.in/futures-options",
+      "h1": [
+        "NSE Option Chain & Futures Open Interest"
+      ],
+      "path": "/futures-options",
+      "robots": "index, follow, max-image-preview:large"
+    },
+    {
+      "canonical": "https://alphanova48.in/institutional-flows",
+      "h1": [
+        "FII DII Data & NSE Bulk and Block Deals"
+      ],
+      "path": "/institutional-flows",
+      "robots": "index, follow, max-image-preview:large"
+    },
+    {
+      "canonical": "https://alphanova48.in/news",
+      "h1": [
+        "Stock Market News"
+      ],
+      "path": "/news",
+      "robots": "index, follow, max-image-preview:large"
+    },
+    {
+      "canonical": "https://alphanova48.in/watchlist",
+      "h1": [
+        "Stock Watchlist"
+      ],
+      "path": "/watchlist",
+      "robots": "noindex, follow"
+    },
+    {
+      "canonical": "https://alphanova48.in/portfolio",
+      "h1": [
+        "Stock Portfolio Tracker"
+      ],
+      "path": "/portfolio",
+      "robots": "noindex, follow"
+    },
+    {
+      "canonical": "https://alphanova48.in/trade-journal",
+      "h1": [
+        "Stock Trading Journal"
+      ],
+      "path": "/trade-journal",
+      "robots": "noindex, follow"
+    },
+    {
+      "canonical": "https://alphanova48.in/price-alerts",
+      "h1": [
+        "Stock Price Alerts"
+      ],
+      "path": "/price-alerts",
+      "robots": "noindex, follow"
+    },
+    {
+      "canonical": "https://alphanova48.in/",
+      "h1": [
+        "Alpha Nova: Indian Stock Market Overview"
+      ],
+      "path": "/",
+      "robots": "index, follow, max-image-preview:large"
+    }
+  ],
+  "mobileChecks": [
+    {
+      "h1": [
+        "Alpha Nova: Indian Stock Market Overview"
+      ],
+      "headingWidth": 153.625,
+      "path": "/",
+      "robots": "index, follow, max-image-preview:large",
+      "viewport": 320,
+      "width": 312
+    },
+    {
+      "h1": [
+        "Stock Charts & Technical Analysis"
+      ],
+      "headingWidth": 153.625,
+      "path": "/charts",
+      "robots": "index, follow, max-image-preview:large",
+      "viewport": 320,
+      "width": 312
+    },
+    {
+      "h1": [
+        "Stock Price Forecast"
+      ],
+      "headingWidth": 153.625,
+      "path": "/forecast",
+      "robots": "index, follow, max-image-preview:large",
+      "viewport": 320,
+      "width": 312
+    },
+    {
+      "h1": [
+        "Indian & Global Stock Markets"
+      ],
+      "headingWidth": 153.625,
+      "path": "/markets",
+      "robots": "index, follow, max-image-preview:large",
+      "viewport": 320,
+      "width": 312
+    },
+    {
+      "h1": [
+        "Nifty 500 Stock Screener"
+      ],
+      "headingWidth": 153.625,
+      "path": "/screener",
+      "robots": "index, follow, max-image-preview:large",
+      "viewport": 320,
+      "width": 312
+    },
+    {
+      "h1": [
+        "NSE Delivery Volume & Percentage Analysis"
+      ],
+      "headingWidth": 153.625,
+      "path": "/delivery",
+      "robots": "index, follow, max-image-preview:large",
+      "viewport": 320,
+      "width": 312
+    },
+    {
+      "h1": [
+        "NSE Option Chain & Futures Open Interest"
+      ],
+      "headingWidth": 153.625,
+      "path": "/futures-options",
+      "robots": "index, follow, max-image-preview:large",
+      "viewport": 320,
+      "width": 312
+    },
+    {
+      "h1": [
+        "FII DII Data & NSE Bulk and Block Deals"
+      ],
+      "headingWidth": 153.625,
+      "path": "/institutional-flows",
+      "robots": "index, follow, max-image-preview:large",
+      "viewport": 320,
+      "width": 312
+    },
+    {
+      "h1": [
+        "Stock Market News"
+      ],
+      "headingWidth": 153.625,
+      "path": "/news",
+      "robots": "index, follow, max-image-preview:large",
+      "viewport": 320,
+      "width": 312
+    },
+    {
+      "h1": [
+        "Stock Watchlist"
+      ],
+      "headingWidth": 134.796875,
+      "path": "/watchlist",
+      "robots": "noindex, follow",
+      "viewport": 320,
+      "width": 312
+    },
+    {
+      "h1": [
+        "Stock Portfolio Tracker"
+      ],
+      "headingWidth": 153.625,
+      "path": "/portfolio",
+      "robots": "noindex, follow",
+      "viewport": 320,
+      "width": 312
+    },
+    {
+      "h1": [
+        "Stock Trading Journal"
+      ],
+      "headingWidth": 153.625,
+      "path": "/trade-journal",
+      "robots": "noindex, follow",
+      "viewport": 320,
+      "width": 312
+    },
+    {
+      "h1": [
+        "Stock Price Alerts"
+      ],
+      "headingWidth": 153.625,
+      "path": "/price-alerts",
+      "robots": "noindex, follow",
+      "viewport": 320,
+      "width": 312
+    }
+  ],
+  "guideChecks": [
+    {
+      "h1Count": 1,
+      "path": "/stock-prices.html",
+      "viewport": 320,
+      "width": 305
+    },
+    {
+      "h1Count": 1,
+      "path": "/stock-market-app.html",
+      "viewport": 320,
+      "width": 305
+    },
+    {
+      "h1Count": 1,
+      "path": "/stock-screener.html",
+      "viewport": 320,
+      "width": 305
+    },
+    {
+      "h1Count": 1,
+      "path": "/delivery-radar.html",
+      "viewport": 320,
+      "width": 305
+    },
+    {
+      "h1Count": 1,
+      "path": "/about.html",
+      "viewport": 320,
+      "width": 305
+    },
+    {
+      "h1Count": 1,
+      "path": "/screens.html",
+      "viewport": 320,
+      "width": 305
+    },
+    {
+      "h1Count": 1,
+      "path": "/methodology.html",
+      "viewport": 320,
+      "width": 305
+    },
+    {
+      "h1Count": 1,
+      "path": "/pricing.html",
+      "viewport": 320,
+      "width": 305
+    },
+    {
+      "h1Count": 1,
+      "path": "/screens/20-day-breakout.html",
+      "viewport": 320,
+      "width": 305
+    },
+    {
+      "h1Count": 1,
+      "path": "/screens/delivery-accumulation.html",
+      "viewport": 320,
+      "width": 305
+    },
+    {
+      "h1Count": 1,
+      "path": "/screens/minervini-trend-template.html",
+      "viewport": 320,
+      "width": 305
+    },
+    {
+      "h1Count": 1,
+      "path": "/screens/near-52-week-high.html",
+      "viewport": 320,
+      "width": 305
+    },
+    {
+      "h1Count": 1,
+      "path": "/screens/relative-strength.html",
+      "viewport": 320,
+      "width": 305
+    },
+    {
+      "h1Count": 1,
+      "path": "/screens/volume-surge.html",
+      "viewport": 320,
+      "width": 305
+    }
+  ],
+  "safariStaged": [
+    "homepage",
+    "screener"
+  ],
+  "safariLive": [
+    "homepage"
+  ]
+}

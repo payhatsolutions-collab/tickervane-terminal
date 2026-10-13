@@ -14,11 +14,21 @@
     {
       "source": "/",
       "has": [
-        { "type": "host", "value": "tickervane.vercel.app" },
-        { "type": "query", "key": "page", "value": "Portfolio" }
+        {
+          "type": "host",
+          "value": "tickervane.vercel.app"
+        },
+        {
+          "type": "query",
+          "key": "page",
+          "value": "Portfolio"
+        }
       ],
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
       ]
     },
     {
@@ -70,6 +80,39 @@
           "value": "same-origin"
         }
       ]
+    },
+    {
+      "source": "/:path(charts|forecast|markets|screener|delivery|futures-options|institutional-flows|news)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "index, follow, max-image-preview:large"
+        }
+      ]
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "alphanova48.in"
+        }
+      ],
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "index, follow, max-image-preview:large"
+        }
+      ]
+    },
+    {
+      "source": "/:path(watchlist|portfolio|trade-journal|price-alerts){.html}?",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        }
+      ]
     }
   ],
   "regions": [
@@ -87,21 +130,185 @@
   ],
   "redirects": [
     {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.alphanova48.in"
+        }
+      ],
+      "destination": "https://alphanova48.in/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/charts",
+      "has": [
+        {
+          "type": "host",
+          "value": "tickervane.vercel.app"
+        }
+      ],
+      "destination": "https://alphanova48.in/charts",
+      "permanent": true
+    },
+    {
+      "source": "/forecast",
+      "has": [
+        {
+          "type": "host",
+          "value": "tickervane.vercel.app"
+        }
+      ],
+      "destination": "https://alphanova48.in/forecast",
+      "permanent": true
+    },
+    {
+      "source": "/markets",
+      "has": [
+        {
+          "type": "host",
+          "value": "tickervane.vercel.app"
+        }
+      ],
+      "destination": "https://alphanova48.in/markets",
+      "permanent": true
+    },
+    {
+      "source": "/screener",
+      "has": [
+        {
+          "type": "host",
+          "value": "tickervane.vercel.app"
+        }
+      ],
+      "destination": "https://alphanova48.in/screener",
+      "permanent": true
+    },
+    {
+      "source": "/delivery",
+      "has": [
+        {
+          "type": "host",
+          "value": "tickervane.vercel.app"
+        }
+      ],
+      "destination": "https://alphanova48.in/delivery",
+      "permanent": true
+    },
+    {
+      "source": "/futures-options",
+      "has": [
+        {
+          "type": "host",
+          "value": "tickervane.vercel.app"
+        }
+      ],
+      "destination": "https://alphanova48.in/futures-options",
+      "permanent": true
+    },
+    {
+      "source": "/institutional-flows",
+      "has": [
+        {
+          "type": "host",
+          "value": "tickervane.vercel.app"
+        }
+      ],
+      "destination": "https://alphanova48.in/institutional-flows",
+      "permanent": true
+    },
+    {
+      "source": "/news",
+      "has": [
+        {
+          "type": "host",
+          "value": "tickervane.vercel.app"
+        }
+      ],
+      "destination": "https://alphanova48.in/news",
+      "permanent": true
+    },
+    {
+      "source": "/watchlist",
+      "has": [
+        {
+          "type": "host",
+          "value": "tickervane.vercel.app"
+        }
+      ],
+      "destination": "https://alphanova48.in/watchlist",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio",
+      "has": [
+        {
+          "type": "host",
+          "value": "tickervane.vercel.app"
+        }
+      ],
+      "destination": "https://alphanova48.in/portfolio",
+      "permanent": true
+    },
+    {
+      "source": "/trade-journal",
+      "has": [
+        {
+          "type": "host",
+          "value": "tickervane.vercel.app"
+        }
+      ],
+      "destination": "https://alphanova48.in/trade-journal",
+      "permanent": true
+    },
+    {
+      "source": "/price-alerts",
+      "has": [
+        {
+          "type": "host",
+          "value": "tickervane.vercel.app"
+        }
+      ],
+      "destination": "https://alphanova48.in/price-alerts",
+      "permanent": true
+    },
+    {
       "source": "/",
-      "has": [{ "type": "host", "value": "tickervane.vercel.app" }],
-      "missing": [{ "type": "query", "key": "page", "value": "Portfolio" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "tickervane.vercel.app"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "page",
+          "value": "Portfolio"
+        }
+      ],
       "destination": "https://alphanova48.in/",
       "permanent": true
     },
     {
       "source": "/index.html",
-      "has": [{ "type": "host", "value": "tickervane.vercel.app" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "tickervane.vercel.app"
+        }
+      ],
       "destination": "https://alphanova48.in/",
       "permanent": true
     },
     {
       "source": "/:path(.*\\.html|sitemap\\.xml|robots\\.txt|llms\\.txt|pricing\\.md)",
-      "has": [{ "type": "host", "value": "tickervane.vercel.app" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "tickervane.vercel.app"
+        }
+      ],
       "destination": "https://alphanova48.in/:path",
       "permanent": true
     },
@@ -109,6 +316,308 @@
       "source": "/index.html",
       "destination": "/",
       "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "alphanova48.in"
+        },
+        {
+          "type": "query",
+          "key": "page",
+          "value": "Terminal"
+        }
+      ],
+      "destination": "/charts",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "alphanova48.in"
+        },
+        {
+          "type": "query",
+          "key": "page",
+          "value": "Forecast"
+        }
+      ],
+      "destination": "/forecast",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "alphanova48.in"
+        },
+        {
+          "type": "query",
+          "key": "page",
+          "value": "Markets"
+        }
+      ],
+      "destination": "/markets",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "alphanova48.in"
+        },
+        {
+          "type": "query",
+          "key": "page",
+          "value": "Screener"
+        }
+      ],
+      "destination": "/screener",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "alphanova48.in"
+        },
+        {
+          "type": "query",
+          "key": "page",
+          "value": "Delivery"
+        }
+      ],
+      "destination": "/delivery",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "alphanova48.in"
+        },
+        {
+          "type": "query",
+          "key": "page",
+          "value": "FnO"
+        }
+      ],
+      "destination": "/futures-options",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "alphanova48.in"
+        },
+        {
+          "type": "query",
+          "key": "page",
+          "value": "Flows"
+        }
+      ],
+      "destination": "/institutional-flows",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "alphanova48.in"
+        },
+        {
+          "type": "query",
+          "key": "page",
+          "value": "News"
+        }
+      ],
+      "destination": "/news",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "alphanova48.in"
+        },
+        {
+          "type": "query",
+          "key": "page",
+          "value": "Watchlist"
+        }
+      ],
+      "destination": "/watchlist",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "alphanova48.in"
+        },
+        {
+          "type": "query",
+          "key": "page",
+          "value": "Portfolio"
+        }
+      ],
+      "destination": "/portfolio",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "alphanova48.in"
+        },
+        {
+          "type": "query",
+          "key": "page",
+          "value": "Journal"
+        }
+      ],
+      "destination": "/trade-journal",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "alphanova48.in"
+        },
+        {
+          "type": "query",
+          "key": "page",
+          "value": "Alerts"
+        }
+      ],
+      "destination": "/price-alerts",
+      "permanent": true
+    },
+    {
+      "source": "/charts.html",
+      "destination": "/charts",
+      "permanent": true
+    },
+    {
+      "source": "/forecast.html",
+      "destination": "/forecast",
+      "permanent": true
+    },
+    {
+      "source": "/markets.html",
+      "destination": "/markets",
+      "permanent": true
+    },
+    {
+      "source": "/screener.html",
+      "destination": "/screener",
+      "permanent": true
+    },
+    {
+      "source": "/delivery.html",
+      "destination": "/delivery",
+      "permanent": true
+    },
+    {
+      "source": "/futures-options.html",
+      "destination": "/futures-options",
+      "permanent": true
+    },
+    {
+      "source": "/institutional-flows.html",
+      "destination": "/institutional-flows",
+      "permanent": true
+    },
+    {
+      "source": "/news.html",
+      "destination": "/news",
+      "permanent": true
+    },
+    {
+      "source": "/watchlist.html",
+      "destination": "/watchlist",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio.html",
+      "destination": "/portfolio",
+      "permanent": true
+    },
+    {
+      "source": "/trade-journal.html",
+      "destination": "/trade-journal",
+      "permanent": true
+    },
+    {
+      "source": "/price-alerts.html",
+      "destination": "/price-alerts",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/charts",
+      "destination": "/charts.html"
+    },
+    {
+      "source": "/forecast",
+      "destination": "/forecast.html"
+    },
+    {
+      "source": "/markets",
+      "destination": "/markets.html"
+    },
+    {
+      "source": "/screener",
+      "destination": "/screener.html"
+    },
+    {
+      "source": "/delivery",
+      "destination": "/delivery.html"
+    },
+    {
+      "source": "/futures-options",
+      "destination": "/futures-options.html"
+    },
+    {
+      "source": "/institutional-flows",
+      "destination": "/institutional-flows.html"
+    },
+    {
+      "source": "/news",
+      "destination": "/news.html"
+    },
+    {
+      "source": "/watchlist",
+      "destination": "/watchlist.html"
+    },
+    {
+      "source": "/portfolio",
+      "destination": "/portfolio.html"
+    },
+    {
+      "source": "/trade-journal",
+      "destination": "/trade-journal.html"
+    },
+    {
+      "source": "/price-alerts",
+      "destination": "/price-alerts.html"
     }
   ]
 }

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run seo:generate && vite build",
+    "build": "npm run seo:generate && vite build && node scripts/build-workspace-seo.mjs",
     "preview": "vite preview",
     "test": "JARVIS_HOME=${TMPDIR:-/tmp}/jarvis-test node --test tests/*.test.js",
     "jarvis": "node agents/jarvis/cli.mjs",
@@ -16,6 +16,7 @@
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
     "@vercel/blob": "^2.8.0",
+    "@vercel/speed-insights": "^2.0.0",
     "@vitejs/plugin-react": "^5.1.0",
     "lightweight-charts": "^5.2.1",
     "lucide-react": "^0.468.0",

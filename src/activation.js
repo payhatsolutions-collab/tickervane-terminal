@@ -28,8 +28,21 @@ export function visitTransition(previous, now, existing = false) {
   return { state, events };
 }
 
+// Called by the save action, never by restoring an old watchlist on page load.
+export function firstStockTransition(previous, now) {
+  const state = { ...previous };
+  if (state.existing || state.firstStockSavedAt || state.activatedAt)
+    return { state, events: [] };
+  state.firstStockSavedAt = now;
+  return { state, events: [["first_stock_saved", {
+    cohort: state.cohort,
+    seconds_to_save: Math.max(0, Math.round((now - state.firstVisit) / 1000)),
+  }]] };
+}
+
 export function activationTransition(previous, watch, now) {
   const state = { ...previous };
+  // Preserve the historical three-stock milestone so older reports stay comparable.
   if (state.existing || state.activatedAt || new Set(watch).size < 3)
     return { state, events: [] };
   state.activatedAt = now;

@@ -13,7 +13,6 @@ export const groups={'India':india,'US':rows.filter(x=>x[2]==='US').map(x=>x[0])
 export const benchmarks=['^NSEI','^NSEBANK','^INDIAVIX','^GSPC','INR=X','BZ=F'];
 export const short=s=>s?.replace('.NS','').replaceAll('_',' ') || '';
 export const exchangeName=x=>({NSI:'NSE',BSE:'BSE',NMS:'NASDAQ',NGM:'NASDAQ',NCM:'NASDAQ',NYQ:'NYSE',PCX:'NYSE Arca',CCC:'Crypto',CCY:'FX',CMX:'COMEX',NYM:'NYMEX',SNP:'S&P',DJI:'Dow Jones'})[x]||x;
-export const fmt=(n,d=2)=>Number.isFinite(n)?n.toLocaleString('en-IN',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
+export { fmt, compact } from './format.js';
 export const pct=n=>Number.isFinite(n)?`${n>=0?'+':''}${n.toFixed(2)}%`:'—';
-export const compact=n=>Number.isFinite(n)?Intl.NumberFormat('en',{notation:'compact',maximumFractionDigits:1}).format(n):'—';
 export const search=q=>{q=(q||'').trim().toUpperCase();if(!q)return instruments.slice(0,12);const exact=x=>x.symbol===q||short(x.symbol)===q;return instruments.filter(x=>x.symbol.includes(q)||x.name.toUpperCase().includes(q)).sort((a,b)=>(exact(b)?1:0)-(exact(a)?1:0)).slice(0,16);};

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { growthEvent, recordVisit, recordActivation } from "../src/growth.js";
+import { growthEvent, recordVisit, recordActivation, recordFirstStockSaved } from "../src/growth.js";
 
 test("events queue before Analytics initializes and funnel emissions persist once", () => {
   const oldWindow = globalThis.window;
@@ -15,9 +15,10 @@ test("events queue before Analytics initializes and funnel emissions persist onc
     window.va = (...args) => events.push(args);
     recordVisit(false);
     recordVisit(false);
+    recordFirstStockSaved();
     recordActivation(["TCS.NS", "HDFCBANK.NS", "RELIANCE.NS"]);
     recordActivation(["TCS.NS", "HDFCBANK.NS", "RELIANCE.NS"]);
-    assert.deepEqual(events.map(([, payload]) => payload.name), ["first_visit", "visit_started", "watchlist_activated"]);
+    assert.deepEqual(events.map(([, payload]) => payload.name), ["first_visit", "visit_started", "first_stock_saved", "watchlist_activated"]);
     assert.equal(saved.size, 1);
   } finally {
     if (oldWindow === undefined) delete globalThis.window; else globalThis.window = oldWindow;

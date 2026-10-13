@@ -17,7 +17,7 @@ import {
   Wallet,
   X,
 } from "lucide-react";
-import { NAV_GROUPS, PAGE_LABELS } from "./navigation.js";
+import { NAV_GROUPS, PAGE_LABELS, workspaceURL } from "./navigation.js";
 import ThemeToggle from "./ThemeToggle.jsx";
 
 const icons = {
@@ -60,11 +60,16 @@ export default function Navigation({
   const item = (name, mobile = false) => {
     const Icon = icons[name];
     return (
-      <button
+      <a
+        href={workspaceURL(name)}
         key={name}
         aria-current={page === name ? "page" : undefined}
         className={page === name ? "active" : ""}
-        onClick={() => choose(name)}
+        onClick={(event) => {
+          if (event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+          event.preventDefault();
+          choose(name);
+        }}
         title={PAGE_LABELS[name]}
       >
         <Icon size={18} />
@@ -72,7 +77,7 @@ export default function Navigation({
           {mobile && name === "Terminal" ? "Charts" : PAGE_LABELS[name]}
         </span>
         {name === "Alerts" && triggered && <i className="alert-dot" />}
-      </button>
+      </a>
     );
   };
   return (

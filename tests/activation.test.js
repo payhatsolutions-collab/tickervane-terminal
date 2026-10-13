@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { visitTransition, activationTransition, SESSION_GAP, RETURN_WINDOW } from "../src/activation.js";
+import { visitTransition, activationTransition, firstStockTransition, SESSION_GAP, RETURN_WINDOW } from "../src/activation.js";
 const start = Date.UTC(2026, 9, 5);
 const stocks = ["RELIANCE.NS", "TCS.NS", "HDFCBANK.NS"];
 const activate = () => activationTransition(visitTransition({}, start).state, stocks, start + 1000).state;
@@ -13,9 +13,11 @@ test("first visit and session emit once across StrictMode, reload and second tab
 });
 test("activation requires three distinct saved stocks and emits once", () => {
   const first = visitTransition({}, start).state;
-  assert.deepEqual(activationTransition(first, stocks.slice(0, 2), start + 1000).events, []);
-  assert.deepEqual(activationTransition(first, [stocks[0], stocks[0], stocks[1]], start + 1000).events, []);
-  const result = activationTransition(first, stocks, start + 2000);
+  const one = firstStockTransition(first, start + 1000);
+  assert.deepEqual(one.events.map(([name]) => name), ["first_stock_saved"]);
+  assert.deepEqual(activationTransition(one.state, stocks.slice(0, 2), start + 1500).events, []);
+  assert.deepEqual(activationTransition(one.state, [stocks[0], stocks[0], stocks[1]], start + 1000).events, []);
+  const result = activationTransition(one.state, stocks, start + 2000);
   assert.equal(result.events[0][0], "watchlist_activated");
   assert.equal(result.events[0][1].seconds_to_activation, 2);
   assert.deepEqual(activationTransition(result.state, [], start + 3000).events, []);
@@ -48,4 +50,19 @@ test("unactivated users and active tabs do not generate retained activations", (
     assert.deepEqual(next.events, []);
     current = next.state;
   }
+});
+
+ test("first-stock milestone survives reload, removal and re-add without changing legacy activation", () => {
+  const initial = visitTransition({}, start).state;
+  const result = firstStockTransition(initial, start + 4000);
+  assert.equal(result.events[0][1].seconds_to_save, 4);
+  assert.equal(result.state.activatedAt, undefined);
+  const removed = activationTransition(result.state, [], start + 5000);
+  assert.deepEqual(firstStockTransition(removed.state, start + 6000).events, []);
+  assert.deepEqual(activationTransition(initial, stocks, start + 4000).events.map(([name]) => name), ["watchlist_activated"]);
+ });
+
+test("restoring old watchlists does not backfill first-save events", () => {
+  assert.deepEqual(firstStockTransition(activate(), start + 5000).events, []);
+  assert.deepEqual(firstStockTransition(visitTransition({}, start, true).state, start + 5000).events, []);
 });

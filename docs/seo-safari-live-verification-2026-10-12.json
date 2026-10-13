@@ -1,0 +1,44 @@
+[
+  {
+    "label": "Screener",
+    "headings": [
+      "41 heading Nifty 500 Stock Screener, Value: 1"
+    ],
+    "page": "5 HTML content Description: Nifty 500 Screener: Momentum & Delivery | Alpha Nova, URL: alphanova48.in/screener"
+  },
+  {
+    "label": "Delivery radar",
+    "headings": [
+      "41 heading NSE Delivery Volume & Percentage Analysis, Value: 1"
+    ],
+    "page": "5 HTML content Description: NSE Stock Delivery Spikes & Volume Radar | Alpha Nova, URL: alphanova48.in/delivery"
+  },
+  {
+    "label": "Charts & plan",
+    "headings": [
+      "41 heading Stock Charts & Technical Analysis, Value: 1"
+    ],
+    "page": "5 HTML content Description: Stock Charts, Technical Analysis & Trade Plans | Alpha Nova, URL: alphanova48.in/charts"
+  },
+  {
+    "label": "Institutional flows",
+    "headings": [
+      "41 heading FII DII Data & NSE Bulk and Block Deals, Value: 1"
+    ],
+    "page": "5 HTML content Description: FII DII Flows, Bulk Deals & Derivatives | Alpha Nova, URL: alphanova48.in/institutional-flows"
+  },
+  {
+    "label": "Watchlist",
+    "headings": [
+      "41 heading Stock Watchlist, Value: 1"
+    ],
+    "page": "5 HTML content Description: Stock Watchlist, Charts & Technical Signals | Alpha Nova, URL: alphanova48.in/watchlist"
+  },
+  {
+    "label": "Overview",
+    "headings": [
+      "41 heading Alpha Nova: Indian Stock Market Overview, Value: 1"
+    ],
+    "page": "5 HTML content Description: Alpha Nova | Indian Stock Market Overview & NSE Screener, URL: alphanova48.in/"
+  }
+]

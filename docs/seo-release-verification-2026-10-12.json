@@ -1,0 +1,315 @@
+{
+  "base": "https://alphanova48.in",
+  "checkedAt": "2026-10-11T21:50:40.349Z",
+  "pages": [
+    {
+      "path": "/",
+      "status": 200,
+      "title": "Alpha Nova | Indian Stock Market Overview & NSE Screener",
+      "h1": "Alpha Nova: Indian Stock Market Overview",
+      "robots": "index, follow, max-image-preview:large",
+      "canonical": "https://alphanova48.in/"
+    },
+    {
+      "path": "/stock-prices.html",
+      "status": 200,
+      "title": "Indian Stock Prices & NSE Share Charts | Alpha Nova",
+      "h1": "Indian stock prices and share price charts",
+      "robots": null,
+      "canonical": "https://alphanova48.in/stock-prices.html"
+    },
+    {
+      "path": "/stock-market-app.html",
+      "status": 200,
+      "title": "Free Stock Market App for India | Alpha Nova",
+      "h1": "A stock market app for Indian market research",
+      "robots": null,
+      "canonical": "https://alphanova48.in/stock-market-app.html"
+    },
+    {
+      "path": "/stock-screener.html",
+      "status": 200,
+      "title": "Nifty 500 Stock Screener | Alpha Nova Terminal",
+      "h1": "Nifty 500 stock screener",
+      "robots": null,
+      "canonical": "https://alphanova48.in/stock-screener.html"
+    },
+    {
+      "path": "/delivery-radar.html",
+      "status": 200,
+      "title": "NSE Delivery Radar and Stock Delivery Analysis | Alpha Nova",
+      "h1": "NSE stock delivery analysis with Delivery Radar",
+      "robots": null,
+      "canonical": "https://alphanova48.in/delivery-radar.html"
+    },
+    {
+      "path": "/about.html",
+      "status": 200,
+      "title": "About Alpha Nova, Its Founder & Market Data",
+      "h1": "About Alpha Nova (AlphaNova)",
+      "robots": null,
+      "canonical": "https://alphanova48.in/about.html"
+    },
+    {
+      "path": "/screens/delivery-accumulation.html",
+      "status": 200,
+      "title": "Delivery accumulation screener | Alpha Nova",
+      "h1": "Delivery accumulation screener",
+      "robots": null,
+      "canonical": "https://alphanova48.in/screens/delivery-accumulation.html"
+    },
+    {
+      "path": "/screens/volume-surge.html",
+      "status": 200,
+      "title": "Volume surge stock screener | Alpha Nova",
+      "h1": "Volume surge stock screener",
+      "robots": null,
+      "canonical": "https://alphanova48.in/screens/volume-surge.html"
+    },
+    {
+      "path": "/screens/20-day-breakout.html",
+      "status": 200,
+      "title": "20-day breakout stock screener | Alpha Nova",
+      "h1": "20-day breakout stock screener",
+      "robots": null,
+      "canonical": "https://alphanova48.in/screens/20-day-breakout.html"
+    },
+    {
+      "path": "/screens/near-52-week-high.html",
+      "status": 200,
+      "title": "Near 52-week high stock screener | Alpha Nova",
+      "h1": "Near 52-week high stock screener",
+      "robots": null,
+      "canonical": "https://alphanova48.in/screens/near-52-week-high.html"
+    },
+    {
+      "path": "/screens/relative-strength.html",
+      "status": 200,
+      "title": "Relative strength stock screener | Alpha Nova",
+      "h1": "Relative strength stock screener",
+      "robots": null,
+      "canonical": "https://alphanova48.in/screens/relative-strength.html"
+    },
+    {
+      "path": "/screens/minervini-trend-template.html",
+      "status": 200,
+      "title": "Minervini trend template screener | Alpha Nova",
+      "h1": "Minervini trend template screener",
+      "robots": null,
+      "canonical": "https://alphanova48.in/screens/minervini-trend-template.html"
+    },
+    {
+      "path": "/screens.html",
+      "status": 200,
+      "title": "Nifty 500 Stock Screener Guides & Rules | Alpha Nova",
+      "h1": "Nifty 500 Stock Screener Guides & Rules",
+      "robots": null,
+      "canonical": "https://alphanova48.in/screens.html"
+    },
+    {
+      "path": "/methodology.html",
+      "status": 200,
+      "title": "Stock screener methodology and data | Alpha Nova",
+      "h1": "Stock screener methodology and data",
+      "robots": null,
+      "canonical": "https://alphanova48.in/methodology.html"
+    },
+    {
+      "path": "/pricing.html",
+      "status": 200,
+      "title": "Free Stock Research Tools and Pricing | Alpha Nova",
+      "h1": "Free Stock Research Tools and Pricing",
+      "robots": null,
+      "canonical": "https://alphanova48.in/pricing.html"
+    },
+    {
+      "path": "/charts",
+      "status": 200,
+      "title": "Stock Charts, Technical Analysis & Trade Plans | Alpha Nova",
+      "h1": "Stock Charts & Technical Analysis",
+      "robots": "index, follow, max-image-preview:large",
+      "canonical": "https://alphanova48.in/charts"
+    },
+    {
+      "path": "/forecast",
+      "status": 200,
+      "title": "Stock Price Forecast & Market Research | Alpha Nova",
+      "h1": "Stock Price Forecast",
+      "robots": "index, follow, max-image-preview:large",
+      "canonical": "https://alphanova48.in/forecast"
+    },
+    {
+      "path": "/markets",
+      "status": 200,
+      "title": "Indian & Global Stock Market Overview | Alpha Nova",
+      "h1": "Indian & Global Stock Markets",
+      "robots": "index, follow, max-image-preview:large",
+      "canonical": "https://alphanova48.in/markets"
+    },
+    {
+      "path": "/screener",
+      "status": 200,
+      "title": "Nifty 500 Screener: Momentum & Delivery | Alpha Nova",
+      "h1": "Nifty 500 Stock Screener",
+      "robots": "index, follow, max-image-preview:large",
+      "canonical": "https://alphanova48.in/screener"
+    },
+    {
+      "path": "/delivery",
+      "status": 200,
+      "title": "NSE Stock Delivery Spikes & Volume Radar | Alpha Nova",
+      "h1": "NSE Delivery Volume & Percentage Analysis",
+      "robots": "index, follow, max-image-preview:large",
+      "canonical": "https://alphanova48.in/delivery"
+    },
+    {
+      "path": "/futures-options",
+      "status": 200,
+      "title": "NSE Option Chain & Futures Open Interest | Alpha Nova",
+      "h1": "NSE Option Chain & Futures Open Interest",
+      "robots": "index, follow, max-image-preview:large",
+      "canonical": "https://alphanova48.in/futures-options"
+    },
+    {
+      "path": "/institutional-flows",
+      "status": 200,
+      "title": "FII DII Flows, Bulk Deals & Derivatives | Alpha Nova",
+      "h1": "FII DII Data & NSE Bulk and Block Deals",
+      "robots": "index, follow, max-image-preview:large",
+      "canonical": "https://alphanova48.in/institutional-flows"
+    },
+    {
+      "path": "/news",
+      "status": 200,
+      "title": "Stock Market News & Company Headlines | Alpha Nova",
+      "h1": "Stock Market News",
+      "robots": "index, follow, max-image-preview:large",
+      "canonical": "https://alphanova48.in/news"
+    },
+    {
+      "path": "/watchlist",
+      "status": 200,
+      "title": "Stock Watchlist, Charts & Technical Signals | Alpha Nova",
+      "h1": "Stock Watchlist",
+      "robots": "noindex, follow",
+      "canonical": "https://alphanova48.in/watchlist"
+    },
+    {
+      "path": "/portfolio",
+      "status": 200,
+      "title": "Stock Portfolio Tracker & Holdings Tools | Alpha Nova",
+      "h1": "Stock Portfolio Tracker",
+      "robots": "noindex, follow",
+      "canonical": "https://alphanova48.in/portfolio"
+    },
+    {
+      "path": "/trade-journal",
+      "status": 200,
+      "title": "Trading Journal & Stock Trade Review Tools | Alpha Nova",
+      "h1": "Stock Trading Journal",
+      "robots": "noindex, follow",
+      "canonical": "https://alphanova48.in/trade-journal"
+    },
+    {
+      "path": "/price-alerts",
+      "status": 200,
+      "title": "Stock Price Alerts & Watchlist Notifications | Alpha Nova",
+      "h1": "Stock Price Alerts",
+      "robots": "noindex, follow",
+      "canonical": "https://alphanova48.in/price-alerts"
+    }
+  ],
+  "redirects": [
+    {
+      "path": "/index.html?keep=1",
+      "status": 308,
+      "location": "/?keep=1"
+    },
+    {
+      "path": "/screener.html?screen=volume",
+      "status": 308,
+      "location": "/screener?screen=volume"
+    },
+    {
+      "path": "/watchlist.html?keep=1",
+      "status": 308,
+      "location": "/watchlist?keep=1"
+    },
+    {
+      "path": "/?page=Screener&screen=volume",
+      "status": 308,
+      "location": "/screener?page=Screener&screen=volume"
+    },
+    {
+      "path": "/?page=Portfolio&keep=1",
+      "status": 308,
+      "location": "/portfolio?page=Portfolio&keep=1"
+    }
+  ],
+  "sitemap": {
+    "status": 200,
+    "type": "application/xml",
+    "uniqueURLs": 23
+  },
+  "missingPage": 404,
+  "googlebotUserAgent": {
+    "status": 200,
+    "note": "Synthetic user-agent check; not a verified Google crawl."
+  },
+  "dateIST": "2026-10-12",
+  "sourceCheckout": "/Users/sarda/Downloads/alphanova-terminal",
+  "project": "wdcre/alphanova2",
+  "projectId": "prj_RxwC99g2zhlKUm3DZWf3NwfdF7ti",
+  "deployment": "https://alphanova2-fp805v2z9-wdcre.vercel.app",
+  "deploymentId": "dpl_5vkSCQXHD7Xy9DXUemCD5BdE6aP6",
+  "rollback": "https://alphanova2-a32qgahr9-wdcre.vercel.app",
+  "tests": {
+    "passed": 275,
+    "failed": 0,
+    "build": "passed",
+    "diffCheck": "passed",
+    "productionJavaScriptMatchesTestedBuild": true,
+    "asset": "/assets/index-DMs0fVFY.js"
+  },
+  "browserEvidence": [
+    "seo-browser-verification-2026-10-12.json",
+    "seo-safari-live-verification-2026-10-12.json"
+  ],
+  "www": {
+    "projectAttached": true,
+    "verified": false,
+    "dnsProvider": "Namecheap",
+    "nameservers": [
+      "dns1.registrar-servers.com",
+      "dns2.registrar-servers.com"
+    ],
+    "dnsStatus": "NXDOMAIN observed via Google Public DNS; local HTTPS cannot resolve",
+    "cname": {
+      "name": "www",
+      "value": "924c123bb1d33d80.vercel-dns-017.com."
+    },
+    "txt": {
+      "name": "_vercel",
+      "value": "vc-domain-verify=www.alphanova48.in,bbab37ce132387f0cac5"
+    },
+    "redirect": "308 host rule deployed in vercel.json; end-to-end verification pending DNS and TLS"
+  },
+  "searchConsole": {
+    "status": "unresolved; access is on another PC",
+    "existingAcceptedRequests": [
+      "/",
+      "/stock-market-app.html",
+      "/screener",
+      "/delivery"
+    ],
+    "newIndexingRequestsSubmitted": 0,
+    "logs": "Vercel static-log query for sitemap.xml over the preceding day returned no records. This does not prove absence of crawling or a permanent block.",
+    "securityChanges": false
+  },
+  "scope": {
+    "abovealphasolutionsModified": false,
+    "preexistingChangesPreserved": true,
+    "baseline": "/tmp/alphanova-seo-baseline-20261012",
+    "committed": false
+  }
+}

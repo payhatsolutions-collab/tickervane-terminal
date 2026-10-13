@@ -1,4 +1,5 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
+import { growthEvent } from './growth.js';
 import { BellRing, ChevronRight, Download, Info, Plus, RefreshCw, Save, Star, Trash2, X } from 'lucide-react';
 import { useFeed, useQuotes } from './hooks';
 import LatestQuote from './LatestQuote.jsx';
@@ -23,11 +24,14 @@ const blank = { id: 'custom', name: 'Custom screen', when: [['score', 'min', 60]
 
 export default function Screener({ view, setView, onOpen, watch, toggleWatch, refresh, onRefresh, saved, setSaved, pushOn, notify, goAlerts }) {
   const { data, loading, error } = useFeed('/api/market?op=screen', refresh);
+  const interacted = useRef(false);
+  const lastReport = useRef(null);
   // Keep screen controls in the app so returning from research preserves the results.
   const { active = PRESETS[0].id, custom = blank, industry = '', q = '', sort = ['score', -1], limit = 60, chartRange = '3M' } = view;
-  const update = (key, fallback) => value => setView(current => ({
-    ...current, [key]: typeof value === 'function' ? value(current[key] ?? fallback) : value,
-  }));
+  const update = (key, fallback) => value => {
+    interacted.current = true;
+    setView(current => ({ ...current, [key]: typeof value === 'function' ? value(current[key] ?? fallback) : value }));
+  };
   const setActive = update('active', PRESETS[0].id), setCustom = update('custom', blank);
   const setIndustry = update('industry', ''), setQ = update('q', '');
   const setSort = update('sort', ['score', -1]), setLimit = update('limit', 60);
@@ -40,6 +44,20 @@ export default function Screener({ view, setView, onOpen, watch, toggleWatch, re
     const needle = q.trim().toUpperCase();
     return sortRows(runScreen(all, screen).filter(r => !needle || r.symbol.includes(needle) || r.name.toUpperCase().includes(needle)), sort);
   }, [all, JSON.stringify(screen), q, sort]);
+  const resultKey = JSON.stringify([active, screen.when, industry, q, sort, chartRange, limit]);
+  useEffect(() => {
+    if (!data || lastReport.current === resultKey) return;
+    // Wait for typing to settle. Neither search text nor custom screen names leave the browser.
+    const timer = setTimeout(() => {
+      lastReport.current = resultKey;
+      growthEvent(interacted.current ? 'screener_used' : 'screener_results_viewed', {
+        preset: PRESETS.some(p => p.id === active) ? active : 'custom',
+        result_count: rows.length, has_search: !!q.trim(), has_industry: !!industry,
+      });
+      interacted.current = false;
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [!!data, resultKey]);
   const latest = useQuotes(rows.slice(0, limit).map(r => r.symbol + '.NS'), refresh);
   const setCond = (i, patch) => setCustom(c => ({ ...c, when: c.when.map((w, j) => j === i ? patch : w) }));
   const editPreset = () => { const p = PRESETS.find(x => x.id === active); if (p) setCustom({ id: 'custom', name: `${p.name} (edited)`, when: p.when.map(w => [...w]), industry: '' }); setActive('custom'); };
