@@ -4,6 +4,7 @@
 .overview-start{display:flex;flex-direction:column;align-items:stretch;gap:10px;flex-shrink:0}
 .overview-start .button{justify-content:center;min-height:44px}
 .overview-search{display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 14px;border:1px solid var(--line);border-radius:8px;color:var(--theme-text,#dce6f4);font-size:13px;background:var(--theme-surface,#101b2b)}
+.overview-delivery{text-decoration:none}
 .overview-free{font-size:11px;color:var(--muted);text-align:center}
 .research-save{display:flex;align-items:center;gap:12px;border-top:1px solid var(--line);padding:14px 16px;background:var(--theme-subtle,#1b2738)}
 .research-save>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;font-size:13px}

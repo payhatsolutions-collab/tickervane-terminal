@@ -1,3 +1,11 @@
+import React, {
+  Suspense,
+  lazy,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { WORKSPACE_SEO, updatePageMetadata } from "./seo.js";
 const News = lazy(() => import("./News.jsx"));
 import Navigation from "./Navigation.jsx";
@@ -11,14 +19,6 @@ import { PAGES, PAGE_LABELS, viewFromSearch, viewFromLocation, workspaceSearch, 
 import { exportCSV, sortRows } from "./ui";
 import { buildBackup, parseBackup } from "./backup";
 import { presetFromSearch } from "./screens";
-import React, {
-  Suspense,
-  lazy,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
 import {
   Activity,
   ArrowLeft,
@@ -92,6 +92,7 @@ import {
   compact,
   groups,
   search,
+  addDirectoryStocks,
   short,
 } from "./data";
 import { signalSnapshot, marketRegime, nseSession } from "./marketMath";
@@ -225,6 +226,11 @@ function Clock() {
   );
 }
 export default function App() {
+  const catalog = useFeed('/api/market?op=directory');
+  const [directoryVersion, setDirectoryVersion] = useState(0);
+  useEffect(() => {
+    if (addDirectoryStocks(catalog.data?.stocks)) setDirectoryVersion(version => version + 1);
+  }, [catalog.data]);
   const [existingVisitor] = useState(() => {
     try { return localStorage.getItem("an2-watch") !== null; } catch { return false; }
   });
@@ -481,7 +487,7 @@ export default function App() {
   const signal = useMemo(() => signalSnapshot(dailyBars), [dailyBars]);
   const regime = useMemo(() => marketRegime(dailyBars), [dailyBars]);
   const levels = useMemo(() => dailyLevels(dailyBars), [dailyBars]);
-  const results = useMemo(() => showSearch ? search(query) : [], [query, showSearch]);
+  const results = useMemo(() => showSearch ? search(query) : [], [query, showSearch, directoryVersion]);
   const choose = (s) => {
     if (searchTarget === "position" || searchTarget === "alert") {
       setSymbol(s);
@@ -1246,7 +1252,7 @@ export default function App() {
         ))}
       </div>
       <main id="main-content" tabIndex={-1}>
-        {guideOpen && page === "Watchlist" && <Suspense fallback={<div className="loading" role="status">Loading guide…</div>}><Onboarding state={onboarding} onState={setOnboarding} watch={watchedStocks}
+        {guideOpen && page === "Watchlist" && <Suspense fallback={<div className="loading" role="status">Loading guide…</div>}><Onboarding directoryVersion={directoryVersion} state={onboarding} onState={setOnboarding} watch={watchedStocks}
           onToggle={toggleWatch} onNavigate={navigate} onAlert={openWatchAlert}
           alerts={alerts} pushOn={!!alertPrefs?.push} /></Suspense>}
         {previousView && (

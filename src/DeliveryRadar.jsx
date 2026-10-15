@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react';
 import { BellRing, ChevronRight, Download, Info, RefreshCw, Star } from 'lucide-react';
 import { useFeed, useQuotes } from './hooks';
+import './delivery.css';
 import LatestQuote from './LatestQuote.jsx';
+import { growthEvent } from './growth.js';
 import { fmt, pct, compact } from './data';
 import { Empty, PanelTitle, SortTh, MiniBars, exportCSV, sortRows, tone } from './ui';
 
@@ -13,6 +15,7 @@ const SIGNALS = [
   ['All liquid', () => true, 'Every liquid EQ stock with a full baseline'],
 ];
 const TURNOVER = [1, 5, 25, 100];
+const SORTS = [['delivRatio', 'Delivery quantity'], ['delivPct', 'Delivery %'], ['change', 'Price change'], ['turnoverCr', 'Turnover'], ['symbol', 'Stock name']];
 const signalClass = s => s === 'Accumulation' ? 'positive' : s === 'Distribution' ? 'negative' : s === 'High conviction' ? 'accent' : 'muted';
 const dateLabel = d => d ? new Date(d + 'T12:00:00Z').toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' }) : '—';
 
@@ -36,6 +39,10 @@ export default function DeliveryRadar({ onOpen, watch, toggleWatch, refresh, onR
   const latest = useQuotes(rows.slice(0, limit).map(r => r.symbol + '.NS'), refresh);
   const watchHits = (data?.rows || []).filter(r => watchSet.has(r.symbol) && r.delivRatio >= 1.5);
 
+  const openChart = (symbol) => {
+    growthEvent('research_chart_opened', { source: 'Delivery' });
+    onOpen(symbol + '.NS');
+  };
   return <>
     <section className="panel radar-panel">
       <PanelTitle title="Delivery radar" tag="DLV">
@@ -48,18 +55,49 @@ export default function DeliveryRadar({ onOpen, watch, toggleWatch, refresh, onR
           <span>{k}</span><strong>{loading && !data ? '…' : counts[k] ?? 0}</strong>
         </button>)}
       </div>
-      {watchHits.length > 0 && <div className="radar-watch"><Star size={13} /> <strong>Your watchlist:</strong> {watchHits.slice(0, 6).map(r => <button key={r.symbol} className="link" onClick={() => onOpen(r.symbol + '.NS')}>{r.symbol} {r.delivRatio.toFixed(1)}×</button>)}</div>}
-      <p className="muted small">Latest prices refresh every 30 seconds while open · Yahoo Finance may be delayed. Screen metrics and exports use session data.{latest.error ? ` ${latest.error}` : ''}</p>
+      {watchHits.length > 0 && <div className="radar-watch"><Star size={13} /> <strong>Your watchlist:</strong> {watchHits.slice(0, 6).map(r => <button key={r.symbol} className="link" onClick={() => openChart(r.symbol)}>{r.symbol} {r.delivRatio.toFixed(1)}×</button>)}</div>}
+      <p className="radar-intro">Find unusual delivery activity, then open a stock’s chart.</p>
       <div className="screen-filters radar-filters">
-        {SIGNALS.map(([k]) => <button key={k} className={signal === k ? 'active' : ''} onClick={() => { setSignal(k); setLimit(50); }}>{k} <em>{counts[k] ?? 0}</em></button>)}
-        <select aria-label="Universe" value={scope} onChange={e => setScope(e.target.value)}>{['All NSE', 'Nifty 500', 'Watchlist'].map(s => <option key={s}>{s}</option>)}</select>
-        <select aria-label="Minimum turnover" value={minTurnover} onChange={e => setMinTurnover(Number(e.target.value))}>{TURNOVER.map(t => <option key={t} value={t}>Turnover ≥ ₹{t} Cr</option>)}</select>
-        <input aria-label="Filter stocks" placeholder="Filter symbol, name, industry…" value={q} onChange={e => setQ(e.target.value)} />
+        {SIGNALS.map(([k, , note]) => <button key={k} title={note} aria-pressed={signal === k} className={signal === k ? 'active' : ''} onClick={() => { setSignal(k); setLimit(50); }}>{k} <em>{counts[k] ?? 0}</em></button>)}
+        <input aria-label="Filter stocks" placeholder="Find a stock in these results…" value={q} onChange={e => setQ(e.target.value)} />
       </div>
+      <details className="radar-options">
+        <summary>Filters & sort · {scope} · ≥ ₹{minTurnover} Cr</summary>
+        <div className="radar-option-fields">
+          <label>Universe<select aria-label="Universe" value={scope} onChange={e => { setScope(e.target.value); setLimit(50); }}>{['All NSE', 'Nifty 500', 'Watchlist'].map(s => <option key={s}>{s}</option>)}</select></label>
+          <label>Minimum turnover<select aria-label="Minimum turnover" value={minTurnover} onChange={e => { setMinTurnover(Number(e.target.value)); setLimit(50); }}>{TURNOVER.map(t => <option key={t} value={t}>≥ ₹{t} Cr</option>)}</select></label>
+          <label>Sort by<select aria-label="Sort delivery results" value={sort[0]} onChange={e => setSort([e.target.value, e.target.value === 'symbol' ? 1 : -1])}>{SORTS.map(([key, label]) => <option key={key} value={key}>{label}</option>)}{!SORTS.some(([key]) => key === sort[0]) && <option value={sort[0]}>{sort[0]}</option>}</select></label>
+          <label>Order<select aria-label="Sort direction" value={sort[1]} onChange={e => setSort([sort[0], Number(e.target.value)])}><option value={-1}>Descending</option><option value={1}>Ascending</option></select></label>
+        </div>
+      </details>
+      {data && <p className="radar-result-note" role="status">{rows.length} matching stocks · {SIGNALS.find(([key]) => key === signal)?.[2]}</p>}
+      {error && data && <div className="notice" role="status">Showing cached session data. {error} <button className="link" onClick={onRefresh}>Retry</button></div>}
       {loading && !data ? <div className="loading">Loading NSE delivery bhavcopy · 21 sessions…</div>
         : error && !data ? <Empty title="Delivery data unavailable" description={error}><button className="button" onClick={onRefresh}>Retry</button></Empty>
         : !rows.length ? <Empty title="Nothing matches" description="Loosen the turnover filter or pick another signal."><button className="button" onClick={() => { setSignal('All liquid'); setMinTurnover(1); setScope('All NSE'); setQ(''); }}>Reset filters</button></Empty>
-        : <div className="table-wrap"><table className="radar-table"><thead><tr>
+        : <>
+        <div className="radar-mobile-results" aria-label="Delivery stock results">
+          {top.map(r => {
+            const symbol = r.symbol + '.NS', saved = (watch || []).includes(symbol);
+            return <article className="delivery-result" key={symbol}>
+              <div className="delivery-result-heading"><div><h3>{r.symbol}</h3><p>{r.name}</p></div><span className={`signal-chip ${signalClass(r.signal)}`}>{r.signal}</span></div>
+              <dl className="delivery-result-metrics">
+                <div><dt>Delivery quantity</dt><dd>{fmt(r.delivRatio, 1)}× <small>20-day avg</small></dd></div>
+                <div><dt>Delivery share</dt><dd>{fmt(r.delivPct, 1)}% <small>avg {fmt(r.delivPctAvg, 0)}%</small></dd></div>
+                <div><dt>Session close</dt><dd>₹{fmt(r.close)} <small className={tone(r.change)}>{pct(r.change)}</small></dd></div>
+                <div><dt>Latest price · delayed</dt><dd><LatestQuote quote={latest.quotes[symbol]} /></dd></div>
+              </dl>
+              <div className="delivery-result-actions">
+                <a className="button primary" aria-label={`View ${r.symbol} chart`} href={`/charts?symbol=${encodeURIComponent(symbol)}`} onClick={event => {
+                  if (event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                  event.preventDefault(); openChart(r.symbol);
+                }}>View chart <ChevronRight size={15} /></a>
+                <button className={`button ${saved ? 'starred' : ''}`} aria-label={`${saved ? 'Remove' : 'Save'} ${r.symbol} ${saved ? 'from' : 'to'} watchlist`} aria-pressed={saved} onClick={() => toggleWatch(symbol)}><Star size={15} fill={saved ? 'currentColor' : 'none'} />{saved ? 'Saved' : 'Save stock'}</button>
+              </div>
+            </article>;
+          })}
+        </div>
+        <div className="table-wrap radar-desktop-results"><table className="radar-table"><thead><tr>
           <SortTh k="symbol" sort={sort} setSort={setSort}>Stock</SortTh>
           <th>Latest price / 1D</th>
           <SortTh k="close" sort={sort} setSort={setSort}>Close</SortTh>
@@ -74,7 +112,7 @@ export default function DeliveryRadar({ onOpen, watch, toggleWatch, refresh, onR
           <th><Star size={13} /></th>
         </tr></thead><tbody>
           {top.map(r => { const w = (watch || []).includes(r.symbol + '.NS'); return <tr key={r.symbol}>
-            <td><button className="instrument" onClick={() => onOpen(r.symbol + '.NS')}><strong>{r.symbol}</strong><span>{r.name}{r.industry ? ` · ${r.industry}` : ''}</span></button></td>
+            <td><button className="instrument" onClick={() => openChart(r.symbol)}><strong>{r.symbol}</strong><span>{r.name}{r.industry ? ` · ${r.industry}` : ''}</span></button></td>
             <td className="number"><LatestQuote quote={latest.quotes[r.symbol + '.NS']} /></td>
             <td className="number">{fmt(r.close)}</td>
             <td className={`number ${tone(r.change)}`}>{pct(r.change)}</td>
@@ -87,9 +125,10 @@ export default function DeliveryRadar({ onOpen, watch, toggleWatch, refresh, onR
             <td><span className={`signal-chip ${signalClass(r.signal)}`}>{r.signal}</span></td>
             <td><button className={`icon-button ${w ? 'starred' : ''}`} aria-label={`${w ? 'Remove' : 'Add'} ${r.symbol} ${w ? 'from' : 'to'} watchlist`} onClick={() => toggleWatch(r.symbol + '.NS')}><Star size={14} fill={w ? 'currentColor' : 'none'} /></button></td>
           </tr>; })}
-        </tbody></table>
+        </tbody></table></div>
         {rows.length > limit && <div className="more-row"><button className="button" onClick={() => setLimit(l => l + 100)}>Show more ({rows.length - limit} left)</button></div>}
-        </div>}
+        </>}
+      <p className="radar-result-note">Latest prices refresh every 30 seconds while open · Yahoo Finance may be delayed. Screen metrics and exports use session data.{latest.error ? ` ${latest.error}` : ''}</p>
       <div className="panel-foot">{data ? <>{data.coverage.liquid.toLocaleString('en-IN')} liquid of {data.coverage.eq.toLocaleString('en-IN')} EQ stocks · baseline {data.baseline} sessions · source: <a href={data.sourceUrl} target="_blank" rel="noreferrer">NSE delivery bhavcopy</a> · published after ~18:00 IST</> : 'Source: NSE security-wise delivery bhavcopy'}</div>
     </section>
     <section className="panel radar-side">

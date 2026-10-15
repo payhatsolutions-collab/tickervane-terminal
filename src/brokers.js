@@ -1,4 +1,4 @@
-import {stockDirectory} from './stocks.js';
+import {directory} from './data.js';
 
 export const BROKERS = [
   {id:'zerodha', name:'Zerodha', url:'https://kite.zerodha.com/'},
@@ -6,11 +6,11 @@ export const BROKERS = [
   {id:'icici', name:'ICICI Direct', url:'https://www.icicidirect.com/'},
 ];
 export const KITE_BASKET_URL = 'https://kite.zerodha.com/connect/basket';
-const symbols = new Set(stockDirectory.map(stock => stock.symbol));
 
 export function buildBrokerOrder({symbol, currency, side, product, entry, quantity}) {
   const tradingsymbol = typeof symbol === 'string' && symbol.endsWith('.NS') ? symbol.slice(0,-3) : '';
-  if (currency !== 'INR' || !symbols.has(tradingsymbol)) return {error:'Broker handoff supports stocks in our NSE directory only.'};
+  const instrument = directory.get(symbol);
+  if (currency !== 'INR' || !tradingsymbol || instrument?.market !== 'India' || instrument.sector === 'Index') return {error:'Broker handoff supports stocks in our NSE directory only.'};
   if (!['long','short'].includes(side)) return {error:'Choose a trade direction.'};
   if (!['delivery','intraday'].includes(product)) return {error:'Choose Delivery or Intraday to prepare a broker order.'};
   if (side === 'short' && product !== 'intraday') return {error:'Short plans require Intraday. Delivery selling needs a separate holdings check.'};

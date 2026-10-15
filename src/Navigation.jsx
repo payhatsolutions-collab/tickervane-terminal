@@ -35,7 +35,7 @@ const icons = {
   Journal: History,
   Alerts: Bell,
 };
-const primary = ["Today", "Markets", "Screener", "Terminal"];
+const primary = ["Today", "Markets", "Delivery", "Screener"];
 
 export default function Navigation({
   page,
@@ -74,7 +74,7 @@ export default function Navigation({
       >
         <Icon size={18} />
         <span>
-          {mobile && name === "Terminal" ? "Charts" : PAGE_LABELS[name]}
+          {mobile && name === "Delivery" ? "Delivery" : PAGE_LABELS[name]}
         </span>
         {name === "Alerts" && triggered && <i className="alert-dot" />}
       </a>

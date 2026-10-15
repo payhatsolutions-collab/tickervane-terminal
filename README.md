@@ -49,6 +49,10 @@ Implementation uses Zerodha's recommended [offsite form POST](https://kite.trade
 
 `npm ci`, then `npm run dev`. The Vite development server includes the same market API used in production. `npm test` checks normalization, input validation, RSS safety and indicator edge cases. `npm run build` produces the static frontend.
 
+Stock search includes NSE mainboard and NSE Emerge/SME listings, including EQ/BE/BZ and SM/ST/SZ series. The bundled directory contains 3,242 entries as of 14 October 2026 (876 added in this refresh), retaining curated sectors and legacy symbols for saved watchlists. Rights-entitlement symbols are excluded from new coverage. On app startup, `/api/market?op=directory` refreshes search from both official NSE CSV lists, cached for six hours. An unavailable or incomplete exchange list keeps the last successful directory or bundled snapshot and retries after one minute; it never empties search. Newly fetched entries also work in watchlists, onboarding and NSE broker handoffs. Price/history availability still depends on Yahoo Finance; the Nifty 500 screener retains its stated universe and history requirements.
+
+Run `npm run stocks:refresh` to update the bundled fallback before a release, or `npm run stocks:refresh -- mainboard.csv sme.csv` using downloaded exchange files. Both lists must validate before the snapshot is written. No extra function, paid API or scheduled job is required.
+
 ## Vercel Hobby architecture
 
 Two Node serverless functions (`api/market.js`, `api/push.js`) in `bom1`, a static frontend, and only free Hobby features.

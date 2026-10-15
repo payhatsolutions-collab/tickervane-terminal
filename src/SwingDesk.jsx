@@ -12,6 +12,7 @@ import { PRESETS, runScreen } from "./screens";
 import { journalStats } from "./tradeMath";
 import { fmt, pct, short } from "./data";
 import { growthEvent } from "./growth.js";
+import { workspaceURL } from "./navigation.js";
 
 const playbooks = [
   {
@@ -89,9 +90,15 @@ export default function SwingDesk({
         </div>
         <div className="overview-start">
         <button className="button primary" onClick={() => { growthEvent("research_cta_clicked", { source: "home" }); onPage("Screener"); }}>
-          Find stocks to research
+          Open stock screener
           <ArrowRight size={16} />
         </button>
+        <a className="button overview-delivery" href={workspaceURL("Delivery")} onClick={(event) => {
+          if (event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+          event.preventDefault();
+          growthEvent("research_cta_clicked", { source: "home", destination: "Delivery" });
+          onPage("Delivery");
+        }}>Explore delivery spikes <ArrowRight size={16} /></a>
         <button className="overview-search" onClick={onSearch}>
           <Search size={16} /> Search a stock or company
         </button>

@@ -1,6 +1,30 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import handler,{normalize,validSymbol,parseNews}from'../api/market.js';import{rsi,ema,bollinger}from'../src/marketMath.js';
 const fixture={meta:{symbol:'AAPL',currency:'USD',regularMarketPrice:110,previousClose:100},timestamp:[1704067200,1704153600,1704240000],indicators:{quote:[{open:[100,102,null],high:[104,112,null],low:[99,100,null],close:[103,110,null],volume:[1000,2000,null]}]}};
+test('Nifty down day stays negative when Yahoo previousClose conflicts with its session change',()=>{
+  const f=structuredClone(fixture);
+  Object.assign(f.meta,{regularMarketPrice:22622.7,previousClose:22363.3,chartPreviousClose:22231.8,regularMarketChangePercent:-0.437});
+  for(const range of ['1d','5d','6mo']){
+    const d=normalize(f,'^NSEI',range);
+    assert.equal(d.change,-0.437);
+    assert.ok(d.previous>d.price);
+    assert.ok(Math.abs((d.price/d.previous-1)*100-d.change)<1e-8);
+  }
+});
+test('reported session changes preserve positive and zero values in percentage points',()=>{
+  for(const change of [0,0.72]){
+    const f=structuredClone(fixture);f.meta.regularMarketChangePercent=change;
+    assert.equal(normalize(f,'AAPL','5d').change,change);
+  }
+});
+test('missing or invalid reported changes fall back to the previous-close calculation',()=>{
+  for(const change of [undefined,null,NaN,Infinity,'-0.437',-100,-101]){
+    const f=structuredClone(fixture);f.meta.regularMarketChangePercent=change;
+    const d=normalize(f,'AAPL','5d');
+    assert.ok(Math.abs(d.change-10)<1e-8);
+    assert.equal(d.previous,100);
+  }
+});
 test('history preserves real bars and calculates session change from previous close',()=>{const d=normalize(fixture,'AAPL','6mo');assert.equal(d.bars.length,2);assert.equal(d.bars[1].close,110);assert.ok(Math.abs(d.change-10)<1e-8);assert.equal(d.bars[0].time,'2024-01-01');});
 test('intraday timestamps stay distinct, duplicate bars removed',()=>{const f=structuredClone(fixture);f.timestamp=[1704067200,1704067500,1704067500];f.indicators.quote[0].open[2]=105;f.indicators.quote[0].high[2]=115;f.indicators.quote[0].low[2]=102;f.indicators.quote[0].close[2]=111;assert.equal(normalize(f,'AAPL','1d').bars.length,2);assert.equal(normalize(f,'AAPL','1d').bars[0].time,1704067200);});
 test('long-period starting price is never labeled session change',()=>{const f=structuredClone(fixture);delete f.meta.previousClose;f.meta.chartPreviousClose=50;assert.equal(normalize(f,'AAPL','6mo').change,null);});

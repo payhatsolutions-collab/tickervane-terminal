@@ -1,5 +1,6 @@
 import { liveOptions, liveFutures, FUTURES_GROUPS } from '../lib/nseOptions.js';
 import { stockDirectory } from '../src/stocks.js';
+import { loadStockDirectory } from '../lib/stockDirectory.js';
 import { recentSessions, nifty500, buildRadar, buildScreen, deliveryStats, deliverySignal, BASELINE } from '../lib/nse.js';
 import { latestFo, futuresBuildup, participants, fiiDii, deals } from '../lib/fno.js';
 import { rotation } from '../lib/indices.js';
@@ -35,9 +36,14 @@ export function normalize(result, symbol, range, adjusted = false) {
   });
   const unique=[...new Map(bars.map(b=>[b.time,b])).values()].sort((a,b)=>a.time<b.time?-1:1);
   if (!unique.length) throw new Error('No price history available');
-  const previous=m.previousClose ?? (range==='1d'?m.chartPreviousClose:null);
   const price=m.regularMarketPrice ?? unique.at(-1).close;
-  return {symbol,name:m.longName || m.shortName || symbol,currency:m.currency || 'USD',exchange:m.exchangeName,price,previous,change:Number.isFinite(previous)&&previous>0?(price/previous-1)*100:null,marketTime:m.regularMarketTime,dayHigh:m.regularMarketDayHigh,dayLow:m.regularMarketDayLow,volume:m.regularMarketVolume,yearHigh:m.fiftyTwoWeekHigh,yearLow:m.fiftyTwoWeekLow,timezone:m.exchangeTimezoneName,delay:m.exchangeDataDelayedBy ?? null,bars:unique,source:'Yahoo Finance',fetchedAt:new Date().toISOString(),range,...(adjusted?{adjusted:true}:{})};
+  // Yahoo can return a stale previousClose even while its explicit session
+  // percentage is current (including for 1d). Prefer that percentage, already
+  // in percentage points, and keep the reference close consistent with it.
+  const reportedChange=Number.isFinite(m.regularMarketPrice)&&Number.isFinite(m.regularMarketChangePercent)&&m.regularMarketChangePercent>-100?m.regularMarketChangePercent:null;
+  const previous=reportedChange!==null?price/(1+reportedChange/100):(m.previousClose ?? (range==='1d'?m.chartPreviousClose:null));
+  const change=reportedChange ?? (Number.isFinite(previous)&&previous>0?(price/previous-1)*100:null);
+  return {symbol,name:m.longName || m.shortName || symbol,currency:m.currency || 'USD',exchange:m.exchangeName,price,previous,change,marketTime:m.regularMarketTime,dayHigh:m.regularMarketDayHigh,dayLow:m.regularMarketDayLow,volume:m.regularMarketVolume,yearHigh:m.fiftyTwoWeekHigh,yearLow:m.fiftyTwoWeekLow,timezone:m.exchangeTimezoneName,delay:m.exchangeDataDelayedBy ?? null,bars:unique,source:'Yahoo Finance',fetchedAt:new Date().toISOString(),range,...(adjusted?{adjusted:true}:{})};
 }
 export async function chart(symbol,range,adjusted=false,daily=false) {
  const key=`${symbol}:${range}${adjusted?':adjusted':''}${daily?':daily':''}`, old=cache.get(key);
@@ -396,7 +402,10 @@ export default async function handler(req,res){
  const op=req.query?.op || 'chart';
  try {
   let data;let cacheControl='public, max-age=60, s-maxage=300, stale-while-revalidate=300';
-  if(op==='chart'){
+  if(op==='directory'){
+   data=await loadStockDirectory();
+   cacheControl=data.stale?'public, max-age=0, s-maxage=60':'public, max-age=300, s-maxage=21600, stale-while-revalidate=3600';
+  }else if(op==='chart'){
    const s=String(req.query.symbol||'').trim().toUpperCase(),range=String(req.query.range||'6mo');
    if(!validSymbol(s)||!intervals[range])return res.status(400).json({error:'Invalid symbol or range'});
    if(req.query.adjusted!=null && (!['0','1'].includes(String(req.query.adjusted)) || ['1d','5d'].includes(range)))return res.status(400).json({error:'Adjusted history requires a daily or weekly range'});

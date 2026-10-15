@@ -17,7 +17,7 @@ export function ViewLink({ page, symbol, onNavigate, children, className = "link
   }}>{children}</a>;
 }
 
-export default function Onboarding({ state, onState, watch, onToggle, onNavigate, onAlert, alerts, pushOn }) {
+export default function Onboarding({ state, onState, watch, onToggle, onNavigate, onAlert, alerts, pushOn, directoryVersion = 0 }) {
   const [query, setQuery] = useState("");
   const [alertSymbol, setAlertSymbol] = useState("");
   const count = Math.min(new Set(watch).size, 1);
@@ -28,7 +28,7 @@ export default function Onboarding({ state, onState, watch, onToggle, onNavigate
     const q = query.trim().toLowerCase();
     return q ? instruments.filter((x) => x.symbol.endsWith(".NS") &&
       `${x.symbol} ${x.name}`.toLowerCase().includes(q)).slice(0, 6) : examples.map((x) => directory.get(x));
-  }, [query]);
+  }, [query, directoryVersion]);
   if (["skipped", "complete", "hidden"].includes(step)) return null;
   const advance = (status) => {
     onState({ ...state, status });

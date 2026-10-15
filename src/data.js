@@ -1,4 +1,5 @@
 import {stockDirectory} from './stocks.js';
+import { validStock } from './stockCatalog.js';
 const rows=[
 ['^NSEI','NIFTY 50','India','Index'],['^NSEBANK','NIFTY BANK','India','Index'],['^BSESN','SENSEX','India','Index'],['^INDIAVIX','INDIA VIX','India','Index'],['^NSMIDCP','NIFTY NEXT 50','India','Index'],['^CNXIT','NIFTY IT','India','Index'],['^CNXAUTO','NIFTY AUTO','India','Index'],['^CNXPHARMA','NIFTY PHARMA','India','Index'],['^CNXFMCG','NIFTY FMCG','India','Index'],['^CNXMETAL','NIFTY METAL','India','Index'],['^CNXENERGY','NIFTY ENERGY','India','Index'],['^CNXPSUBANK','NIFTY PSU BANK','India','Index'],['NIFTY_FIN_SERVICE.NS','NIFTY FIN SERVICE','India','Index'],['NIFTY_PVT_BANK.NS','NIFTY PVT BANK','India','Index'],['^CNXREALTY','NIFTY REALTY','India','Index'],['^CNXMEDIA','NIFTY MEDIA','India','Index'],['^CNXINFRA','NIFTY INFRA','India','Index'],['^CNXPSE','NIFTY PSE','India','Index'],['^CNXCONSUM','NIFTY CONSUMPTION','India','Index'],['^CNXCMDT','NIFTY COMMODITIES','India','Index'],['^NSEMDCP50','NIFTY MIDCAP 50','India','Index'],['^CNXSC','NIFTY SMALLCAP 100','India','Index'],
 ['^GSPC','S&P 500','Global','Index'],['^IXIC','NASDAQ','Global','Index'],['^DJI','DOW JONES','Global','Index'],['^FTSE','FTSE 100','Global','Index'],['^N225','NIKKEI 225','Global','Index'],['^KS11','KOSPI','Global','Index'],
@@ -8,6 +9,22 @@ const rows=[
 ];
 export const instruments=[...rows.map(([symbol,name,market,sector])=>({symbol,name,market,sector})),...stockDirectory.map(x=>({...x,symbol:x.symbol+'.NS',market:'India'}))];
 export const directory=new Map(instruments.map(x=>[x.symbol,x]));
+// Keep the shared directory and instrument array in sync so search, onboarding,
+// watchlists and broker handoffs all recognize newly listed symbols.
+export function addDirectoryStocks(stocks) {
+  let added = 0;
+  if (!Array.isArray(stocks)) return added;
+  for (const stock of stocks) {
+    if (!validStock(stock)) continue;
+    const symbol = stock.symbol + '.NS';
+    if (directory.has(symbol)) continue;
+    const instrument = { symbol, name: stock.name.trim(), sector: 'Others', market: 'India' };
+    instruments.push(instrument);
+    directory.set(symbol, instrument);
+    added++;
+  }
+  return added;
+}
 export const india=['RELIANCE','TCS','HDFCBANK','ICICIBANK','INFY','SBIN','BHARTIARTL','ITC','LT','AXISBANK','MARUTI','SUNPHARMA','TITAN','NTPC','TATASTEEL','BAJFINANCE'].map(x=>x+'.NS');
 export const groups={'India':india,'US':rows.filter(x=>x[2]==='US').map(x=>x[0]),'Indices':rows.filter(x=>x[3]==='Index').map(x=>x[0]),'Commodities':rows.filter(x=>x[2]==='Commodities').map(x=>x[0]),'FX & Crypto':rows.filter(x=>['FX','Crypto'].includes(x[2])).map(x=>x[0]),'Rates':rows.filter(x=>x[2]==='Rates').map(x=>x[0])};
 export const benchmarks=['^NSEI','^NSEBANK','^INDIAVIX','^GSPC','INR=X','BZ=F'];

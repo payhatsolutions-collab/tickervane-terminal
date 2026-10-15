@@ -11,7 +11,8 @@
     "jarvis": "node agents/jarvis/cli.mjs",
     "jarvis:daemon": "node agents/jarvis/runtime.mjs",
     "jarvis:dashboard": "node agents/jarvis/server.mjs",
-    "seo:generate": "node scripts/generate-seo.mjs"
+    "seo:generate": "node scripts/generate-seo.mjs",
+    "stocks:refresh": "node scripts/refresh-stock-directory.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
