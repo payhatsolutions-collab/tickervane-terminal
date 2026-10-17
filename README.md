@@ -39,6 +39,8 @@ Limitations: cash equities only; no contract multipliers or leverage sizing, par
 
 ## Run
 
+For a local, password-free registration viewer, double-click `Open User Viewer.command` or run `npm run users` and open `http://127.0.0.1:5188`. It shows names, emails and signup details from private storage, with search and CSV export. It runs only on this computer and is excluded from deployment. Details: `local-admin/README.md`.
+
 ### Broker handoffs
 
 Terminal → risk planner → Continue with your broker supports NSE directory stocks with valid Delivery/Intraday plans. Zerodha can receive a prefilled LIMIT entry basket. Groww and ICICI Direct currently provide copyable tickets and official website links for manual order entry; these are not account connections or order APIs. Short plans require Intraday. Stops/targets are planning references, never transmitted as protective orders. Journal status never changes from a handoff or callback.
@@ -55,10 +57,11 @@ Run `npm run stocks:refresh` to update the bundled fallback before a release, or
 
 ## Vercel Hobby architecture
 
-Two Node serverless functions (`api/market.js`, `api/push.js`) in `bom1`, a static frontend, and only free Hobby features.
+Three Node serverless functions (`api/market.js`, `api/push.js`, `api/signup.js`) in `bom1`, a static frontend, and only free Hobby features.
 
 - **Market data**: Yahoo chart/spark endpoints, NSE's security-wise delivery bhavcopy (`sec_bhavdata_full_DDMMYYYY.csv`, last 21 sessions) and the official Nifty 500 list. Everything is cached per instance and at the edge (quotes 5 min, screener 15 min, delivery 30 min with 6 h stale-while-revalidate), reducing repeated upstream work. Cache hits still count toward CDN requests and transfer; cold-instance latency depends on upstream availability.
 - **Push storage**: one private Vercel Blob file per subscribed device (`push/subs/<sha256(endpoint)>.json`) holding the subscription, alerts, watchlist, saved screens and a short delivery log. Endpoints are restricted to real browser push services; updates require the subscription's auth secret.
+- **Free registration**: a dismissible name/email signup appears after two minutes of visible-tab use, with no visible countdown. Names and emails are stored privately under `signups/` in the existing Blob store; only the welcome name and registration time are remembered in the browser. This is unverified registration, not account authentication or cross-device research sync. See `docs/FREE-SIGNUP.md` and `/privacy.html`.
 - **Scheduling**: two weekday cron jobs at 14:00 and 16:00 UTC (19:30–20:30 and 21:30–22:30 IST execution windows on Hobby), authenticated with `CRON_SECRET`. Closed-app price checks and daily digests run in these evening windows; active tabs continue checking prices every five minutes. Browser subscription sync runs on preference changes and entry to Alerts, not every market refresh.
 - **Env vars** (already set on the project): `BLOB_READ_WRITE_TOKEN` (from the linked `alphanova-push` store), `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `CRON_SECRET`; optional `VAPID_SUBJECT`. Without them push reports "not configured" and everything else keeps working.
 

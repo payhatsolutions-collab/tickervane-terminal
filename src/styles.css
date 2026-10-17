@@ -200,6 +200,23 @@ body{line-height:1.5}button,input,select,textarea{font-family:inherit}button:foc
 
 /* Keep incoming market data from moving the content already on screen. */
 .market-pulse-pending{min-height:100svh}
+.deferred-placeholder{padding:20px;color:var(--muted);font-size:13px;border:1px solid var(--line);border-radius:12px;background:var(--theme-surface,var(--panel))}
+@media(max-width:760px){
+  :is(.delivery-workspace,.markets-workspace) .topbar{gap:8px;padding:0 12px}
+  :is(.delivery-workspace,.markets-workspace) .brand{font-size:11px;gap:7px}
+  :is(.delivery-workspace,.markets-workspace) .global-search{flex:0 0 36px;width:36px}
+  :is(.delivery-workspace,.markets-workspace) .top-right .icon-button{width:32px}
+  .delivery-workspace .benchmark-strip>button{flex-basis:156px;grid-template-columns:auto auto;align-items:center;gap:2px 8px;padding:7px 12px;min-height:44px}
+  .delivery-workspace .benchmark-strip span{grid-column:1;grid-row:1;font-size:9px;white-space:nowrap}
+  .delivery-workspace .benchmark-strip strong{grid-column:2;grid-row:1;font-size:11px;justify-self:end;white-space:nowrap}
+  .delivery-workspace .benchmark-strip em{grid-column:2;grid-row:2;font-size:9px;justify-self:end}
+  .delivery-workspace .benchmark-strip .spark{display:none}
+  .delivery-workspace main{padding-top:14px}
+  .delivery-workspace .workspace-heading{display:block;margin-bottom:14px}
+  .delivery-workspace .workspace-heading h1{font-size:22px;line-height:1.25;letter-spacing:-.5px;max-width:340px}
+  .delivery-workspace .heading-actions{display:none}
+  .delivery-workspace .delivery-heading-note{font-size:12px;line-height:1.5;margin-top:6px;max-width:330px}
+}
 .pulse-cards .radar-card strong{line-height:1.25;min-height:1.25em}
 .pulse-cards .radar-card:first-child small:last-child{min-height:30px}
 .heatmap-placeholder>i{min-height:64px;border:1px solid var(--line);border-radius:5px;background:var(--theme-subtle,#1b2a40)}

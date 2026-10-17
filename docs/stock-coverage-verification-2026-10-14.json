@@ -1,0 +1,49 @@
+{
+  "verifiedAt": "2026-10-13T23:25:04.783864+00:00",
+  "status": "published and verified on alphanova48.in",
+  "deployment": "https://alphanova2-9kpsh4emd-wdcre.vercel.app",
+  "deploymentId": "dpl_gHXhL3CfHxvea2v5BqAgLV4EGBBV",
+  "previousProduction": "https://alphanova2-besfggbhp-wdcre.vercel.app",
+  "previousProductionId": "dpl_HXL1mfHVyrrEDRJaPvumbj81z67R",
+  "bundledStocks": 3242,
+  "addedStocks": 876,
+  "sources": [
+    "https://nsearchives.nseindia.com/content/equities/EQUITY_L.csv",
+    "https://nsearchives.nseindia.com/emerge/corporates/content/SME_EQUITY_L.csv"
+  ],
+  "coverageCheck": "All 3184 parsed NSE mainboard/SME rows are covered and exact-symbol search returns the correct result. Rights entitlements excluded.",
+  "tests": {
+    "total": 286,
+    "passed": 286,
+    "failed": 0
+  },
+  "build": "passed locally and on Vercel",
+  "stagedDirectory": {
+    "source": "NSE mainboard + SME",
+    "stale": false,
+    "fetchedAt": "2026-10-13T23:24:06.857Z",
+    "count": 3242
+  },
+  "stagedFrontend": "Matches tested index-8wsqndS7.js bundle",
+  "browserChecks": [
+    "TEMPSENS returns Tempsens Instruments (India)",
+    "R.K. Fashion returns RKFAL, R.K. Fashion Accessories"
+  ],
+  "runtimeRefresh": "NSE lists requested on app startup; server/CDN cache six hours. Failure retains bundled/last good coverage with a one-minute retry cache.",
+  "limits": [
+    "The Nifty 500 screener retains its existing universe.",
+    "Chart and forecast availability depend on upstream price history."
+  ],
+  "productionVerifiedAt": "2026-10-14T03:19:27.114Z",
+  "productionDirectory": {
+    "source": "NSE mainboard + SME",
+    "stale": false,
+    "fetchedAt": "2026-10-14T03:18:49.186Z",
+    "count": 3242
+  },
+  "productionFrontend": "Matches tested index-8wsqndS7.js bundle",
+  "productionBrowserChecks": [
+    "VARMORA returns Varmora Granito on the live domain",
+    "EVENTIONS returns Eventions on the live domain"
+  ]
+}

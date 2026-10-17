@@ -8,6 +8,9 @@
     },
     "api/push.js": {
       "maxDuration": 60
+    },
+    "api/signup.js": {
+      "maxDuration": 15
     }
   },
   "headers": [

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>AlphaNova · Users</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23245dec'/%3E%3Ctext x='32' y='46' text-anchor='middle' font-family='sans-serif' font-size='44' font-weight='700' fill='white'%3EA%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="/style.css" />
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <aside class="rail">
+    <a class="brand" href="/"><span class="mark">A</span><span>ALPHA NOVA<small>YOUR LOCAL WORKSPACE</small></span></a>
+    <p class="rail-label">OVERVIEW</p>
+    <div class="nav-active"><span aria-hidden="true">▦</span> User directory <span id="nav-count">—</span></div>
+    <div class="rail-note"><span class="local-dot"></span><strong>Only on this computer</strong><p>No password required.<br />This viewer isn’t published on your website.</p></div>
+  </aside>
+  <main>
+    <header class="page-heading">
+      <div><p class="eyebrow">ALPHANOVA / COMMUNITY</p><h1>Your users<span>.</span></h1><p class="subtitle">Everyone who signed up, in one place.</p></div>
+      <div class="heading-actions"><span class="local-badge"><i></i> Local only</span><button id="refresh" class="button primary">↻ <span>Refresh data</span></button></div>
+    </header>
+    <section class="stats" aria-label="Registration summary">
+      <article><p>Total registrations</p><strong id="total">—</strong><span>Names and emails collected</span></article>
+      <article><p>New in the last 7 days</p><strong id="recent">—</strong><span>Based on signup date</span></article>
+      <article><p>Latest signup</p><strong id="latest" class="date-stat">—</strong><span id="latest-caption">Waiting for data</span></article>
+    </section>
+    <div id="message" class="message" role="status" hidden></div>
+    <section class="directory">
+      <div class="directory-main">
+        <div class="toolbar"><div><h2>Registered users <span id="result-count">—</span></h2><p id="updated">Connecting to registration data…</p></div><button id="export" class="button" disabled>↓ Export CSV</button></div>
+        <div class="filters"><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Search by name or email" aria-label="Search by name or email" /></label><label class="sort"><span class="sr-only">Sort users</span><select id="sort"><option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="name">Name A–Z</option></select></label></div>
+        <div class="table-wrap"><table><thead><tr><th>Name</th><th>Email address</th><th>Signed up</th><th>Email status</th><th><span class="sr-only">Details</span></th></tr></thead><tbody id="users"></tbody></table></div>
+        <div id="empty" class="empty"><span aria-hidden="true">◎</span><h3>Loading your users</h3><p>Connecting to your registration data.</p></div>
+        <div class="table-footer"><span id="shown">—</span><span>Read-only access</span></div>
+      </div>
+      <aside id="details" class="details" aria-label="User details"><div class="details-placeholder"><span aria-hidden="true">↗</span><h2>A closer look</h2><p>Select a user to see their registration details.</p></div></aside>
+    </section>
+    <footer><span class="local-dot"></span><p>Registration data only. Watchlists, holdings and journals stay on each user’s device and aren’t linked to signup.</p></footer>
+  </main>
+</body>
+</html>

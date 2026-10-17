@@ -4,6 +4,10 @@ dist/
 .env*
 .claude/
 outputs/
+output/
+# Separate local checkout and its preview image.
+bbskelly/
+bbskelly-preview.jpg
 .DS_Store
 *.mp4
 *.docx

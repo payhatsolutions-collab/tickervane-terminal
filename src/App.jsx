@@ -9,6 +9,7 @@ import React, {
 import { WORKSPACE_SEO, updatePageMetadata } from "./seo.js";
 const News = lazy(() => import("./News.jsx"));
 import Navigation from "./Navigation.jsx";
+import SignupPrompt from "./SignupPrompt.jsx";
 const Onboarding = lazy(() => import("./Onboarding.jsx"));
 const Watchlist = lazy(() => import("./Watchlist.jsx"));
 import { growthEvent, recordVisit, recordActivation, recordFirstStockSaved } from "./growth.js";
@@ -61,7 +62,8 @@ const TradeJournal = lazy(() => import("./TradeDesk").then(module => ({ default:
 const KeyLevels = lazy(() => import("./TradeDesk").then(module => ({ default: module.KeyLevels })));
 import { completedDailyBars, dailyLevels } from "./tradeMath";
 const Forecast = lazy(() => import("./Forecast"));
-import SwingDesk from "./SwingDesk";
+const SwingDesk = lazy(() => import("./SwingDesk"));
+import DeferredSection from "./DeferredSection.jsx";
 const DeliveryRadar = lazy(() => import("./DeliveryRadar"));
 const Pulse = lazy(() => import("./Pulse"));
 const Screener = lazy(() => import("./Screener"));
@@ -417,6 +419,8 @@ export default function App() {
     dialogRef = useRef();
   const meta = directory.get(symbol) || { symbol, name: symbol };
   const groupSymbols = group === "Watchlist" ? watch : groups[group] || [];
+  const [marketMonitorReady, setMarketMonitorReady] = useState(false);
+  useEffect(() => { if (page !== "Markets") setMarketMonitorReady(false); }, [page]);
   const symbols = useMemo(
     () => [
       ...new Set(
@@ -425,11 +429,11 @@ export default function App() {
           ...(page === "Portfolio" ? positions.map((x) => x.symbol) : []),
           ...alerts.filter((x) => !x.triggered).map((x) => x.symbol),
           ...(["Today", "Terminal", "Watchlist"].includes(page) ? watch : []),
-          ...(page === "Markets" ? groupSymbols : []),
+          ...(page === "Markets" && marketMonitorReady ? groupSymbols : []),
         ].filter((s) => s && !benchmarks.includes(s)),
       ),
     ],
-    [watch, symbol, page, groupSymbols, positions, alerts, form],
+    [watch, symbol, page, groupSymbols, positions, alerts, form, marketMonitorReady],
   );
   const benchmarkFeed = useQuotes(benchmarks, refresh);
   const instrumentFeed = useQuotes(symbols, refresh);
@@ -1185,7 +1189,7 @@ export default function App() {
     setForm(null);
   }
   return (
-    <div className={`app ${page === "Today" ? "research-home" : ""} ${focus ? "chart-focus" : ""}`}>
+    <div className={`app ${page === "Today" ? "research-home" : ""} ${page === "Delivery" ? "delivery-workspace" : ""} ${page === "Markets" ? "markets-workspace" : ""} ${focus ? "chart-focus" : ""}`}>
       <SpeedInsights route={(WORKSPACE_SEO[page] || WORKSPACE_SEO.Today).path} />
       <a href="#main-content" className="skip-link">
         Skip to content
@@ -1215,6 +1219,7 @@ export default function App() {
           <span className="search-label-mobile">Search stocks</span>
           <kbd>⌘ K</kbd>
         </button>
+        <SignupPrompt busy={guideOpen || showSearch || help || !!form} />
         <div className="top-right">
           <MarketStatus />
           <button
@@ -1279,7 +1284,8 @@ export default function App() {
         )}
           {page !== "Today" && <div className="workspace-heading">
             <div>
-              <h1>{(WORKSPACE_SEO[page] || WORKSPACE_SEO.Today).heading}</h1>
+              <h1>{page === "Delivery" ? "Find unusual NSE delivery activity" : (WORKSPACE_SEO[page] || WORKSPACE_SEO.Today).heading}</h1>
+              {page === "Delivery" && <p className="delivery-heading-note">Compare with the 20-day average, then open a chart.</p>}
             </div>
             <div className="heading-actions">
               <span className="feed-status">
@@ -2085,10 +2091,10 @@ export default function App() {
             </div>
           )}
           {page === "Markets" && (
-            <Suspense fallback={<div className="loading market-pulse-pending" role="status">Loading market pulse…</div>}><Pulse onOpen={openSymbol} refresh={refresh} /></Suspense>
+            <Suspense fallback={<div className="loading market-pulse-pending" role="status">Loading market pulse…</div>}><Pulse onOpen={openSymbol} refresh={refresh} quotes={benchmarkFeed.quotes} loading={benchmarkFeed.loading} /></Suspense>
           )}
           {page === "Markets" && (
-            <Suspense fallback={<div className="loading" role="status">Loading sector rotation…</div>}><Rotation onOpen={openSymbol} refresh={refresh} /></Suspense>
+            <DeferredSection className="deferred-rotation" label="Sector rotation" minHeight={500}><Suspense fallback={<div className="loading" role="status">Loading sector rotation…</div>}><Rotation onOpen={openSymbol} refresh={refresh} /></Suspense></DeferredSection>
           )}
           {page === "FnO" && (
             <FnO
@@ -2109,6 +2115,7 @@ export default function App() {
             />
           )}
           {page === "Markets" && (
+            <DeferredSection label="Cross-asset monitor" minHeight={500} onReveal={() => setMarketMonitorReady(true)}>
             <section className="panel market-panel">
               <PanelTitle title="Cross-asset monitor" tag="WEI">
                 <button
@@ -2170,6 +2177,7 @@ export default function App() {
                 sparklines · source: Yahoo Finance
               </div>
             </section>
+            </DeferredSection>
           )}
           {page === "Journal" && (
             <TradeJournal
@@ -2736,6 +2744,7 @@ export default function App() {
         <a href="/stock-prices.html">Stock prices</a>
         <a href="/stock-market-app.html">Stock market app</a>
         <a href="/about.html">About & data sources</a>
+        <a href="/privacy.html">Privacy</a>
         <a
           href="https://www.tradingview.com/lightweight-charts/"
           target="_blank"

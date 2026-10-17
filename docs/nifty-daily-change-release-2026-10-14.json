@@ -1,0 +1,28 @@
+{
+  "verifiedAt": "2026-10-14T14:10:32.034660+00:00",
+  "status": "published and verified on alphanova48.in",
+  "deployment": "https://alphanova2-q0mmo8859-wdcre.vercel.app",
+  "deploymentId": "dpl_3NSehsSmsLDErrAa24z8XhSPm72m",
+  "previousProduction": "https://alphanova2-9kpsh4emd-wdcre.vercel.app",
+  "cause": "Yahoo previousClose conflicted with its explicit regularMarketChangePercent. The app recomputed +1.159936% instead of using the reported -0.437%.",
+  "fix": "Prefer finite reported session percentage in percentage points; derive a consistent reference close. Retain previous-close fallback when the percentage is absent or invalid.",
+  "tests": {
+    "passed": 289,
+    "failed": 0
+  },
+  "build": "passed locally and on Vercel",
+  "liveQuotes": [
+    {
+      "symbol": "^NSEBANK",
+      "price": 55316,
+      "change": -0.297
+    },
+    {
+      "symbol": "^NSEI",
+      "price": 22622.7,
+      "change": -0.437
+    }
+  ],
+  "browserVerified": "NIFTY 50 22,622.70 -0.44% rendered red; NIFTY BANK 55,316.00 -0.30% rendered red.",
+  "screenshot": "docs/nifty-daily-change-live-2026-10-14.png"
+}

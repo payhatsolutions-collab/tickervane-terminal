@@ -1,0 +1,142 @@
+{
+  "date": "2026-10-18",
+  "deployment": "https://alphanova2-f2paed25g-wdcre.vercel.app",
+  "deploymentId": "dpl_8tvS2pkp8ijomTipxMUFWBwyPZMm",
+  "rollback": "https://alphanova2-foo6h89r5-wdcre.vercel.app",
+  "tests": {
+    "passed": 297,
+    "failed": 0
+  },
+  "methodology": "Production builds tested at 360x740 with deterministic market fixtures and again on the staged deployment with real data. Cross-size and interaction checks cover 360, 390, 430, 768 and 1440 pixels, filters, signal explanations, saving, chart navigation, responsive switching, load more and loading quotes on scroll. Timing samples use 4x CPU slowdown; they are lab diagnostics, not field Core Web Vitals scores.",
+  "baseline": [
+    {
+      "path": "/delivery",
+      "firstCardTop": 592.28125,
+      "chartButtonBottom": 877.78125,
+      "navTop": 676,
+      "domNodes": 3953,
+      "horizontalOverflow": false,
+      "jsBytes": 575149,
+      "LayoutDuration": 77,
+      "RecalcStyleDuration": 16,
+      "ScriptDuration": 146,
+      "TaskDuration": 323,
+      "initialQuoteSymbols": 56,
+      "stockQuoteSymbols": 50,
+      "initialOps": [
+        "status",
+        "directory",
+        "quotes",
+        "delivery",
+        "quotes",
+        "quotes",
+        "quotes",
+        "quotes"
+      ],
+      "errors": []
+    },
+    {
+      "path": "/markets",
+      "navTop": 676,
+      "domNodes": 1258,
+      "horizontalOverflow": false,
+      "jsBytes": 574525,
+      "LayoutDuration": 89,
+      "RecalcStyleDuration": 14,
+      "ScriptDuration": 112,
+      "TaskDuration": 308,
+      "initialQuoteSymbols": 44,
+      "stockQuoteSymbols": 16,
+      "initialOps": [
+        "status",
+        "directory",
+        "quotes",
+        "quotes",
+        "screen",
+        "quotes",
+        "quotes",
+        "rotation"
+      ],
+      "errors": []
+    }
+  ],
+  "updated": [
+    {
+      "path": "/delivery",
+      "firstCardTop": 281,
+      "chartButtonBottom": 566.5,
+      "navTop": 676,
+      "domNodes": 1013,
+      "horizontalOverflow": false,
+      "jsBytes": 572018,
+      "LayoutDuration": 56,
+      "RecalcStyleDuration": 19,
+      "ScriptDuration": 165,
+      "TaskDuration": 346,
+      "initialQuoteSymbols": 8,
+      "stockQuoteSymbols": 2,
+      "initialOps": [
+        "status",
+        "directory",
+        "quotes",
+        "delivery",
+        "quotes"
+      ],
+      "errors": []
+    },
+    {
+      "path": "/markets",
+      "navTop": 676,
+      "domNodes": 701,
+      "horizontalOverflow": false,
+      "jsBytes": 559940,
+      "LayoutDuration": 55,
+      "RecalcStyleDuration": 9,
+      "ScriptDuration": 108,
+      "TaskDuration": 240,
+      "initialQuoteSymbols": 6,
+      "stockQuoteSymbols": 0,
+      "initialOps": [
+        "screen",
+        "status",
+        "directory",
+        "quotes"
+      ],
+      "errors": []
+    }
+  ],
+  "staged": [],
+  "production": [
+    {
+      "path": "/delivery",
+      "heading": "Find unusual NSE delivery activity",
+      "chartButtonBottom": 566.5,
+      "navTop": 676,
+      "overflow": false,
+      "errors": [],
+      "badResponses": [],
+      "quoteRequests": [
+        "BZ=F,INR=X,^GSPC,^INDIAVIX,^NSEBANK,^NSEI",
+        "ONWARDTEC.NS,SINGERIND.NS",
+        "SINGERIND.NS"
+      ]
+    },
+    {
+      "path": "/markets",
+      "heading": "Indian & Global Stock Markets",
+      "navTop": 676,
+      "overflow": false,
+      "errors": [],
+      "badResponses": [],
+      "quoteRequests": [
+        "BZ=F,INR=X,^GSPC,^INDIAVIX,^NSEBANK,^NSEI",
+        "BZ=F,GC=F,INR=X,NIFTY_FIN_SERVICE.NS,^CNXAUTO,^CNXCMDT,^CNXCONSUM,^CNXENERGY,^CNXFMCG,^CNXINFRA,^CNXIT,^CNXMEDIA,^CNXMETAL,^CNXPHARMA,^CNXPSE,^CNXPSUBANK",
+        "^CNXREALTY,^CNXSC,^GSPC,^IXIC,^KS11,^N225,^NSEBANK,^NSEI,^NSEMDCP50,^NSMIDCP,^TNX",
+        "AXISBANK.NS,BAJFINANCE.NS,BHARTIARTL.NS,HDFCBANK.NS,ICICIBANK.NS,INFY.NS,ITC.NS,LT.NS,MARUTI.NS,NTPC.NS,RELIANCE.NS,SBIN.NS,SUNPHARMA.NS,TATASTEEL.NS,TCS.NS,TITAN.NS",
+        "^CNXAUTO,^CNXCONSUM,^CNXENERGY,^CNXFMCG,^CNXIT,^CNXMETAL,^CNXPHARMA,^CNXPSUBANK,^CNXREALTY,^CNXSC,^NSEBANK,^NSEI,^NSMIDCP"
+      ]
+    }
+  ],
+  "publicDomain": "https://alphanova48.in",
+  "status": "promoted and verified"
+}
