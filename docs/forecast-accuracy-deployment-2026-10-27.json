@@ -1,0 +1,154 @@
+{
+  "date": "2026-10-27",
+  "project": "alphanova2",
+  "deployment": {
+    "id": "dpl_BWVXCv4JXeN5q9k1NhAXi59RPa4T",
+    "url": "https://alphanova2-awyv6bibe-wdcre.vercel.app",
+    "status": "promoted"
+  },
+  "production": "https://alphanova48.in",
+  "previousDeployment": {
+    "id": "dpl_FmifCbVmMXPjoVa1FfQ2WNk2hmUu",
+    "url": "https://alphanova2-m9mm8lf9w-wdcre.vercel.app"
+  },
+  "rollbackCommand": "npx --yes vercel promote https://alphanova2-m9mm8lf9w-wdcre.vercel.app --yes",
+  "model": {
+    "version": "4.0.0",
+    "assessmentSourceSha256": "8ae389f27ee8ea87ba8c0021feffa92bf55acb852a5a02b1bf4ed13baf6e0e46",
+    "workerSha256": "1c27b001aea9e379829ddcc254b184c8d7a0071fa0b50106254af387c4c3080c",
+    "matchesVerifiedWorker": true,
+    "stagedCalculationMatchesSource": true
+  },
+  "tests": {
+    "passed": 314,
+    "failed": 0,
+    "cancelled": 0
+  },
+  "localBuild": "passed",
+  "hostedBuild": "passed",
+  "ui": {
+    "forecastMarkup": "unchanged",
+    "stylesheet": "unchanged",
+    "browserResult": "RELIANCE forecast rendered with live data",
+    "screenshot": "outputs/forecast-accuracy-2026-10-27/forecast-live.png"
+  },
+  "productionChecks": {
+    "checkedAt": "2026-10-27T02:37:56.199Z",
+    "origin": "https://alphanova48.in",
+    "pages": [
+      {
+        "path": "/",
+        "status": 200,
+        "main": "/assets/index-D2x3_dC4.js"
+      },
+      {
+        "path": "/charts",
+        "status": 200,
+        "main": "/assets/index-D2x3_dC4.js"
+      },
+      {
+        "path": "/forecast",
+        "status": 200,
+        "main": "/assets/index-D2x3_dC4.js"
+      },
+      {
+        "path": "/markets",
+        "status": 200,
+        "main": "/assets/index-D2x3_dC4.js"
+      },
+      {
+        "path": "/screener",
+        "status": 200,
+        "main": "/assets/index-D2x3_dC4.js"
+      },
+      {
+        "path": "/delivery",
+        "status": 200,
+        "main": "/assets/index-D2x3_dC4.js"
+      },
+      {
+        "path": "/futures-options",
+        "status": 200,
+        "main": "/assets/index-D2x3_dC4.js"
+      },
+      {
+        "path": "/institutional-flows",
+        "status": 200,
+        "main": "/assets/index-D2x3_dC4.js"
+      },
+      {
+        "path": "/news",
+        "status": 200,
+        "main": "/assets/index-D2x3_dC4.js"
+      },
+      {
+        "path": "/watchlist",
+        "status": 200,
+        "main": "/assets/index-D2x3_dC4.js"
+      },
+      {
+        "path": "/portfolio",
+        "status": 200,
+        "main": "/assets/index-D2x3_dC4.js"
+      },
+      {
+        "path": "/trade-journal",
+        "status": 200,
+        "main": "/assets/index-D2x3_dC4.js"
+      },
+      {
+        "path": "/price-alerts",
+        "status": 200,
+        "main": "/assets/index-D2x3_dC4.js"
+      }
+    ],
+    "worker": {
+      "path": "/assets/forecast.worker-CbDHPKwu.js",
+      "status": 200,
+      "sha256": "1c27b001aea9e379829ddcc254b184c8d7a0071fa0b50106254af387c4c3080c",
+      "matchesVerifiedBuild": true
+    },
+    "stylesheet": {
+      "path": "/assets/index-D9VW_L9T.css",
+      "matchesExistingStyles": true
+    },
+    "api": [
+      {
+        "path": "/api/market?op=chart&symbol=RELIANCE.NS&range=5y&adjusted=1&daily=1",
+        "status": 200,
+        "bars": 1236,
+        "regularSession": {
+          "start": 1793072700,
+          "end": 1793095200
+        }
+      },
+      {
+        "path": "/api/market?op=quotes&symbols=RELIANCE.NS",
+        "status": 200
+      },
+      {
+        "path": "/api/signup?op=status",
+        "status": 200,
+        "configured": true
+      },
+      {
+        "path": "/api/push?op=vapid",
+        "status": 200,
+        "configured": true
+      }
+    ],
+    "alternates": [
+      {
+        "url": "https://tickervane.vercel.app/forecast",
+        "status": 308,
+        "location": "https://alphanova48.in/forecast"
+      },
+      {
+        "url": "https://www.alphanova48.in/forecast",
+        "status": 307,
+        "location": "https://alphanova48.in/forecast"
+      }
+    ]
+  },
+  "scopeNote": "The independent local Jarvis runtime fix remains excluded from website deployment by .vercelignore."
+}

@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-30",
+  "production": "https://alphanova48.in",
+  "deployment": {
+    "id": "dpl_AaFjkfAN2spWjeke1h4DaMgk2nWQ",
+    "url": "https://alphanova2-rkn805o0b-wdcre.vercel.app",
+    "status": "promoted"
+  },
+  "rollback": "npx --yes vercel promote https://alphanova2-o3xe65e9b-wdcre.vercel.app --yes",
+  "cause": "Setup watch bound its price to daily screen row.price and did not subscribe to candidate quotes.",
+  "fix": "Displayed six candidates now subscribe to useQuotes; render shared LatestQuote with timestamp; no screening-close fallback. Daily setup rules are unchanged.",
+  "verification": {
+    "regression": "Failed before fix, passed after fix with close=100 and quote=123.45; missing quote does not show screening close",
+    "testsPassed": 319,
+    "build": "passed",
+    "live": "All six candidate LTP values and timestamps rendered",
+    "example": {
+      "symbol": "KOTAKBANK",
+      "oldScreenPrice": 440,
+      "latestAvailableQuote": 459
+    }
+  },
+  "screenshot": "outputs/setup-ltp-2026-10-30/live-mobile.png"
+}

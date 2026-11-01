@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-31",
+  "production": "https://alphanova48.in/markets",
+  "deployment": {
+    "id": "dpl_FzCSkBQQqoQster2yyADGa68UMVQ",
+    "url": "https://alphanova2-ks5hwni7b-wdcre.vercel.app",
+    "status": "promoted"
+  },
+  "previousProduction": "https://alphanova2-3c6qfqxqz-wdcre.vercel.app",
+  "rollback": "vercel promote https://alphanova2-3c6qfqxqz-wdcre.vercel.app --yes",
+  "changes": [
+    "Render RRG quadrant backgrounds at 8% fill opacity instead of opaque theme colors",
+    "Give Improving a dedicated blue in dark and light themes",
+    "Share each quadrant color across its background, label, trails and list heading"
+  ],
+  "verification": {
+    "productionSourceComparison": "Only src/Rotation.jsx and src/styles.css differ; CSS differences are confined to RRG styling",
+    "testsPassed": 352,
+    "localProductionBuild": "passed",
+    "hostedProductionBuild": "ready",
+    "stagedCSSMatchesLocalBuild": true,
+    "stagedRRGComponent": "All four quadrant-specific label classes verified",
+    "localBrowser": "Dark and light themes; desktop and narrow layouts",
+    "liveBrowser": "Public Markets page loaded real sector data; four 8% fills and matching labels and list headings verified",
+    "publicCSS": "/assets/index-SvZfLn-6.css",
+    "publicRRGComponent": "/assets/Rotation-lEhfeU__.js"
+  },
+  "screenshot": "/tmp/alphanova-rrg-live.jpg"
+}

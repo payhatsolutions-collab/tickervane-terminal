@@ -61,7 +61,7 @@ Three Node serverless functions (`api/market.js`, `api/push.js`, `api/signup.js`
 
 - **Market data**: Yahoo chart/spark endpoints, NSE's security-wise delivery bhavcopy (`sec_bhavdata_full_DDMMYYYY.csv`, last 21 sessions) and the official Nifty 500 list. Everything is cached per instance and at the edge (quotes 5 min, screener 15 min, delivery 30 min with 6 h stale-while-revalidate), reducing repeated upstream work. Cache hits still count toward CDN requests and transfer; cold-instance latency depends on upstream availability.
 - **Push storage**: one private Vercel Blob file per subscribed device (`push/subs/<sha256(endpoint)>.json`) holding the subscription, alerts, watchlist, saved screens and a short delivery log. Endpoints are restricted to real browser push services; updates require the subscription's auth secret.
-- **Free registration**: a dismissible name/email signup appears after two minutes of visible-tab use, with no visible countdown. Names and emails are stored privately under `signups/` in the existing Blob store; only the welcome name and registration time are remembered in the browser. This is unverified registration, not account authentication or cross-device research sync. See `docs/FREE-SIGNUP.md` and `/privacy.html`.
+- **Free registration**: an optional name/email registration opens from the header. After two minutes of visible-tab use, the header entry is subtly highlighted without opening a modal. Names and emails are stored privately under `signups/` in the existing Blob store; only the welcome name and registration time are remembered in the browser. This is unverified registration, not account authentication or cross-device research sync. See `docs/FREE-SIGNUP.md` and `/privacy.html`.
 - **Scheduling**: two weekday cron jobs at 14:00 and 16:00 UTC (19:30–20:30 and 21:30–22:30 IST execution windows on Hobby), authenticated with `CRON_SECRET`. Closed-app price checks and daily digests run in these evening windows; active tabs continue checking prices every five minutes. Browser subscription sync runs on preference changes and entry to Alerts, not every market refresh.
 - **Env vars** (already set on the project): `BLOB_READ_WRITE_TOKEN` (from the linked `alphanova-push` store), `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `CRON_SECRET`; optional `VAPID_SUBJECT`. Without them push reports "not configured" and everything else keeps working.
 
@@ -225,3 +225,15 @@ Checks: `node --test tests/forecast.test.js tests/market.test.js tests/ux.test.j
 The F&O tab now uses NSE's current `option-chain-contract-info` / `option-chain-v3` endpoints, with 30-second visible-tab refresh, a 15-second server cache, and no downstream caching. Option data includes exchange timestamps, selected expiry, LTP, IV, bid/ask and OI. Bullish / Bearish / Range is a transparent, unvalidated positioning heuristic; stale or incomplete data suppresses the signal. Outside regular hours the last-session read is explicitly dated. NSE futures contracts use `liveEquity-derivatives`; the broader OI build-up scanner remains labelled end-of-day.
 
 All 225 tests and local/hosted builds passed. Promoted `https://alphanova2-oidisks74-wdcre.vercel.app` to both existing public domains, verified live endpoints and rendered UI. Release evidence: `docs/fno-release-verification-2026-10-07.json`. Rollback: `npx --yes vercel promote https://alphanova2-xh3fo97ta-wdcre.vercel.app --yes`.
+
+## Personal brief and shareable watchlists — 2026-10-22
+
+Returning users see their watchlist pulse on Overview: session breadth, the three largest absolute moves, quote coverage and freshness. Watchlist now has company search, movement/name sorting and a direct mobile tab. Share stocks creates a selected-symbol link with a recipient preview and explicit, reversible import; it never includes holdings, notes or alerts. Signup no longer interrupts research with an automatic modal.
+
+Product rationale, measurement events, limitations and verification are recorded in [the improvement review](docs/PRODUCT-IMPROVEMENTS-2026-10-22.md).
+
+Published and verified on [alphanova48.in](https://alphanova48.in): deployment `dpl_FbcZPfYdEaHqs3QZ8eQmE3qun75a`, production build passed, 302 local tests passed. The live shared-list preview, personal brief and mobile Watchlist destination were verified. Release record: `docs/product-improvements-release-2026-10-22.json`. Rollback: `vercel promote https://alphanova2-f2paed25g-wdcre.vercel.app --yes`.
+
+## Personalized research tools (2026-11-01)
+
+Added personalized session alerts, advanced market and stock analytics, and breakout stock insight pages. These reuse existing market feeds and run calculations in the browser. Personalized rules require the app to be open; existing evening push remains separate. Setup, data definitions, free-plan limits and verification: [Personal research tools](docs/PERSONAL-RESEARCH.md).

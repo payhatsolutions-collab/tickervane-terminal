@@ -1,0 +1,232 @@
+{
+  "date": "2026-10-26",
+  "project": "alphanova2",
+  "deployment": {
+    "id": "dpl_FmifCbVmMXPjoVa1FfQ2WNk2hmUu",
+    "url": "https://alphanova2-m9mm8lf9w-wdcre.vercel.app",
+    "status": "promoted"
+  },
+  "production": "https://alphanova48.in",
+  "alternateDomains": [
+    "https://tickervane.vercel.app",
+    "https://www.alphanova48.in"
+  ],
+  "alternateDomainsVerified": true,
+  "previousDeployment": {
+    "id": "dpl_6p2xRCXepyBz9D4AMnmmYd3edkEt",
+    "url": "https://alphanova2-2vlr0al0o-wdcre.vercel.app"
+  },
+  "rollbackCommand": "vercel promote https://alphanova2-2vlr0al0o-wdcre.vercel.app --yes",
+  "tests": {
+    "passed": 306,
+    "failed": 0,
+    "cancelled": 0
+  },
+  "localBuild": "passed",
+  "hostedBuild": "passed",
+  "staged": {
+    "origin": "https://alphanova2-m9mm8lf9w-wdcre.vercel.app",
+    "pages": [
+      {
+        "name": "Terminal",
+        "path": "/charts",
+        "status": 200
+      },
+      {
+        "name": "Forecast",
+        "path": "/forecast",
+        "status": 200
+      },
+      {
+        "name": "Today",
+        "path": "/",
+        "status": 200
+      },
+      {
+        "name": "Markets",
+        "path": "/markets",
+        "status": 200
+      },
+      {
+        "name": "Screener",
+        "path": "/screener",
+        "status": 200
+      },
+      {
+        "name": "Delivery",
+        "path": "/delivery",
+        "status": 200
+      },
+      {
+        "name": "FnO",
+        "path": "/futures-options",
+        "status": 200
+      },
+      {
+        "name": "Flows",
+        "path": "/institutional-flows",
+        "status": 200
+      },
+      {
+        "name": "Watchlist",
+        "path": "/watchlist",
+        "status": 200
+      },
+      {
+        "name": "Journal",
+        "path": "/trade-journal",
+        "status": 200
+      },
+      {
+        "name": "News",
+        "path": "/news",
+        "status": 200
+      },
+      {
+        "name": "Portfolio",
+        "path": "/portfolio",
+        "status": 200
+      },
+      {
+        "name": "Alerts",
+        "path": "/price-alerts",
+        "status": 200
+      }
+    ],
+    "assets": [
+      "/assets/index-BAqzcyYR.js",
+      "/assets/index-D9VW_L9T.css"
+    ],
+    "fixesPresent": true,
+    "api": [
+      {
+        "path": "/api/market?op=quotes&symbols=M%26M.NS",
+        "status": 200
+      },
+      {
+        "path": "/api/market?op=chart&symbol=M%26M.NS&range=1y&adjusted=1&daily=1",
+        "status": 200,
+        "bars": 247
+      },
+      {
+        "path": "/api/signup?op=status",
+        "status": 200,
+        "configured": true
+      },
+      {
+        "path": "/api/push?op=vapid",
+        "status": 200,
+        "configured": true
+      }
+    ],
+    "checkedAt": "2026-10-26T11:03:50.281Z"
+  },
+  "productionChecks": {
+    "origin": "https://alphanova48.in",
+    "pages": [
+      {
+        "name": "Today",
+        "path": "/",
+        "status": 200
+      },
+      {
+        "name": "Forecast",
+        "path": "/forecast",
+        "status": 200
+      },
+      {
+        "name": "Markets",
+        "path": "/markets",
+        "status": 200
+      },
+      {
+        "name": "Terminal",
+        "path": "/charts",
+        "status": 200
+      },
+      {
+        "name": "FnO",
+        "path": "/futures-options",
+        "status": 200
+      },
+      {
+        "name": "Screener",
+        "path": "/screener",
+        "status": 200
+      },
+      {
+        "name": "Flows",
+        "path": "/institutional-flows",
+        "status": 200
+      },
+      {
+        "name": "Delivery",
+        "path": "/delivery",
+        "status": 200
+      },
+      {
+        "name": "Portfolio",
+        "path": "/portfolio",
+        "status": 200
+      },
+      {
+        "name": "Journal",
+        "path": "/trade-journal",
+        "status": 200
+      },
+      {
+        "name": "News",
+        "path": "/news",
+        "status": 200
+      },
+      {
+        "name": "Watchlist",
+        "path": "/watchlist",
+        "status": 200
+      },
+      {
+        "name": "Alerts",
+        "path": "/price-alerts",
+        "status": 200
+      }
+    ],
+    "assets": [
+      "/assets/index-BAqzcyYR.js",
+      "/assets/index-D9VW_L9T.css"
+    ],
+    "fixesPresent": true,
+    "api": [
+      {
+        "path": "/api/market?op=quotes&symbols=M%26M.NS",
+        "status": 200
+      },
+      {
+        "path": "/api/market?op=chart&symbol=M%26M.NS&range=1y&adjusted=1&daily=1",
+        "status": 200,
+        "bars": 247
+      },
+      {
+        "path": "/api/signup?op=status",
+        "status": 200,
+        "configured": true
+      },
+      {
+        "path": "/api/push?op=vapid",
+        "status": 200,
+        "configured": true
+      }
+    ],
+    "checkedAt": "2026-10-26T11:04:14.900Z"
+  },
+  "mobile": {
+    "lineHeight": "35.2px",
+    "price": "2,758.84 INR",
+    "priceHeight": 35,
+    "scrollWidth": 312,
+    "submitFits": true,
+    "symbol": "M&M",
+    "width": 312
+  },
+  "mobileScreenshot": "outputs/mobile-qa-2026-10-26/forecast-live-320.png",
+  "scopeNote": "The separate local Jarvis runtime fix is excluded from website deployments by .vercelignore."
+}

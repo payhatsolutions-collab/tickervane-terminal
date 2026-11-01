@@ -1,0 +1,66 @@
+{
+  "origin": "https://alphanova48.in",
+  "checkedAt": "2026-11-01T12:54:10.163Z",
+  "pages": [
+    {
+      "path": "/price-alerts",
+      "asset": "/assets/index-ML20sEs7.js",
+      "status": 200
+    },
+    {
+      "path": "/breakouts?symbol=COFORGE.NS",
+      "asset": "/assets/index-ML20sEs7.js",
+      "status": 200
+    },
+    {
+      "path": "/analytics",
+      "asset": "/assets/index-ML20sEs7.js",
+      "status": 200
+    }
+  ],
+  "companies": [
+    {
+      "symbol": "DIVISLAB.NS",
+      "basis": "Consolidated",
+      "period": "TTM",
+      "end": "2026-06-30",
+      "netIncome": 29250000000,
+      "revenue": 112300000000,
+      "roe": 0.165,
+      "netMargin": 0.26046304541406945,
+      "operatingMargin": 0.35325022261798755,
+      "pe": 87.1,
+      "source": "https://www.screener.in/company/DIVISLAB/consolidated/"
+    },
+    {
+      "symbol": "COFORGE.NS",
+      "basis": "Consolidated",
+      "period": "TTM",
+      "end": "2026-09-30",
+      "netIncome": 21000000000,
+      "revenue": 203800000000,
+      "roe": 0.214,
+      "netMargin": 0.10304219823356231,
+      "operatingMargin": 0.19043179587831208,
+      "pe": 41.7,
+      "source": "https://www.screener.in/company/COFORGE/consolidated/"
+    }
+  ],
+  "deployment": {
+    "id": "dpl_GiSDNqLCvByN6x7h2pDsf34kNcNR",
+    "url": "https://alphanova2-dgrovo3xd-wdcre.vercel.app",
+    "status": "promoted"
+  },
+  "rollback": "vercel promote https://alphanova2-gduw5ie7t-wdcre.vercel.app --yes",
+  "tests": {
+    "passed": 374,
+    "failed": 0,
+    "hostedBuild": "passed"
+  },
+  "browser": {
+    "desktop": "Company description, financial metrics and written outlook rendered",
+    "mobile": "390px layout, stock switching and no horizontal overflow verified",
+    "consoleErrors": 0,
+    "screenshot": "/Users/sarda/.codex/visualizations/2026/11/01/01a1970d-72f4-7880-8010-a60819b4dcdb/company-insight-live.jpg"
+  }
+}

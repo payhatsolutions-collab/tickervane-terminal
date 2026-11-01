@@ -1,0 +1,8 @@
+{
+  "deploymentId": "dpl_3LAVeCEFgB9njsFDeGwcj8jQY391",
+  "deploymentUrl": "https://alphanova2-5rfzf3110-wdcre.vercel.app",
+  "productionUrl": "https://alphanova48.in",
+  "promoted": true,
+  "previousProduction": "https://alphanova2-n0q7h0sko-wdcre.vercel.app",
+  "verification": ["production build passed", "8 focused tests passed", "393x852 mobile visual checks for bull and bear", "auto-dismiss and skip verified", "both production WebP assets return HTTP 200", "production replay uses bull-art-charge and blur(12px)"]
+}

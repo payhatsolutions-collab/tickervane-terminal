@@ -14,3 +14,11 @@ bbskelly-preview.jpg
 back-navigation-preview.png
 reel_fresh.py
 reel*_gen.py
+# Python caches and local environment pins.
+__pycache__/
+*.pyc
+.pytest_cache/
+.python-version
+# Separate prototype, not part of the app.
+football-game/
+

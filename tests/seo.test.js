@@ -21,7 +21,7 @@ test('public guide generation preserves rules, canonicals, structured data and l
   const sitemap = await readFile('public/sitemap.xml','utf8');
   const urls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]);
   assert.equal(new Set(urls).size,urls.length);
-  assert.equal(urls.length,23);
+  assert.equal(urls.length,25);
   const titles = new Set();
   const descriptions = new Set();
   for (const url of urls) {

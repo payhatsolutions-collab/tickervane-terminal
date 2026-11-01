@@ -34,10 +34,10 @@ test('NSE company news excludes unrelated event headlines before ranking',()=>{
 });
 
 import {buildBackup,parseBackup} from '../src/backup.js';
-test('version 4 backup round-trips journal and keeps older backup journal absent',()=>{
+test('version 5 backup round-trips journal and keeps older backup journal absent',()=>{
  const t={...input,...sizeTrade(input),id:'one',symbol:'TEST.NS',currency:'INR',status:'closed',exit:110,fees:100};
  const backup=buildBackup({symbol:'TEST.NS',watch:['TEST.NS'],positions:[],alerts:[],journal:[t]});
- assert.equal(backup.version,4);assert.deepEqual(parseBackup(JSON.stringify(backup)).journal,[t]);
+ assert.equal(backup.version,5);assert.deepEqual(parseBackup(JSON.stringify(backup)).journal,[t]);
  assert.equal(parseBackup({watch:[],positions:[],alerts:[]}).journal,null);
  assert.deepEqual(parseBackup({...backup,data:{...backup.data,journal:[]}}).journal,[]);
  assert.deepEqual(parseBackup({...backup,data:{...backup.data,journal:[{bad:true}]}}).journal,[]);

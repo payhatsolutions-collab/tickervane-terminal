@@ -12,6 +12,8 @@
     "jarvis": "node agents/jarvis/cli.mjs",
     "jarvis:daemon": "node agents/jarvis/runtime.mjs",
     "jarvis:dashboard": "node agents/jarvis/server.mjs",
+    "telegram": "node agents/telegram/runtime.mjs",
+    "telegram:install": "node agents/telegram/install.mjs",
     "seo:generate": "node scripts/generate-seo.mjs",
     "stocks:refresh": "node scripts/refresh-stock-directory.mjs"
   },

@@ -1,3 +1,4 @@
+import { parseCompanyFinancials } from '../lib/companyFundamentals.js';
 import { liveOptions, liveFutures, FUTURES_GROUPS } from '../lib/nseOptions.js';
 import { stockDirectory } from '../src/stocks.js';
 import { loadStockDirectory } from '../lib/stockDirectory.js';
@@ -5,6 +6,7 @@ import { recentSessions, nifty500, buildRadar, buildScreen, deliveryStats, deliv
 import { latestFo, futuresBuildup, participants, fiiDii, deals } from '../lib/fno.js';
 import { rotation } from '../lib/indices.js';
 const cache = new Map();
+const chartRequests = new Map();
 // Basic per-instance rate limiting so one client cannot exhaust Yahoo upstream
 // or Vercel execution time for everyone else. Vercel Hobby has no shared KV,
 // so this is best-effort per isolate; edge CDN caching does the heavy lifting.
@@ -43,11 +45,19 @@ export function normalize(result, symbol, range, adjusted = false) {
   const reportedChange=Number.isFinite(m.regularMarketPrice)&&Number.isFinite(m.regularMarketChangePercent)&&m.regularMarketChangePercent>-100?m.regularMarketChangePercent:null;
   const previous=reportedChange!==null?price/(1+reportedChange/100):(m.previousClose ?? (range==='1d'?m.chartPreviousClose:null));
   const change=reportedChange ?? (Number.isFinite(previous)&&previous>0?(price/previous-1)*100:null);
-  return {symbol,name:m.longName || m.shortName || symbol,currency:m.currency || 'USD',exchange:m.exchangeName,price,previous,change,marketTime:m.regularMarketTime,dayHigh:m.regularMarketDayHigh,dayLow:m.regularMarketDayLow,volume:m.regularMarketVolume,yearHigh:m.fiftyTwoWeekHigh,yearLow:m.fiftyTwoWeekLow,timezone:m.exchangeTimezoneName,delay:m.exchangeDataDelayedBy ?? null,bars:unique,source:'Yahoo Finance',fetchedAt:new Date().toISOString(),range,...(adjusted?{adjusted:true}:{})};
+  const regular=m.currentTradingPeriod?.regular;
+  const session=Number.isFinite(regular?.start)&&Number.isFinite(regular?.end)&&regular.end>regular.start&&regular.end-regular.start<=86400?{regularSession:{start:regular.start,end:regular.end}}:{};
+  return {symbol,name:m.longName || m.shortName || symbol,currency:m.currency || 'USD',exchange:m.exchangeName,price,previous,change,marketTime:m.regularMarketTime,dayHigh:m.regularMarketDayHigh,dayLow:m.regularMarketDayLow,volume:m.regularMarketVolume,yearHigh:m.fiftyTwoWeekHigh,yearLow:m.fiftyTwoWeekLow,timezone:m.exchangeTimezoneName,delay:m.exchangeDataDelayedBy ?? null,bars:unique,source:'Yahoo Finance',fetchedAt:new Date().toISOString(),range,...(adjusted?{adjusted:true}:{}),...session};
 }
 export async function chart(symbol,range,adjusted=false,daily=false) {
  const key=`${symbol}:${range}${adjusted?':adjusted':''}${daily?':daily':''}`, old=cache.get(key);
  if(old && Date.now()-old.at<15000)return old.data;
+ if(chartRequests.has(key))return chartRequests.get(key);
+ const request=fetchChart(symbol,range,adjusted,daily,key);
+ chartRequests.set(key,request);
+ try{return await request;}finally{if(chartRequests.get(key)===request)chartRequests.delete(key);}
+}
+async function fetchChart(symbol,range,adjusted,daily,key) {
  for(const host of ['query2.finance.yahoo.com','query1.finance.yahoo.com']) {
   try {
    const r=await fetch(`https://${host}/v8/finance/chart/${encodeURIComponent(symbol)}?range=${range}&interval=${daily?'1d':intervals[range]}&includePrePost=false${adjusted?'&includeAdjustedClose=true':''}`,{headers:{'User-Agent':'Mozilla/5.0',Accept:'application/json'},signal:AbortSignal.timeout(7000)});
@@ -58,6 +68,27 @@ export async function chart(symbol,range,adjusted=false,daily=false) {
   }catch{}
  }
  throw new Error(`Market data unavailable for ${symbol}. Try again shortly.`);
+}
+
+// Keep four upstream requests busy instead of waiting at batch barriers. Return
+// partial coverage before the browser's 30-second timeout; shared chart work can
+// finish in the cache without being cancelled for other callers.
+export async function loadQuotes(symbols, loadChart=chart, timeoutMs=24000) {
+ const found=new Map();
+ let cursor=0,finished=false,timer;
+ const worker=async()=>{
+  while(!finished && cursor<symbols.length){
+   const symbol=symbols[cursor++];
+   try{
+    const data=await loadChart(symbol,'5d');
+    if(!finished)found.set(symbol,{...data,bars:undefined,spark:data.bars.map(bar=>bar.close)});
+   }catch{}
+  }
+ };
+ const work=Promise.all(Array.from({length:Math.min(4,symbols.length)},worker));
+ try{await Promise.race([work,new Promise(resolve=>{timer=setTimeout(resolve,timeoutMs);})]);}
+ finally{finished=true;clearTimeout(timer);}
+ return {quotes:symbols.flatMap(symbol=>found.has(symbol)?[found.get(symbol)]:[]),errors:symbols.filter(symbol=>!found.has(symbol))};
 }
 const fundCache = new Map();
 let yahooSession = null;
@@ -80,7 +111,7 @@ const str=v=>typeof v?.raw==='string'?v.raw:(typeof v==='string'?v:null);
 export function normalizeFundamentals(json, symbol) {
   const r=json?.quoteSummary?.result?.[0] || {};
   const sd=r.summaryDetail||{},ks=r.defaultKeyStatistics||{},fd=r.financialData||{},pr=r.price||{},ap=r.assetProfile||{};
-  return {symbol,peTrailing:num(sd.trailingPE),peForward:num(sd.forwardPE),epsTrailing:num(ks.trailingEps),epsForward:num(ks.forwardEps),earningsGrowth:num(fd.earningsGrowth),revenueGrowth:num(fd.revenueGrowth),roe:num(fd.returnOnEquity),profitMargin:num(fd.profitMargins),debtToEquity:num(fd.debtToEquity),marketCap:num(pr.marketCap),sector:str(ap.sector)||null,industry:str(ap.industry)||null,businessSummary:str(ap.longBusinessSummary)||null,source:'Yahoo Finance',fetchedAt:new Date().toISOString()};
+  return {symbol,peTrailing:num(sd.trailingPE),peForward:num(sd.forwardPE),epsTrailing:num(ks.trailingEps),epsForward:num(ks.forwardEps),earningsGrowth:num(fd.earningsGrowth),revenueGrowth:num(fd.revenueGrowth),roe:num(fd.returnOnEquity),profitMargin:num(fd.profitMargins),debtToEquity:num(fd.debtToEquity),marketCap:num(pr.marketCap),sector:str(ap.sector)||null,industry:str(ap.industry)||null,businessSummary:str(ap.longBusinessSummary)||null,company:{businessSummary:str(ap.longBusinessSummary)||null,website:str(ap.website)||null,currency:str(fd.financialCurrency)||str(pr.currency)||null,netIncome:num(ks.netIncomeToCommon),revenue:num(fd.totalRevenue),netMargin:num(fd.profitMargins),operatingMargin:num(fd.operatingMargins),roe:num(fd.returnOnEquity),period:'TTM (provider)',basis:'Provider reported',history:[],source:'Yahoo Finance',url:`https://finance.yahoo.com/quote/${encodeURIComponent(symbol)}/financials/`},source:'Yahoo Finance',fetchedAt:new Date().toISOString()};
 }
 const SEC_UA='Alpha Nova Terminal (contact@alphanova48.in)';
 let secTickers={at:0,map:null};
@@ -169,11 +200,11 @@ async function secFundamentals(symbol,price){
   }
   return normalizeSECFacts(facts,price,symbol);
 }
-async function yahooFundamentals(symbol) {
+async function yahooFundamentals(symbol, attempts=2) {
   const old=fundCache.get(symbol);
   if(old && Date.now()-old.at<1800000)return old.data;
   let lastErr=null;
-  for(let attempt=0;attempt<2;attempt++){
+  for(let attempt=0;attempt<attempts;attempt++){
     try{
       const sess=await yahooSessionGet(attempt>0);
       const host=attempt===0?'query2.finance.yahoo.com':'query1.finance.yahoo.com';
@@ -195,13 +226,14 @@ async function yahooFundamentals(symbol) {
 const SCR_UA='Alpha Nova Terminal (contact@alphanova48.in)';
 const scrSlugCache=new Map();
 const scrCache=new Map();
+const scrPending=new Map();
 const isIndian=s=>/\.NS$/.test(s||'');
 function scrSlugs(symbol){
   const base=symbol.replace(/\.NS$/,'');
   return [...new Set([base,base.replace(/&/g,''),base.replace(/-/g,'')])].filter(Boolean);
 }
 const scrNum=t=>{const v=parseFloat(String(t||'').replace(/,/g,''));return Number.isFinite(v)?v:null;};
-export function normalizeScreener(html,symbol){
+export function normalizeScreener(html,symbol,url=`https://www.screener.in/company/${encodeURIComponent(symbol.replace(/\.NS$/,''))}/`){
   if(!html||!/top-ratios/.test(html))return null;
   const rows={};
   for(const m of html.matchAll(/<li[^>]*>\s*<span class="name">\s*([^<]+?)\s*<\/span>([\s\S]*?)<\/li>/g)){
@@ -217,22 +249,30 @@ export function normalizeScreener(html,symbol){
   const mc=get('Market Cap');
   const marketCap=mc?mc.nums[0]*(mc.crore?1e7:1):null;
   const growth=re=>{const m=html.match(new RegExp('Compounded '+re+' Growth<\/th>(?:[\\s\\S]{0,800}?)TTM:<\/td>\\s*<td>\\s*(-?[\\d.]+)%'));return m?scrNum(m[1])/100:null;};
-  const out={symbol,peTrailing:pe,peForward:null,epsTrailing:pe&&price&&pe>0?price/pe:null,epsForward:null,earningsGrowth:growth('Profit'),revenueGrowth:growth('Sales'),roe,profitMargin:null,debtToEquity:null,marketCap,sector:null,industry:null,businessSummary:null,source:'Screener.in',fetchedAt:new Date().toISOString()};
+  const out={symbol,peTrailing:pe,peForward:null,epsTrailing:pe&&price&&pe>0?price/pe:null,epsForward:null,earningsGrowth:growth('Profit'),revenueGrowth:growth('Sales'),roe,profitMargin:null,debtToEquity:null,marketCap,sector:null,industry:null,businessSummary:null,company:parseCompanyFinancials(html,symbol,url),source:'Screener.in',fetchedAt:new Date().toISOString()};
+  out.profitMargin=out.company.netMargin??null;
+  out.company.roe=roe;
+  out.company.revenueGrowth=out.revenueGrowth;
+  out.company.earningsGrowth=out.earningsGrowth;
+  out.company.growthPeriod='TTM year over year';
   if(out.peTrailing==null&&out.roe==null&&out.marketCap==null)return null;
   return out;
 }
-async function screenerFundamentals(symbol){
+async function loadScreenerFundamentals(symbol){
+  const deadline=Date.now()+15000;
   let slug=scrSlugCache.get(symbol);
   const trySlugs=slug?[slug]:scrSlugs(symbol);
   for(const s of trySlugs){
     const hit=scrCache.get(s);
     if(hit&&Date.now()-hit.at<43200000){scrSlugCache.set(symbol,s);return hit.data;}
-    try{
-      const r=await fetch(`https://www.screener.in/company/${encodeURIComponent(s)}/`,{headers:{'User-Agent':SCR_UA,Accept:'text/html'},signal:AbortSignal.timeout(10000)});
+    for(const suffix of ['consolidated/','']) try{
+      if(Date.now()>=deadline-100)return null;
+      const url=`https://www.screener.in/company/${encodeURIComponent(s)}/${suffix}`;
+      const r=await fetch(url,{headers:{'User-Agent':SCR_UA,Accept:'text/html'},signal:AbortSignal.timeout(Math.max(100,Math.min(6000,deadline-Date.now())))});
       if(r.status===404)continue;
       if(!r.ok)continue;
       const html=await r.text();
-      const data=normalizeScreener(html,symbol);
+      const data=normalizeScreener(html,symbol,url);
       if(!data)continue;
       if(scrCache.size>500)scrCache.delete(scrCache.keys().next().value);
       scrCache.set(s,{at:Date.now(),data});
@@ -242,14 +282,19 @@ async function screenerFundamentals(symbol){
   }
   return null;
 }
+async function screenerFundamentals(symbol){
+  if(scrPending.has(symbol))return scrPending.get(symbol);
+  const request=loadScreenerFundamentals(symbol).finally(()=>scrPending.delete(symbol));
+  scrPending.set(symbol,request);return request;
+}
 async function fundamentals(symbol) {
   const key=`fund:${symbol}`, old=fundCache.get(key);
   if(old && Date.now()-old.at<1800000)return old.data;
-  const price=await chart(symbol,'5d').then(d=>d.price).catch(()=>null);
-  const [yahoo,sec,scr]=await Promise.all([
-    yahooFundamentals(symbol).catch(()=>null),
-    isUSTicker(symbol)?secFundamentals(symbol,price).catch(()=>null):Promise.resolve(null),
-    isIndian(symbol)?screenerFundamentals(symbol).catch(()=>null):Promise.resolve(null)
+  const scr=isIndian(symbol)?await screenerFundamentals(symbol).catch(()=>null):null;
+  const price=isUSTicker(symbol)?await chart(symbol,'5d').then(d=>d.price).catch(()=>null):null;
+  const [yahoo,sec]=await Promise.all([
+    scr?.company?.revenue!=null?Promise.resolve(null):yahooFundamentals(symbol,isIndian(symbol)?1:2).catch(()=>null),
+    isUSTicker(symbol)?secFundamentals(symbol,price).catch(()=>null):Promise.resolve(null)
   ]);
   if(!yahoo&&!sec&&!scr){
     if(old)return old.data;
@@ -257,7 +302,7 @@ async function fundamentals(symbol) {
   }
   const pick=k=>yahoo?.[k]??sec?.[k]??scr?.[k]??null;
   const sources=[yahoo&&'Yahoo Finance',sec&&'SEC EDGAR',scr&&'Screener.in'].filter(Boolean);
-  const data={symbol,peTrailing:pick('peTrailing'),peForward:pick('peForward'),epsTrailing:pick('epsTrailing'),epsForward:pick('epsForward'),earningsGrowth:pick('earningsGrowth'),revenueGrowth:pick('revenueGrowth'),roe:pick('roe'),profitMargin:pick('profitMargin'),debtToEquity:pick('debtToEquity'),marketCap:yahoo?.marketCap??scr?.marketCap??null,sector:yahoo?.sector??null,industry:yahoo?.industry??null,businessSummary:yahoo?.businessSummary??null,source:sources.join(' + ')||'Unavailable',fetchedAt:new Date().toISOString()};
+  const data={symbol,peTrailing:pick('peTrailing'),peForward:pick('peForward'),epsTrailing:pick('epsTrailing'),epsForward:pick('epsForward'),earningsGrowth:pick('earningsGrowth'),revenueGrowth:pick('revenueGrowth'),roe:pick('roe'),profitMargin:pick('profitMargin'),debtToEquity:pick('debtToEquity'),marketCap:yahoo?.marketCap??scr?.marketCap??null,sector:yahoo?.sector??null,industry:yahoo?.industry??null,businessSummary:scr?.company?.businessSummary??yahoo?.businessSummary??null,company:scr?.company?.revenue!=null?scr.company:yahoo?.company?.revenue!=null?{...yahoo.company,businessSummary:yahoo.businessSummary||scr?.company?.businessSummary,revenueGrowth:yahoo.revenueGrowth,earningsGrowth:yahoo.earningsGrowth,growthPeriod:'Latest reported quarter year over year'}:scr?.company??yahoo?.company??null,source:sources.join(' + ')||'Unavailable',fetchedAt:new Date().toISOString()};
   if(data.peTrailing==null&&data.epsTrailing==null&&data.roe==null){
     if(old)return old.data;
     throw new Error('Fundamentals temporarily unavailable');
@@ -415,9 +460,8 @@ export default async function handler(req,res){
   }else if(op==='quotes'){
    const symbols=[...new Set(String(req.query.symbols||'').toUpperCase().split(',').map(s=>s.trim()).filter(Boolean))];
    if(!symbols.length||symbols.length>16||!symbols.every(validSymbol))return res.status(400).json({error:'Supply 1–16 valid symbols'});
-   const quotes=[],errors=[];
-   for(let i=0;i<symbols.length;i+=4){await Promise.all(symbols.slice(i,i+4).map(async s=>{try{const d=await chart(s,'5d');quotes.push({...d,bars:undefined,spark:d.bars.map(b=>b.close)});}catch{errors.push(s);}}));}
-   if(!quotes.length)return res.status(503).json({error:'Market feed temporarily unavailable. Please retry.',errors});
+   const {quotes,errors}=await loadQuotes(symbols);
+   if(!quotes.length){res.setHeader('Cache-Control','no-store');return res.status(503).json({error:'Market feed temporarily unavailable. Please retry.',errors});}
    cacheControl=errors.length?'no-store':'public, max-age=0, s-maxage=15';
    data={quotes,errors,fetchedAt:new Date().toISOString()};
   }else if(op==='fundamentals'){

@@ -2,5 +2,5 @@
 try {
   const theme = JSON.parse(localStorage.getItem("an2-theme")) === "light" ? "light" : "dark";
   document.documentElement.dataset.theme = theme;
-  document.querySelector('meta[name="theme-color"]').content = theme === "light" ? "#f4f7fb" : "#0b111a";
+  document.querySelector('meta[name="theme-color"]').content = theme === "light" ? "#f5f7f8" : "#0c1116";
 } catch {}

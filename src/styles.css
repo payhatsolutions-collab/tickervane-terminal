@@ -104,13 +104,16 @@ main{padding:18px 22px 28px}.workspace-heading{margin-bottom:14px}h1{font-size:2
 .long-share i{position:absolute;left:0;top:0;bottom:0;background:var(--theme-positive-surface,#5dd6a538)}
 .deal-client{max-width:260px;font-size:11px;color:var(--theme-muted,#c3cfdf);white-space:normal}
 .rotation-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:18px;padding:16px 18px}
+.rotation-panel{--rrg-improving:#91b4ff}
+:root[data-theme="light"] .rotation-panel{--rrg-improving:#245ec9}
+/* Chart colors carry quadrant meaning independently of the site's accent. */
+.rotation-panel .q-leading{--rrg-color:var(--green,#5dd6a5)}.rotation-panel .q-improving{--rrg-color:var(--rrg-improving)}.rotation-panel .q-weakening{--rrg-color:var(--theme-warning,#f0c66b)}.rotation-panel .q-lagging{--rrg-color:var(--red,#fa8996)}
 .rrg{width:100%;height:auto;display:block;background:var(--theme-surface,#0f151d);border:1px solid var(--line);border-radius:8px}
-.rrg rect.q-leading{fill:var(--theme-positive,#5dd6a50d)}.rrg rect.q-weakening{fill:var(--theme-warning,#f0c66b0d)}.rrg rect.q-lagging{fill:var(--theme-negative,#fa89960d)}.rrg rect.q-improving{fill:var(--theme-accent,#91b4ff0d)}
+.rrg rect{fill:var(--rrg-color);fill-opacity:.08}
 .rrg .axis{stroke:var(--theme-border,#3a4a60);stroke-dasharray:3 4}
-.rrg .q-label{fill:var(--theme-muted,#64748a);font-size:10px;letter-spacing:1px;font-weight:600}
+.rrg .q-label{fill:var(--rrg-color);font-size:10px;letter-spacing:1px;font-weight:600}
 .rrg .axis-label{fill:var(--theme-muted,#7f8ea3);font-size:10px}
-.rrg .trail{color:var(--theme-accent,#91b4ff);cursor:default;transition:opacity .15s}
-.rrg .trail.q-leading{color:var(--green)}.rrg .trail.q-weakening{color:var(--theme-warning,#f0c66b)}.rrg .trail.q-lagging{color:var(--red)}.rrg .trail.q-improving{color:var(--accent)}
+.rrg .trail{color:var(--rrg-color);cursor:default;transition:opacity .15s}
 .rrg .trail polyline{stroke:currentColor;stroke-width:1.4;opacity:.55}
 .rrg .trail circle{fill:currentColor;opacity:.5}
 .rrg .trail circle.head{opacity:1;stroke:var(--theme-border,#0b1016);stroke-width:1.5}
@@ -119,8 +122,7 @@ main{padding:18px 22px 28px}.workspace-heading{margin-bottom:14px}h1{font-size:2
 .rrg-toggles{padding:10px 0 0;border:0}
 .rrg-toggles button{padding:5px 8px}
 .rrg-list{display:flex;flex-direction:column;gap:12px;min-width:0}
-.rrg-group h4{margin:0 0 4px;font-size:11px;letter-spacing:.6px;text-transform:uppercase}
-.rrg-group h4.q-leading{color:var(--green)}.rrg-group h4.q-weakening{color:var(--theme-warning,#f0c66b)}.rrg-group h4.q-lagging{color:var(--red)}.rrg-group h4.q-improving{color:var(--accent)}
+.rrg-group h4{margin:0 0 4px;font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--rrg-color)}
 .rrg-row,.rrg-legend{display:grid;grid-template-columns:minmax(0,1fr) 62px 62px 56px;gap:6px;align-items:center;width:100%;padding:6px 8px;border-radius:5px;text-align:left;font-size:12px}
 .rrg-row:hover:not(:disabled){background:var(--theme-subtle,#19232f)}
 .rrg-row em,.rrg-legend span{font-style:normal;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:11px}
@@ -167,7 +169,7 @@ body{line-height:1.5}button,input,select,textarea{font-family:inherit}button:foc
 
 /* Forecast one-number flow: ticker in, single projected price out. Minimalism: one column, one hero number, 8px rhythm. */
 .fore-one{max-width:760px;margin:0 auto;padding:clamp(24px,5vw,64px) clamp(16px,4vw,48px) clamp(32px,6vw,72px);text-align:center}
-.fore-ask{display:grid;gap:12px;justify-items:center}
+.fore-ask{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;justify-items:center}
 .fore-ask>label{font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
 .fore-box{position:relative;display:flex;align-items:center;gap:8px;width:min(480px,100%);padding:6px 6px 6px 16px;border:1px solid var(--line);border-radius:14px;background:var(--bg);transition:border-color .2s}
 .fore-box:focus-within{border-color:var(--accent)}
@@ -193,7 +195,7 @@ body{line-height:1.5}button,input,select,textarea{font-family:inherit}button:foc
 @keyframes fore-pulse{to{background-position:-200% 0}}
 .fore-error{color:var(--red);font-size:14px;margin:0 0 16px}
 .fore-out .button{min-height:44px}
-@media(max-width:600px){.fore-one{padding-left:14px;padding-right:14px}.fore-number{letter-spacing:-1px}}
+@media(max-width:600px){.fore-one{padding-left:14px;padding-right:14px}.fore-number{font-size:clamp(32px,9vw,54px);letter-spacing:-1px}}
 @media(prefers-reduced-motion:reduce){.fore-number{animation:none}.fore-skel{animation:none}}
 
 .nav-group a,.mobile-nav>a{text-decoration:none}

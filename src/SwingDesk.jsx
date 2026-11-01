@@ -1,18 +1,23 @@
 import { useMemo, useState } from "react";
 import {
   ArrowRight,
-  Search,
+  Bell,
   ShieldCheck,
   BookOpen,
   Star,
   RefreshCw,
+  CloudOff,
 } from "lucide-react";
-import { useFeed } from "./hooks";
+import { useFeed, useQuotes } from "./hooks";
+import LatestQuote from "./LatestQuote.jsx";
 import { PRESETS, runScreen } from "./screens";
 import { journalStats } from "./tradeMath";
-import { fmt, pct, short } from "./data";
+import { fmt, short } from "./data";
 import { growthEvent } from "./growth.js";
-import { workspaceURL } from "./navigation.js";
+import { useMobileLayout } from "./viewport.js";
+
+import WatchlistBrief from "./WatchlistBrief.jsx";
+import ResearchBrief, { WorkspaceSummary } from "./ResearchBrief.jsx";
 
 const playbooks = [
   {
@@ -42,14 +47,19 @@ export default function SwingDesk({
   refresh,
   onRefresh,
   onOpen,
+  onInsight,
   onPage,
   onSearch,
   watch,
   toggleWatch,
   journal,
   quotes,
+  alerts,
+  recent = [],
 }) {
   const { data, loading, error } = useFeed("/api/market?op=screen", refresh);
+  const mobile = useMobileLayout();
+  const [section, setSection] = useState("setups");
   const [selected, setSelected] = useState("breakout20");
   const playbook = playbooks.find((item) => item.id === selected);
   const lists = useMemo(
@@ -66,6 +76,10 @@ export default function SwingDesk({
     [data],
   );
   const rows = lists[selected];
+  // Setups use daily metrics; prices use the refreshing quote feed, including
+  // candidates outside the user's watchlist.
+  const setupSymbols = mobile && section !== "setups" ? [] : rows.slice(0, 6).map(row => row.symbol + ".NS");
+  const setupQuotes = useQuotes(setupSymbols, refresh);
   const trades = journal.filter(
     (trade) =>
       trade.currency === "INR" &&
@@ -82,31 +96,10 @@ export default function SwingDesk({
   );
   return (
     <div className="swing-desk">
-      <section className="overview-intro">
-        <div>
-          <span className="desk-kicker">ALPHA NOVA · FREE STOCK MARKET RESEARCH</span>
-          <h1>Find stocks to research.</h1>
-          <p>Explore Nifty 500 breakouts, pullbacks and delivery activity. Open a chart to take a closer look.</p>
-        </div>
-        <div className="overview-start">
-        <button className="button primary" onClick={() => { growthEvent("research_cta_clicked", { source: "home" }); onPage("Screener"); }}>
-          Open stock screener
-          <ArrowRight size={16} />
-        </button>
-        <a className="button overview-delivery" href={workspaceURL("Delivery")} onClick={(event) => {
-          if (event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-          event.preventDefault();
-          growthEvent("research_cta_clicked", { source: "home", destination: "Delivery" });
-          onPage("Delivery");
-        }}>Explore delivery spikes <ArrowRight size={16} /></a>
-        <button className="overview-search" onClick={onSearch}>
-          <Search size={16} /> Search a stock or company
-        </button>
-        <span className="overview-free">Free · No sign-up needed</span>
-        </div>
-      </section>
+      {!watch.length && <div className="overview-welcome"><Star size={14} /> Build your personal watchlist. <button className="link" onClick={onSearch}>Add a stock</button></div>}
+      <div className="overview-tabs" role="group" aria-label="Overview sections">{["setups", "watchlist", "alerts"].map(name => <button key={name} aria-pressed={section === name} onClick={() => setSection(name)}>{name === "setups" ? "Setups" : name === "watchlist" ? "Watchlist" : `Alerts${alerts.some(a => a.triggered) ? " •" : ""}`}</button>)}</div>
       <div className="desk-columns">
-        <section className="panel desk-opportunities" id="desk-opportunities">
+        <section className="panel desk-opportunities" id="desk-opportunities" hidden={mobile && section !== "setups"}>
           <div className="panel-title">
             <div>
               <span className="panel-tag">NIFTY 500</span>
@@ -145,7 +138,7 @@ export default function SwingDesk({
           {error && (
             <div className="notice" role="status">
               {data ? "Showing cached results. " : ""}
-              {error}{" "}
+              Market feed temporarily unavailable.{" "}
               <button className="link" onClick={onRefresh}>
                 Retry
               </button>
@@ -158,17 +151,18 @@ export default function SwingDesk({
                   <span className="skeleton-line" /><p><span className="skeleton-line skeleton-short" /></p>
                 </div></div>
                 <span className="desk-evidence"><span className="skeleton-line" /></span>
-                <div className="desk-candidate-bottom"><span>Last close<b>—</b></span>
+                <div className="desk-candidate-bottom"><span>LTP<b>—</b></span>
                   <span className="button skeleton-button">View chart</span>
                 </div>
               </article>)}
             </div>
           ) : !data ? (
             <div className="empty">
-              <h3>Setups unavailable</h3>
-              <p>Try refreshing or open a stock from your watchlist.</p>
-              <button className="button" onClick={onRefresh}>
-                Retry
+              <CloudOff size={28} />
+              <h3>A pause in the market feed</h3>
+              <p>Setups will return when data is available. In the meantime, explore a company or review your watchlist.</p>
+              <button className="button" onClick={onSearch}>
+                Research a stock <ArrowRight size={14} />
               </button>
             </div>
           ) : !rows.length ? (
@@ -188,6 +182,7 @@ export default function SwingDesk({
                 return (
                   <article key={symbol}>
                     <div className="desk-candidate-top">
+                      <span className="stock-monogram" aria-hidden="true">{row.symbol.slice(0, 2)}</span>
                       <div>
                         <button className="link" onClick={() => onOpen(symbol)}>
                           {row.symbol}
@@ -212,11 +207,11 @@ export default function SwingDesk({
                       {playbook.evidence(row)}
                     </span>
                     <div className="desk-candidate-bottom">
-                      <span>
-                        Last close<b>₹{fmt(row.price)}</b>
+                      <span className="desk-ltp">
+                        <small>LTP · INR</small><LatestQuote quote={setupQuotes.quotes[symbol] || quotes[symbol]} />
                       </span>
-                      <button className="button" onClick={() => onOpen(symbol)}>
-                        View chart
+                      <button className="button" onClick={() => selected === "breakout20" && onInsight ? onInsight(symbol) : onOpen(symbol)}>
+                        {selected === "breakout20" && onInsight ? "Read insight" : "View chart"}
                         <ArrowRight size={13} />
                       </button>
                     </div>
@@ -231,48 +226,23 @@ export default function SwingDesk({
                 ? `Session ${data.date || "unavailable"} · ${data.rows?.length || 0} stocks`
                 : "Daily market data"}
               <br />
-              Research candidates · up to 6 by turnover
+              Setups: daily data · LTP: 30 sec refresh, may be delayed
             </span>
-            <button className="link" onClick={() => onPage("Screener")}>
-              All screens
+            <button className="link" onClick={() => onPage(selected === "breakout20" ? "Breakouts" : "Screener")}>
+              {selected === "breakout20" ? "All breakout insights" : "All screens"}
               <ArrowRight size={13} />
             </button>
           </div>
         </section>
-        <aside className="desk-sidebar">
-          <section className="panel overview-watch">
-            <div className="panel-title">
-              <div>
-                <Star size={16} />
-                <h2>Your watchlist</h2>
-              </div>
-              <span className="muted">{watch.length} stocks</span>
-            </div>
-            {watch.length ? (
-              <div className="overview-watch-list">
-                {watch.slice(0, 5).map((symbol) => (
-                  <button key={symbol} onClick={() => onOpen(symbol)}>
-                    <strong>{short(symbol)}</strong>
-                    <span
-                      className={`number ${Number.isFinite(quotes[symbol]?.change) ? (quotes[symbol].change >= 0 ? "positive" : "negative") : "muted"}`}
-                    >
-                      {pct(quotes[symbol]?.change)}
-                    </span>
-                    <ArrowRight size={13} />
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <p className="watch-empty">Star stocks to follow them here.</p>
-            )}
-            <div className="panel-foot">
-              <button className="link" onClick={() => onPage("Watchlist")}>
-                Open full watchlist
-                <ArrowRight size={13} />
-              </button>
-            </div>
+        <aside className="desk-sidebar" hidden={mobile && section === "setups"}>
+          <div hidden={mobile && section !== "watchlist"}>
+            {watch.length ? <WatchlistBrief overview watch={watch} quotes={quotes} alerts={alerts} onOpen={onOpen} onPage={onPage} /> : <section className="panel overview-empty"><h2>Your watchlist</h2><p>Star stocks to follow them here.</p><button className="button" onClick={onSearch}>Find a stock</button></section>}
+          </div>
+          <section className="panel overview-alerts" hidden={mobile && section !== "alerts"}>
+            <div className="panel-title"><h2><Bell size={15} /> Price alerts</h2><button className="link" onClick={() => onPage("Alerts")}>Manage</button></div>
+            {alerts.some(a => a.triggered) ? <div className="overview-alert-list">{alerts.filter(a => a.triggered).slice(0, 4).map(a => <button key={a.id} onClick={() => onOpen(a.symbol)}><strong>{short(a.symbol)}</strong><span>{a.condition} {fmt(a.price)}</span><ArrowRight size={14} /></button>)}</div> : <p className="watch-empty">{alerts.length ? `${alerts.length} active alerts · none triggered` : "No alerts yet. Set a price to follow."}</p>}
           </section>
-          {trades.length > 0 && <section className="panel desk-performance">
+          {trades.length > 0 && <section className="panel desk-performance" hidden={mobile}>
             <div className="panel-title">
               <div>
                 <BookOpen size={16} />
@@ -324,6 +294,8 @@ export default function SwingDesk({
           </section>}
         </aside>
       </div>
+      <WorkspaceSummary watch={watch} alerts={alerts} journal={journal} onPage={onPage} />
+      <ResearchBrief data={data} loading={loading} error={error} onPage={onPage} onRefresh={onRefresh} recent={recent} onOpen={onOpen} onSearch={onSearch} />
       <div className="overview-note">
         <ShieldCheck size={14} />
         <span>

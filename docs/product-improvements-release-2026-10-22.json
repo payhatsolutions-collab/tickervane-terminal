@@ -1,0 +1,78 @@
+{
+  "verifiedAt": "2026-10-22T02:01:34.581Z",
+  "status": "published and verified on alphanova48.in",
+  "deployment": "https://alphanova2-8qg6bwoid-wdcre.vercel.app",
+  "deploymentId": "dpl_FbcZPfYdEaHqs3QZ8eQmE3qun75a",
+  "previousProduction": "https://alphanova2-f2paed25g-wdcre.vercel.app",
+  "previousDeploymentId": "dpl_8tvS2pkp8ijomTipxMUFWBwyPZMm",
+  "tests": {
+    "passed": 302,
+    "failed": 0
+  },
+  "build": "passed locally and on Vercel",
+  "pages": [
+    {
+      "path": "/",
+      "status": 200,
+      "bundle": "/assets/index-Dc7sGb9M.js",
+      "noindex": false
+    },
+    {
+      "path": "/watchlist",
+      "status": 200,
+      "bundle": "/assets/index-Dc7sGb9M.js",
+      "noindex": true
+    },
+    {
+      "path": "/charts",
+      "status": 200,
+      "bundle": "/assets/index-Dc7sGb9M.js",
+      "noindex": false
+    },
+    {
+      "path": "/screener",
+      "status": 200,
+      "bundle": "/assets/index-Dc7sGb9M.js",
+      "noindex": false
+    }
+  ],
+  "features": [
+    {
+      "name": "WatchlistShare",
+      "file": "WatchlistShare-Dec9Fehg.js",
+      "status": 200,
+      "expectedTextPresent": true
+    },
+    {
+      "name": "WatchlistBrief",
+      "file": "WatchlistBrief-B5RNm9zG.js",
+      "status": 200,
+      "expectedTextPresent": true
+    },
+    {
+      "name": "Watchlist",
+      "file": "Watchlist-CW14hPs9.js",
+      "status": 200,
+      "expectedTextPresent": true
+    },
+    {
+      "name": "SwingDesk",
+      "file": "SwingDesk-iqHyDcER.js",
+      "status": 200,
+      "expectedTextPresent": true
+    }
+  ],
+  "legacyRedirect": {
+    "status": 308,
+    "destination": "https://alphanova48.in/watchlist"
+  },
+  "signupExplicitOnly": true,
+  "rollback": "vercel promote https://alphanova2-f2paed25g-wdcre.vercel.app --yes",
+  "browserVerified": [
+    "Shared-watchlist preview recognizes already-saved TCS and offers MSFT as a new selectable stock",
+    "Watchlist search, sorting and Share stocks controls rendered on the public domain",
+    "Personalized overview and watchlist pulse rendered with real quotes",
+    "Mobile Watchlist destination visible"
+  ],
+  "screenshot": "outputs/product-improvements/live-overview.png"
+}

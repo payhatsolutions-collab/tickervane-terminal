@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-29",
+  "project": "alphanova2",
+  "production": "https://alphanova48.in",
+  "deployment": {
+    "id": "dpl_8K4g4VJjVRkterxn6fKiXDxuvqh5",
+    "url": "https://alphanova2-o1npivhkb-wdcre.vercel.app"
+  },
+  "rollback": "npx --yes vercel promote https://alphanova2-awyv6bibe-wdcre.vercel.app --yes",
+  "scope": [
+    "Supplied logo and matching gold accents",
+    "Shared dark/light visual system",
+    "Compact mobile market snapshot and shortcuts",
+    "Full-screen mobile search",
+    "Bottom-sheet navigation and Android install guidance",
+    "Android launcher shortcuts",
+    "On-demand screener tools",
+    "Compact watchlist with optional charts and expandable summary"
+  ],
+  "verification": {
+    "fullSuite": {
+      "passed": 316,
+      "failed": 0,
+      "note": "Before final screener/watchlist density changes"
+    },
+    "finalTargetedSuite": {
+      "passed": 22,
+      "failed": 0
+    },
+    "localBuild": "passed",
+    "hostedBuild": "ready",
+    "mobileWidths": [
+      360,
+      393
+    ],
+    "desktopWidth": 1440,
+    "physicalAndroidDevice": "not tested"
+  },
+  "mainAsset": "/assets/index-BaXsshWE.js",
+  "notes": "Further enhancements deferred at user request. Yahoo Finance feed work intentionally excluded. Earlier local changes retained; desktop Jarvis excluded from deployment."
+}

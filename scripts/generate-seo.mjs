@@ -23,7 +23,7 @@ function page({path, name, description, body, parent, type='WebPage'}) {
 <html lang="en-IN"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b1016">
 <title>${esc(title)}</title><meta name="description" content="${esc(description)}">
-<link rel="canonical" href="${url}"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/seo.css">
+<link rel="canonical" href="${url}"><link rel="icon" href="/icon-192.png" type="image/png"><link rel="stylesheet" href="/seo.css">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta property="og:type" content="website"><meta property="og:site_name" content="Alpha Nova"><meta property="og:locale" content="en_IN">
 <meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${url}"><meta property="og:image" content="${origin}/icon-512.png"><meta property="og:image:alt" content="Alpha Nova logo">

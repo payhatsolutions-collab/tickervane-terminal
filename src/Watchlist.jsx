@@ -1,15 +1,19 @@
-import { useMemo, useState } from "react";
-import { Bell, ChevronDown, Plus, Star, Trash2, TrendingDown, TrendingUp, Minus } from "lucide-react";
+import { lazy, Suspense, useMemo, useState } from "react";
+import { useSaved } from "./hooks.js";
+import { Bell, ChevronDown, Plus, Search, Star, Trash2, TrendingDown, TrendingUp, Minus } from "lucide-react";
+import WatchlistShare from "./WatchlistShare.jsx";
+import WatchlistBrief from "./WatchlistBrief.jsx";
+import { filterWatchlist } from "./watchlistTools.js";
 import { directory, fmt, pct, short } from "./data.js";
 import { tone } from "./ui.jsx";
 import { ViewLink } from "./Onboarding.jsx";
-import { CandlestickPreview } from "./ScreenChart.jsx";
+const CandlestickPreview = lazy(() => import("./ScreenChart.jsx").then(module => ({ default: module.CandlestickPreview })));
 import { useChartPreview } from "./useChartPreview.js";
 import { signalSnapshot } from "./marketMath.js";
 import { completedDailyBars } from "./tradeMath.js";
 import { SCREEN_CHART_RANGES } from "./screenerChartMath.js";
 
-function WatchlistRow({ symbol, quote, range, refresh, onNavigate, onToggle, onAlert }) {
+function WatchlistRow({ symbol, quote, range, refresh, onNavigate, onToggle, onAlert, showCharts }) {
   const { host, feed, onRetry } = useChartPreview(symbol, refresh);
   const dailyBars = useMemo(() => completedDailyBars(feed.data?.bars, feed.data?.timezone || "Asia/Kolkata"), [feed.data]);
   const signal = useMemo(() => signalSnapshot(dailyBars), [dailyBars]);
@@ -28,22 +32,29 @@ function WatchlistRow({ symbol, quote, range, refresh, onNavigate, onToggle, onA
       {feed.error && <span className="watch-signal-status" title={feed.error}>{feed.data ? "Cached data · " : ""}<button className="link" onClick={onRetry}>Retry</button></span>}
       {feed.loading && available && <span className="watch-signal-status">Refreshing…</span>}
     </div>
-    <CandlestickPreview symbol={short(symbol)} range={range} feed={feed} onRetry={onRetry} />
+    {showCharts && <Suspense fallback={<span className="muted">Loading chart…</span>}><CandlestickPreview symbol={short(symbol)} range={range} feed={feed} onRetry={onRetry} /></Suspense>}
     <div className="saved-watchlist-actions"><button className="button" onClick={() => onAlert(symbol)}><Bell size={14} /> Set alert</button><button className="icon-button" aria-label={`Remove ${short(symbol)} from watchlist`} onClick={() => onToggle(symbol)}><Trash2 size={15} /></button></div>
   </article>;
 }
 
-export default function Watchlist({ watch, quotes, refresh = 0, onNavigate, onToggle, onSearch, onAlert, onGuide, onCopy }) {
+export default function Watchlist({ watch, quotes, refresh = 0, onNavigate, onToggle, onSearch, onAlert, onGuide, onCopy, alerts }) {
   const [range, setRange] = useState("1M");
-  return <section className="panel saved-watchlist">
-    <div className="saved-watchlist-head"><div><h2><Star size={18} /> Your saved stocks</h2><p>Come back here to see what changed. Saved in this browser · {watch.length} / 40 instruments.</p></div>
-      <div><button className="button" onClick={onCopy}>Copy return link</button><button className="button primary" onClick={onSearch}><Plus size={15} /> Add stock</button></div></div>
+  const [showCharts, setShowCharts] = useSaved("an2-watchlist-charts", false);
+  const [query, setQuery] = useState("");
+  const [order, setOrder] = useState("saved");
+  const visible = filterWatchlist(watch, quotes, directory, query, order);
+  return <section className={`panel saved-watchlist ${showCharts ? "with-watch-charts" : "compact-watchlist"}`}>
+    <div className="saved-watchlist-head"><div><h2><Star size={18} /> Your saved stocks</h2><p>{watch.length} / 40 instruments · Saved on this device.</p></div>
+      <div><WatchlistShare watch={watch} /><button className="button primary" onClick={onSearch}><Plus size={15} /> Add stock</button></div></div>
     {watch.length ? <>
-      <div className="watchlist-chart-toolbar"><p>Daily technical signals · click a chart to enlarge</p><div className="segments" role="group" aria-label="Watchlist candlestick period">{Object.keys(SCREEN_CHART_RANGES).map(period => <button key={period} className={range === period ? "active" : ""} aria-pressed={range === period} onClick={() => setRange(period)}>{period}</button>)}</div></div>
+      <details className="watchlist-pulse-details"><summary>Session summary <ChevronDown size={14} /></summary><WatchlistBrief compact watch={watch} quotes={quotes} alerts={alerts} onOpen={symbol => onNavigate({ page: "Terminal", symbol })} onPage={page => onNavigate({ page })} /></details>
+      <div className="watchlist-controls"><label className="watchlist-filter"><Search size={16} /><input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Find in your watchlist" aria-label="Find in your watchlist" /></label><label className="watchlist-sort">Sort<select value={order} onChange={event => setOrder(event.target.value)}><option value="saved">Saved order</option><option value="movers">Biggest moves</option><option value="gainers">Top gainers</option><option value="decliners">Top decliners</option><option value="name">Name A–Z</option></select></label><span className="watchlist-results" role="status">{visible.length} of {watch.length}</span></div>
+      <div className="watchlist-chart-toolbar"><p>Daily technical signals</p><button className="button" aria-pressed={showCharts} onClick={() => setShowCharts(value => !value)}>{showCharts ? "Hide charts" : "Show charts"}</button>{showCharts && <div className="segments" role="group" aria-label="Watchlist candlestick period">{Object.keys(SCREEN_CHART_RANGES).map(period => <button key={period} className={range === period ? "active" : ""} aria-pressed={range === period} onClick={() => setRange(period)}>{period}</button>)}</div>}</div>
       <div className="saved-watchlist-columns" aria-hidden="true"><span>Stock</span><span>Price / change</span><span>Technical signal</span><span>Candlesticks</span><span>Actions</span></div>
-      <div className="saved-watchlist-rows">{watch.map(symbol => <WatchlistRow key={symbol} symbol={symbol} quote={quotes[symbol]} range={range} refresh={refresh} onNavigate={onNavigate} onToggle={onToggle} onAlert={onAlert} />)}</div>
+      <div className="saved-watchlist-rows">{visible.map(symbol => <WatchlistRow key={symbol} symbol={symbol} quote={quotes[symbol]} range={range} refresh={refresh} onNavigate={onNavigate} onToggle={onToggle} onAlert={onAlert} showCharts={showCharts} />)}</div>
+      {!visible.length && <div className="watch-empty"><h3>No saved stocks match this search.</h3><button className="button" onClick={() => setQuery("")}>Clear search</button></div>}
       <p className="watchlist-signal-note">Signals use completed daily sessions and stay the same across chart periods. Candles may include today’s session. Yahoo Finance · prices may be delayed.</p>
-    </> : <div className="watch-empty"><Star size={28} /><h3>Start with three stocks you want to follow.</h3><p>Save them here, then return to their charts and set relevant price alerts.</p><button className="button primary" onClick={onGuide}>Start interactive guide</button><button className="button" onClick={onSearch}>Find my own stocks</button></div>}
-    <div className="saved-watchlist-foot"><ViewLink page="Alerts" onNavigate={onNavigate}>Manage price alerts</ViewLink><button className="link" onClick={onGuide}>Reopen interactive guide</button><span>Return links open your local list. Use Portfolio → Backup & restore to move it to another browser.</span></div>
+    </> : <div className="watch-empty"><Star size={28} /><h3>One stock is enough to get started.</h3><p>Save a company you follow. Your watchlist brings its moves, chart and alerts together.</p><button className="button primary" onClick={onSearch}>Find my first stock</button><button className="button" onClick={onGuide}>Help me get started</button></div>}
+    <div className="saved-watchlist-foot"><ViewLink page="Alerts" onNavigate={onNavigate}>Manage price alerts</ViewLink><button className="link" onClick={onCopy}>Copy personal return link</button><button className="link" onClick={onGuide}>Reopen interactive guide</button><span>A personal return link opens the list saved in this browser. Share stocks creates a list others can preview and save. Use Portfolio → Backup & restore for your full records.</span></div>
   </section>;
 }

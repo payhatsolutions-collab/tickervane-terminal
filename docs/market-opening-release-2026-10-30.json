@@ -1,0 +1,9 @@
+{
+  "deploymentId": "dpl_AsbrKPG8ADPBkEHcxawsDBS8WL4b",
+  "deploymentUrl": "https://alphanova2-8g4btgsfd-wdcre.vercel.app",
+  "productionUrl": "https://alphanova48.in",
+  "promoted": true,
+  "previousProduction": "https://alphanova2-5rfzf3110-wdcre.vercel.app",
+  "change": "Automatic market entrance plays once per fresh app load. Foreground returns, restored pages, workspace navigation and quote direction changes do not replay it. Manual badge replay remains available.",
+  "verification": ["production build passed", "8 focused tests passed", "initial entrance observed in browser", "no entrance after simulated visibilitychange, persisted pageshow, component remount, or direction change"]
+}

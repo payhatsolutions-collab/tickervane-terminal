@@ -14,6 +14,7 @@ export default function SignupPrompt({ busy = false }) {
   const [available, setAvailable] = useState(false);
   const [profile, setProfile] = useState(() => signupProfile(readSignupValue(local(), SIGNUP_KEYS.profile)));
   const [open, setOpen] = useState(false);
+  const [suggested, setSuggested] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
@@ -57,8 +58,8 @@ export default function SignupPrompt({ busy = false }) {
       })) {
         clock.current.shown = true;
         saveSignupValue(session(), SIGNUP_KEYS.clock, clock.current);
-        setOpen(true);
-        growthEvent('signup_prompt_viewed', { source: 'timed' });
+        setSuggested(true);
+        growthEvent('signup_nudge_viewed', { source: 'timed_header' });
       }
     };
     const interval = setInterval(tick, 1000);
@@ -133,8 +134,8 @@ export default function SignupPrompt({ busy = false }) {
 
   if (!available && !profile) return null;
   return <>
-    <button className="button signup-entry" onClick={() => {
-      setError(''); setOpen(true);
+    <button className={`button signup-entry${suggested && !profile ? ' signup-entry-suggested' : ''}`} title={profile ? 'View your registration' : 'Optional free registration · your research is already saved in this browser'} onClick={() => {
+      setError(''); setSuggested(false); setOpen(true);
       if (!profile) growthEvent('signup_prompt_viewed', { source: 'header' });
     }} aria-label={profile ? 'View free registration' : 'Sign up for free'}>
       <UserRound size={15} /><span>{profile ? `Hi, ${profile.name.split(' ')[0]}` : 'Sign up free'}</span>
@@ -161,8 +162,8 @@ export default function SignupPrompt({ busy = false }) {
       </section> : <section>
         <div className="signup-emblem"><UserRound size={27} /></div>
         <p className="signup-kicker">MAKE YOURSELF AT HOME</p>
-        <h2 id="signup-title">A better experience.<br /><span>Still completely free.</span></h2>
-        <p id="signup-description">Sign up with your name and email. We’ll remember you here, so you can get straight back to exploring the markets.</p>
+        <h2 id="signup-title">Make yourself at home.<br /><span>Register for free.</span></h2>
+        <p id="signup-description">Register with your name and email for a personal welcome on this browser. All research tools are already free to use, and registration is optional.</p>
         <form onSubmit={submit} className="signup-form">
           <label htmlFor="signup-name">Your name</label>
           <input ref={nameInput} id="signup-name" name="name" autoComplete="name" maxLength={80} required value={name} onChange={event => setName(event.target.value)} placeholder="Your name" />

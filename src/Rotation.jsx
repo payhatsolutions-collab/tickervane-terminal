@@ -21,8 +21,8 @@ function RRGChart({ sectors, hidden, focus, setFocus }) {
     <rect x={cx} y={PAD} width={W - PAD - cx} height={cy - PAD} className="q-leading" /><rect x={PAD} y={PAD} width={cx - PAD} height={cy - PAD} className="q-improving" />
     <rect x={PAD} y={cy} width={cx - PAD} height={H - PAD - cy} className="q-lagging" /><rect x={cx} y={cy} width={W - PAD - cx} height={H - PAD - cy} className="q-weakening" />
     <line x1={cx} x2={cx} y1={PAD} y2={H - PAD} className="axis" /><line x1={PAD} x2={W - PAD} y1={cy} y2={cy} className="axis" />
-    <text x={W - PAD - 6} y={PAD + 14} textAnchor="end" className="q-label">LEADING</text><text x={PAD + 6} y={PAD + 14} className="q-label">IMPROVING</text>
-    <text x={PAD + 6} y={H - PAD - 8} className="q-label">LAGGING</text><text x={W - PAD - 6} y={H - PAD - 8} textAnchor="end" className="q-label">WEAKENING</text>
+    <text x={W - PAD - 6} y={PAD + 14} textAnchor="end" className="q-label q-leading">LEADING</text><text x={PAD + 6} y={PAD + 14} className="q-label q-improving">IMPROVING</text>
+    <text x={PAD + 6} y={H - PAD - 8} className="q-label q-lagging">LAGGING</text><text x={W - PAD - 6} y={H - PAD - 8} textAnchor="end" className="q-label q-weakening">WEAKENING</text>
     <text x={W / 2} y={H - 8} textAnchor="middle" className="axis-label">RS-Ratio → stronger than Nifty 50</text>
     <text x={12} y={H / 2} textAnchor="middle" transform={`rotate(-90 12 ${H / 2})`} className="axis-label">RS-Momentum ↑</text>
     {shown.map(s => { const head = s.trail.at(-1), dim = focus && focus !== s.label; return <g key={s.label} className={`trail ${Q[s.quadrant] || ''} ${dim ? 'dim' : ''}`} onMouseEnter={() => setFocus(s.label)} onMouseLeave={() => setFocus(null)}>

@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "horizon": 10,
+  "initialTraining": 504,
+  "developmentSessions": 252,
+  "holdoutSessions": 126,
+  "step": 10,
+  "minimumPointImprovement": 0.05,
+  "maximumIntervalDegradation": 0.05,
+  "primaryMetric": "returnMae",
+  "symbols": [
+    { "symbol": "RELIANCE.NS", "market": "^NSEI", "sector": "^CNXENERGY" },
+    { "symbol": "TCS.NS", "market": "^NSEI", "sector": "^CNXIT" },
+    { "symbol": "HDFCBANK.NS", "market": "^NSEI", "sector": "^NSEBANK" },
+    { "symbol": "INFY.NS", "market": "^NSEI", "sector": "^CNXIT" },
+    { "symbol": "SUNPHARMA.NS", "market": "^NSEI", "sector": "^CNXPHARMA" },
+    { "symbol": "ITC.NS", "market": "^NSEI", "sector": "^CNXFMCG" },
+    { "symbol": "TATASTEEL.NS", "market": "^NSEI", "sector": "^CNXMETAL" },
+    { "symbol": "MARUTI.NS", "market": "^NSEI", "sector": "^CNXAUTO" },
+    { "symbol": "AAPL", "market": "^GSPC", "sector": "XLK" },
+    { "symbol": "MSFT", "market": "^GSPC", "sector": "XLK" },
+    { "symbol": "BTC-USD" },
+    { "symbol": "ETH-USD", "market": "BTC-USD" }
+  ]
+}

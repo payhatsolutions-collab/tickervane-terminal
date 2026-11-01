@@ -1,0 +1,185 @@
+/* Workspace density: compact chrome, full-size data and touch targets. */
+.app { --sidebar: 200px; }
+.app [hidden] { display: none !important; }
+.app .topbar { height: 56px; gap: 20px; padding: 0 20px; }
+.app .desktop-nav { top: 56px; padding: 10px 10px 14px; gap: 14px; }
+.app .brand { width: calc(var(--sidebar) - 20px); }
+.app .nav-group :is(button,a) { min-height: 36px; padding: 7px 10px; }
+.nav-collapse { display: flex; align-items: center; gap: 10px; min-height: 36px; padding: 8px 10px; color: var(--muted); font-size: 12px; border-radius: 6px; }
+.nav-collapse:hover { background: var(--theme-subtle); }
+.app .nav-bottom { margin-top: auto; }
+.app.nav-collapsed { --sidebar: 64px; }
+.app.nav-collapsed .desktop-nav { padding-inline: 8px; gap: 12px; }
+.app.nav-collapsed .nav-group { gap: 4px; }
+.app.nav-collapsed .nav-group + .nav-group { border-top: 1px solid var(--line); padding-top: 12px; }
+.app.nav-collapsed .nav-group-label, .app.nav-collapsed .desktop-nav a>span,
+.app.nav-collapsed .nav-collapse span, .app.nav-collapsed .brand>span:last-child,
+.app.nav-collapsed .desktop-nav .theme-toggle>span, .app.nav-collapsed .nav-refresh>span { display: none; }
+.app.nav-collapsed .nav-group a, .app.nav-collapsed .nav-collapse, .app.nav-collapsed .theme-toggle { justify-content: center; padding: 8px; width: 46px; }
+.app.nav-collapsed .nav-refresh { justify-content: center; padding-inline: 0; }
+.app.nav-collapsed .alert-dot { position: absolute; right: 6px; top: 6px; }
+.app .benchmark-strip { display: flex; overflow-x: auto; scrollbar-width: none; min-width: 0; height: 40px; }
+.app .benchmark-strip::-webkit-scrollbar { display: none; }
+.app .benchmark-strip>button { flex: 1 0 auto; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 0 12px; min-height: 40px; white-space: nowrap; }
+.app .benchmark-strip span { font-size: 10px; }
+.app .benchmark-strip strong { font-size: 12px; }
+.app .benchmark-strip em { font-size: 11px; }
+.app .benchmark-strip .spark { display: none; }
+.app main { max-width: none; padding: 16px 20px 28px; }
+.workspace-toolbar { display: flex; align-items: center; gap: 12px; min-height: 40px; margin-bottom: 14px; }
+.workspace-toolbar h1 { font-size: 21px; line-height: 1.3; letter-spacing: -.5px; margin-right: auto; }
+.workspace-toolbar .feed-status { font-size: 11px; }
+.workspace-back { border: 1px solid var(--line); }
+.app .swing-desk { gap: 12px; }
+.overview-welcome { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 10px 14px; background: var(--theme-subtle); border: 1px solid var(--line); border-radius: 8px; font-size: 13px; color: var(--muted); }
+.overview-tabs { display: none; }
+.app .desk-columns { grid-template-columns: minmax(0,1fr) minmax(290px,340px); gap: 16px; align-items: start; }
+.app .desk-sidebar { display: grid; grid-template-columns: 1fr; gap: 14px; }
+.app .panel-title { min-height: 44px; padding: 10px 14px; }
+.app .desk-playbooks { padding: 8px 12px; gap: 8px; }
+.app .desk-playbooks>button { min-height: 36px; padding: 8px 12px; }
+.app .setup-rules { margin: 0 14px 8px; }
+.app .setup-rules summary { min-height: 28px; font-size: 12px; }
+.app .desk-candidates { display: grid; grid-template-columns: 1fr; gap: 0; padding: 0 14px; }
+.app .desk-candidates article { display: grid; grid-template-columns: minmax(160px,1fr) minmax(140px,1fr) auto; align-items: center; gap: 14px; padding: 12px 0; border: 0; border-top: 1px solid var(--line); border-radius: 0; background: transparent; }
+.app .desk-candidate-top { gap: 6px; min-width: 0; }
+.app .desk-candidate-top>div { min-width: 0; }
+.app .desk-candidate-top p { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+.app .desk-evidence { font-size: 12px; margin: 0; background: none; padding: 0; }
+.app .desk-candidate-bottom { margin: 0; padding: 0; border: 0; gap: 14px; }
+.app .desk-candidate-bottom>span { text-align: right; font-size: 10px; }
+.app .desk-candidate-bottom b { font-size: 13px; }
+.app .desk-candidate-bottom .button { font-size: 11px; }
+.app .overview-watch-list { padding: 0 14px; }
+.app .overview-watch-list>button { gap: 8px; min-height: 48px; }
+.app .overview-watch-list .number { margin-left: 0; font-size: 12px; min-width: 55px; text-align: right; }
+.overview-watch-counts { display: flex; gap: 12px; padding: 10px 14px; font-size: 12px; border-bottom: 1px solid var(--line); }
+.overview-watch-price { margin-left: auto; font: 11px 'IBM Plex Mono',monospace; text-align: right; }
+.overview-watch-price small { display: block; font: 9px Inter,sans-serif; color: var(--muted); margin-top: 3px; }
+.overview-alerts h2 { display: flex; gap: 8px; align-items: center; }
+.overview-alert-list { padding: 0 14px; }
+.overview-alert-list button { display: flex; align-items: center; width: 100%; gap: 12px; min-height: 44px; border-top: 1px solid var(--line); font-size: 12px; }
+.overview-alert-list span { margin-left: auto; color: var(--muted); }
+.overview-empty { padding: 16px; display: grid; gap: 12px; }
+.app .desk-source { padding: 10px 14px; }
+.app .overview-watch .panel-foot { font-size: 10px; line-height: 1.7; padding: 10px 14px; }
+/* Screen controls and rows share the full available width. */
+.screener-workspace { min-width: 0; }
+.screen-preset-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 10px 14px 6px; }
+.screen-preset-toolbar label { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+.screen-preset-toolbar select { min-width: 230px; font-size: 12px; padding: 8px 10px; }
+.screen-rules { padding: 0 14px 8px; color: var(--muted); font-size: 12px; }
+.screen-rules summary { cursor: pointer; min-height: 28px; align-content: center; }
+.screen-rules p { margin: 6px 0; line-height: 1.6; }
+.screen-rules a { color: var(--accent); text-decoration: underline; }
+.app .screen-builder:empty { display: none; }
+.app .screen-builder { padding: 0 14px 10px; }
+.screen-freshness { padding: 4px 14px 8px; color: var(--muted); font-size: 11px; }
+.app .screen-filters { padding: 8px 14px; gap: 10px; }
+.app .screen-chart-toolbar { padding: 6px 14px; min-height: 44px; }
+.app .screen-chart-toolbar .screen-display-actions { display: flex; flex-direction: row; gap: 8px; }
+.app .screen-display-actions .button { min-height: 32px; padding: 5px 10px; }
+.app .screen-display-actions .button[aria-pressed=true] { border-color: var(--accent); background: var(--theme-selected); }
+.app .compact-rows .screen-stock { min-width: 150px; }
+.app .compact-rows .screen-stock .instrument span { max-width: 240px; }
+.app .compact-rows td { padding: 10px 14px; }
+.app .essential-metrics :is(.metric-price,.metric-change,.metric-r3m,.metric-rs3m,.metric-fromHigh,.metric-delivPct,.metric-trend) { display: none; }
+.app .screen-table th { white-space: nowrap; }
+.screen-chart-placeholder { width: 176px; flex: 0 0 176px; color: var(--muted); font-size: 11px; }
+.saved-screens-drawer { position: fixed; inset: 0 0 0 auto; margin: 0; width: min(440px,100vw); max-width: 100vw; height: 100dvh; max-height: 100dvh; border-radius: 0; padding: 20px; overflow: auto; }
+.saved-drawer-heading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.saved-drawer-heading h2 { font-size: 20px; }
+.saved-screens-drawer .saved-screens { position: static; }
+/* Keep the chart prominent; open planning only when requested. */
+.app .terminal-grid.planner-closed { grid-template-columns: minmax(0,1fr); grid-template-areas: 'chart' 'watch' 'research' 'company' 'news'; }
+.app .terminal-grid.planner-open { grid-template-columns: minmax(0,1fr) 320px; grid-template-areas: 'chart technical' 'watch technical' 'research research' 'company company' 'news news'; align-items: start; }
+.app .security-header { padding: 10px 14px; }
+.app .security-logo { display: none; }
+.app .security-price>strong { font-size: 24px; }
+.app .regime-strip { padding: 0 14px 8px; }
+.indicator-menu { border-bottom: 1px solid var(--line); }
+.indicator-menu>summary { cursor: pointer; padding: 8px 14px; font-size: 12px; color: var(--muted); min-height: 34px; }
+.app .indicator-toolbar { border: 0; padding-top: 0; }
+.app .chart-toolbar { padding: 6px 12px; }
+.app.chart-focus .workspace-toolbar { display: none; }
+@media(min-width:761px) and (max-width:1150px) {
+  .app .desk-columns { grid-template-columns: minmax(0,1fr) 290px; }
+  .app .desk-candidates article { grid-template-columns: 1fr auto; gap: 6px 12px; }
+  .app .desk-evidence { grid-column: 1; grid-row: 2; }
+  .app .desk-candidate-bottom { grid-column: 2; grid-row: 1 / 3; flex-direction: column; align-items: flex-end; gap: 6px; }
+  .app .terminal-grid.planner-open { grid-template-columns: 1fr; grid-template-areas: 'technical' 'chart' 'watch' 'research' 'company' 'news'; }
+}
+@media(max-width:760px) {
+  .app, .app.nav-collapsed { --sidebar: 0px; }
+  .app .topbar { height: 56px; gap: 10px; padding: 0 12px; }
+  .app .brand { width: auto; font-size: 12px; }
+  .app.nav-collapsed .brand>span:last-child { display: block; }
+  .app .brand small, .app .top-right, .app .global-search kbd { display: none; }
+  .app .global-search { flex: 1; min-width: 0; width: auto; max-width: none; margin: 0; justify-content: flex-start; padding: 0 12px; }
+  .app .global-search .search-label-wide { display: none; }
+  .app .global-search .search-label-mobile { display: block; white-space: nowrap; font-size: 12px; }
+  .app .benchmark-strip { height: 40px; }
+  .app .benchmark-strip>button { flex: 0 0 auto; padding: 0 12px; gap: 7px; }
+  .app .benchmark-strip span, .app .benchmark-strip em { font-size: 10px; }
+  .app .benchmark-strip strong { font-size: 11px; }
+  .app main, .app.research-home main { padding: 10px 12px 24px; }
+  .workspace-toolbar { gap: 8px; margin-bottom: 10px; }
+  .workspace-toolbar h1 { font-size: 20px; }
+  .workspace-toolbar .feed-status { display: none; }
+  .workspace-toolbar>.button { min-height: 40px; padding: 8px 10px; }
+  .overview-tabs { display: flex; border-bottom: 1px solid var(--line); gap: 4px; }
+  .overview-tabs button { flex: 1; min-height: 44px; font-size: 13px; color: var(--muted); border-bottom: 2px solid transparent; }
+  .overview-tabs button[aria-pressed=true] { color: var(--text); border-bottom-color: var(--accent); background: var(--theme-subtle); }
+  .app .desk-columns, .app .desk-sidebar { grid-template-columns: minmax(0,1fr); gap: 12px; }
+  .app .desk-playbooks { padding: 6px 10px; gap: 5px; }
+  .app .desk-playbooks>button { min-height: 44px; padding: 8px; }
+  .app .setup-rules { margin: 0 12px 6px; }
+  .app .setup-rules summary { min-height: 36px; }
+  .app .desk-candidates { padding: 0 12px; }
+  .app .desk-candidates article { grid-template-columns: minmax(0,1fr) auto; gap: 4px 10px; padding: 10px 0; }
+  .app .desk-candidate-top { grid-column: 1; }
+  .app .desk-evidence { grid-column: 1; grid-row: 2; font-size: 11px; }
+  .app .desk-candidate-bottom { grid-column: 2; grid-row: 1 / 3; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .app .desk-candidate-bottom .button { min-height: 44px; padding: 8px 10px; }
+  .app .desk-candidate-top .icon-button { width: 44px; height: 44px; }
+  .app .overview-watch-list>button { min-height: 54px; }
+  .app .overview-watch-price { font-size: 12px; }
+  .navigation-registration { margin-top: 12px; }
+  .navigation-registration .signup-entry { width: 100%; justify-content: center; min-height: 44px; }
+  .navigation-registration .signup-entry span { max-width: none; font-size: 13px; }
+  .app .screen-preset-toolbar { padding: 10px 12px 4px; }
+  .screen-preset-toolbar label { width: 100%; }
+  .screen-preset-toolbar select { flex: 1; width: 0; min-width: 0; min-height: 44px; font-size: 16px; }
+  .app .screen-rules summary { min-height: 40px; }
+  .app .screen-filters { display: flex; flex-wrap: wrap; padding: 8px 12px; gap: 8px; }
+  .app .screen-filters>select, .app .screen-filters>input { width: calc(50% - 4px); max-width: none; flex: 1 1 40%; min-width: 0; font-size: 16px; }
+  .app .screen-filters>span { flex-basis: 100%; font-size: 11px; }
+  .app .screen-chart-toolbar { flex-wrap: wrap; gap: 6px; padding: 6px 12px; }
+  .app .screen-display-actions .button { min-height: 40px; }
+  .app .essential-metrics .screen-metric { display: none; }
+  .app .essential-metrics:not(.with-charts) .screen-table { table-layout: fixed; }
+  .app .essential-metrics:not(.with-charts) .screen-table th:nth-child(1) { width: 32%; }
+  .app .essential-metrics:not(.with-charts) .screen-table th:nth-child(2) { width: 36%; white-space: normal; }
+  .app .essential-metrics:not(.with-charts) .screen-table th:nth-child(3) { width: 16%; }
+  .app .essential-metrics:not(.with-charts) .screen-table th:last-child { width: 16%; }
+  .app .essential-metrics .screen-table td:nth-child(2)>span>small { display: block; font-size: 10px; }
+  .app .essential-metrics .screen-table td:nth-child(2)>span { white-space: normal; }
+  .app .essential-metrics .screen-table .instrument { max-width: 100%; }
+  .app .essential-metrics .screen-table .instrument span { max-width: 100%; }
+  .app .essential-metrics .screen-stock { min-width: 90px; }
+  .app .essential-metrics .screen-stock .instrument span { max-width: 106px; }
+  .app .screen-table td, .app .screen-table th { padding: 10px 6px; font-size: 11px; }
+  .app .screen-table .instrument strong { font-size: 12px; }
+  .app .screen-table .instrument span { font-size: 10px; }
+  .app .screen-table .score { min-width: 30px; width: 30px; }
+  .app .screen-table .icon-button { width: 44px; height: 44px; }
+  .app .screener-panel>.panel-title { gap: 8px; flex-wrap: wrap; }
+  .app .screen-freshness { font-size: 10px; line-height: 1.5; }
+  .app .terminal-grid.planner-open { grid-template-columns: 1fr; grid-template-areas: 'technical' 'chart' 'watch' 'research' 'company' 'news'; }
+  .app .chart-toolbar { gap: 6px; flex-wrap: wrap; }
+  .app .chart-toolbar .segments { flex-wrap: wrap; }
+  .app .chart-toolbar .segments button { min-height: 40px; padding: 7px 8px; }
+  .app .indicator-menu>summary { min-height: 44px; padding: 12px 14px; }
+  .app .chart-tools { margin-left: auto; }
+  .app .security-price>strong { font-size: 22px; }
+}

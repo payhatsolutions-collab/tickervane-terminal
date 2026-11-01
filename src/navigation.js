@@ -4,7 +4,7 @@ export const NAV_GROUPS = [
   { label: "Workspace", pages: ["Today", "Terminal", "Forecast"] },
   {
     label: "Discover",
-    pages: ["Markets", "Screener", "Delivery", "FnO", "Flows", "News"],
+    pages: ["Markets", "Screener", "Breakouts", "Analytics", "Delivery", "FnO", "Flows", "News"],
   },
   { label: "Personal", pages: ["Watchlist", "Portfolio", "Journal", "Alerts"] },
 ];
@@ -14,6 +14,8 @@ export const PAGE_LABELS = {
   Forecast: "Forecast",
   Markets: "Markets",
   Screener: "Screener",
+  Breakouts: "Breakout insights",
+  Analytics: "Advanced analytics",
   Delivery: "Delivery radar",
   FnO: "Futures & options",
   Flows: "Institutional flows",
@@ -34,7 +36,7 @@ export function viewFromSearch(search, fallback = {}) {
   return {
     page: PAGES.includes(page) ? page : fallback.page || "Today",
     symbol:
-      symbol && /^[A-Za-z0-9^=._-]{1,25}$/.test(symbol)
+      symbol && /^[A-Za-z0-9^][A-Za-z0-9._^=&-]{0,24}$/.test(symbol)
         ? symbol.toUpperCase()
         : fallback.symbol || "RELIANCE.NS",
     range: RANGE_VALUES.includes(range) ? range : fallback.range || "6mo",
@@ -65,7 +67,7 @@ export function viewURL(href, view, { share = true } = {}) {
   url.pathname = workspaceURL(view.page);
   url.searchParams.delete("page");
   for (const key of ["symbol", "range"])
-    if (share) url.searchParams.set(key, view[key]);
+    if (share || (key === "symbol" && ["Breakouts", "Analytics"].includes(view.page))) url.searchParams.set(key, view[key]);
     else url.searchParams.delete(key);
   if (share && view.page === "Screener" && view.screen && view.screen !== "custom")
     url.searchParams.set("screen", view.screen);

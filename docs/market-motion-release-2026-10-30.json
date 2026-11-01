@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-30",
+  "production": "https://alphanova48.in",
+  "deployment": {
+    "id": "dpl_4jVCipB2GWzJrbL3KTJcf246Q1fB",
+    "url": "https://alphanova2-ro24mx7pq-wdcre.vercel.app",
+    "status": "promoted"
+  },
+  "rollback": "npx --yes vercel promote https://alphanova2-o1npivhkb-wdcre.vercel.app --yes",
+  "behavior": {
+    "green": "Nifty session change rounded to 2 decimals is zero or positive",
+    "red": "Nifty session change rounded to 2 decimals is negative",
+    "missingQuote": "Mascot hidden until a valid price, change and timestamp exist",
+    "replay": "Overview mount, app foreground, persisted page restore, or tap",
+    "durationMs": 2100,
+    "reducedMotion": "Static mascot"
+  },
+  "verification": {
+    "fullSuitePassed": 318,
+    "finalTargetedPassed": 7,
+    "localBuild": "passed",
+    "hostedBuild": "ready",
+    "liveReplay": "verified",
+    "liveMainAsset": "/assets/index-QqSpr1Wp.js",
+    "mobileViewport": {
+      "width": 393,
+      "pageWidth": 385
+    },
+    "physicalAndroidDevice": "not tested"
+  },
+  "screenshot": "outputs/market-motion-2026-10-30/live-mobile.png",
+  "scope": "Daily market animation. Earlier logo and compact product design retained. Unrelated football-game folder excluded from deployment."
+}

@@ -9,12 +9,23 @@ import React, {
 import { WORKSPACE_SEO, updatePageMetadata } from "./seo.js";
 const News = lazy(() => import("./News.jsx"));
 import Navigation from "./Navigation.jsx";
+import CommandPalette from "./CommandPalette.jsx";
+import MarketOverview from "./MarketOverview.jsx";
+import MarketPulse from "./MarketPulse.jsx";
+import ConnectionStatus from "./ConnectionStatus.jsx";
+import { useMobileLayout } from "./viewport.js";
 import SignupPrompt from "./SignupPrompt.jsx";
 const Onboarding = lazy(() => import("./Onboarding.jsx"));
 const Watchlist = lazy(() => import("./Watchlist.jsx"));
+const SharedWatchlist = lazy(() => import("./WatchlistShare.jsx").then(module => ({ default: module.SharedWatchlist })));
+import { readSharedWatchlist, mergeWatchlist } from "./watchlistTools.js";
 import { growthEvent, recordVisit, recordActivation, recordFirstStockSaved } from "./growth.js";
 
 import "./research.css";
+import "./insights.css";
+import PersonalAlerts, { PersonalAlertMonitor } from './PersonalAlerts.jsx';
+const AdvancedAnalytics = lazy(() => import('./AdvancedAnalytics.jsx'));
+const BreakoutInsights = lazy(() => import('./BreakoutInsights.jsx'));
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { PAGES, PAGE_LABELS, viewFromSearch, viewFromLocation, workspaceSearch, viewURL } from "./navigation.js";
 import { exportCSV, sortRows } from "./ui";
@@ -29,7 +40,6 @@ import {
   BellRing,
   Check,
   ChevronRight,
-  Command,
   Download,
   Globe2,
   HelpCircle,
@@ -71,7 +81,8 @@ const FnO = lazy(() => import("./FnO"));
 const Flows = lazy(() => import("./Flows"));
 const Rotation = lazy(() => import("./Rotation"));
 const FairValue = lazy(() => import("./FairValue"));
-import { Heatmap, ResearchCharts } from "./VisualData";
+const Heatmap = lazy(() => import("./VisualData").then(module => ({ default: module.Heatmap })));
+const ResearchCharts = lazy(() => import("./VisualData").then(module => ({ default: module.ResearchCharts })));
 import {
   enablePush,
   disablePush,
@@ -228,7 +239,33 @@ function Clock() {
   );
 }
 export default function App() {
-  const catalog = useFeed('/api/market?op=directory');
+  const mobileLayout = useMobileLayout();
+  const [navCollapsed, setNavCollapsed] = useSaved("an2-nav-collapsed", false);
+  const [plannerOpen, setPlannerOpen] = useState(false);
+  const incomingShareHash = useRef(location.hash);
+  const [sharedWatchlist, setSharedWatchlist] = useState(() => readSharedWatchlist(location.hash));
+  const sharedViewed = useRef(false);
+  useEffect(() => {
+    const receive = () => {
+      const shared = readSharedWatchlist(location.hash);
+      if (!shared) return;
+      incomingShareHash.current = location.hash;
+      sharedViewed.current = false;
+      setSharedWatchlist(shared);
+    };
+    window.addEventListener("hashchange", receive);
+    return () => window.removeEventListener("hashchange", receive);
+  }, []);
+  useEffect(() => {
+    if (sharedWatchlist && !sharedViewed.current) {
+      sharedViewed.current = true;
+      growthEvent("shared_watchlist_opened", { stock_count: sharedWatchlist.symbols.length, valid: !sharedWatchlist.error });
+    }
+  }, [sharedWatchlist]);
+  const [showSearch, setShowSearch] = useState(false);
+  // The bundled catalog is immediately searchable. Check for new listings only
+  // when search is used, so the full directory does not compete with page data.
+  const catalog = useFeed(showSearch ? '/api/market?op=directory' : null);
   const [directoryVersion, setDirectoryVersion] = useState(0);
   useEffect(() => {
     if (addDirectoryStocks(catalog.data?.stocks)) setDirectoryVersion(version => version + 1);
@@ -286,7 +323,6 @@ export default function App() {
   const [group, setGroup] = useState("India"),
     [refresh, setRefresh] = useState(0),
     [query, setQuery] = useState(""),
-    [showSearch, setShowSearch] = useState(false),
     [help, setHelp] = useState(false),
     [toast, setToast] = useState(""),
     [sort, setSort] = useState("symbol"),
@@ -304,10 +340,11 @@ export default function App() {
       "an2-delivery-history",
       [],
     );
+  const [personalRules, setPersonalRules] = useSaved("an2-personal-rules", []);
+  const [personalEvents, setPersonalEvents] = useSaved("an2-personal-events", []);
   const [savedScreens, setSavedScreens] = useSaved("an2-screens", []),
     [pushBusy, setPushBusy] = useState(false);
   const [recent, setRecent] = useSaved("an2-recent", []),
-    [activeIdx, setActiveIdx] = useState(0),
     [copied, setCopied] = useState(false);
   // Record deliberate navigation only, so hydration and background updates never add stops.
   const [backStack, setBackStack] = useState(() => window.history.state?.anBackStack || []);
@@ -511,7 +548,6 @@ export default function App() {
     setSearchTarget(null);
     setShowSearch(false);
     setQuery("");
-    setActiveIdx(0);
     try {
       setRecent((r) =>
         [s, ...(Array.isArray(r) ? r.filter((x) => x !== s) : [])].slice(0, 8),
@@ -563,13 +599,11 @@ export default function App() {
   useEffect(() => {
     try {
       const next = viewURL(location.href, { ...currentView(), screen: screenerView.active }, { share: false });
-      window.history.replaceState({ ...window.history.state, anView: currentView() }, "", next);
+      const shareHash = page === "Watchlist" && sharedWatchlist ? incomingShareHash.current : "";
+      window.history.replaceState({ ...window.history.state, anView: currentView() }, "", next + shareHash);
     } catch {}
-  }, [symbol, page, range, screenerView.active]);
+  }, [symbol, page, range, screenerView.active, sharedWatchlist]);
   useEffect(() => { updatePageMetadata(page); }, [page]);
-  useEffect(() => {
-    setActiveIdx(0);
-  }, [query, showSearch]);
   useEffect(() => {
     const r = setInterval(() => {
       if (!document.hidden) setRefresh((x) => x + 1);
@@ -612,12 +646,6 @@ export default function App() {
     window.addEventListener("keydown", fn);
     return () => window.removeEventListener("keydown", fn);
   }, []);
-  useEffect(() => {
-    if (showSearch)
-      document
-        .getElementById(`search-result-${activeIdx}`)
-        ?.scrollIntoView({ block: "nearest" });
-  }, [activeIdx, showSearch]);
   useEffect(() => {
     const d = dialogRef.current;
     if (!d) return;
@@ -720,6 +748,15 @@ export default function App() {
       growthEvent("watchlist_stock_saved", { stock_count: watch.length + 1 });
       notify("Added to watchlist");
     }
+  };
+  const importSharedWatchlist = (symbols) => {
+    const result = mergeWatchlist(watch, symbols.filter(s => directory.has(s)));
+    if (!result.added.length) return;
+    setWatch(result.symbols);
+    if (!watchedStocks.length && result.added.some(s => ["India", "US"].includes(directory.get(s)?.market) && directory.get(s)?.sector !== "Index")) recordFirstStockSaved();
+    growthEvent("shared_watchlist_saved", { stock_count: result.added.length, overflow: result.overflow });
+    setSharedWatchlist(null);
+    notify(`${result.added.length} ${result.added.length === 1 ? "stock" : "stocks"} saved${result.overflow ? ` · ${result.overflow} did not fit` : ""}`, () => setWatch(current => current.filter(s => !result.added.includes(s))));
   };
   const watchSummary = useMemo(() => {
     const qs = (watch || []).map((sym) => ({ symbol: sym, q: quotes[sym] }));
@@ -939,6 +976,7 @@ export default function App() {
         deliveryHistory,
         alertPrefs,
         savedScreens,
+        personalRules,
         journal,
       });
       downloadFile(
@@ -982,6 +1020,7 @@ export default function App() {
             push: p?.push || false,
           }));
         setSavedScreens(parsed.savedScreens);
+        if (parsed.personalRules !== null) setPersonalRules(parsed.personalRules);
         if (parsed.journal !== null) setJournal(parsed.journal);
         setBackupMsg(
           `Restored ${parsed.watch.length} watchlisted · ${parsed.positions.length} holdings · ${parsed.alerts.length} alerts. Browser notifications stay off until you opt in again.`,
@@ -1189,7 +1228,7 @@ export default function App() {
     setForm(null);
   }
   return (
-    <div className={`app ${page === "Today" ? "research-home" : ""} ${page === "Delivery" ? "delivery-workspace" : ""} ${page === "Markets" ? "markets-workspace" : ""} ${focus ? "chart-focus" : ""}`}>
+    <div className={`app ${navCollapsed ? "nav-collapsed" : ""} ${page === "Today" ? "research-home" : ""} ${page === "Delivery" ? "delivery-workspace" : ""} ${page === "Markets" ? "markets-workspace" : ""} ${focus ? "chart-focus" : ""}`}>
       <SpeedInsights route={(WORKSPACE_SEO[page] || WORKSPACE_SEO.Today).path} />
       <a href="#main-content" className="skip-link">
         Skip to content
@@ -1198,28 +1237,29 @@ export default function App() {
         <a
           href="#"
           className="brand"
+          aria-label="Alpha Nova overview"
           onClick={(e) => {
             e.preventDefault();
             setPage("Today");
           }}
         >
-          <span className="brand-mark">A</span>
+          <span className="brand-mark" aria-hidden="true"><img src="/icon-192.png" alt="" width="32" height="32" /></span>
           <span>
             ALPHA <span className="brand-light">NOVA</span>
-            <small>TERMINAL</small>
+            <small>RESEARCH WORKSPACE</small>
           </span>
         </a>
         <button
           className="global-search"
           aria-label="Search instruments and commands"
-          onClick={() => openSearch()}
+          onClick={() => openSearch(page === "News" ? "news" : page === "Forecast" ? "forecast" : null)}
         >
           <Search size={16} />
-          <span className="search-label-wide">Search symbol or company</span>
+          <span className="search-label-wide">Search stocks, screens, and more…</span>
           <span className="search-label-mobile">Search stocks</span>
           <kbd>⌘ K</kbd>
         </button>
-        <SignupPrompt busy={guideOpen || showSearch || help || !!form} />
+        {!mobileLayout && <SignupPrompt busy={guideOpen || showSearch || help || !!form} />}
         <div className="top-right">
           <MarketStatus />
           <button
@@ -1232,11 +1272,17 @@ export default function App() {
         </div>
       </header>
       <Navigation
+        mobile={mobileLayout}
+        collapsed={navCollapsed}
+        onToggleCollapsed={() => setNavCollapsed(value => !value)}
+        registration={mobileLayout ? <SignupPrompt busy={guideOpen || showSearch || help || !!form} /> : null}
         page={page}
         onPage={(name) => {
           setPage(name);
           setFilter("");
         }}
+        watchCount={watch.length}
+        alertCount={alerts.filter(a => !a.triggered).length}
         triggered={alerts.some((a) => a.triggered)}
         loading={quotesLoading}
         onRefresh={() => {
@@ -1257,73 +1303,25 @@ export default function App() {
         ))}
       </div>
       <main id="main-content" tabIndex={-1}>
+        <ConnectionStatus />
         {guideOpen && page === "Watchlist" && <Suspense fallback={<div className="loading" role="status">Loading guide…</div>}><Onboarding directoryVersion={directoryVersion} state={onboarding} onState={setOnboarding} watch={watchedStocks}
           onToggle={toggleWatch} onNavigate={navigate} onAlert={openWatchAlert}
           alerts={alerts} pushOn={!!alertPrefs?.push} /></Suspense>}
-        {previousView && (
-          <div className="history-navigation">
-            <button
-              type="button"
-              className="button"
-              onClick={goBack}
-              disabled={!previousView}
-              aria-label={
-                previousView
-                  ? `Back to ${previousLabel}`
-                  : "Back — no previous view"
-              }
-              title={
-                previousView ? `Back to ${previousLabel}` : "No previous view"
-              }
-            >
-              <ArrowLeft size={16} />
-              <span>Back</span>
-            </button>
-            {previousView && <span className="muted">to {previousLabel}</span>}
-          </div>
-        )}
-          {page !== "Today" && <div className="workspace-heading">
-            <div>
-              <h1>{page === "Delivery" ? "Find unusual NSE delivery activity" : (WORKSPACE_SEO[page] || WORKSPACE_SEO.Today).heading}</h1>
-              {page === "Delivery" && <p className="delivery-heading-note">Compare with the 20-day average, then open a chart.</p>}
-            </div>
-            <div className="heading-actions">
-              <span className="feed-status">
-                <i
-                  className={
-                    quotesLoading ? "pending" : quotesError ? "warning" : ""
-                  }
-                />
-                {quotesLoading
-                  ? "Updating prices"
-                  : quotesError
-                    ? "Partial data"
-                    : "Quotes may be delayed · 30 sec refresh"}
-              </span>
-              <button
-                className="button primary"
-                onClick={() =>
-                  openSearch(
-                    page === "News"
-                      ? "news"
-                      : page === "Forecast"
-                        ? "forecast"
-                        : null,
-                  )
-                }
-              >
-                <Search size={15} /> Find instrument
-              </button>
-            </div>
-          </div>}
+        <div className="workspace-toolbar">
+          {previousView && <button className="icon-button workspace-back" onClick={goBack} aria-label={`Back to ${previousLabel}`} title={`Back to ${previousLabel}`}><ArrowLeft size={18} /></button>}
+          <div className="workspace-heading"><span className="eyebrow">{page === "Today" ? "YOUR RESEARCH, CONNECTED" : "ALPHA NOVA WORKSPACE"}</span><h1>{PAGE_LABELS[page]}</h1><p>{page === "Today" ? "Market context. Clearer decisions." : page === "Watchlist" ? "Your companies. A clearer picture." : page === "Screener" ? "Find the stocks that fit your process." : page === "Terminal" ? "Explore the price. Build your thesis." : page === "Portfolio" ? "A complete view of what you hold." : page === "Alerts" ? "Follow the prices that matter to you." : page === "News" ? "Stay close to the stories behind the market." : "Turn market information into informed research."}</p></div>
+          {page === "Today" ? <MarketPulse quote={quotes['^NSEI']} loading={benchmarkFeed.loading} /> : <span className="feed-status"><i className={quotesLoading ? "pending" : quotesError ? "warning" : ""} />{quotesLoading ? "Updating prices" : quotesError ? "Partial data" : "Quotes may be delayed"}</span>}
+          {page === "Today" && <button className="button overview-refresh" onClick={() => setRefresh(x => x + 1)} aria-label="Refresh overview"><RefreshCw size={15} className={quotesLoading ? "spin" : ""} /><span>Refresh</span></button>}
+          {page === "Terminal" && <button className="button" aria-expanded={plannerOpen} aria-controls="trade-planner" onClick={() => setPlannerOpen(value => !value)}><Target size={15} />{plannerOpen ? "Hide plan" : "Trade plan"}</button>}
+        </div>
+        {page === "Today" && <MarketOverview quotes={quotes} loading={benchmarkFeed.loading} onOpen={openSymbol} onPage={setPage} onSearch={() => openSearch()} />}
         <Suspense fallback={<div className="loading">Loading workspace…</div>}>
           {quotesError && (
-            <div className="notice" role="status">
-              {quotesError}
-            </div>
+            <details className="feed-notice"><summary><Info size={14} /> Some market data is temporarily unavailable</summary><p>{quotesError} You can continue browsing your saved research.</p></details>
           )}
           {page === "Today" && (
             <SwingDesk
+              onInsight={s => navigate({ page: "Breakouts", symbol: s })}
               refresh={refresh}
               onRefresh={() => setRefresh((x) => x + 1)}
               onOpen={openSymbol}
@@ -1332,32 +1330,13 @@ export default function App() {
               watch={watch}
               toggleWatch={toggleWatch}
               journal={journal}
+              recent={recent}
               quotes={quotes}
+              alerts={alerts}
             />
           )}
           {page === "Terminal" && (
-            <div className="research-next">
-              <span>
-                <Target size={16} />
-                <strong>Plan your risk before entering.</strong>
-                <span className="research-next-detail">
-                  Position size and costs, calculated for you.
-                </span>
-              </span>
-              <button
-                className="button primary"
-                onClick={() =>
-                  document
-                    .getElementById("trade-planner")
-                    ?.scrollIntoView({ behavior: "smooth", block: "start" })
-                }
-              >
-                Build trade plan <Target size={14} />
-              </button>
-            </div>
-          )}
-          {page === "Terminal" && (
-            <div className="terminal-grid">
+            <div className={`terminal-grid ${plannerOpen ? "planner-open" : "planner-closed"}`}>
               <section className="panel chart-panel">
                 <PanelTitle title="Price & technicals" tag="GP">
                   <button
@@ -1477,7 +1456,7 @@ export default function App() {
                     </button>
                   </div>
                 </div>
-                <div className="indicator-toolbar">
+                <details className="indicator-menu"><summary>Indicators · {indicators.length} active</summary><div className="indicator-toolbar">
                   {[
                     "Volume",
                     "EMA 20",
@@ -1512,6 +1491,7 @@ export default function App() {
                     </button>
                   ))}
                 </div>
+                </details>
                 <div className="chart-area">
                   {history.loading && !history.data ? (
                     <Empty
@@ -2002,7 +1982,8 @@ export default function App() {
                 </div>
                 <div className="panel-foot">Delayed · research only</div>
               </section>
-              <section id="trade-planner" className="planner-disclosure panel">
+              <section id="trade-planner" className="planner-disclosure panel" hidden={!plannerOpen}>
+                {plannerOpen && <>
                 <Suspense fallback={<div className="loading" role="status">Loading trade planner…</div>}><TradePlanner
                   symbol={symbol}
                   currency={quote?.currency}
@@ -2035,7 +2016,7 @@ export default function App() {
                     notify("Plan saved to journal. No order placed.");
                     setPage("Journal");
                   }}
-                /></Suspense>
+                /></Suspense></>}
               </section>
 
               <Suspense fallback={<div className="loading" role="status">Loading news…</div>}><News symbol={symbol} refresh={refresh} /></Suspense>
@@ -2050,9 +2031,13 @@ export default function App() {
               onSymbol={choose}
             />
           )}
+          {page === "Analytics" && <AdvancedAnalytics symbol={symbol} refresh={refresh} onRefresh={() => setRefresh(x => x + 1)} onSelect={s => navigate({ page: "Analytics", symbol: s })} watch={watch} />}
+          {page === "Breakouts" && <BreakoutInsights symbol={symbol} refresh={refresh} onRefresh={() => setRefresh(x => x + 1)} onSelect={s => navigate({ page: "Breakouts", symbol: s })} onOpen={openSymbol} onAlert={openWatchAlert} watch={watch} toggleWatch={toggleWatch} />}
           {page === "Screener" && (
-            <div className="side-grid">
+            <div className="screener-workspace">
               <Screener
+                onInsight={s => navigate({ page: "Breakouts", symbol: s })}
+                onAnalytics={() => setPage("Analytics")}
                 view={screenerView}
                 setView={setScreenerView}
                 onOpen={openSymbol}
@@ -2420,11 +2405,14 @@ export default function App() {
               </section>
             </>
           )}
+          {page === "Watchlist" && sharedWatchlist && <SharedWatchlist key={incomingShareHash.current} shared={sharedWatchlist} watch={watch} onImport={importSharedWatchlist} onDismiss={() => setSharedWatchlist(null)} onNavigate={navigate} />}
           {page === "Watchlist" && <Watchlist watch={watch} quotes={quotes} refresh={refresh} onNavigate={navigate}
             onToggle={toggleWatch} onSearch={() => openSearch()} onAlert={openWatchAlert}
-            onGuide={openGuide} onCopy={copyLink} />}
+            onGuide={openGuide} onCopy={copyLink} alerts={alerts} />}
+          <PersonalAlertMonitor rules={personalRules} setRules={setPersonalRules} setEvents={setPersonalEvents} watch={watch} refresh={refresh} notify={notify} />
           {page === "Alerts" && (
             <>
+              <PersonalAlerts refresh={refresh} rules={personalRules} setRules={setPersonalRules} events={personalEvents} setEvents={setPersonalEvents} watch={watch} symbol={symbol} onOpen={openSymbol} />
               <section className="panel">
                 <PanelTitle title="Price monitor" tag="ALRT">
                   <button className="button" onClick={() => setForm("alert")}>
@@ -2783,7 +2771,7 @@ export default function App() {
       )}
       <dialog
         ref={dialogRef}
-        className="dialog"
+        className={`dialog ${showSearch ? "instrument-search-dialog" : ""}`}
         aria-label={
           showSearch
             ? "Find an instrument"
@@ -2807,112 +2795,10 @@ export default function App() {
         }}
       >
         {showSearch ? (
-          <div className="search-dialog">
-            <div className="search-input">
-              <Search size={20} />
-              <input
-                ref={searchRef}
-                aria-label="Search symbols or commands"
-                placeholder="Search symbol or company…"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "ArrowDown") {
-                    e.preventDefault();
-                    setActiveIdx((i) =>
-                      Math.min(i + 1, Math.max(0, results.length - 1)),
-                    );
-                  } else if (e.key === "ArrowUp") {
-                    e.preventDefault();
-                    setActiveIdx((i) => Math.max(0, i - 1));
-                  } else if (
-                    e.key === "Enter" &&
-                    (results[activeIdx] || results[0])
-                  )
-                    choose((results[activeIdx] || results[0]).symbol);
-                }}
-              />
-              <button
-                className="icon-button"
-                aria-label="Close search"
-                onClick={() => setShowSearch(false)}
-              >
-                <X size={18} />
-              </button>
-            </div>
-            <div className="command-shortcuts">
-              {PAGES.filter(
-                (p) =>
-                  !query ||
-                  `${p} ${PAGE_LABELS[p]}`
-                    .toLowerCase()
-                    .includes(query.toLowerCase()),
-              ).map((p) => (
-                <button
-                  key={p}
-                  onClick={() => {
-                    setPage(p);
-                    setForm(null);
-                    setSearchTarget(null);
-                    setShowSearch(false);
-                    setQuery("");
-                  }}
-                >
-                  <Command size={13} />
-                  {PAGE_LABELS[p]}
-                </button>
-              ))}
-            </div>
-            {!query && recent.length ? (
-              <div className="recent-row">
-                <span>Recent</span>
-                {recent
-                  .filter((s) => directory.get(s))
-                  .slice(0, 8)
-                  .map((s) => (
-                    <button key={s} onClick={() => choose(s)}>
-                      {short(s)}
-                    </button>
-                  ))}
-              </div>
-            ) : null}
-            <div className="search-results">
-              {results.map((r, idx) => (
-                <div
-                  id={`search-result-${idx}`}
-                  key={r.symbol}
-                  className={idx === activeIdx ? "active" : ""}
-                >
-                  <button onClick={() => choose(r.symbol)}>
-                    <span>
-                      <strong>{short(r.symbol)}</strong>
-                      <small>{r.name}</small>
-                    </span>
-                    <em>{r.market}</em>
-                  </button>
-                  <button
-                    className={`icon-button ${watch.includes(r.symbol) ? "starred" : ""}`}
-                    aria-label={`${watch.includes(r.symbol) ? "Remove" : "Add"} ${short(r.symbol)} ${watch.includes(r.symbol) ? "from" : "to"} watchlist`}
-                    onClick={() => toggleWatch(r.symbol)}
-                  >
-                    <Star
-                      size={16}
-                      fill={watch.includes(r.symbol) ? "currentColor" : "none"}
-                    />
-                  </button>
-                </div>
-              ))}
-              {!results.length && (
-                <Empty
-                  title="No matches"
-                  description="Search by company name or ticker, such as RELIANCE or AAPL."
-                />
-              )}
-            </div>
-            <div className="panel-foot">
-              ↑↓ to move · Enter opens · Esc to close
-            </div>
-          </div>
+          <CommandPalette query={query} onQuery={setQuery} instruments={results} recent={recent}
+            catalog={directory} watch={watch} onChoose={choose} onToggle={toggleWatch}
+            onClose={() => setShowSearch(false)} searchRef={searchRef} includePages={!searchTarget}
+            onPage={next => { setPage(next); setForm(null); setSearchTarget(null); setShowSearch(false); setQuery(""); }} />
         ) : help ? (
           <div className="modal-content">
             <button

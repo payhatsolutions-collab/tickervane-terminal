@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, Search } from "lucide-react";
 import { useFeed } from "./hooks";
 import { directory, fmt, search, short } from "./data";
-import { completedDailyBars } from "./tradeMath";
+import { completedForecastBars } from "./forecastHistory";
 
 // One question, one answer: type a ticker, get the projected price in
 // 10 trading sessions (~2 weeks). No charts, no tables, no fine print.
@@ -35,7 +35,7 @@ export default function Forecast({ symbol, refresh, onRefresh, onSymbol }) {
   // instrument's cached projection during that render.
   const data = feed.data?.symbol === symbol ? feed.data : null;
   const bars = useMemo(
-    () => completedDailyBars(data?.bars, data?.timezone || "Asia/Kolkata"),
+    () => completedForecastBars(data),
     [data],
   );
   const [forecast, setForecast] = useState(null);

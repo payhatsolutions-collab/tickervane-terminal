@@ -91,9 +91,10 @@ export class Runtime {
     }
 
     const started = Date.now();
+    let timeoutId;
     const timeout = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error(`Exceeded wallSeconds=${task.budget.wallSeconds}`)),
-        task.budget.wallSeconds * 1000).unref()
+      timeoutId = setTimeout(() => reject(new Error(`Exceeded wallSeconds=${task.budget.wallSeconds}`)),
+        task.budget.wallSeconds * 1000)
     );
 
     try {
@@ -121,6 +122,8 @@ export class Runtime {
         ms: Date.now() - started, error: e.message
       });
       return { status: timedOut ? 'timeout' : 'error', error: e.message };
+    } finally {
+      clearTimeout(timeoutId);
     }
   }
 

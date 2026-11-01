@@ -23,3 +23,8 @@ Open User Viewer.command
 output
 bbskelly
 bbskelly-preview.jpg
+football-game
+
+__pycache__
+**/__pycache__/**
+*.pyc

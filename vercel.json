@@ -1,5 +1,6 @@
 {
   "framework": "vite",
+  "fluid": true,
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "functions": {
@@ -11,6 +12,11 @@
     },
     "api/signup.js": {
       "maxDuration": 15
+    },
+    "api/nifty_edge.py": {
+      "maxDuration": 120,
+      "includeFiles": "nifty_edge/**",
+      "excludeFiles": "{node_modules/**,public/**,dist/**,docs/**,tests/**,outputs/**,output/**,football-game/**,.git/**,.venv/**,.vercel/**,**/__pycache__/**,**/tests/**,**/test/**}"
     }
   },
   "headers": [
@@ -111,6 +117,23 @@
     {
       "source": "/:path(watchlist|portfolio|trade-journal|price-alerts){.html}?",
       "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        }
+      ]
+    },
+    {
+      "source": "/nifty-edge/:path*",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://query1.finance.yahoo.com https://query2.finance.yahoo.com https://feeds.finance.yahoo.com https://news.google.com; worker-src 'self'; manifest-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://kite.zerodha.com"
+        },
         {
           "key": "X-Robots-Tag",
           "value": "noindex, follow"
@@ -621,6 +644,14 @@
     {
       "source": "/price-alerts",
       "destination": "/price-alerts.html"
+    },
+    {
+      "source": "/breakouts",
+      "destination": "/breakouts.html"
+    },
+    {
+      "source": "/analytics",
+      "destination": "/analytics.html"
     }
   ]
 }

@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-30",
+  "production": "https://alphanova48.in",
+  "deployment": {
+    "id": "dpl_3nrAfwcSWRpvoELKbBCfMxSaVvsz",
+    "url": "https://alphanova2-o3xe65e9b-wdcre.vercel.app",
+    "status": "promoted"
+  },
+  "rollback": "npx --yes vercel promote https://alphanova2-ro24mx7pq-wdcre.vercel.app --yes",
+  "behavior": {
+    "presentation": "Large centered mascot with full-screen 12px backdrop blur",
+    "durationMs": 2800,
+    "dismiss": "Automatic fade, tap, Skip animation, or Escape",
+    "triggers": "Overview opens, app returns to foreground, manual replay",
+    "states": "Green bull and red bear"
+  },
+  "verification": {
+    "targetedTestsPassed": 7,
+    "localBuild": "passed",
+    "hostedBuild": "ready",
+    "liveAutoDismiss": "verified",
+    "mobile": "393px viewport; roughly 310px animal during entrance",
+    "desktop": "Centered in 1440px viewport",
+    "instantDismiss": "passed"
+  },
+  "preview": "outputs/market-motion-center-2026-10-30/preview.png"
+}

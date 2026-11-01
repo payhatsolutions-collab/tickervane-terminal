@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-31",
+  "production": "https://alphanova48.in",
+  "deployment": {
+    "id": "dpl_J3h1BbgxW7X1G3EbB9uhUmpGnncK",
+    "url": "https://alphanova2-3c6qfqxqz-wdcre.vercel.app",
+    "status": "promoted"
+  },
+  "rollback": "vercel promote https://alphanova2-boheq0jgc-wdcre.vercel.app --yes",
+  "changes": [
+    "Stock setups directly below the market snapshot; summaries and breadth follow the setups",
+    "Shared dark/light visual refinements and clearer workspace navigation",
+    "Keyboard command palette for instruments, recent research and workspace tasks",
+    "Market breadth with explicit coverage and honest handling of missing observations",
+    "Watchlist, alert and plan summaries; recently viewed companies",
+    "Accessible names retained when navigation is collapsed"
+  ],
+  "verification": {
+    "tests": {
+      "passed": 352,
+      "failed": 0
+    },
+    "localBuild": "passed",
+    "hostedBuild": "ready",
+    "publicHomepage": 200,
+    "publicSetupFeed": {
+      "status": 200,
+      "session": "2026-10-30",
+      "stocks": 499
+    },
+    "mainAsset": "/assets/index-ywHOR0lM.js",
+    "browser": "Desktop and phone layouts; light/dark themes; keyboard workspace/instrument selection; reversible watchlist changes; live phone setup placement",
+    "mobileWidths": [
+      360,
+      393
+    ],
+    "desktopWidth": 1440
+  },
+  "screenshot": "/Users/sarda/.codex/visualizations/2026/10/31/01a1915c-6d37-7272-afea-680ee1b59a23/alphanova-release-mobile.jpg"
+}

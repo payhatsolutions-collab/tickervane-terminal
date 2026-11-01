@@ -1,0 +1,5426 @@
+{
+  "dataset": {
+    "createdAt": "2026-10-26T22:54:15.485Z",
+    "config": {
+      "version": 1,
+      "horizon": 10,
+      "initialTraining": 504,
+      "developmentSessions": 252,
+      "holdoutSessions": 126,
+      "step": 10,
+      "minimumPointImprovement": 0.05,
+      "maximumIntervalDegradation": 0.05,
+      "primaryMetric": "returnMae",
+      "symbols": [
+        {
+          "symbol": "RELIANCE.NS",
+          "market": "^NSEI",
+          "sector": "^CNXENERGY"
+        },
+        {
+          "symbol": "TCS.NS",
+          "market": "^NSEI",
+          "sector": "^CNXIT"
+        },
+        {
+          "symbol": "HDFCBANK.NS",
+          "market": "^NSEI",
+          "sector": "^NSEBANK"
+        },
+        {
+          "symbol": "INFY.NS",
+          "market": "^NSEI",
+          "sector": "^CNXIT"
+        },
+        {
+          "symbol": "SUNPHARMA.NS",
+          "market": "^NSEI",
+          "sector": "^CNXPHARMA"
+        },
+        {
+          "symbol": "ITC.NS",
+          "market": "^NSEI",
+          "sector": "^CNXFMCG"
+        },
+        {
+          "symbol": "TATASTEEL.NS",
+          "market": "^NSEI",
+          "sector": "^CNXMETAL"
+        },
+        {
+          "symbol": "MARUTI.NS",
+          "market": "^NSEI",
+          "sector": "^CNXAUTO"
+        },
+        {
+          "symbol": "AAPL",
+          "market": "^GSPC",
+          "sector": "XLK"
+        },
+        {
+          "symbol": "MSFT",
+          "market": "^GSPC",
+          "sector": "XLK"
+        },
+        {
+          "symbol": "BTC-USD"
+        },
+        {
+          "symbol": "ETH-USD",
+          "market": "BTC-USD"
+        }
+      ]
+    },
+    "files": {
+      "RELIANCE.NS": {
+        "file": "RELIANCE.NS.json",
+        "sha256": "bc6ae1213ad5aceedd98359f90b9b3ff0c41cc654c05d27a1c34b562777f4ec1",
+        "observations": 1235,
+        "start": "2021-10-26",
+        "end": "2026-10-23",
+        "host": "query2.finance.yahoo.com"
+      },
+      "^NSEI": {
+        "file": "%5ENSEI.json",
+        "sha256": "772d7bc8f6d9090297a388d252ace365d4f708ce686029fe159ddf10dd47fd19",
+        "observations": 1234,
+        "start": "2021-10-26",
+        "end": "2026-10-23",
+        "host": "query2.finance.yahoo.com"
+      },
+      "^CNXENERGY": {
+        "file": "%5ECNXENERGY.json",
+        "sha256": "4b781af224fd7257914b85b83ba60f709447143303fcf7bd73e96437354a1b42",
+        "observations": 1228,
+        "start": "2021-10-26",
+        "end": "2026-10-23",
+        "host": "query2.finance.yahoo.com"
+      },
+      "TCS.NS": {
+        "file": "TCS.NS.json",
+        "sha256": "d8affcf10f67728685cbb0a15fe5474839f14e9bf6ccb0ecea65f3b9c39783af",
+        "observations": 1235,
+        "start": "2021-10-26",
+        "end": "2026-10-23",
+        "host": "query2.finance.yahoo.com"
+      },
+      "^CNXIT": {
+        "file": "%5ECNXIT.json",
+        "sha256": "31a2b15f34cc80ba4b69d8ac1b436aedf6b500bc820f27c211e0fdc02d019dc0",
+        "observations": 1233,
+        "start": "2021-10-26",
+        "end": "2026-10-23",
+        "host": "query2.finance.yahoo.com"
+      },
+      "HDFCBANK.NS": {
+        "file": "HDFCBANK.NS.json",
+        "sha256": "4b5906f43205e69cde12c70ef5f888bdfc931eec14659eb8845d5c43f829549c",
+        "observations": 1235,
+        "start": "2021-10-26",
+        "end": "2026-10-23",
+        "host": "query2.finance.yahoo.com"
+      },
+      "^NSEBANK": {
+        "file": "%5ENSEBANK.json",
+        "sha256": "b6ab3adfe75d5f020000f6d0ad3a1e058366fffca860683e0653989ee03ba834",
+        "observations": 1233,
+        "start": "2021-10-26",
+        "end": "2026-10-23",
+        "host": "query2.finance.yahoo.com"
+      },
+      "INFY.NS": {
+        "file": "INFY.NS.json",
+        "sha256": "21d9778873cc0e4d4f2c56205c55252d2da0676f9e6b76e84a06c60d36e9201e",
+        "observations": 1235,
+        "start": "2021-10-26",
+        "end": "2026-10-23",
+        "host": "query2.finance.yahoo.com"
+      },
+      "SUNPHARMA.NS": {
+        "file": "SUNPHARMA.NS.json",
+        "sha256": "785e8677fb05cc44c51f3cf3d388031c9417fd142410123503edbfc5cb3c1ddc",
+        "observations": 1235,
+        "start": "2021-10-26",
+        "end": "2026-10-23",
+        "host": "query2.finance.yahoo.com"
+      },
+      "^CNXPHARMA": {
+        "file": "%5ECNXPHARMA.json",
+        "sha256": "de0e8f3aea632c934f1102b6621fcf931171452a194a692f949b37d6286cb9d5",
+        "observations": 1232,
+        "start": "2021-10-26",
+        "end": "2026-10-23",
+        "host": "query2.finance.yahoo.com"
+      },
+      "ITC.NS": {
+        "file": "ITC.NS.json",
+        "sha256": "a4369b411a103e027e2c299bec7969311c4b3002dcde2b7694da1cba56ab34c2",
+        "observations": 1235,
+        "start": "2021-10-26",
+        "end": "2026-10-23",
+        "host": "query2.finance.yahoo.com"
+      },
+      "^CNXFMCG": {
+        "file": "%5ECNXFMCG.json",
+        "sha256": "c4f93e03ae75f4b6f9fbba723ae4c3680b50de9cd713ada1b0102e5071400fb8",
+        "observations": 1228,
+        "start": "2021-10-26",
+        "end": "2026-10-23",
+        "host": "query2.finance.yahoo.com"
+      },
+      "TATASTEEL.NS": {
+        "file": "TATASTEEL.NS.json",
+        "sha256": "76afde5fabf2200c665e5f16bb21d6b51eb163641f72c7a4d43d5de5adf86fc6",
+        "observations": 1235,
+        "start": "2021-10-26",
+        "end": "2026-10-23",
+        "host": "query2.finance.yahoo.com"
+      },
+      "^CNXMETAL": {
+        "file": "%5ECNXMETAL.json",
+        "sha256": "b356f26cf9de9a9145287e869f23b3b558a7a3c13b940fe905792b2bdfbdb4ab",
+        "observations": 1228,
+        "start": "2021-10-26",
+        "end": "2026-10-23",
+        "host": "query2.finance.yahoo.com"
+      },
+      "MARUTI.NS": {
+        "file": "MARUTI.NS.json",
+        "sha256": "5915a3f16dcd637c986493cae17ad8555c0630be0a7a7824de5743a376a1df2c",
+        "observations": 1235,
+        "start": "2021-10-26",
+        "end": "2026-10-23",
+        "host": "query2.finance.yahoo.com"
+      },
+      "^CNXAUTO": {
+        "file": "%5ECNXAUTO.json",
+        "sha256": "40d036fc73a8cefce91d4e5652479f7d5dd9ba857bd1e62adf523e96f3770f5e",
+        "observations": 1228,
+        "start": "2021-10-26",
+        "end": "2026-10-23",
+        "host": "query2.finance.yahoo.com"
+      },
+      "AAPL": {
+        "file": "AAPL.json",
+        "sha256": "4a3248e48f297f853d8a7274a87402bc771adab0921d9690de9cca29ce1dafe5",
+        "observations": 1254,
+        "start": "2021-10-27",
+        "end": "2026-10-26",
+        "host": "query2.finance.yahoo.com"
+      },
+      "^GSPC": {
+        "file": "%5EGSPC.json",
+        "sha256": "055475b2c90d3cfc3daac0f940ab4b345e142bd73d499945066e85c757af0039",
+        "observations": 1254,
+        "start": "2021-10-27",
+        "end": "2026-10-26",
+        "host": "query2.finance.yahoo.com"
+      },
+      "XLK": {
+        "file": "XLK.json",
+        "sha256": "9c28e8b145496ecbae5bde377a7cef761a5dd9f4ca8a43219a78240ef385e998",
+        "observations": 1254,
+        "start": "2021-10-27",
+        "end": "2026-10-26",
+        "host": "query2.finance.yahoo.com"
+      },
+      "MSFT": {
+        "file": "MSFT.json",
+        "sha256": "c6e09f5bbf74b8fd7033b3923f3c4c376337690a85ee16528a03b674e1420033",
+        "observations": 1254,
+        "start": "2021-10-27",
+        "end": "2026-10-26",
+        "host": "query2.finance.yahoo.com"
+      },
+      "BTC-USD": {
+        "file": "BTC-USD.json",
+        "sha256": "5a30e323f3b34384fea46c3f70e8ca724595a1c7a843fe7b9b847d04afe5d82b",
+        "observations": 1826,
+        "start": "2021-10-26",
+        "end": "2026-10-25",
+        "host": "query2.finance.yahoo.com"
+      },
+      "ETH-USD": {
+        "file": "ETH-USD.json",
+        "sha256": "4d5cec0f9d2dc4a3ee6aa5d3e76c3ffd8ffd9d3c1d67a3b57401309988a3d27d",
+        "observations": 1826,
+        "start": "2021-10-26",
+        "end": "2026-10-25",
+        "host": "query2.finance.yahoo.com"
+      }
+    },
+    "failures": {}
+  },
+  "development": {
+    "mode": "development",
+    "createdAt": "2026-10-26T23:03:51.327Z",
+    "modelVersion": "4.0.0",
+    "codeSha256": "b89462bc06e0278f975e7d7cde8158bed7a995b28d31a2b01caec26559f31532",
+    "legacyRevision": "ab21308d0cd8f56f28c4e5ca72c11171be7f988e",
+    "productionVariant": "alignedOriginalFamily",
+    "manifestSha256": "155697c67d5ef491537dabea50c6795e54bf0dd4b2353fd0557216576749839a",
+    "observations": 300,
+    "horizon": 10,
+    "overall": {
+      "legacy": {
+        "wis": 0.02206747258822678,
+        "error": 4.656577494159421,
+        "returnMae": 4.597082452403114,
+        "coverage80": 77.66666666666667,
+        "coverage95": 86.66666666666667,
+        "brier": 0.2832113951444626,
+        "returnRmse": 6.1995781728932675,
+        "directionAccuracy": 50.66666666666667,
+        "directionalCoverage": 99.33333333333333,
+        "directionalAccuracyWhenCalled": 51.006711409395976,
+        "availableForecasts": 300,
+        "modelSelections": {
+          "baseline": 288,
+          "ewma": 12
+        }
+      },
+      "alignedOriginalFamily": {
+        "wis": 0.018772887061164045,
+        "error": 3.9056143251277793,
+        "returnMae": 3.8602870639837645,
+        "coverage80": 82.33333333333333,
+        "coverage95": 93.66666666666667,
+        "brier": 0.2505333856741587,
+        "returnRmse": 5.36177056828633,
+        "directionAccuracy": 1,
+        "directionalCoverage": 0.6666666666666667,
+        "directionalAccuracyWhenCalled": 0,
+        "availableForecasts": 300,
+        "modelSelections": {
+          "baseline": 259,
+          "ewma": 39,
+          "har-trend": 2
+        }
+      },
+      "accuracy": {
+        "wis": 0.018772887061164045,
+        "error": 3.9056143251277793,
+        "returnMae": 3.8602870639837645,
+        "coverage80": 82.33333333333333,
+        "coverage95": 93.66666666666667,
+        "brier": 0.2505333856741587,
+        "returnRmse": 5.36177056828633,
+        "directionAccuracy": 1,
+        "directionalCoverage": 0.6666666666666667,
+        "directionalAccuracyWhenCalled": 0,
+        "availableForecasts": 300,
+        "modelSelections": {
+          "baseline": 259,
+          "ewma": 39,
+          "har-trend": 2
+        }
+      },
+      "contextExperiment": {
+        "wis": 0.018772887061164045,
+        "error": 3.9056143251277793,
+        "returnMae": 3.8602870639837645,
+        "coverage80": 82.33333333333333,
+        "coverage95": 93.66666666666667,
+        "brier": 0.2505333856741587,
+        "returnRmse": 5.36177056828633,
+        "directionAccuracy": 1,
+        "directionalCoverage": 0.6666666666666667,
+        "directionalAccuracyWhenCalled": 0,
+        "availableForecasts": 300,
+        "modelSelections": {
+          "baseline": 259,
+          "ewma": 39,
+          "har-trend": 2
+        }
+      },
+      "unchangedPrice": {
+        "wis": 0.018805591908593065,
+        "error": 3.9017808862137264,
+        "returnMae": 3.8564425770578623,
+        "coverage80": 84.66666666666667,
+        "coverage95": 93.66666666666667,
+        "brier": 0.25,
+        "returnRmse": 5.3612046067861145,
+        "directionAccuracy": 1,
+        "directionalCoverage": 0,
+        "directionalAccuracyWhenCalled": null,
+        "availableForecasts": 300,
+        "modelSelections": {
+          "baseline": 300
+        }
+      },
+      "simpleTrend": {
+        "wis": 0.022201138879197984,
+        "error": 4.656577494159421,
+        "returnMae": 4.597082452403114,
+        "coverage80": 73.66666666666667,
+        "coverage95": 85,
+        "brier": 0.28623239040374754,
+        "returnRmse": 6.1995781728932675,
+        "directionAccuracy": 50.66666666666667,
+        "directionalCoverage": 99.33333333333333,
+        "directionalAccuracyWhenCalled": 51.006711409395976,
+        "availableForecasts": 300,
+        "modelSelections": {
+          "trend-30": 300
+        }
+      },
+      "directHorizon": {
+        "wis": 0.019470765175622448,
+        "error": 3.992463419796042,
+        "returnMae": 3.947008695822777,
+        "coverage80": 79,
+        "coverage95": 91.33333333333333,
+        "brier": 0.2629719183842341,
+        "returnRmse": 5.439055103105507,
+        "directionAccuracy": 40.666666666666664,
+        "directionalCoverage": 94.66666666666667,
+        "directionalAccuracyWhenCalled": 42.95774647887324,
+        "availableForecasts": 300,
+        "modelSelections": {
+          "ridge-direct": 300
+        }
+      },
+      "directContext": {
+        "wis": 0.0195805890958779,
+        "error": 4.050315902140937,
+        "returnMae": 4.005380762158364,
+        "coverage80": 78,
+        "coverage95": 91.66666666666667,
+        "brier": 0.26358859340349833,
+        "returnRmse": 5.524190549879699,
+        "directionAccuracy": 37.666666666666664,
+        "directionalCoverage": 86.66666666666667,
+        "directionalAccuracyWhenCalled": 43.46153846153846,
+        "availableForecasts": 277,
+        "modelSelections": {
+          "ridge-context": 300
+        }
+      }
+    },
+    "groups": {
+      "NSE": {
+        "legacy": {
+          "wis": 0.019539504034792373,
+          "error": 3.9347993258855434,
+          "returnMae": 3.916528827607627,
+          "coverage80": 76.5,
+          "coverage95": 84,
+          "brier": 0.2881854212284088,
+          "returnRmse": 5.382147286645664,
+          "directionAccuracy": 51,
+          "directionalCoverage": 99,
+          "directionalAccuracyWhenCalled": 51.515151515151516,
+          "availableForecasts": 200,
+          "modelSelections": {
+            "baseline": 188,
+            "ewma": 12
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.015511681650108904,
+          "error": 3.2821976005700866,
+          "returnMae": 3.2712454422130275,
+          "coverage80": 81,
+          "coverage95": 94.5,
+          "brier": 0.2508000785112381,
+          "returnRmse": 4.3946357070583755,
+          "directionAccuracy": 1.5,
+          "directionalCoverage": 1,
+          "directionalAccuracyWhenCalled": 0,
+          "availableForecasts": 200,
+          "modelSelections": {
+            "baseline": 178,
+            "ewma": 20,
+            "har-trend": 2
+          }
+        },
+        "accuracy": {
+          "wis": 0.015511681650108904,
+          "error": 3.2821976005700866,
+          "returnMae": 3.2712454422130275,
+          "coverage80": 81,
+          "coverage95": 94.5,
+          "brier": 0.2508000785112381,
+          "returnRmse": 4.3946357070583755,
+          "directionAccuracy": 1.5,
+          "directionalCoverage": 1,
+          "directionalAccuracyWhenCalled": 0,
+          "availableForecasts": 200,
+          "modelSelections": {
+            "baseline": 178,
+            "ewma": 20,
+            "har-trend": 2
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.015511681650108904,
+          "error": 3.2821976005700866,
+          "returnMae": 3.2712454422130275,
+          "coverage80": 81,
+          "coverage95": 94.5,
+          "brier": 0.2508000785112381,
+          "returnRmse": 4.3946357070583755,
+          "directionAccuracy": 1.5,
+          "directionalCoverage": 1,
+          "directionalAccuracyWhenCalled": 0,
+          "availableForecasts": 200,
+          "modelSelections": {
+            "baseline": 178,
+            "ewma": 20,
+            "har-trend": 2
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.015568631051362112,
+          "error": 3.276447442199008,
+          "returnMae": 3.265478711824174,
+          "coverage80": 82.5,
+          "coverage95": 94.5,
+          "brier": 0.25,
+          "returnRmse": 4.393599869250406,
+          "directionAccuracy": 1.5,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 200,
+          "modelSelections": {
+            "baseline": 200
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.01930485217509315,
+          "error": 3.9347993258855434,
+          "returnMae": 3.916528827607627,
+          "coverage80": 73.5,
+          "coverage95": 84,
+          "brier": 0.2894923374056816,
+          "returnRmse": 5.382147286645664,
+          "directionAccuracy": 51,
+          "directionalCoverage": 99,
+          "directionalAccuracyWhenCalled": 51.515151515151516,
+          "availableForecasts": 200,
+          "modelSelections": {
+            "trend-30": 200
+          }
+        },
+        "directHorizon": {
+          "wis": 0.016032088418497428,
+          "error": 3.307826724759731,
+          "returnMae": 3.2965704589971865,
+          "coverage80": 81,
+          "coverage95": 91,
+          "brier": 0.26292845129966735,
+          "returnRmse": 4.439282744225575,
+          "directionAccuracy": 43.5,
+          "directionalCoverage": 94.5,
+          "directionalAccuracyWhenCalled": 46.03174603174603,
+          "availableForecasts": 200,
+          "modelSelections": {
+            "ridge-direct": 200
+          }
+        },
+        "directContext": {
+          "wis": 0.016054437444618194,
+          "error": 3.347722796000462,
+          "returnMae": 3.3374979538511593,
+          "coverage80": 79,
+          "coverage95": 91.5,
+          "brier": 0.26130654782056806,
+          "returnRmse": 4.504679813021941,
+          "directionAccuracy": 38,
+          "directionalCoverage": 81,
+          "directionalAccuracyWhenCalled": 46.913580246913575,
+          "availableForecasts": 177,
+          "modelSelections": {
+            "ridge-context": 200
+          }
+        }
+      },
+      "US": {
+        "legacy": {
+          "wis": 0.020026780789082287,
+          "error": 4.2481018884219175,
+          "returnMae": 4.27396552838557,
+          "coverage80": 84,
+          "coverage95": 92,
+          "brier": 0.2500812339782715,
+          "returnRmse": 5.659495797531676,
+          "directionAccuracy": 56.00000000000001,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 56.00000000000001,
+          "availableForecasts": 50,
+          "modelSelections": {
+            "baseline": 50
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.01833831262946263,
+          "error": 3.7289073395884564,
+          "returnMae": 3.756265077549869,
+          "coverage80": 82,
+          "coverage95": 92,
+          "brier": 0.25,
+          "returnRmse": 5.09228256163125,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 50,
+          "modelSelections": {
+            "baseline": 31,
+            "ewma": 19
+          }
+        },
+        "accuracy": {
+          "wis": 0.01833831262946263,
+          "error": 3.7289073395884564,
+          "returnMae": 3.756265077549869,
+          "coverage80": 82,
+          "coverage95": 92,
+          "brier": 0.25,
+          "returnRmse": 5.09228256163125,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 50,
+          "modelSelections": {
+            "baseline": 31,
+            "ewma": 19
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.01833831262946263,
+          "error": 3.7289073395884564,
+          "returnMae": 3.756265077549869,
+          "coverage80": 82,
+          "coverage95": 92,
+          "brier": 0.25,
+          "returnRmse": 5.09228256163125,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 50,
+          "modelSelections": {
+            "baseline": 31,
+            "ewma": 19
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.01830674410902394,
+          "error": 3.7289073395884564,
+          "returnMae": 3.756265077549869,
+          "coverage80": 90,
+          "coverage95": 92,
+          "brier": 0.25,
+          "returnRmse": 5.09228256163125,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 50,
+          "modelSelections": {
+            "baseline": 50
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.020270304490073957,
+          "error": 4.2481018884219175,
+          "returnMae": 4.27396552838557,
+          "coverage80": 72,
+          "coverage95": 88,
+          "brier": 0.2597174906730652,
+          "returnRmse": 5.659495797531676,
+          "directionAccuracy": 56.00000000000001,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 56.00000000000001,
+          "availableForecasts": 50,
+          "modelSelections": {
+            "trend-30": 50
+          }
+        },
+        "directHorizon": {
+          "wis": 0.01849959114986769,
+          "error": 3.834520277420451,
+          "returnMae": 3.861850323408177,
+          "coverage80": 72,
+          "coverage95": 94,
+          "brier": 0.2642668795585632,
+          "returnRmse": 5.195762799098381,
+          "directionAccuracy": 36,
+          "directionalCoverage": 94,
+          "directionalAccuracyWhenCalled": 38.297872340425535,
+          "availableForecasts": 50,
+          "modelSelections": {
+            "ridge-direct": 50
+          }
+        },
+        "directContext": {
+          "wis": 0.01881165010362896,
+          "error": 3.9161858797291007,
+          "returnMae": 3.9437450299153975,
+          "coverage80": 74,
+          "coverage95": 94,
+          "brier": 0.27081749081611634,
+          "returnRmse": 5.276843393459545,
+          "directionAccuracy": 40,
+          "directionalCoverage": 98,
+          "directionalAccuracyWhenCalled": 40.816326530612244,
+          "availableForecasts": 50,
+          "modelSelections": {
+            "ridge-context": 50
+          }
+        }
+      },
+      "Crypto": {
+        "legacy": {
+          "wis": 0.034220038601108935,
+          "error": 7.952165772992459,
+          "returnMae": 7.642413875602597,
+          "coverage80": 76,
+          "coverage95": 92,
+          "brier": 0.29644545197486877,
+          "returnRmse": 9.0944316363377,
+          "directionAccuracy": 44,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 44,
+          "availableForecasts": 50,
+          "modelSelections": {
+            "baseline": 50
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.03225228313708602,
+          "error": 6.575988208897875,
+          "returnMae": 6.3204755375006165,
+          "coverage80": 88,
+          "coverage95": 92,
+          "brier": 0.25,
+          "returnRmse": 8.32519477748992,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 50,
+          "modelSelections": {
+            "baseline": 50
+          }
+        },
+        "accuracy": {
+          "wis": 0.03225228313708602,
+          "error": 6.575988208897875,
+          "returnMae": 6.3204755375006165,
+          "coverage80": 88,
+          "coverage95": 92,
+          "brier": 0.25,
+          "returnRmse": 8.32519477748992,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 50,
+          "modelSelections": {
+            "baseline": 50
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.03225228313708602,
+          "error": 6.575988208897875,
+          "returnMae": 6.3204755375006165,
+          "coverage80": 88,
+          "coverage95": 92,
+          "brier": 0.25,
+          "returnRmse": 8.32519477748992,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 50,
+          "modelSelections": {
+            "baseline": 50
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.03225228313708602,
+          "error": 6.575988208897875,
+          "returnMae": 6.3204755375006165,
+          "coverage80": 88,
+          "coverage95": 92,
+          "brier": 0.25,
+          "returnRmse": 8.32519477748992,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 50,
+          "modelSelections": {
+            "baseline": 50
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.035717120084741365,
+          "error": 7.952165772992459,
+          "returnMae": 7.642413875602597,
+          "coverage80": 76,
+          "coverage95": 86,
+          "brier": 0.2997075021266937,
+          "returnRmse": 9.0944316363377,
+          "directionAccuracy": 44,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 44,
+          "availableForecasts": 50,
+          "modelSelections": {
+            "trend-30": 50
+          }
+        },
+        "directHorizon": {
+          "wis": 0.03419664622987735,
+          "error": 6.888953342316858,
+          "returnMae": 6.633920015539736,
+          "coverage80": 78,
+          "coverage95": 90,
+          "brier": 0.261850825548172,
+          "returnRmse": 8.466111639383096,
+          "directionAccuracy": 34,
+          "directionalCoverage": 96,
+          "directionalAccuracyWhenCalled": 35.41666666666667,
+          "availableForecasts": 50,
+          "modelSelections": {
+            "ridge-direct": 50
+          }
+        },
+        "directContext": {
+          "wis": 0.034454134693165724,
+          "error": 6.994818349114687,
+          "returnMae": 6.73854772763015,
+          "coverage80": 78,
+          "coverage95": 90,
+          "brier": 0.26548787832260135,
+          "returnRmse": 8.607348622996158,
+          "directionAccuracy": 34,
+          "directionalCoverage": 98,
+          "directionalAccuracyWhenCalled": 34.69387755102041,
+          "availableForecasts": 50,
+          "modelSelections": {
+            "ridge-context": 50
+          }
+        }
+      }
+    },
+    "regimes": {
+      "rising": {
+        "count": 131,
+        "legacy": {
+          "wis": 0.01854399346916803,
+          "error": 3.8870664531395676,
+          "returnMae": 3.8775121462594546,
+          "coverage80": 83.96946564885496,
+          "coverage95": 90.83969465648855,
+          "brier": 0.2473424563881095,
+          "returnRmse": 5.314641271200829,
+          "directionAccuracy": 55.72519083969466,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 55.72519083969466,
+          "availableForecasts": 131,
+          "modelSelections": {
+            "baseline": 122,
+            "ewma": 9
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.016557091262304757,
+          "error": 3.4497216765877217,
+          "returnMae": 3.424849437892203,
+          "coverage80": 83.20610687022901,
+          "coverage95": 96.18320610687023,
+          "brier": 0.2512214939102872,
+          "returnRmse": 4.686151493081144,
+          "directionAccuracy": 1.5267175572519083,
+          "directionalCoverage": 1.5267175572519083,
+          "directionalAccuracyWhenCalled": 0,
+          "availableForecasts": 131,
+          "modelSelections": {
+            "baseline": 105,
+            "ewma": 24,
+            "har-trend": 2
+          }
+        },
+        "accuracy": {
+          "wis": 0.016557091262304757,
+          "error": 3.4497216765877217,
+          "returnMae": 3.424849437892203,
+          "coverage80": 83.20610687022901,
+          "coverage95": 96.18320610687023,
+          "brier": 0.2512214939102872,
+          "returnRmse": 4.686151493081144,
+          "directionAccuracy": 1.5267175572519083,
+          "directionalCoverage": 1.5267175572519083,
+          "directionalAccuracyWhenCalled": 0,
+          "availableForecasts": 131,
+          "modelSelections": {
+            "baseline": 105,
+            "ewma": 24,
+            "har-trend": 2
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.016557091262304757,
+          "error": 3.4497216765877217,
+          "returnMae": 3.424849437892203,
+          "coverage80": 83.20610687022901,
+          "coverage95": 96.18320610687023,
+          "brier": 0.2512214939102872,
+          "returnRmse": 4.686151493081144,
+          "directionAccuracy": 1.5267175572519083,
+          "directionalCoverage": 1.5267175572519083,
+          "directionalAccuracyWhenCalled": 0,
+          "availableForecasts": 131,
+          "modelSelections": {
+            "baseline": 105,
+            "ewma": 24,
+            "har-trend": 2
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.016634590846387225,
+          "error": 3.440942808845617,
+          "returnMae": 3.416045269359602,
+          "coverage80": 87.02290076335878,
+          "coverage95": 96.18320610687023,
+          "brier": 0.25,
+          "returnRmse": 4.684668378997871,
+          "directionAccuracy": 1.5267175572519083,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 131,
+          "modelSelections": {
+            "baseline": 131
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.019019433331285886,
+          "error": 3.8870664531395676,
+          "returnMae": 3.8775121462594546,
+          "coverage80": 80.1526717557252,
+          "coverage95": 88.54961832061069,
+          "brier": 0.2521566998867588,
+          "returnRmse": 5.314641271200829,
+          "directionAccuracy": 55.72519083969466,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 55.72519083969466,
+          "availableForecasts": 131,
+          "modelSelections": {
+            "trend-30": 131
+          }
+        },
+        "directHorizon": {
+          "wis": 0.016815039360319084,
+          "error": 3.426988082247353,
+          "returnMae": 3.40169158018838,
+          "coverage80": 81.6793893129771,
+          "coverage95": 91.6030534351145,
+          "brier": 0.25876849207259317,
+          "returnRmse": 4.601023557154178,
+          "directionAccuracy": 41.221374045801525,
+          "directionalCoverage": 93.89312977099237,
+          "directionalAccuracyWhenCalled": 43.90243902439025,
+          "availableForecasts": 131,
+          "modelSelections": {
+            "ridge-direct": 131
+          }
+        },
+        "directContext": {
+          "wis": 0.016940084581796362,
+          "error": 3.4988600133610226,
+          "returnMae": 3.474965847127829,
+          "coverage80": 79.38931297709924,
+          "coverage95": 92.36641221374046,
+          "brier": 0.2621451912035469,
+          "returnRmse": 4.704949347360775,
+          "directionAccuracy": 39.69465648854962,
+          "directionalCoverage": 89.31297709923665,
+          "directionalAccuracyWhenCalled": 44.44444444444444,
+          "availableForecasts": 123,
+          "modelSelections": {
+            "ridge-context": 131
+          }
+        }
+      },
+      "falling": {
+        "count": 130,
+        "legacy": {
+          "wis": 0.026750769442080123,
+          "error": 5.758454832498459,
+          "returnMae": 5.6231957382673325,
+          "coverage80": 70,
+          "coverage95": 82.3076923076923,
+          "brier": 0.3272092090203212,
+          "returnRmse": 7.238941478220729,
+          "directionAccuracy": 43.84615384615385,
+          "directionalCoverage": 99.23076923076923,
+          "directionalAccuracyWhenCalled": 44.18604651162791,
+          "availableForecasts": 130,
+          "modelSelections": {
+            "baseline": 130
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.021362693920223736,
+          "error": 4.508379368232879,
+          "returnMae": 4.422266151114055,
+          "coverage80": 81.53846153846153,
+          "coverage95": 92.3076923076923,
+          "brier": 0.25,
+          "returnRmse": 6.071328372467223,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 130,
+          "modelSelections": {
+            "baseline": 120,
+            "ewma": 10
+          }
+        },
+        "accuracy": {
+          "wis": 0.021362693920223736,
+          "error": 4.508379368232879,
+          "returnMae": 4.422266151114055,
+          "coverage80": 81.53846153846153,
+          "coverage95": 92.3076923076923,
+          "brier": 0.25,
+          "returnRmse": 6.071328372467223,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 130,
+          "modelSelections": {
+            "baseline": 120,
+            "ewma": 10
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.021362693920223736,
+          "error": 4.508379368232879,
+          "returnMae": 4.422266151114055,
+          "coverage80": 81.53846153846153,
+          "coverage95": 92.3076923076923,
+          "brier": 0.25,
+          "returnRmse": 6.071328372467223,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 130,
+          "modelSelections": {
+            "baseline": 120,
+            "ewma": 10
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.021370703149104824,
+          "error": 4.508379368232879,
+          "returnMae": 4.422266151114055,
+          "coverage80": 81.53846153846153,
+          "coverage95": 92.3076923076923,
+          "brier": 0.25,
+          "returnRmse": 6.071328372467223,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 130,
+          "modelSelections": {
+            "baseline": 130
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.02655606880382447,
+          "error": 5.758454832498459,
+          "returnMae": 5.6231957382673325,
+          "coverage80": 67.6923076923077,
+          "coverage95": 80.76923076923077,
+          "brier": 0.3301857521900764,
+          "returnRmse": 7.238941478220729,
+          "directionAccuracy": 43.84615384615385,
+          "directionalCoverage": 99.23076923076923,
+          "directionalAccuracyWhenCalled": 44.18604651162791,
+          "availableForecasts": 130,
+          "modelSelections": {
+            "trend-30": 130
+          }
+        },
+        "directHorizon": {
+          "wis": 0.022628071342726618,
+          "error": 4.708823727547639,
+          "returnMae": 4.622769551458209,
+          "coverage80": 78.46153846153847,
+          "coverage95": 91.53846153846153,
+          "brier": 0.26849276973651004,
+          "returnRmse": 6.288468676262257,
+          "directionAccuracy": 38.46153846153847,
+          "directionalCoverage": 93.84615384615384,
+          "directionalAccuracyWhenCalled": 40.98360655737705,
+          "availableForecasts": 130,
+          "modelSelections": {
+            "ridge-direct": 130
+          }
+        },
+        "directContext": {
+          "wis": 0.02308936416177216,
+          "error": 4.848920297188651,
+          "returnMae": 4.762882589846483,
+          "coverage80": 76.92307692307692,
+          "coverage95": 91.53846153846153,
+          "brier": 0.2733535051345825,
+          "returnRmse": 6.4395187218217345,
+          "directionAccuracy": 31.538461538461537,
+          "directionalCoverage": 85.38461538461539,
+          "directionalAccuracyWhenCalled": 36.93693693693694,
+          "availableForecasts": 119,
+          "modelSelections": {
+            "ridge-context": 130
+          }
+        }
+      },
+      "sideways": {
+        "count": 39,
+        "legacy": {
+          "wis": 0.018291759090682293,
+          "error": 3.568420888762687,
+          "returnMae": 3.593723040671597,
+          "coverage80": 82.05128205128206,
+          "coverage95": 87.17948717948718,
+          "brier": 0.2570348611244789,
+          "returnRmse": 5.109032526803734,
+          "directionAccuracy": 56.41025641025641,
+          "directionalCoverage": 97.43589743589743,
+          "directionalAccuracyWhenCalled": 57.89473684210527,
+          "availableForecasts": 39,
+          "modelSelections": {
+            "baseline": 36,
+            "ewma": 3
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.01758299880405641,
+          "error": 3.427729231668411,
+          "returnMae": 3.4496472611903517,
+          "coverage80": 82.05128205128206,
+          "coverage95": 89.74358974358974,
+          "brier": 0.25,
+          "returnRmse": 4.950729936727975,
+          "directionAccuracy": 2.564102564102564,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 39,
+          "modelSelections": {
+            "baseline": 34,
+            "ewma": 5
+          }
+        },
+        "accuracy": {
+          "wis": 0.01758299880405641,
+          "error": 3.427729231668411,
+          "returnMae": 3.4496472611903517,
+          "coverage80": 82.05128205128206,
+          "coverage95": 89.74358974358974,
+          "brier": 0.25,
+          "returnRmse": 4.950729936727975,
+          "directionAccuracy": 2.564102564102564,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 39,
+          "modelSelections": {
+            "baseline": 34,
+            "ewma": 5
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.01758299880405641,
+          "error": 3.427729231668411,
+          "returnMae": 3.4496472611903517,
+          "coverage80": 82.05128205128206,
+          "coverage95": 89.74358974358974,
+          "brier": 0.25,
+          "returnRmse": 4.950729936727975,
+          "directionAccuracy": 2.564102564102564,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 39,
+          "modelSelections": {
+            "baseline": 34,
+            "ewma": 5
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.017547558008142627,
+          "error": 3.427729231668411,
+          "returnMae": 3.4496472611903517,
+          "coverage80": 87.17948717948718,
+          "coverage95": 89.74358974358974,
+          "brier": 0.25,
+          "returnRmse": 4.950729936727975,
+          "directionAccuracy": 2.564102564102564,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 39,
+          "modelSelections": {
+            "baseline": 39
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.018371973150352938,
+          "error": 3.568420888762687,
+          "returnMae": 3.593723040671597,
+          "coverage80": 71.7948717948718,
+          "coverage95": 87.17948717948718,
+          "brier": 0.254180555160229,
+          "returnRmse": 5.109032526803734,
+          "directionAccuracy": 56.41025641025641,
+          "directionalCoverage": 97.43589743589743,
+          "directionalAccuracyWhenCalled": 57.89473684210527,
+          "availableForecasts": 39,
+          "modelSelections": {
+            "trend-30": 39
+          }
+        },
+        "directHorizon": {
+          "wis": 0.017866926203345554,
+          "error": 3.5040128867491225,
+          "returnMae": 3.52617871929712,
+          "coverage80": 71.7948717948718,
+          "coverage95": 89.74358974358974,
+          "brier": 0.25868828174395436,
+          "returnRmse": 4.963904113971509,
+          "directionAccuracy": 46.15384615384615,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 46.15384615384615,
+          "availableForecasts": 39,
+          "modelSelections": {
+            "ridge-direct": 39
+          }
+        },
+        "directContext": {
+          "wis": 0.01675405916711975,
+          "error": 3.2406274424990533,
+          "returnMae": 3.262024769069768,
+          "coverage80": 76.92307692307692,
+          "coverage95": 89.74358974358974,
+          "brier": 0.2358872386125418,
+          "returnRmse": 4.707752352163676,
+          "directionAccuracy": 51.28205128205128,
+          "directionalCoverage": 82.05128205128204,
+          "directionalAccuracyWhenCalled": 62.5,
+          "availableForecasts": 35,
+          "modelSelections": {
+            "ridge-context": 39
+          }
+        }
+      }
+    },
+    "symbols": {
+      "RELIANCE.NS": {
+        "legacy": {
+          "wis": 0.018868980690604532,
+          "error": 3.8384263676561767,
+          "returnMae": 3.858581016622446,
+          "coverage80": 72,
+          "coverage95": 80,
+          "brier": 0.29156349420547484,
+          "returnRmse": 5.217941191408162,
+          "directionAccuracy": 56.00000000000001,
+          "directionalCoverage": 96,
+          "directionalAccuracyWhenCalled": 58.333333333333336,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.015734990060782373,
+          "error": 3.393099755439204,
+          "returnMae": 3.405627000224472,
+          "coverage80": 80,
+          "coverage95": 92,
+          "brier": 0.25,
+          "returnRmse": 4.46020369034727,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "accuracy": {
+          "wis": 0.015734990060782373,
+          "error": 3.393099755439204,
+          "returnMae": 3.405627000224472,
+          "coverage80": 80,
+          "coverage95": 92,
+          "brier": 0.25,
+          "returnRmse": 4.46020369034727,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.015734990060782373,
+          "error": 3.393099755439204,
+          "returnMae": 3.405627000224472,
+          "coverage80": 80,
+          "coverage95": 92,
+          "brier": 0.25,
+          "returnRmse": 4.46020369034727,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.015734990060782373,
+          "error": 3.393099755439204,
+          "returnMae": 3.405627000224472,
+          "coverage80": 80,
+          "coverage95": 92,
+          "brier": 0.25,
+          "returnRmse": 4.46020369034727,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.01963345101446828,
+          "error": 3.8384263676561767,
+          "returnMae": 3.858581016622446,
+          "coverage80": 68,
+          "coverage95": 80,
+          "brier": 0.298514723777771,
+          "returnRmse": 5.217941191408162,
+          "directionAccuracy": 56.00000000000001,
+          "directionalCoverage": 96,
+          "directionalAccuracyWhenCalled": 58.333333333333336,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "trend-30": 25
+          }
+        },
+        "directHorizon": {
+          "wis": 0.016756692869392773,
+          "error": 3.48200921797808,
+          "returnMae": 3.494805055053496,
+          "coverage80": 72,
+          "coverage95": 84,
+          "brier": 0.2600080394744873,
+          "returnRmse": 4.5834573274531545,
+          "directionAccuracy": 36,
+          "directionalCoverage": 92,
+          "directionalAccuracyWhenCalled": 39.130434782608695,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "ridge-direct": 25
+          }
+        },
+        "directContext": {
+          "wis": 0.016628482690335036,
+          "error": 3.558466186381778,
+          "returnMae": 3.5703237982372587,
+          "coverage80": 76,
+          "coverage95": 84,
+          "brier": 0.2708494257926941,
+          "returnRmse": 4.525932127856454,
+          "directionAccuracy": 24,
+          "directionalCoverage": 76,
+          "directionalAccuracyWhenCalled": 31.57894736842105,
+          "availableForecasts": 22,
+          "modelSelections": {
+            "ridge-context": 25
+          }
+        }
+      },
+      "TCS.NS": {
+        "legacy": {
+          "wis": 0.01949409149237585,
+          "error": 3.8190592320693253,
+          "returnMae": 3.7524340619621794,
+          "coverage80": 72,
+          "coverage95": 84,
+          "brier": 0.33133261919021606,
+          "returnRmse": 5.188885997578096,
+          "directionAccuracy": 48,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 48,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.016294049014507227,
+          "error": 3.199957840520387,
+          "returnMae": 3.142705656580051,
+          "coverage80": 84,
+          "coverage95": 92,
+          "brier": 0.25,
+          "returnRmse": 4.458075340982172,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "accuracy": {
+          "wis": 0.016294049014507227,
+          "error": 3.199957840520387,
+          "returnMae": 3.142705656580051,
+          "coverage80": 84,
+          "coverage95": 92,
+          "brier": 0.25,
+          "returnRmse": 4.458075340982172,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.016294049014507227,
+          "error": 3.199957840520387,
+          "returnMae": 3.142705656580051,
+          "coverage80": 84,
+          "coverage95": 92,
+          "brier": 0.25,
+          "returnRmse": 4.458075340982172,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.016294049014507227,
+          "error": 3.199957840520387,
+          "returnMae": 3.142705656580051,
+          "coverage80": 84,
+          "coverage95": 92,
+          "brier": 0.25,
+          "returnRmse": 4.458075340982172,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.019219726152257727,
+          "error": 3.8190592320693253,
+          "returnMae": 3.7524340619621794,
+          "coverage80": 72,
+          "coverage95": 80,
+          "brier": 0.3297301197052002,
+          "returnRmse": 5.188885997578096,
+          "directionAccuracy": 48,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 48,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "trend-30": 25
+          }
+        },
+        "directHorizon": {
+          "wis": 0.01630485181386574,
+          "error": 3.3833217525103265,
+          "returnMae": 3.3259043097868948,
+          "coverage80": 80,
+          "coverage95": 92,
+          "brier": 0.26946784973144533,
+          "returnRmse": 4.517463448441677,
+          "directionAccuracy": 32,
+          "directionalCoverage": 88,
+          "directionalAccuracyWhenCalled": 36.36363636363637,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "ridge-direct": 25
+          }
+        },
+        "directContext": {
+          "wis": 0.01687051389938794,
+          "error": 3.513488209032435,
+          "returnMae": 3.4570692594669192,
+          "coverage80": 80,
+          "coverage95": 92,
+          "brier": 0.2772534918785095,
+          "returnRmse": 4.634677553212189,
+          "directionAccuracy": 28.000000000000004,
+          "directionalCoverage": 76,
+          "directionalAccuracyWhenCalled": 36.84210526315789,
+          "availableForecasts": 22,
+          "modelSelections": {
+            "ridge-context": 25
+          }
+        }
+      },
+      "HDFCBANK.NS": {
+        "legacy": {
+          "wis": 0.014923943899668002,
+          "error": 3.0402265040418945,
+          "returnMae": 3.0000691314273995,
+          "coverage80": 84,
+          "coverage95": 88,
+          "brier": 0.23497045993804933,
+          "returnRmse": 4.0382916246700695,
+          "directionAccuracy": 64,
+          "directionalCoverage": 96,
+          "directionalAccuracyWhenCalled": 66.66666666666666,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.012822535063695245,
+          "error": 2.496876528023111,
+          "returnMae": 2.464438140838092,
+          "coverage80": 76,
+          "coverage95": 92,
+          "brier": 0.25,
+          "returnRmse": 3.545564345622641,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 15,
+            "ewma": 10
+          }
+        },
+        "accuracy": {
+          "wis": 0.012822535063695245,
+          "error": 2.496876528023111,
+          "returnMae": 2.464438140838092,
+          "coverage80": 76,
+          "coverage95": 92,
+          "brier": 0.25,
+          "returnRmse": 3.545564345622641,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 15,
+            "ewma": 10
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.012822535063695245,
+          "error": 2.496876528023111,
+          "returnMae": 2.464438140838092,
+          "coverage80": 76,
+          "coverage95": 92,
+          "brier": 0.25,
+          "returnRmse": 3.545564345622641,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 15,
+            "ewma": 10
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.013256785302773163,
+          "error": 2.496876528023111,
+          "returnMae": 2.464438140838092,
+          "coverage80": 80,
+          "coverage95": 92,
+          "brier": 0.25,
+          "returnRmse": 3.545564345622641,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.012993043880945623,
+          "error": 3.0402265040418945,
+          "returnMae": 3.0000691314273995,
+          "coverage80": 76,
+          "coverage95": 92,
+          "brier": 0.23199969053268432,
+          "returnRmse": 4.0382916246700695,
+          "directionAccuracy": 64,
+          "directionalCoverage": 96,
+          "directionalAccuracyWhenCalled": 66.66666666666666,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "trend-30": 25
+          }
+        },
+        "directHorizon": {
+          "wis": 0.013912886063150885,
+          "error": 2.718080017092741,
+          "returnMae": 2.6868836664602953,
+          "coverage80": 76,
+          "coverage95": 92,
+          "brier": 0.29224841356277464,
+          "returnRmse": 3.872089891382835,
+          "directionAccuracy": 40,
+          "directionalCoverage": 96,
+          "directionalAccuracyWhenCalled": 41.66666666666667,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "ridge-direct": 25
+          }
+        },
+        "directContext": {
+          "wis": 0.014107573953812576,
+          "error": 2.6932986243701276,
+          "returnMae": 2.6639006058379096,
+          "coverage80": 80,
+          "coverage95": 92,
+          "brier": 0.2770069980621338,
+          "returnRmse": 4.058089986717644,
+          "directionAccuracy": 36,
+          "directionalCoverage": 80,
+          "directionalAccuracyWhenCalled": 45,
+          "availableForecasts": 22,
+          "modelSelections": {
+            "ridge-context": 25
+          }
+        }
+      },
+      "INFY.NS": {
+        "legacy": {
+          "wis": 0.024267994896281193,
+          "error": 4.788233289028081,
+          "returnMae": 4.705427328609694,
+          "coverage80": 76,
+          "coverage95": 84,
+          "brier": 0.3102847862243652,
+          "returnRmse": 6.334538092812516,
+          "directionAccuracy": 44,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 44,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.01843671814151247,
+          "error": 3.904882756126345,
+          "returnMae": 3.8540516529637183,
+          "coverage80": 88,
+          "coverage95": 96,
+          "brier": 0.25,
+          "returnRmse": 5.023988802405639,
+          "directionAccuracy": 4,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "accuracy": {
+          "wis": 0.01843671814151247,
+          "error": 3.904882756126345,
+          "returnMae": 3.8540516529637183,
+          "coverage80": 88,
+          "coverage95": 96,
+          "brier": 0.25,
+          "returnRmse": 5.023988802405639,
+          "directionAccuracy": 4,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.01843671814151247,
+          "error": 3.904882756126345,
+          "returnMae": 3.8540516529637183,
+          "coverage80": 88,
+          "coverage95": 96,
+          "brier": 0.25,
+          "returnRmse": 5.023988802405639,
+          "directionAccuracy": 4,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.01843671814151247,
+          "error": 3.904882756126345,
+          "returnMae": 3.8540516529637183,
+          "coverage80": 88,
+          "coverage95": 96,
+          "brier": 0.25,
+          "returnRmse": 5.023988802405639,
+          "directionAccuracy": 4,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.02410166589166838,
+          "error": 4.788233289028081,
+          "returnMae": 4.705427328609694,
+          "coverage80": 72,
+          "coverage95": 80,
+          "brier": 0.3078698945045471,
+          "returnRmse": 6.334538092812516,
+          "directionAccuracy": 44,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 44,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "trend-30": 25
+          }
+        },
+        "directHorizon": {
+          "wis": 0.018945732866962064,
+          "error": 3.9140238344336478,
+          "returnMae": 3.864043686259961,
+          "coverage80": 80,
+          "coverage95": 92,
+          "brier": 0.25737107753753663,
+          "returnRmse": 5.1301566969742085,
+          "directionAccuracy": 40,
+          "directionalCoverage": 92,
+          "directionalAccuracyWhenCalled": 43.47826086956522,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "ridge-direct": 25
+          }
+        },
+        "directContext": {
+          "wis": 0.018573713474482126,
+          "error": 3.8577822141097875,
+          "returnMae": 3.8086235027395072,
+          "coverage80": 80,
+          "coverage95": 96,
+          "brier": 0.24746842861175536,
+          "returnRmse": 5.011607933018684,
+          "directionAccuracy": 48,
+          "directionalCoverage": 84,
+          "directionalAccuracyWhenCalled": 57.14285714285714,
+          "availableForecasts": 22,
+          "modelSelections": {
+            "ridge-context": 25
+          }
+        }
+      },
+      "SUNPHARMA.NS": {
+        "legacy": {
+          "wis": 0.014345883542830968,
+          "error": 3.219958760239557,
+          "returnMae": 3.2202608383961007,
+          "coverage80": 76,
+          "coverage95": 92,
+          "brier": 0.2713403511047363,
+          "returnRmse": 4.065149973001485,
+          "directionAccuracy": 44,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 44,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.012057186638853388,
+          "error": 2.949753550675435,
+          "returnMae": 2.9514742588848235,
+          "coverage80": 76,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 3.514940594210235,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 15,
+            "ewma": 10
+          }
+        },
+        "accuracy": {
+          "wis": 0.012057186638853388,
+          "error": 2.949753550675435,
+          "returnMae": 2.9514742588848235,
+          "coverage80": 76,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 3.514940594210235,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 15,
+            "ewma": 10
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.012057186638853388,
+          "error": 2.949753550675435,
+          "returnMae": 2.9514742588848235,
+          "coverage80": 76,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 3.514940594210235,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 15,
+            "ewma": 10
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.012137245474603629,
+          "error": 2.949753550675435,
+          "returnMae": 2.9514742588848235,
+          "coverage80": 84,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 3.514940594210235,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.014886877077374397,
+          "error": 3.219958760239557,
+          "returnMae": 3.2202608383961007,
+          "coverage80": 80,
+          "coverage95": 84,
+          "brier": 0.2780025029182434,
+          "returnRmse": 4.065149973001485,
+          "directionAccuracy": 44,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 44,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "trend-30": 25
+          }
+        },
+        "directHorizon": {
+          "wis": 0.013203127296906947,
+          "error": 3.141886826676607,
+          "returnMae": 3.1447768432211456,
+          "coverage80": 80,
+          "coverage95": 92,
+          "brier": 0.28044322967529295,
+          "returnRmse": 3.7350647464266475,
+          "directionAccuracy": 40,
+          "directionalCoverage": 96,
+          "directionalAccuracyWhenCalled": 41.66666666666667,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "ridge-direct": 25
+          }
+        },
+        "directContext": {
+          "wis": 0.012711574988700397,
+          "error": 3.078907076911154,
+          "returnMae": 3.082645019804311,
+          "coverage80": 76,
+          "coverage95": 92,
+          "brier": 0.27101351737976076,
+          "returnRmse": 3.7800922582194554,
+          "directionAccuracy": 44,
+          "directionalCoverage": 80,
+          "directionalAccuracyWhenCalled": 55.00000000000001,
+          "availableForecasts": 22,
+          "modelSelections": {
+            "ridge-context": 25
+          }
+        }
+      },
+      "ITC.NS": {
+        "legacy": {
+          "wis": 0.016374177286485804,
+          "error": 2.9424687964612337,
+          "returnMae": 2.8690706205758074,
+          "coverage80": 88,
+          "coverage95": 88,
+          "brier": 0.26680358409881594,
+          "returnRmse": 4.40635333002207,
+          "directionAccuracy": 64,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 64,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.01290223855682467,
+          "error": 2.531106865471074,
+          "returnMae": 2.48425302418232,
+          "coverage80": 92,
+          "coverage95": 96,
+          "brier": 0.25640062808990477,
+          "returnRmse": 3.549224574674377,
+          "directionAccuracy": 0,
+          "directionalCoverage": 8,
+          "directionalAccuracyWhenCalled": 0,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 23,
+            "har-trend": 2
+          }
+        },
+        "accuracy": {
+          "wis": 0.01290223855682467,
+          "error": 2.531106865471074,
+          "returnMae": 2.48425302418232,
+          "coverage80": 92,
+          "coverage95": 96,
+          "brier": 0.25640062808990477,
+          "returnRmse": 3.549224574674377,
+          "directionAccuracy": 0,
+          "directionalCoverage": 8,
+          "directionalAccuracyWhenCalled": 0,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 23,
+            "har-trend": 2
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.01290223855682467,
+          "error": 2.531106865471074,
+          "returnMae": 2.48425302418232,
+          "coverage80": 92,
+          "coverage95": 96,
+          "brier": 0.25640062808990477,
+          "returnRmse": 3.549224574674377,
+          "directionAccuracy": 0,
+          "directionalCoverage": 8,
+          "directionalAccuracyWhenCalled": 0,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 23,
+            "har-trend": 2
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.01284352469202219,
+          "error": 2.485105598502444,
+          "returnMae": 2.438119181071489,
+          "coverage80": 92,
+          "coverage95": 96,
+          "brier": 0.25,
+          "returnRmse": 3.538950351173388,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.0160590384753722,
+          "error": 2.9424687964612337,
+          "returnMae": 2.8690706205758074,
+          "coverage80": 76,
+          "coverage95": 92,
+          "brier": 0.26258556842803954,
+          "returnRmse": 4.40635333002207,
+          "directionAccuracy": 64,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 64,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "trend-30": 25
+          }
+        },
+        "directHorizon": {
+          "wis": 0.013432594465019133,
+          "error": 2.469443062487572,
+          "returnMae": 2.4224353689484017,
+          "coverage80": 92,
+          "coverage95": 96,
+          "brier": 0.2530032920837402,
+          "returnRmse": 3.5288394744144456,
+          "directionAccuracy": 52,
+          "directionalCoverage": 96,
+          "directionalAccuracyWhenCalled": 54.166666666666664,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "ridge-direct": 25
+          }
+        },
+        "directContext": {
+          "wis": 0.013438594371623274,
+          "error": 2.494807056593895,
+          "returnMae": 2.446684586606433,
+          "coverage80": 84,
+          "coverage95": 96,
+          "brier": 0.25610961675643923,
+          "returnRmse": 3.5797741655077484,
+          "directionAccuracy": 36,
+          "directionalCoverage": 80,
+          "directionalAccuracyWhenCalled": 45,
+          "availableForecasts": 23,
+          "modelSelections": {
+            "ridge-context": 25
+          }
+        }
+      },
+      "TATASTEEL.NS": {
+        "legacy": {
+          "wis": 0.022750819580670382,
+          "error": 4.710061444600193,
+          "returnMae": 4.792772528720814,
+          "coverage80": 76,
+          "coverage95": 84,
+          "brier": 0.29974267959594725,
+          "returnRmse": 6.638451403949464,
+          "directionAccuracy": 48,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 48,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 13,
+            "ewma": 12
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.01655209135899855,
+          "error": 3.5843645853516564,
+          "returnMae": 3.660994636944141,
+          "coverage80": 80,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 4.927987115717654,
+          "directionAccuracy": 4,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "accuracy": {
+          "wis": 0.01655209135899855,
+          "error": 3.5843645853516564,
+          "returnMae": 3.660994636944141,
+          "coverage80": 80,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 4.927987115717654,
+          "directionAccuracy": 4,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.01655209135899855,
+          "error": 3.5843645853516564,
+          "returnMae": 3.660994636944141,
+          "coverage80": 80,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 4.927987115717654,
+          "directionAccuracy": 4,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.01655209135899855,
+          "error": 3.5843645853516564,
+          "returnMae": 3.660994636944141,
+          "coverage80": 80,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 4.927987115717654,
+          "directionAccuracy": 4,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.021907797799960115,
+          "error": 4.710061444600193,
+          "returnMae": 4.792772528720814,
+          "coverage80": 76,
+          "coverage95": 88,
+          "brier": 0.2944595170021057,
+          "returnRmse": 6.638451403949464,
+          "directionAccuracy": 48,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 48,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "trend-30": 25
+          }
+        },
+        "directHorizon": {
+          "wis": 0.01496413268236385,
+          "error": 3.3246765153564497,
+          "returnMae": 3.397052073481743,
+          "coverage80": 92,
+          "coverage95": 100,
+          "brier": 0.242055184841156,
+          "returnRmse": 4.37264574498709,
+          "directionAccuracy": 56.00000000000001,
+          "directionalCoverage": 96,
+          "directionalAccuracyWhenCalled": 58.333333333333336,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "ridge-direct": 25
+          }
+        },
+        "directContext": {
+          "wis": 0.016192842415431265,
+          "error": 3.7269743008815577,
+          "returnMae": 3.8064004223565804,
+          "coverage80": 84,
+          "coverage95": 100,
+          "brier": 0.2602542877197266,
+          "returnRmse": 4.927913569350696,
+          "directionAccuracy": 36,
+          "directionalCoverage": 84,
+          "directionalAccuracyWhenCalled": 42.857142857142854,
+          "availableForecasts": 22,
+          "modelSelections": {
+            "ridge-context": 25
+          }
+        }
+      },
+      "MARUTI.NS": {
+        "legacy": {
+          "wis": 0.025290140889422275,
+          "error": 5.119960212987895,
+          "returnMae": 5.133615094546594,
+          "coverage80": 68,
+          "coverage95": 72,
+          "brier": 0.29944539546966553,
+          "returnRmse": 6.41436076616835,
+          "directionAccuracy": 40,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 40,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.01929364436569716,
+          "error": 4.197538922953481,
+          "returnMae": 4.206419167086604,
+          "coverage80": 72,
+          "coverage95": 88,
+          "brier": 0.25,
+          "returnRmse": 5.2617850380011415,
+          "directionAccuracy": 4,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "accuracy": {
+          "wis": 0.01929364436569716,
+          "error": 4.197538922953481,
+          "returnMae": 4.206419167086604,
+          "coverage80": 72,
+          "coverage95": 88,
+          "brier": 0.25,
+          "returnRmse": 5.2617850380011415,
+          "directionAccuracy": 4,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.01929364436569716,
+          "error": 4.197538922953481,
+          "returnMae": 4.206419167086604,
+          "coverage80": 72,
+          "coverage95": 88,
+          "brier": 0.25,
+          "returnRmse": 5.2617850380011415,
+          "directionAccuracy": 4,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.01929364436569716,
+          "error": 4.197538922953481,
+          "returnMae": 4.206419167086604,
+          "coverage80": 72,
+          "coverage95": 88,
+          "brier": 0.25,
+          "returnRmse": 5.2617850380011415,
+          "directionAccuracy": 4,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.025637217108698474,
+          "error": 5.119960212987895,
+          "returnMae": 5.133615094546594,
+          "coverage80": 68,
+          "coverage95": 76,
+          "brier": 0.31277668237686157,
+          "returnRmse": 6.41436076616835,
+          "directionAccuracy": 40,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 40,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "trend-30": 25
+          }
+        },
+        "directHorizon": {
+          "wis": 0.020736689290318043,
+          "error": 4.029172571542439,
+          "returnMae": 4.036662668765545,
+          "coverage80": 76,
+          "coverage95": 80,
+          "brier": 0.24883052349090576,
+          "returnRmse": 5.422845914742929,
+          "directionAccuracy": 52,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 52,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "ridge-direct": 25
+          }
+        },
+        "directContext": {
+          "wis": 0.019912203763173018,
+          "error": 3.858058699722964,
+          "returnMae": 3.8643364357603556,
+          "coverage80": 72,
+          "coverage95": 80,
+          "brier": 0.2304966163635254,
+          "returnRmse": 5.23452987156393,
+          "directionAccuracy": 52,
+          "directionalCoverage": 88,
+          "directionalAccuracyWhenCalled": 59.09090909090909,
+          "availableForecasts": 22,
+          "modelSelections": {
+            "ridge-context": 25
+          }
+        }
+      },
+      "AAPL": {
+        "legacy": {
+          "wis": 0.017815684720100353,
+          "error": 3.9478485142713504,
+          "returnMae": 4.00645090935625,
+          "coverage80": 88,
+          "coverage95": 96,
+          "brier": 0.24620784997940062,
+          "returnRmse": 5.208593550855453,
+          "directionAccuracy": 60,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 60,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.01682193417285567,
+          "error": 3.5092048849201176,
+          "returnMae": 3.562608191259536,
+          "coverage80": 96,
+          "coverage95": 96,
+          "brier": 0.25,
+          "returnRmse": 4.657328825338283,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "accuracy": {
+          "wis": 0.01682193417285567,
+          "error": 3.5092048849201176,
+          "returnMae": 3.562608191259536,
+          "coverage80": 96,
+          "coverage95": 96,
+          "brier": 0.25,
+          "returnRmse": 4.657328825338283,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.01682193417285567,
+          "error": 3.5092048849201176,
+          "returnMae": 3.562608191259536,
+          "coverage80": 96,
+          "coverage95": 96,
+          "brier": 0.25,
+          "returnRmse": 4.657328825338283,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.01682193417285567,
+          "error": 3.5092048849201176,
+          "returnMae": 3.562608191259536,
+          "coverage80": 96,
+          "coverage95": 96,
+          "brier": 0.25,
+          "returnRmse": 4.657328825338283,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.019453104056224992,
+          "error": 3.9478485142713504,
+          "returnMae": 4.00645090935625,
+          "coverage80": 68,
+          "coverage95": 88,
+          "brier": 0.2612713646888733,
+          "returnRmse": 5.208593550855453,
+          "directionAccuracy": 60,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 60,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "trend-30": 25
+          }
+        },
+        "directHorizon": {
+          "wis": 0.017054851065138987,
+          "error": 3.4925740078937704,
+          "returnMae": 3.54496043008963,
+          "coverage80": 76,
+          "coverage95": 96,
+          "brier": 0.2549265360832214,
+          "returnRmse": 4.614985435303043,
+          "directionAccuracy": 44,
+          "directionalCoverage": 96,
+          "directionalAccuracyWhenCalled": 45.83333333333333,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "ridge-direct": 25
+          }
+        },
+        "directContext": {
+          "wis": 0.017343103962465342,
+          "error": 3.598528872880581,
+          "returnMae": 3.652164333435722,
+          "coverage80": 80,
+          "coverage95": 96,
+          "brier": 0.2616958928108215,
+          "returnRmse": 4.687601474245472,
+          "directionAccuracy": 48,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 48,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "ridge-context": 25
+          }
+        }
+      },
+      "MSFT": {
+        "legacy": {
+          "wis": 0.022237876858064224,
+          "error": 4.548355262572482,
+          "returnMae": 4.541480147414893,
+          "coverage80": 80,
+          "coverage95": 88,
+          "brier": 0.25395461797714236,
+          "returnRmse": 6.0770336996386956,
+          "directionAccuracy": 52,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 52,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.019854691086069593,
+          "error": 3.9486097942567953,
+          "returnMae": 3.9499219638402012,
+          "coverage80": 68,
+          "coverage95": 88,
+          "brier": 0.25,
+          "returnRmse": 5.492901927730056,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 6,
+            "ewma": 19
+          }
+        },
+        "accuracy": {
+          "wis": 0.019854691086069593,
+          "error": 3.9486097942567953,
+          "returnMae": 3.9499219638402012,
+          "coverage80": 68,
+          "coverage95": 88,
+          "brier": 0.25,
+          "returnRmse": 5.492901927730056,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 6,
+            "ewma": 19
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.019854691086069593,
+          "error": 3.9486097942567953,
+          "returnMae": 3.9499219638402012,
+          "coverage80": 68,
+          "coverage95": 88,
+          "brier": 0.25,
+          "returnRmse": 5.492901927730056,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 6,
+            "ewma": 19
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.019791554045192214,
+          "error": 3.9486097942567953,
+          "returnMae": 3.9499219638402012,
+          "coverage80": 84,
+          "coverage95": 88,
+          "brier": 0.25,
+          "returnRmse": 5.492901927730056,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.021087504923922903,
+          "error": 4.548355262572482,
+          "returnMae": 4.541480147414893,
+          "coverage80": 76,
+          "coverage95": 88,
+          "brier": 0.25816361665725707,
+          "returnRmse": 6.0770336996386956,
+          "directionAccuracy": 52,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 52,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "trend-30": 25
+          }
+        },
+        "directHorizon": {
+          "wis": 0.0199443312345964,
+          "error": 4.1764665469471325,
+          "returnMae": 4.178740216726724,
+          "coverage80": 68,
+          "coverage95": 92,
+          "brier": 0.27360722303390506,
+          "returnRmse": 5.71785025695235,
+          "directionAccuracy": 28.000000000000004,
+          "directionalCoverage": 92,
+          "directionalAccuracyWhenCalled": 30.434782608695656,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "ridge-direct": 25
+          }
+        },
+        "directContext": {
+          "wis": 0.020280196244792572,
+          "error": 4.2338428865776185,
+          "returnMae": 4.235325726395074,
+          "coverage80": 68,
+          "coverage95": 92,
+          "brier": 0.2799390888214111,
+          "returnRmse": 5.8065949416888865,
+          "directionAccuracy": 32,
+          "directionalCoverage": 96,
+          "directionalAccuracyWhenCalled": 33.33333333333333,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "ridge-context": 25
+          }
+        }
+      },
+      "BTC-USD": {
+        "legacy": {
+          "wis": 0.0321792468523005,
+          "error": 7.410943064946988,
+          "returnMae": 7.154462494157243,
+          "coverage80": 68,
+          "coverage95": 88,
+          "brier": 0.3200169062614441,
+          "returnRmse": 8.324903763130965,
+          "directionAccuracy": 40,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 40,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.028627244419883607,
+          "error": 5.733440420856625,
+          "returnMae": 5.54480746725254,
+          "coverage80": 88,
+          "coverage95": 88,
+          "brier": 0.25,
+          "returnRmse": 7.242211868141641,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "accuracy": {
+          "wis": 0.028627244419883607,
+          "error": 5.733440420856625,
+          "returnMae": 5.54480746725254,
+          "coverage80": 88,
+          "coverage95": 88,
+          "brier": 0.25,
+          "returnRmse": 7.242211868141641,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.028627244419883607,
+          "error": 5.733440420856625,
+          "returnMae": 5.54480746725254,
+          "coverage80": 88,
+          "coverage95": 88,
+          "brier": 0.25,
+          "returnRmse": 7.242211868141641,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.028627244419883607,
+          "error": 5.733440420856625,
+          "returnMae": 5.54480746725254,
+          "coverage80": 88,
+          "coverage95": 88,
+          "brier": 0.25,
+          "returnRmse": 7.242211868141641,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.033507465769788934,
+          "error": 7.410943064946988,
+          "returnMae": 7.154462494157243,
+          "coverage80": 72,
+          "coverage95": 84,
+          "brier": 0.3206957268714905,
+          "returnRmse": 8.324903763130965,
+          "directionAccuracy": 40,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 40,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "trend-30": 25
+          }
+        },
+        "directHorizon": {
+          "wis": 0.03074185743331998,
+          "error": 5.953699723427896,
+          "returnMae": 5.765518634836219,
+          "coverage80": 80,
+          "coverage95": 88,
+          "brier": 0.2653084135055542,
+          "returnRmse": 7.494688872715157,
+          "directionAccuracy": 36,
+          "directionalCoverage": 92,
+          "directionalAccuracyWhenCalled": 39.130434782608695,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "ridge-direct": 25
+          }
+        },
+        "directContext": {
+          "wis": 0.03091710034742937,
+          "error": 5.991630430893056,
+          "returnMae": 5.80260194926493,
+          "coverage80": 80,
+          "coverage95": 88,
+          "brier": 0.2665849232673645,
+          "returnRmse": 7.567160258821121,
+          "directionAccuracy": 36,
+          "directionalCoverage": 96,
+          "directionalAccuracyWhenCalled": 37.5,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "ridge-context": 25
+          }
+        }
+      },
+      "ETH-USD": {
+        "legacy": {
+          "wis": 0.036260830349917374,
+          "error": 8.493388481037929,
+          "returnMae": 8.130365257047952,
+          "coverage80": 84,
+          "coverage95": 96,
+          "brier": 0.27287399768829346,
+          "returnRmse": 9.803741679106393,
+          "directionAccuracy": 48,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 48,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.035877321854288456,
+          "error": 7.418535996939122,
+          "returnMae": 7.09614360774869,
+          "coverage80": 88,
+          "coverage95": 96,
+          "brier": 0.25,
+          "returnRmse": 9.282677599875976,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "accuracy": {
+          "wis": 0.035877321854288456,
+          "error": 7.418535996939122,
+          "returnMae": 7.09614360774869,
+          "coverage80": 88,
+          "coverage95": 96,
+          "brier": 0.25,
+          "returnRmse": 9.282677599875976,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.035877321854288456,
+          "error": 7.418535996939122,
+          "returnMae": 7.09614360774869,
+          "coverage80": 88,
+          "coverage95": 96,
+          "brier": 0.25,
+          "returnRmse": 9.282677599875976,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.035877321854288456,
+          "error": 7.418535996939122,
+          "returnMae": 7.09614360774869,
+          "coverage80": 88,
+          "coverage95": 96,
+          "brier": 0.25,
+          "returnRmse": 9.282677599875976,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "baseline": 25
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.03792677439969381,
+          "error": 8.493388481037929,
+          "returnMae": 8.130365257047952,
+          "coverage80": 80,
+          "coverage95": 88,
+          "brier": 0.27871927738189695,
+          "returnRmse": 9.803741679106393,
+          "directionAccuracy": 48,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 48,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "trend-30": 25
+          }
+        },
+        "directHorizon": {
+          "wis": 0.0376514350264347,
+          "error": 7.824206961205821,
+          "returnMae": 7.502321396243254,
+          "coverage80": 76,
+          "coverage95": 92,
+          "brier": 0.2583932375907898,
+          "returnRmse": 9.337008690270961,
+          "directionAccuracy": 32,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 32,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "ridge-direct": 25
+          }
+        },
+        "directContext": {
+          "wis": 0.03799116903890208,
+          "error": 7.998006267336321,
+          "returnMae": 7.674493505995373,
+          "coverage80": 76,
+          "coverage95": 92,
+          "brier": 0.26439083337783814,
+          "returnRmse": 9.534725284606052,
+          "directionAccuracy": 32,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 32,
+          "availableForecasts": 25,
+          "modelSelections": {
+            "ridge-context": 25
+          }
+        }
+      }
+    },
+    "comparisons": {
+      "productionVsLegacy": {
+        "skillPercent": 16.027456458480348,
+        "low95": 7.165865615276457,
+        "high95": 23.803615983928662,
+        "blocks": 15,
+        "method": "1000 paired calendar-month block bootstrap samples; exploratory with few blocks"
+      },
+      "productionVsUnchanged": {
+        "skillPercent": -0.09968998238878424,
+        "low95": -0.2978145133842425,
+        "high95": 0,
+        "blocks": 15,
+        "method": "1000 paired calendar-month block bootstrap samples; exploratory with few blocks"
+      },
+      "accuracyVsProduction": {
+        "skillPercent": 0,
+        "low95": 0,
+        "high95": 0,
+        "blocks": 15,
+        "method": "1000 paired calendar-month block bootstrap samples; exploratory with few blocks"
+      },
+      "contextVsProduction": {
+        "skillPercent": 0,
+        "low95": 0,
+        "high95": 0,
+        "blocks": 15,
+        "method": "1000 paired calendar-month block bootstrap samples; exploratory with few blocks"
+      },
+      "directVsProduction": {
+        "skillPercent": -2.246507329678127,
+        "low95": -4.203245327288996,
+        "high95": 0.23493018227380702,
+        "blocks": 15,
+        "method": "1000 paired calendar-month block bootstrap samples; exploratory with few blocks"
+      },
+      "directContextVsProduction": {
+        "skillPercent": -3.758624572983549,
+        "low95": -7.181542633230542,
+        "high95": -0.3239745382308534,
+        "blocks": 15,
+        "method": "1000 paired calendar-month block bootstrap samples; exploratory with few blocks"
+      }
+    },
+    "limitations": [
+      "Fixed convenience universe; not a survivorship-free exchange panel.",
+      "Downloaded adjusted history is a current snapshot, not a vintage point-in-time archive.",
+      "The same source provides targets and inputs.",
+      "Success on a historical holdout does not establish future accuracy."
+    ]
+  },
+  "holdout": {
+    "mode": "holdout",
+    "createdAt": "2026-10-26T23:04:53.501Z",
+    "modelVersion": "4.0.0",
+    "codeSha256": "8ae389f27ee8ea87ba8c0021feffa92bf55acb852a5a02b1bf4ed13baf6e0e46",
+    "legacyRevision": "ab21308d0cd8f56f28c4e5ca72c11171be7f988e",
+    "productionVariant": "alignedOriginalFamily",
+    "manifestSha256": "155697c67d5ef491537dabea50c6795e54bf0dd4b2353fd0557216576749839a",
+    "observations": 144,
+    "horizon": 10,
+    "overall": {
+      "legacy": {
+        "wis": 0.024118461218869444,
+        "error": 5.339714854341065,
+        "returnMae": 5.4109512318205395,
+        "coverage80": 66.66666666666667,
+        "coverage95": 88.88888888888889,
+        "brier": 0.31048953781525296,
+        "returnRmse": 7.047584433939859,
+        "directionAccuracy": 44.44444444444444,
+        "directionalCoverage": 99.30555555555556,
+        "directionalAccuracyWhenCalled": 44.75524475524475,
+        "availableForecasts": 144,
+        "modelSelections": {
+          "baseline": 144
+        }
+      },
+      "alignedOriginalFamily": {
+        "wis": 0.019439859249972692,
+        "error": 4.290014035100317,
+        "returnMae": 4.339582007406307,
+        "coverage80": 76.38888888888889,
+        "coverage95": 93.75,
+        "brier": 0.2502676633497079,
+        "returnRmse": 5.9184643048648855,
+        "directionAccuracy": 1.3888888888888888,
+        "directionalCoverage": 2.7777777777777777,
+        "directionalAccuracyWhenCalled": 50,
+        "availableForecasts": 144,
+        "modelSelections": {
+          "baseline": 134,
+          "har-trend": 5,
+          "ewma": 5
+        }
+      },
+      "accuracy": {
+        "wis": 0.019475480416388198,
+        "error": 4.301388021628787,
+        "returnMae": 4.350998714565093,
+        "coverage80": 76.38888888888889,
+        "coverage95": 93.75,
+        "brier": 0.25116636314325863,
+        "returnRmse": 5.926254747586708,
+        "directionAccuracy": 1.3888888888888888,
+        "directionalCoverage": 4.166666666666666,
+        "directionalAccuracyWhenCalled": 33.33333333333333,
+        "availableForecasts": 144,
+        "modelSelections": {
+          "baseline": 132,
+          "har-trend": 5,
+          "ewma": 5,
+          "ridge-direct": 2
+        }
+      },
+      "contextExperiment": {
+        "wis": 0.019455875890029145,
+        "error": 4.2913647616295005,
+        "returnMae": 4.340928043180303,
+        "coverage80": 76.38888888888889,
+        "coverage95": 93.75,
+        "brier": 0.2504241226447953,
+        "returnRmse": 5.920558456271938,
+        "directionAccuracy": 2.083333333333333,
+        "directionalCoverage": 4.166666666666666,
+        "directionalAccuracyWhenCalled": 50,
+        "availableForecasts": 144,
+        "modelSelections": {
+          "baseline": 132,
+          "har-trend": 5,
+          "ewma": 5,
+          "ridge-direct": 1,
+          "ridge-context": 1
+        }
+      },
+      "unchangedPrice": {
+        "wis": 0.019398873274467317,
+        "error": 4.284677373341368,
+        "returnMae": 4.334140261654707,
+        "coverage80": 77.08333333333333,
+        "coverage95": 93.75,
+        "brier": 0.25,
+        "returnRmse": 5.915631335044578,
+        "directionAccuracy": 0,
+        "directionalCoverage": 0,
+        "directionalAccuracyWhenCalled": null,
+        "availableForecasts": 144,
+        "modelSelections": {
+          "baseline": 144
+        }
+      },
+      "simpleTrend": {
+        "wis": 0.023902739336171555,
+        "error": 5.339714854341065,
+        "returnMae": 5.4109512318205395,
+        "coverage80": 65.97222222222223,
+        "coverage95": 90.97222222222223,
+        "brier": 0.3043771551715003,
+        "returnRmse": 7.047584433939859,
+        "directionAccuracy": 44.44444444444444,
+        "directionalCoverage": 99.30555555555556,
+        "directionalAccuracyWhenCalled": 44.75524475524475,
+        "availableForecasts": 144,
+        "modelSelections": {
+          "trend-30": 144
+        }
+      },
+      "directHorizon": {
+        "wis": 0.02015889001021487,
+        "error": 4.3178714588805915,
+        "returnMae": 4.367959565047289,
+        "coverage80": 77.08333333333333,
+        "coverage95": 94.44444444444444,
+        "brier": 0.25196727365255356,
+        "returnRmse": 6.040267853124621,
+        "directionAccuracy": 47.22222222222222,
+        "directionalCoverage": 95.13888888888889,
+        "directionalAccuracyWhenCalled": 49.63503649635037,
+        "availableForecasts": 144,
+        "modelSelections": {
+          "ridge-direct": 144
+        }
+      },
+      "directContext": {
+        "wis": 0.02035822721414709,
+        "error": 4.40029358216134,
+        "returnMae": 4.448694982775259,
+        "coverage80": 78.47222222222223,
+        "coverage95": 95.13888888888889,
+        "brier": 0.2567042199273904,
+        "returnRmse": 6.121439214249938,
+        "directionAccuracy": 50,
+        "directionalCoverage": 95.83333333333334,
+        "directionalAccuracyWhenCalled": 52.17391304347826,
+        "availableForecasts": 144,
+        "modelSelections": {
+          "ridge-context": 144
+        }
+      }
+    },
+    "groups": {
+      "NSE": {
+        "legacy": {
+          "wis": 0.021377397193676106,
+          "error": 4.735923030516585,
+          "returnMae": 4.719202588550883,
+          "coverage80": 62.5,
+          "coverage95": 87.5,
+          "brier": 0.31894007821877796,
+          "returnRmse": 6.007588436890809,
+          "directionAccuracy": 42.70833333333333,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 42.70833333333333,
+          "availableForecasts": 96,
+          "modelSelections": {
+            "baseline": 96
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.01651439768100964,
+          "error": 3.9276992958936243,
+          "returnMae": 3.9077183020125976,
+          "coverage80": 71.875,
+          "coverage95": 94.79166666666667,
+          "brier": 0.2504014950245619,
+          "returnRmse": 4.844710043222649,
+          "directionAccuracy": 2.083333333333333,
+          "directionalCoverage": 4.166666666666666,
+          "directionalAccuracyWhenCalled": 50,
+          "availableForecasts": 96,
+          "modelSelections": {
+            "baseline": 89,
+            "har-trend": 5,
+            "ewma": 2
+          }
+        },
+        "accuracy": {
+          "wis": 0.01651439768100964,
+          "error": 3.9276992958936243,
+          "returnMae": 3.9077183020125976,
+          "coverage80": 71.875,
+          "coverage95": 94.79166666666667,
+          "brier": 0.2504014950245619,
+          "returnRmse": 4.844710043222649,
+          "directionAccuracy": 2.083333333333333,
+          "directionalCoverage": 4.166666666666666,
+          "directionalAccuracyWhenCalled": 50,
+          "availableForecasts": 96,
+          "modelSelections": {
+            "baseline": 89,
+            "har-trend": 5,
+            "ewma": 2
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.01651439768100964,
+          "error": 3.9276992958936243,
+          "returnMae": 3.9077183020125976,
+          "coverage80": 71.875,
+          "coverage95": 94.79166666666667,
+          "brier": 0.2504014950245619,
+          "returnRmse": 4.844710043222649,
+          "directionAccuracy": 2.083333333333333,
+          "directionalCoverage": 4.166666666666666,
+          "directionalAccuracyWhenCalled": 50,
+          "availableForecasts": 96,
+          "modelSelections": {
+            "baseline": 89,
+            "har-trend": 5,
+            "ewma": 2
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.016577506073589224,
+          "error": 3.9196943032552016,
+          "returnMae": 3.8995556833852,
+          "coverage80": 72.91666666666667,
+          "coverage95": 94.79166666666667,
+          "brier": 0.25,
+          "returnRmse": 4.839517222740783,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 96,
+          "modelSelections": {
+            "baseline": 96
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.020642728421048338,
+          "error": 4.735923030516585,
+          "returnMae": 4.719202588550883,
+          "coverage80": 64.58333333333333,
+          "coverage95": 90.625,
+          "brier": 0.31129519268870354,
+          "returnRmse": 6.007588436890809,
+          "directionAccuracy": 42.70833333333333,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 42.70833333333333,
+          "availableForecasts": 96,
+          "modelSelections": {
+            "trend-30": 96
+          }
+        },
+        "directHorizon": {
+          "wis": 0.017013596429072256,
+          "error": 3.920250250674641,
+          "returnMae": 3.9015055236084617,
+          "coverage80": 75,
+          "coverage95": 94.79166666666667,
+          "brier": 0.2500150501728058,
+          "returnRmse": 4.941595917535622,
+          "directionAccuracy": 47.91666666666667,
+          "directionalCoverage": 93.75,
+          "directionalAccuracyWhenCalled": 51.11111111111111,
+          "availableForecasts": 96,
+          "modelSelections": {
+            "ridge-direct": 96
+          }
+        },
+        "directContext": {
+          "wis": 0.017111995063622907,
+          "error": 3.974615191334413,
+          "returnMae": 3.954813182629662,
+          "coverage80": 76.04166666666667,
+          "coverage95": 95.83333333333333,
+          "brier": 0.25189922501643497,
+          "returnRmse": 5.010063942228372,
+          "directionAccuracy": 53.125,
+          "directionalCoverage": 93.75,
+          "directionalAccuracyWhenCalled": 56.666666666666664,
+          "availableForecasts": 96,
+          "modelSelections": {
+            "ridge-context": 96
+          }
+        }
+      },
+      "US": {
+        "legacy": {
+          "wis": 0.031149972723648955,
+          "error": 6.536293524961711,
+          "returnMae": 6.771598665852506,
+          "coverage80": 58.333333333333336,
+          "coverage95": 87.5,
+          "brier": 0.3495118071635564,
+          "returnRmse": 8.992941899967075,
+          "directionAccuracy": 41.66666666666667,
+          "directionalCoverage": 95.83333333333334,
+          "directionalAccuracyWhenCalled": 43.47826086956522,
+          "availableForecasts": 24,
+          "modelSelections": {
+            "baseline": 24
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.024841944234994442,
+          "error": 4.755618139182654,
+          "returnMae": 4.9485549198786885,
+          "coverage80": 79.16666666666667,
+          "coverage95": 87.5,
+          "brier": 0.25,
+          "returnRmse": 7.780032378040175,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 24,
+          "modelSelections": {
+            "baseline": 21,
+            "ewma": 3
+          }
+        },
+        "accuracy": {
+          "wis": 0.025055671233487464,
+          "error": 4.82386205835348,
+          "returnMae": 5.017055162831408,
+          "coverage80": 79.16666666666667,
+          "coverage95": 87.5,
+          "brier": 0.2553921987613042,
+          "returnRmse": 7.815533087087452,
+          "directionAccuracy": 0,
+          "directionalCoverage": 8.333333333333332,
+          "directionalAccuracyWhenCalled": 0,
+          "availableForecasts": 24,
+          "modelSelections": {
+            "baseline": 19,
+            "ridge-direct": 2,
+            "ewma": 3
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.024938044075333152,
+          "error": 4.763722498357761,
+          "returnMae": 4.956631134522667,
+          "coverage80": 79.16666666666667,
+          "coverage95": 87.5,
+          "brier": 0.2509387557705243,
+          "returnRmse": 7.789586641176386,
+          "directionAccuracy": 4.166666666666666,
+          "directionalCoverage": 8.333333333333332,
+          "directionalAccuracyWhenCalled": 50,
+          "availableForecasts": 24,
+          "modelSelections": {
+            "baseline": 19,
+            "ridge-direct": 1,
+            "ridge-context": 1,
+            "ewma": 3
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.024343594811643856,
+          "error": 4.755618139182654,
+          "returnMae": 4.9485549198786885,
+          "coverage80": 79.16666666666667,
+          "coverage95": 87.5,
+          "brier": 0.25,
+          "returnRmse": 7.780032378040175,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 24,
+          "modelSelections": {
+            "baseline": 24
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.029979180067493994,
+          "error": 6.536293524961711,
+          "returnMae": 6.771598665852506,
+          "coverage80": 66.66666666666667,
+          "coverage95": 91.66666666666667,
+          "brier": 0.32591434319814044,
+          "returnRmse": 8.992941899967075,
+          "directionAccuracy": 41.66666666666667,
+          "directionalCoverage": 95.83333333333334,
+          "directionalAccuracyWhenCalled": 43.47826086956522,
+          "availableForecasts": 24,
+          "modelSelections": {
+            "trend-30": 24
+          }
+        },
+        "directHorizon": {
+          "wis": 0.02443304310223268,
+          "error": 4.753743589577445,
+          "returnMae": 4.946774309450332,
+          "coverage80": 79.16666666666667,
+          "coverage95": 95.83333333333333,
+          "brier": 0.24186566968758902,
+          "returnRmse": 7.692098744327842,
+          "directionAccuracy": 54.166666666666664,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 54.166666666666664,
+          "availableForecasts": 24,
+          "modelSelections": {
+            "ridge-direct": 24
+          }
+        },
+        "directContext": {
+          "wis": 0.02450894461789078,
+          "error": 4.8529020915676755,
+          "returnMae": 5.043461090726796,
+          "coverage80": 83.33333333333333,
+          "coverage95": 95.83333333333333,
+          "brier": 0.2556983754038811,
+          "returnRmse": 7.686380761847733,
+          "directionAccuracy": 50,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 50,
+          "availableForecasts": 24,
+          "modelSelections": {
+            "ridge-context": 24
+          }
+        }
+      },
+      "Crypto": {
+        "legacy": {
+          "wis": 0.02805120581486333,
+          "error": 6.558303479018318,
+          "returnMae": 6.817298370867206,
+          "coverage80": 91.66666666666667,
+          "coverage95": 95.83333333333333,
+          "brier": 0.23766510685284933,
+          "returnRmse": 8.530720883760548,
+          "directionAccuracy": 54.166666666666664,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 54.166666666666664,
+          "availableForecasts": 24,
+          "modelSelections": {
+            "baseline": 24
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.025739620540803195,
+          "error": 5.273668887844746,
+          "returnMae": 5.458063916508764,
+          "coverage80": 91.66666666666667,
+          "coverage95": 95.83333333333333,
+          "brier": 0.25,
+          "returnRmse": 7.466964105498009,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 24,
+          "modelSelections": {
+            "baseline": 24
+          }
+        },
+        "accuracy": {
+          "wis": 0.025739620540803195,
+          "error": 5.273668887844746,
+          "returnMae": 5.458063916508764,
+          "coverage80": 91.66666666666667,
+          "coverage95": 95.83333333333333,
+          "brier": 0.25,
+          "returnRmse": 7.466964105498009,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 24,
+          "modelSelections": {
+            "baseline": 24
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.025739620540803195,
+          "error": 5.273668887844746,
+          "returnMae": 5.458063916508764,
+          "coverage80": 91.66666666666667,
+          "coverage95": 95.83333333333333,
+          "brier": 0.25,
+          "returnRmse": 7.466964105498009,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 24,
+          "modelSelections": {
+            "baseline": 24
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.025739620540803195,
+          "error": 5.273668887844746,
+          "returnMae": 5.458063916508764,
+          "coverage80": 91.66666666666667,
+          "coverage95": 95.83333333333333,
+          "brier": 0.25,
+          "returnRmse": 7.466964105498009,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 24,
+          "modelSelections": {
+            "baseline": 24
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.03086634226534203,
+          "error": 6.558303479018318,
+          "returnMae": 6.817298370867206,
+          "coverage80": 70.83333333333333,
+          "coverage95": 91.66666666666667,
+          "brier": 0.25516781707604724,
+          "returnRmse": 8.530720883760548,
+          "directionAccuracy": 54.166666666666664,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 54.166666666666664,
+          "availableForecasts": 24,
+          "modelSelections": {
+            "trend-30": 24
+          }
+        },
+        "directHorizon": {
+          "wis": 0.028465911242767473,
+          "error": 5.472484161007532,
+          "returnMae": 5.6549609863995505,
+          "coverage80": 83.33333333333333,
+          "coverage95": 91.66666666666667,
+          "brier": 0.2698777715365092,
+          "returnRmse": 7.878016913134636,
+          "directionAccuracy": 37.5,
+          "directionalCoverage": 95.83333333333334,
+          "directionalAccuracyWhenCalled": 39.130434782608695,
+          "availableForecasts": 24,
+          "modelSelections": {
+            "ridge-direct": 24
+          }
+        },
+        "directContext": {
+          "wis": 0.029192438412500115,
+          "error": 5.650398636062699,
+          "returnMae": 5.829456075406103,
+          "coverage80": 83.33333333333333,
+          "coverage95": 91.66666666666667,
+          "brier": 0.2769300440947215,
+          "returnRmse": 8.083854049002298,
+          "directionAccuracy": 37.5,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 37.5,
+          "availableForecasts": 24,
+          "modelSelections": {
+            "ridge-context": 24
+          }
+        }
+      }
+    },
+    "regimes": {
+      "rising": {
+        "count": 56,
+        "legacy": {
+          "wis": 0.026930218144795005,
+          "error": 5.96768074542174,
+          "returnMae": 6.055265363977425,
+          "coverage80": 64.28571428571429,
+          "coverage95": 83.92857142857143,
+          "brier": 0.3169111641389983,
+          "returnRmse": 7.401060640022843,
+          "directionAccuracy": 50,
+          "directionalCoverage": 98.21428571428571,
+          "directionalAccuracyWhenCalled": 50.90909090909091,
+          "availableForecasts": 56,
+          "modelSelections": {
+            "baseline": 56
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.020715151037013626,
+          "error": 4.583468831058533,
+          "returnMae": 4.609569865856749,
+          "coverage80": 76.78571428571429,
+          "coverage95": 89.28571428571429,
+          "brier": 0.25,
+          "returnRmse": 5.9460875849767625,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 56,
+          "modelSelections": {
+            "baseline": 52,
+            "ewma": 4
+          }
+        },
+        "accuracy": {
+          "wis": 0.020806748322082062,
+          "error": 4.612716224988888,
+          "returnMae": 4.638927112836487,
+          "coverage80": 76.78571428571429,
+          "coverage95": 89.28571428571429,
+          "brier": 0.2523109423262732,
+          "returnRmse": 5.966006846812786,
+          "directionAccuracy": 0,
+          "directionalCoverage": 3.571428571428571,
+          "directionalAccuracyWhenCalled": 0,
+          "availableForecasts": 56,
+          "modelSelections": {
+            "baseline": 50,
+            "ewma": 4,
+            "ridge-direct": 2
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.020756336682873074,
+          "error": 4.586942127847864,
+          "returnMae": 4.613031100704169,
+          "coverage80": 76.78571428571429,
+          "coverage95": 89.28571428571429,
+          "brier": 0.2504023239016533,
+          "returnRmse": 5.951446063036444,
+          "directionAccuracy": 1.7857142857142856,
+          "directionalCoverage": 3.571428571428571,
+          "directionalAccuracyWhenCalled": 50,
+          "availableForecasts": 56,
+          "modelSelections": {
+            "baseline": 50,
+            "ewma": 4,
+            "ridge-direct": 1,
+            "ridge-context": 1
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.020602702764233764,
+          "error": 4.583468831058533,
+          "returnMae": 4.609569865856749,
+          "coverage80": 76.78571428571429,
+          "coverage95": 89.28571428571429,
+          "brier": 0.25,
+          "returnRmse": 5.9460875849767625,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 56,
+          "modelSelections": {
+            "baseline": 56
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.027066110065220046,
+          "error": 5.96768074542174,
+          "returnMae": 6.055265363977425,
+          "coverage80": 64.28571428571429,
+          "coverage95": 87.5,
+          "brier": 0.3070228600076267,
+          "returnRmse": 7.401060640022843,
+          "directionAccuracy": 50,
+          "directionalCoverage": 98.21428571428571,
+          "directionalAccuracyWhenCalled": 50.90909090909091,
+          "availableForecasts": 56,
+          "modelSelections": {
+            "trend-30": 56
+          }
+        },
+        "directHorizon": {
+          "wis": 0.021473189644322262,
+          "error": 4.511899496326269,
+          "returnMae": 4.538833545293954,
+          "coverage80": 75,
+          "coverage95": 92.85714285714286,
+          "brier": 0.2459473737648555,
+          "returnRmse": 5.9159228319887,
+          "directionAccuracy": 50,
+          "directionalCoverage": 94.64285714285714,
+          "directionalAccuracyWhenCalled": 52.83018867924528,
+          "availableForecasts": 56,
+          "modelSelections": {
+            "ridge-direct": 56
+          }
+        },
+        "directContext": {
+          "wis": 0.021754972567646313,
+          "error": 4.6447892728790725,
+          "returnMae": 4.669338627710794,
+          "coverage80": 78.57142857142857,
+          "coverage95": 94.64285714285714,
+          "brier": 0.25381417998245787,
+          "returnRmse": 6.10035494921132,
+          "directionAccuracy": 51.78571428571429,
+          "directionalCoverage": 98.21428571428571,
+          "directionalAccuracyWhenCalled": 52.72727272727272,
+          "availableForecasts": 56,
+          "modelSelections": {
+            "ridge-context": 56
+          }
+        }
+      },
+      "falling": {
+        "count": 67,
+        "legacy": {
+          "wis": 0.022231902098158392,
+          "error": 4.870047945009331,
+          "returnMae": 4.922562027069172,
+          "coverage80": 71.64179104477611,
+          "coverage95": 91.04477611940298,
+          "brier": 0.3064492771874613,
+          "returnRmse": 6.815920145401954,
+          "directionAccuracy": 41.7910447761194,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 41.7910447761194,
+          "availableForecasts": 67,
+          "modelSelections": {
+            "baseline": 67
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.01889524210445448,
+          "error": 4.101323216475639,
+          "returnMae": 4.157938314536147,
+          "coverage80": 77.61194029850746,
+          "coverage95": 97.01492537313433,
+          "brier": 0.2521293670383852,
+          "returnRmse": 5.981671164031528,
+          "directionAccuracy": 1.4925373134328357,
+          "directionalCoverage": 4.477611940298507,
+          "directionalAccuracyWhenCalled": 33.33333333333333,
+          "availableForecasts": 67,
+          "modelSelections": {
+            "baseline": 64,
+            "har-trend": 3
+          }
+        },
+        "accuracy": {
+          "wis": 0.01889524210445448,
+          "error": 4.101323216475639,
+          "returnMae": 4.157938314536147,
+          "coverage80": 77.61194029850746,
+          "coverage95": 97.01492537313433,
+          "brier": 0.2521293670383852,
+          "returnRmse": 5.981671164031528,
+          "directionAccuracy": 1.4925373134328357,
+          "directionalCoverage": 4.477611940298507,
+          "directionalAccuracyWhenCalled": 33.33333333333333,
+          "availableForecasts": 67,
+          "modelSelections": {
+            "baseline": 64,
+            "har-trend": 3
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.01889524210445448,
+          "error": 4.101323216475639,
+          "returnMae": 4.157938314536147,
+          "coverage80": 77.61194029850746,
+          "coverage95": 97.01492537313433,
+          "brier": 0.2521293670383852,
+          "returnRmse": 5.981671164031528,
+          "directionAccuracy": 1.4925373134328357,
+          "directionalCoverage": 4.477611940298507,
+          "directionalAccuracyWhenCalled": 33.33333333333333,
+          "availableForecasts": 67,
+          "modelSelections": {
+            "baseline": 64,
+            "har-trend": 3
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.018831456534583697,
+          "error": 4.073191905552994,
+          "returnMae": 4.12966766915231,
+          "coverage80": 79.1044776119403,
+          "coverage95": 97.01492537313433,
+          "brier": 0.25,
+          "returnRmse": 5.960603222993176,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 67,
+          "modelSelections": {
+            "baseline": 67
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.021196187954976742,
+          "error": 4.870047945009331,
+          "returnMae": 4.922562027069172,
+          "coverage80": 67.16417910447761,
+          "coverage95": 94.02985074626865,
+          "brier": 0.30365449634950553,
+          "returnRmse": 6.815920145401954,
+          "directionAccuracy": 41.7910447761194,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 41.7910447761194,
+          "availableForecasts": 67,
+          "modelSelections": {
+            "trend-30": 67
+          }
+        },
+        "directHorizon": {
+          "wis": 0.018774911701571004,
+          "error": 4.153658833953389,
+          "returnMae": 4.211121059169275,
+          "coverage80": 79.1044776119403,
+          "coverage95": 97.01492537313433,
+          "brier": 0.25560531865304975,
+          "returnRmse": 6.158944029296326,
+          "directionAccuracy": 47.76119402985074,
+          "directionalCoverage": 97.01492537313433,
+          "directionalAccuracyWhenCalled": 49.23076923076923,
+          "availableForecasts": 67,
+          "modelSelections": {
+            "ridge-direct": 67
+          }
+        },
+        "directContext": {
+          "wis": 0.018891766945059667,
+          "error": 4.161499000537107,
+          "returnMae": 4.217290965483614,
+          "coverage80": 80.59701492537313,
+          "coverage95": 97.01492537313433,
+          "brier": 0.251782532058545,
+          "returnRmse": 6.16616934312831,
+          "directionAccuracy": 55.223880597014926,
+          "directionalCoverage": 94.02985074626866,
+          "directionalAccuracyWhenCalled": 58.730158730158735,
+          "availableForecasts": 67,
+          "modelSelections": {
+            "ridge-context": 67
+          }
+        }
+      },
+      "sideways": {
+        "count": 21,
+        "legacy": {
+          "wis": 0.022639464706288952,
+          "error": 5.16360023647001,
+          "returnMae": 5.250974342180361,
+          "coverage80": 57.142857142857146,
+          "coverage95": 95.23809523809524,
+          "brier": 0.30625555628821965,
+          "returnRmse": 6.804108477858758,
+          "directionAccuracy": 38.095238095238095,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 38.095238095238095,
+          "availableForecasts": 21,
+          "modelSelections": {
+            "baseline": 21
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.01777666918689789,
+          "error": 4.109481476728557,
+          "returnMae": 4.1991442621242,
+          "coverage80": 71.42857142857143,
+          "coverage95": 95.23809523809524,
+          "brier": 0.24504171098981584,
+          "returnRmse": 5.63511056522095,
+          "directionAccuracy": 4.761904761904762,
+          "directionalCoverage": 4.761904761904762,
+          "directionalAccuracyWhenCalled": 100,
+          "availableForecasts": 21,
+          "modelSelections": {
+            "har-trend": 2,
+            "baseline": 18,
+            "ewma": 1
+          }
+        },
+        "accuracy": {
+          "wis": 0.01777666918689789,
+          "error": 4.109481476728557,
+          "returnMae": 4.1991442621242,
+          "coverage80": 71.42857142857143,
+          "coverage95": 95.23809523809524,
+          "brier": 0.24504171098981584,
+          "returnRmse": 5.63511056522095,
+          "directionAccuracy": 4.761904761904762,
+          "directionalCoverage": 4.761904761904762,
+          "directionalAccuracyWhenCalled": 100,
+          "availableForecasts": 21,
+          "modelSelections": {
+            "har-trend": 2,
+            "baseline": 18,
+            "ewma": 1
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.01777666918689789,
+          "error": 4.109481476728557,
+          "returnMae": 4.1991442621242,
+          "coverage80": 71.42857142857143,
+          "coverage95": 95.23809523809524,
+          "brier": 0.24504171098981584,
+          "returnRmse": 5.63511056522095,
+          "directionAccuracy": 4.761904761904762,
+          "directionalCoverage": 4.761904761904762,
+          "directionalAccuracyWhenCalled": 100,
+          "availableForecasts": 21,
+          "modelSelections": {
+            "har-trend": 2,
+            "baseline": 18,
+            "ewma": 1
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.01799899090043313,
+          "error": 4.162639502372778,
+          "returnMae": 4.252026255099763,
+          "coverage80": 71.42857142857143,
+          "coverage95": 95.23809523809524,
+          "brier": 0.25,
+          "returnRmse": 5.68571033824985,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 21,
+          "modelSelections": {
+            "baseline": 21
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.024102271798711487,
+          "error": 5.16360023647001,
+          "returnMae": 5.250974342180361,
+          "coverage80": 66.66666666666667,
+          "coverage95": 90.47619047619048,
+          "brier": 0.2996275680405753,
+          "returnRmse": 6.804108477858758,
+          "directionAccuracy": 38.095238095238095,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 38.095238095238095,
+          "availableForecasts": 21,
+          "modelSelections": {
+            "trend-30": 21
+          }
+        },
+        "directHorizon": {
+          "wis": 0.021069640827792273,
+          "error": 4.32437982903128,
+          "returnMae": 4.412685136476496,
+          "coverage80": 76.19047619047619,
+          "coverage95": 90.47619047619048,
+          "brier": 0.25641324406578425,
+          "returnRmse": 5.9858432453653485,
+          "directionAccuracy": 38.095238095238095,
+          "directionalCoverage": 90.47619047619048,
+          "directionalAccuracyWhenCalled": 42.10526315789473,
+          "availableForecasts": 21,
+          "modelSelections": {
+            "ridge-direct": 21
+          }
+        },
+        "directContext": {
+          "wis": 0.021312279510951895,
+          "error": 4.510173500667546,
+          "returnMae": 4.5986009371633445,
+          "coverage80": 71.42857142857143,
+          "coverage95": 90.47619047619048,
+          "brier": 0.28011352107638404,
+          "returnRmse": 6.033706586925887,
+          "directionAccuracy": 28.57142857142857,
+          "directionalCoverage": 95.23809523809523,
+          "directionalAccuracyWhenCalled": 30,
+          "availableForecasts": 21,
+          "modelSelections": {
+            "ridge-context": 21
+          }
+        }
+      }
+    },
+    "symbols": {
+      "RELIANCE.NS": {
+        "legacy": {
+          "wis": 0.014189096402129472,
+          "error": 3.485915928976801,
+          "returnMae": 3.4517904106348287,
+          "coverage80": 83.33333333333333,
+          "coverage95": 100,
+          "brier": 0.3221501012643178,
+          "returnRmse": 4.10486294152751,
+          "directionAccuracy": 25,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 25,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.010840146046834824,
+          "error": 2.551988724738704,
+          "returnMae": 2.5275602677491933,
+          "coverage80": 75,
+          "coverage95": 100,
+          "brier": 0.25321196019649506,
+          "returnRmse": 3.2592894060333237,
+          "directionAccuracy": 16.666666666666664,
+          "directionalCoverage": 33.33333333333333,
+          "directionalAccuracyWhenCalled": 50,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 7,
+            "har-trend": 5
+          }
+        },
+        "accuracy": {
+          "wis": 0.010840146046834824,
+          "error": 2.551988724738704,
+          "returnMae": 2.5275602677491933,
+          "coverage80": 75,
+          "coverage95": 100,
+          "brier": 0.25321196019649506,
+          "returnRmse": 3.2592894060333237,
+          "directionAccuracy": 16.666666666666664,
+          "directionalCoverage": 33.33333333333333,
+          "directionalAccuracyWhenCalled": 50,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 7,
+            "har-trend": 5
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.010840146046834824,
+          "error": 2.551988724738704,
+          "returnMae": 2.5275602677491933,
+          "coverage80": 75,
+          "coverage95": 100,
+          "brier": 0.25321196019649506,
+          "returnRmse": 3.2592894060333237,
+          "directionAccuracy": 16.666666666666664,
+          "directionalCoverage": 33.33333333333333,
+          "directionalAccuracyWhenCalled": 50,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 7,
+            "har-trend": 5
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.01105588880126807,
+          "error": 2.4879487836313254,
+          "returnMae": 2.4622593187300086,
+          "coverage80": 83.33333333333333,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 3.1969766659610017,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.013313966074590003,
+          "error": 3.485915928976801,
+          "returnMae": 3.4517904106348287,
+          "coverage80": 83.33333333333333,
+          "coverage95": 100,
+          "brier": 0.3128957152366638,
+          "returnRmse": 4.10486294152751,
+          "directionAccuracy": 25,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 25,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "trend-30": 12
+          }
+        },
+        "directHorizon": {
+          "wis": 0.010888919471051852,
+          "error": 2.5222040485570094,
+          "returnMae": 2.4962306984192417,
+          "coverage80": 91.66666666666667,
+          "coverage95": 100,
+          "brier": 0.2523215711116791,
+          "returnRmse": 3.1764647846846685,
+          "directionAccuracy": 50,
+          "directionalCoverage": 91.66666666666666,
+          "directionalAccuracyWhenCalled": 54.54545454545454,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-direct": 12
+          }
+        },
+        "directContext": {
+          "wis": 0.010952162499525091,
+          "error": 2.536867069925323,
+          "returnMae": 2.5112704249091102,
+          "coverage80": 91.66666666666667,
+          "coverage95": 100,
+          "brier": 0.25033561885356903,
+          "returnRmse": 3.2738090298064733,
+          "directionAccuracy": 50,
+          "directionalCoverage": 91.66666666666666,
+          "directionalAccuracyWhenCalled": 54.54545454545454,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-context": 12
+          }
+        }
+      },
+      "TCS.NS": {
+        "legacy": {
+          "wis": 0.03472427263914601,
+          "error": 6.858900781691311,
+          "returnMae": 6.926371204879868,
+          "coverage80": 50,
+          "coverage95": 75,
+          "brier": 0.299339031179746,
+          "returnRmse": 8.942395753367185,
+          "directionAccuracy": 58.333333333333336,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 58.333333333333336,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.025924138890143944,
+          "error": 6.557648418404038,
+          "returnMae": 6.605076064508563,
+          "coverage80": 58.333333333333336,
+          "coverage95": 91.66666666666667,
+          "brier": 0.25,
+          "returnRmse": 7.419602027466072,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "accuracy": {
+          "wis": 0.025924138890143944,
+          "error": 6.557648418404038,
+          "returnMae": 6.605076064508563,
+          "coverage80": 58.333333333333336,
+          "coverage95": 91.66666666666667,
+          "brier": 0.25,
+          "returnRmse": 7.419602027466072,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.025924138890143944,
+          "error": 6.557648418404038,
+          "returnMae": 6.605076064508563,
+          "coverage80": 58.333333333333336,
+          "coverage95": 91.66666666666667,
+          "brier": 0.25,
+          "returnRmse": 7.419602027466072,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.025924138890143944,
+          "error": 6.557648418404038,
+          "returnMae": 6.605076064508563,
+          "coverage80": 58.333333333333336,
+          "coverage95": 91.66666666666667,
+          "brier": 0.25,
+          "returnRmse": 7.419602027466072,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.032325618328364114,
+          "error": 6.858900781691311,
+          "returnMae": 6.926371204879868,
+          "coverage80": 50,
+          "coverage95": 91.66666666666667,
+          "brier": 0.28924354910850525,
+          "returnRmse": 8.942395753367185,
+          "directionAccuracy": 58.333333333333336,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 58.333333333333336,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "trend-30": 12
+          }
+        },
+        "directHorizon": {
+          "wis": 0.026940414764760723,
+          "error": 5.895692685804533,
+          "returnMae": 5.951365294125584,
+          "coverage80": 66.66666666666667,
+          "coverage95": 91.66666666666667,
+          "brier": 0.22153288622697195,
+          "returnRmse": 7.57670672769877,
+          "directionAccuracy": 66.66666666666666,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 66.66666666666666,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-direct": 12
+          }
+        },
+        "directContext": {
+          "wis": 0.02792109260926227,
+          "error": 6.519272927792397,
+          "returnMae": 6.567403444777839,
+          "coverage80": 66.66666666666667,
+          "coverage95": 91.66666666666667,
+          "brier": 0.2510948230822881,
+          "returnRmse": 7.8448123142794035,
+          "directionAccuracy": 50,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 50,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-context": 12
+          }
+        }
+      },
+      "HDFCBANK.NS": {
+        "legacy": {
+          "wis": 0.01823006772477067,
+          "error": 4.0339104344791705,
+          "returnMae": 4.030956626672923,
+          "coverage80": 58.333333333333336,
+          "coverage95": 83.33333333333333,
+          "brier": 0.31395062804222107,
+          "returnRmse": 4.987006238582329,
+          "directionAccuracy": 41.66666666666667,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 41.66666666666667,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.013265963754239647,
+          "error": 3.1928633366621106,
+          "returnMae": 3.1844585488569916,
+          "coverage80": 75,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 3.816139000213997,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "accuracy": {
+          "wis": 0.013265963754239647,
+          "error": 3.1928633366621106,
+          "returnMae": 3.1844585488569916,
+          "coverage80": 75,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 3.816139000213997,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.013265963754239647,
+          "error": 3.1928633366621106,
+          "returnMae": 3.1844585488569916,
+          "coverage80": 75,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 3.816139000213997,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.013265963754239647,
+          "error": 3.1928633366621106,
+          "returnMae": 3.1844585488569916,
+          "coverage80": 75,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 3.816139000213997,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.017003890656457615,
+          "error": 4.0339104344791705,
+          "returnMae": 4.030956626672923,
+          "coverage80": 75,
+          "coverage95": 91.66666666666667,
+          "brier": 0.3048696716626485,
+          "returnRmse": 4.987006238582329,
+          "directionAccuracy": 41.66666666666667,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 41.66666666666667,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "trend-30": 12
+          }
+        },
+        "directHorizon": {
+          "wis": 0.014316610796907605,
+          "error": 3.6323469837654017,
+          "returnMae": 3.627930607255999,
+          "coverage80": 83.33333333333333,
+          "coverage95": 100,
+          "brier": 0.2826916476090749,
+          "returnRmse": 4.1156691323749595,
+          "directionAccuracy": 25,
+          "directionalCoverage": 91.66666666666666,
+          "directionalAccuracyWhenCalled": 27.27272727272727,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-direct": 12
+          }
+        },
+        "directContext": {
+          "wis": 0.014223982190054116,
+          "error": 3.460179846953858,
+          "returnMae": 3.453151765355305,
+          "coverage80": 75,
+          "coverage95": 100,
+          "brier": 0.265880008538564,
+          "returnRmse": 4.089293179195218,
+          "directionAccuracy": 41.66666666666667,
+          "directionalCoverage": 91.66666666666666,
+          "directionalAccuracyWhenCalled": 45.45454545454545,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-context": 12
+          }
+        }
+      },
+      "INFY.NS": {
+        "legacy": {
+          "wis": 0.02928968980548355,
+          "error": 7.27126379817958,
+          "returnMae": 7.1979458607832045,
+          "coverage80": 50,
+          "coverage95": 75,
+          "brier": 0.4609934290250142,
+          "returnRmse": 7.937379825392987,
+          "directionAccuracy": 8.333333333333332,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 8.333333333333332,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.020176601846584506,
+          "error": 4.813541116393558,
+          "returnMae": 4.763407072434929,
+          "coverage80": 75,
+          "coverage95": 91.66666666666667,
+          "brier": 0.25,
+          "returnRmse": 5.725258530675452,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "accuracy": {
+          "wis": 0.020176601846584506,
+          "error": 4.813541116393558,
+          "returnMae": 4.763407072434929,
+          "coverage80": 75,
+          "coverage95": 91.66666666666667,
+          "brier": 0.25,
+          "returnRmse": 5.725258530675452,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.020176601846584506,
+          "error": 4.813541116393558,
+          "returnMae": 4.763407072434929,
+          "coverage80": 75,
+          "coverage95": 91.66666666666667,
+          "brier": 0.25,
+          "returnRmse": 5.725258530675452,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.020176601846584506,
+          "error": 4.813541116393558,
+          "returnMae": 4.763407072434929,
+          "coverage80": 75,
+          "coverage95": 91.66666666666667,
+          "brier": 0.25,
+          "returnRmse": 5.725258530675452,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.028431338139099132,
+          "error": 7.27126379817958,
+          "returnMae": 7.1979458607832045,
+          "coverage80": 66.66666666666667,
+          "coverage95": 91.66666666666667,
+          "brier": 0.42871328194936115,
+          "returnRmse": 7.937379825392987,
+          "directionAccuracy": 8.333333333333332,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 8.333333333333332,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "trend-30": 12
+          }
+        },
+        "directHorizon": {
+          "wis": 0.021183233720361225,
+          "error": 5.052006839204819,
+          "returnMae": 4.999105722623962,
+          "coverage80": 66.66666666666667,
+          "coverage95": 100,
+          "brier": 0.2575862606366475,
+          "returnRmse": 5.964138830326146,
+          "directionAccuracy": 50,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 50,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-direct": 12
+          }
+        },
+        "directContext": {
+          "wis": 0.02228488892225366,
+          "error": 5.21683814342304,
+          "returnMae": 5.168186689505436,
+          "coverage80": 75,
+          "coverage95": 100,
+          "brier": 0.28361184398333233,
+          "returnRmse": 6.174178862135998,
+          "directionAccuracy": 41.66666666666667,
+          "directionalCoverage": 91.66666666666666,
+          "directionalAccuracyWhenCalled": 45.45454545454545,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-context": 12
+          }
+        }
+      },
+      "SUNPHARMA.NS": {
+        "legacy": {
+          "wis": 0.025434956696302146,
+          "error": 5.339132644160682,
+          "returnMae": 5.3552165493992065,
+          "coverage80": 41.666666666666664,
+          "coverage95": 83.33333333333333,
+          "brier": 0.3198103755712509,
+          "returnRmse": 6.417275399798964,
+          "directionAccuracy": 58.333333333333336,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 58.333333333333336,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.01855775420454439,
+          "error": 4.495378347661069,
+          "returnMae": 4.499428413738175,
+          "coverage80": 58.333333333333336,
+          "coverage95": 83.33333333333333,
+          "brier": 0.25,
+          "returnRmse": 5.165279862026083,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ewma": 2,
+            "baseline": 10
+          }
+        },
+        "accuracy": {
+          "wis": 0.01855775420454439,
+          "error": 4.495378347661069,
+          "returnMae": 4.499428413738175,
+          "coverage80": 58.333333333333336,
+          "coverage95": 83.33333333333333,
+          "brier": 0.25,
+          "returnRmse": 5.165279862026083,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ewma": 2,
+            "baseline": 10
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.01855775420454439,
+          "error": 4.495378347661069,
+          "returnMae": 4.499428413738175,
+          "coverage80": 58.333333333333336,
+          "coverage95": 83.33333333333333,
+          "brier": 0.25,
+          "returnRmse": 5.165279862026083,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ewma": 2,
+            "baseline": 10
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.01884687859074777,
+          "error": 4.495378347661069,
+          "returnMae": 4.499428413738175,
+          "coverage80": 58.333333333333336,
+          "coverage95": 83.33333333333333,
+          "brier": 0.25,
+          "returnRmse": 5.165279862026083,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.024904656972826848,
+          "error": 5.339132644160682,
+          "returnMae": 5.3552165493992065,
+          "coverage80": 41.666666666666664,
+          "coverage95": 75,
+          "brier": 0.31655600170294446,
+          "returnRmse": 6.417275399798964,
+          "directionAccuracy": 58.333333333333336,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 58.333333333333336,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "trend-30": 12
+          }
+        },
+        "directHorizon": {
+          "wis": 0.018449267757542485,
+          "error": 4.413922850331796,
+          "returnMae": 4.417815324197276,
+          "coverage80": 50,
+          "coverage95": 75,
+          "brier": 0.24257289369901022,
+          "returnRmse": 5.13840468154818,
+          "directionAccuracy": 58.333333333333336,
+          "directionalCoverage": 91.66666666666666,
+          "directionalAccuracyWhenCalled": 63.63636363636363,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-direct": 12
+          }
+        },
+        "directContext": {
+          "wis": 0.01656080886846901,
+          "error": 4.137751088119085,
+          "returnMae": 4.140683928770444,
+          "coverage80": 58.333333333333336,
+          "coverage95": 91.66666666666667,
+          "brier": 0.22080465654532114,
+          "returnRmse": 4.716067615764848,
+          "directionAccuracy": 66.66666666666666,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 66.66666666666666,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-context": 12
+          }
+        }
+      },
+      "ITC.NS": {
+        "legacy": {
+          "wis": 0.01493747830356034,
+          "error": 3.6098885588025476,
+          "returnMae": 3.5649613837792775,
+          "coverage80": 66.66666666666667,
+          "coverage95": 100,
+          "brier": 0.31339969237645465,
+          "returnRmse": 4.257802020584536,
+          "directionAccuracy": 41.66666666666667,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 41.66666666666667,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.01216467185137167,
+          "error": 2.7631565187906553,
+          "returnMae": 2.725747767021906,
+          "coverage80": 75,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 3.4454717331733584,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "accuracy": {
+          "wis": 0.01216467185137167,
+          "error": 2.7631565187906553,
+          "returnMae": 2.725747767021906,
+          "coverage80": 75,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 3.4454717331733584,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.01216467185137167,
+          "error": 2.7631565187906553,
+          "returnMae": 2.725747767021906,
+          "coverage80": 75,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 3.4454717331733584,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.01216467185137167,
+          "error": 2.7631565187906553,
+          "returnMae": 2.725747767021906,
+          "coverage80": 75,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 3.4454717331733584,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.015200571941927142,
+          "error": 3.6098885588025476,
+          "returnMae": 3.5649613837792775,
+          "coverage80": 58.333333333333336,
+          "coverage95": 83.33333333333333,
+          "brier": 0.31490012009938556,
+          "returnRmse": 4.257802020584536,
+          "directionAccuracy": 41.66666666666667,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 41.66666666666667,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "trend-30": 12
+          }
+        },
+        "directHorizon": {
+          "wis": 0.011730384152883357,
+          "error": 2.6950727743222767,
+          "returnMae": 2.6579018595613557,
+          "coverage80": 83.33333333333333,
+          "coverage95": 100,
+          "brier": 0.23934978246688843,
+          "returnRmse": 3.2946035632666746,
+          "directionAccuracy": 50,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 50,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-direct": 12
+          }
+        },
+        "directContext": {
+          "wis": 0.011671353215060664,
+          "error": 2.655670708434503,
+          "returnMae": 2.6159172272134428,
+          "coverage80": 83.33333333333333,
+          "coverage95": 91.66666666666667,
+          "brier": 0.2218519945939382,
+          "returnRmse": 3.3461746028144237,
+          "directionAccuracy": 75,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 75,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-context": 12
+          }
+        }
+      },
+      "TATASTEEL.NS": {
+        "legacy": {
+          "wis": 0.014249317086457233,
+          "error": 2.9081663266341007,
+          "returnMae": 2.883210823425767,
+          "coverage80": 83.33333333333333,
+          "coverage95": 100,
+          "brier": 0.2587225486834844,
+          "returnRmse": 3.889819353491516,
+          "directionAccuracy": 58.333333333333336,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 58.333333333333336,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.012926283784592027,
+          "error": 2.6031726818986964,
+          "returnMae": 2.5659120990928344,
+          "coverage80": 91.66666666666667,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 3.1099020273119433,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "accuracy": {
+          "wis": 0.012926283784592027,
+          "error": 2.6031726818986964,
+          "returnMae": 2.5659120990928344,
+          "coverage80": 91.66666666666667,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 3.1099020273119433,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.012926283784592027,
+          "error": 2.6031726818986964,
+          "returnMae": 2.5659120990928344,
+          "coverage80": 91.66666666666667,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 3.1099020273119433,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.012926283784592027,
+          "error": 2.6031726818986964,
+          "returnMae": 2.5659120990928344,
+          "coverage80": 91.66666666666667,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 3.1099020273119433,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.013600999416547924,
+          "error": 2.9081663266341007,
+          "returnMae": 2.883210823425767,
+          "coverage80": 75,
+          "coverage95": 100,
+          "brier": 0.2656763692696889,
+          "returnRmse": 3.889819353491516,
+          "directionAccuracy": 58.333333333333336,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 58.333333333333336,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "trend-30": 12
+          }
+        },
+        "directHorizon": {
+          "wis": 0.01203892583694832,
+          "error": 2.5546078150015346,
+          "returnMae": 2.518544291309826,
+          "coverage80": 91.66666666666667,
+          "coverage95": 100,
+          "brier": 0.2416133185227712,
+          "returnRmse": 3.1015690809598127,
+          "directionAccuracy": 41.66666666666667,
+          "directionalCoverage": 83.33333333333334,
+          "directionalAccuracyWhenCalled": 50,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-direct": 12
+          }
+        },
+        "directContext": {
+          "wis": 0.0125125404326844,
+          "error": 2.705359655891746,
+          "returnMae": 2.671332829798207,
+          "coverage80": 91.66666666666667,
+          "coverage95": 100,
+          "brier": 0.2602851291497548,
+          "returnRmse": 3.3230623375781687,
+          "directionAccuracy": 41.66666666666667,
+          "directionalCoverage": 75,
+          "directionalAccuracyWhenCalled": 55.55555555555556,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-context": 12
+          }
+        }
+      },
+      "MARUTI.NS": {
+        "legacy": {
+          "wis": 0.01996429889155949,
+          "error": 4.38020577120849,
+          "returnMae": 4.343167848832011,
+          "coverage80": 66.66666666666667,
+          "coverage95": 83.33333333333333,
+          "brier": 0.2631548196077347,
+          "returnRmse": 5.440531510392828,
+          "directionAccuracy": 50,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 50,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.018259621069766113,
+          "error": 4.443845222600154,
+          "returnMae": 4.390156182698174,
+          "coverage80": 66.66666666666667,
+          "coverage95": 91.66666666666667,
+          "brier": 0.25,
+          "returnRmse": 5.150910336659474,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "accuracy": {
+          "wis": 0.018259621069766113,
+          "error": 4.443845222600154,
+          "returnMae": 4.390156182698174,
+          "coverage80": 66.66666666666667,
+          "coverage95": 91.66666666666667,
+          "brier": 0.25,
+          "returnRmse": 5.150910336659474,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.018259621069766113,
+          "error": 4.443845222600154,
+          "returnMae": 4.390156182698174,
+          "coverage80": 66.66666666666667,
+          "coverage95": 91.66666666666667,
+          "brier": 0.25,
+          "returnRmse": 5.150910336659474,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.018259621069766113,
+          "error": 4.443845222600154,
+          "returnMae": 4.390156182698174,
+          "coverage80": 66.66666666666667,
+          "coverage95": 91.66666666666667,
+          "brier": 0.25,
+          "returnRmse": 5.150910336659474,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.02036078583857392,
+          "error": 4.38020577120849,
+          "returnMae": 4.343167848832011,
+          "coverage80": 66.66666666666667,
+          "coverage95": 91.66666666666667,
+          "brier": 0.2575068324804306,
+          "returnRmse": 5.440531510392828,
+          "directionAccuracy": 50,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 50,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "trend-30": 12
+          }
+        },
+        "directHorizon": {
+          "wis": 0.020561014932122555,
+          "error": 4.5961480084097595,
+          "returnMae": 4.543150391374435,
+          "coverage80": 66.66666666666667,
+          "coverage95": 91.66666666666667,
+          "brier": 0.26245204110940296,
+          "returnRmse": 5.3358708626371785,
+          "directionAccuracy": 41.66666666666667,
+          "directionalCoverage": 91.66666666666666,
+          "directionalAccuracyWhenCalled": 45.45454545454545,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-direct": 12
+          }
+        },
+        "directContext": {
+          "wis": 0.020769131771674127,
+          "error": 4.564982090135352,
+          "returnMae": 4.510559150707494,
+          "coverage80": 66.66666666666667,
+          "coverage95": 91.66666666666667,
+          "brier": 0.2613297253847122,
+          "returnRmse": 5.405857469111346,
+          "directionAccuracy": 58.333333333333336,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 58.333333333333336,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-context": 12
+          }
+        }
+      },
+      "AAPL": {
+        "legacy": {
+          "wis": 0.021772712466131675,
+          "error": 4.972634683476853,
+          "returnMae": 5.067045231464404,
+          "coverage80": 66.66666666666667,
+          "coverage95": 91.66666666666667,
+          "brier": 0.361465056737264,
+          "returnRmse": 6.089645277620984,
+          "directionAccuracy": 33.33333333333333,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 33.33333333333333,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.016002771426901923,
+          "error": 3.73696752082018,
+          "returnMae": 3.8094266109930466,
+          "coverage80": 75,
+          "coverage95": 91.66666666666667,
+          "brier": 0.25,
+          "returnRmse": 4.746337155410405,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "accuracy": {
+          "wis": 0.016430225423887963,
+          "error": 3.873455359161832,
+          "returnMae": 3.946427096898484,
+          "coverage80": 75,
+          "coverage95": 91.66666666666667,
+          "brier": 0.26078439752260846,
+          "returnRmse": 4.861586537010308,
+          "directionAccuracy": 0,
+          "directionalCoverage": 16.666666666666664,
+          "directionalAccuracyWhenCalled": 0,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 10,
+            "ridge-direct": 2
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.016194971107579347,
+          "error": 3.753176239170393,
+          "returnMae": 3.8255790402810015,
+          "coverage80": 75,
+          "coverage95": 91.66666666666667,
+          "brier": 0.2518775115410487,
+          "returnRmse": 4.777575626498197,
+          "directionAccuracy": 8.333333333333332,
+          "directionalCoverage": 16.666666666666664,
+          "directionalAccuracyWhenCalled": 50,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 10,
+            "ridge-direct": 1,
+            "ridge-context": 1
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.016002771426901923,
+          "error": 3.73696752082018,
+          "returnMae": 3.8094266109930466,
+          "coverage80": 75,
+          "coverage95": 91.66666666666667,
+          "brier": 0.25,
+          "returnRmse": 4.746337155410405,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.022440152363680698,
+          "error": 4.972634683476853,
+          "returnMae": 5.067045231464404,
+          "coverage80": 66.66666666666667,
+          "coverage95": 91.66666666666667,
+          "brier": 0.3488561411698659,
+          "returnRmse": 6.089645277620984,
+          "directionAccuracy": 33.33333333333333,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 33.33333333333333,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "trend-30": 12
+          }
+        },
+        "directHorizon": {
+          "wis": 0.016146371358099664,
+          "error": 3.7676981703192163,
+          "returnMae": 3.8414691964987147,
+          "coverage80": 75,
+          "coverage95": 100,
+          "brier": 0.2353097399075826,
+          "returnRmse": 4.467730531154536,
+          "directionAccuracy": 50,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 50,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-direct": 12
+          }
+        },
+        "directContext": {
+          "wis": 0.015900164646189492,
+          "error": 3.6382919260715165,
+          "returnMae": 3.7056497779887394,
+          "coverage80": 83.33333333333333,
+          "coverage95": 100,
+          "brier": 0.2412826269865036,
+          "returnRmse": 4.181242700601605,
+          "directionAccuracy": 58.333333333333336,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 58.333333333333336,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-context": 12
+          }
+        }
+      },
+      "MSFT": {
+        "legacy": {
+          "wis": 0.04052723298116624,
+          "error": 8.099952366446573,
+          "returnMae": 8.476152100240608,
+          "coverage80": 50,
+          "coverage95": 83.33333333333333,
+          "brier": 0.3375585575898488,
+          "returnRmse": 11.165224065154955,
+          "directionAccuracy": 50,
+          "directionalCoverage": 91.66666666666666,
+          "directionalAccuracyWhenCalled": 54.54545454545454,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.03368111704308696,
+          "error": 5.774268757545127,
+          "returnMae": 6.087683228764334,
+          "coverage80": 83.33333333333333,
+          "coverage95": 83.33333333333333,
+          "brier": 0.25,
+          "returnRmse": 9.92623247833122,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 9,
+            "ewma": 3
+          }
+        },
+        "accuracy": {
+          "wis": 0.03368111704308696,
+          "error": 5.774268757545127,
+          "returnMae": 6.087683228764334,
+          "coverage80": 83.33333333333333,
+          "coverage95": 83.33333333333333,
+          "brier": 0.25,
+          "returnRmse": 9.92623247833122,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 9,
+            "ewma": 3
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.03368111704308696,
+          "error": 5.774268757545127,
+          "returnMae": 6.087683228764334,
+          "coverage80": 83.33333333333333,
+          "coverage95": 83.33333333333333,
+          "brier": 0.25,
+          "returnRmse": 9.92623247833122,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 9,
+            "ewma": 3
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.03268441819638579,
+          "error": 5.774268757545127,
+          "returnMae": 6.087683228764334,
+          "coverage80": 83.33333333333333,
+          "coverage95": 83.33333333333333,
+          "brier": 0.25,
+          "returnRmse": 9.92623247833122,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.0375182077713073,
+          "error": 8.099952366446573,
+          "returnMae": 8.476152100240608,
+          "coverage80": 66.66666666666667,
+          "coverage95": 91.66666666666667,
+          "brier": 0.302972545226415,
+          "returnRmse": 11.165224065154955,
+          "directionAccuracy": 50,
+          "directionalCoverage": 91.66666666666666,
+          "directionalAccuracyWhenCalled": 54.54545454545454,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "trend-30": 12
+          }
+        },
+        "directHorizon": {
+          "wis": 0.032719714846365704,
+          "error": 5.739789008835673,
+          "returnMae": 6.052079422401948,
+          "coverage80": 83.33333333333333,
+          "coverage95": 91.66666666666667,
+          "brier": 0.24842159946759543,
+          "returnRmse": 9.918475189562633,
+          "directionAccuracy": 58.333333333333336,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 58.333333333333336,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-direct": 12
+          }
+        },
+        "directContext": {
+          "wis": 0.033117724589592064,
+          "error": 6.067512257063833,
+          "returnMae": 6.381272403464851,
+          "coverage80": 83.33333333333333,
+          "coverage95": 91.66666666666667,
+          "brier": 0.27011412382125854,
+          "returnRmse": 10.033848110813302,
+          "directionAccuracy": 41.66666666666667,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 41.66666666666667,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-context": 12
+          }
+        }
+      },
+      "BTC-USD": {
+        "legacy": {
+          "wis": 0.02371990940918139,
+          "error": 5.808811931951311,
+          "returnMae": 5.98568564576837,
+          "coverage80": 91.66666666666667,
+          "coverage95": 100,
+          "brier": 0.2467312067747116,
+          "returnRmse": 6.960461081987283,
+          "directionAccuracy": 41.66666666666667,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 41.66666666666667,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.02073537364783977,
+          "error": 4.333215755937894,
+          "returnMae": 4.435496206679667,
+          "coverage80": 91.66666666666667,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 5.686681883230859,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "accuracy": {
+          "wis": 0.02073537364783977,
+          "error": 4.333215755937894,
+          "returnMae": 4.435496206679667,
+          "coverage80": 91.66666666666667,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 5.686681883230859,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.02073537364783977,
+          "error": 4.333215755937894,
+          "returnMae": 4.435496206679667,
+          "coverage80": 91.66666666666667,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 5.686681883230859,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.02073537364783977,
+          "error": 4.333215755937894,
+          "returnMae": 4.435496206679667,
+          "coverage80": 91.66666666666667,
+          "coverage95": 100,
+          "brier": 0.25,
+          "returnRmse": 5.686681883230859,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.025544819557779277,
+          "error": 5.808811931951311,
+          "returnMae": 5.98568564576837,
+          "coverage80": 75,
+          "coverage95": 91.66666666666667,
+          "brier": 0.26544290284315747,
+          "returnRmse": 6.960461081987283,
+          "directionAccuracy": 41.66666666666667,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 41.66666666666667,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "trend-30": 12
+          }
+        },
+        "directHorizon": {
+          "wis": 0.02320247919266408,
+          "error": 4.698657171358813,
+          "returnMae": 4.798734765707926,
+          "coverage80": 83.33333333333333,
+          "coverage95": 91.66666666666667,
+          "brier": 0.2810487002134323,
+          "returnRmse": 6.215221375120293,
+          "directionAccuracy": 33.33333333333333,
+          "directionalCoverage": 91.66666666666666,
+          "directionalAccuracyWhenCalled": 36.36363636363637,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-direct": 12
+          }
+        },
+        "directContext": {
+          "wis": 0.023677440134913047,
+          "error": 4.824693230035272,
+          "returnMae": 4.92185484701564,
+          "coverage80": 83.33333333333333,
+          "coverage95": 91.66666666666667,
+          "brier": 0.2876184582710266,
+          "returnRmse": 6.408353037002753,
+          "directionAccuracy": 41.66666666666667,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 41.66666666666667,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-context": 12
+          }
+        }
+      },
+      "ETH-USD": {
+        "legacy": {
+          "wis": 0.03238250222054526,
+          "error": 7.307795026085327,
+          "returnMae": 7.648911095966042,
+          "coverage80": 91.66666666666667,
+          "coverage95": 91.66666666666667,
+          "brier": 0.22859900693098703,
+          "returnRmse": 9.853850979155158,
+          "directionAccuracy": 66.66666666666666,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 66.66666666666666,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "alignedOriginalFamily": {
+          "wis": 0.030743867433766604,
+          "error": 6.214122019751596,
+          "returnMae": 6.480631626337861,
+          "coverage80": 91.66666666666667,
+          "coverage95": 91.66666666666667,
+          "brier": 0.25,
+          "returnRmse": 8.897907341871196,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "accuracy": {
+          "wis": 0.030743867433766604,
+          "error": 6.214122019751596,
+          "returnMae": 6.480631626337861,
+          "coverage80": 91.66666666666667,
+          "coverage95": 91.66666666666667,
+          "brier": 0.25,
+          "returnRmse": 8.897907341871196,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "contextExperiment": {
+          "wis": 0.030743867433766604,
+          "error": 6.214122019751596,
+          "returnMae": 6.480631626337861,
+          "coverage80": 91.66666666666667,
+          "coverage95": 91.66666666666667,
+          "brier": 0.25,
+          "returnRmse": 8.897907341871196,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "unchangedPrice": {
+          "wis": 0.030743867433766604,
+          "error": 6.214122019751596,
+          "returnMae": 6.480631626337861,
+          "coverage80": 91.66666666666667,
+          "coverage95": 91.66666666666667,
+          "brier": 0.25,
+          "returnRmse": 8.897907341871196,
+          "directionAccuracy": 0,
+          "directionalCoverage": 0,
+          "directionalAccuracyWhenCalled": null,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "baseline": 12
+          }
+        },
+        "simpleTrend": {
+          "wis": 0.036187864972904805,
+          "error": 7.307795026085327,
+          "returnMae": 7.648911095966042,
+          "coverage80": 66.66666666666667,
+          "coverage95": 91.66666666666667,
+          "brier": 0.24489273130893707,
+          "returnRmse": 9.853850979155158,
+          "directionAccuracy": 66.66666666666666,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 66.66666666666666,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "trend-30": 12
+          }
+        },
+        "directHorizon": {
+          "wis": 0.03372934329287088,
+          "error": 6.246311150656251,
+          "returnMae": 6.511187207091173,
+          "coverage80": 83.33333333333333,
+          "coverage95": 91.66666666666667,
+          "brier": 0.25870684285958606,
+          "returnRmse": 9.246476314008412,
+          "directionAccuracy": 41.66666666666667,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 41.66666666666667,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-direct": 12
+          }
+        },
+        "directContext": {
+          "wis": 0.03470743669008718,
+          "error": 6.476104042090125,
+          "returnMae": 6.737057303796568,
+          "coverage80": 83.33333333333333,
+          "coverage95": 91.66666666666667,
+          "brier": 0.2662416299184163,
+          "returnRmse": 9.467333517114485,
+          "directionAccuracy": 33.33333333333333,
+          "directionalCoverage": 100,
+          "directionalAccuracyWhenCalled": 33.33333333333333,
+          "availableForecasts": 12,
+          "modelSelections": {
+            "ridge-context": 12
+          }
+        }
+      }
+    },
+    "comparisons": {
+      "productionVsLegacy": {
+        "skillPercent": 19.800016272809128,
+        "low95": 18.28487184356664,
+        "high95": 21.965736012963987,
+        "blocks": 6,
+        "method": "1000 paired calendar-month block bootstrap samples; exploratory with few blocks"
+      },
+      "productionVsUnchanged": {
+        "skillPercent": -0.12555536791791777,
+        "low95": -0.8259732880926629,
+        "high95": 0.4181095414628744,
+        "blocks": 6,
+        "method": "1000 paired calendar-month block bootstrap samples; exploratory with few blocks"
+      },
+      "accuracyVsProduction": {
+        "skillPercent": -0.26308310660569934,
+        "low95": -0.5124799974552063,
+        "high95": 0,
+        "blocks": 6,
+        "method": "1000 paired calendar-month block bootstrap samples; exploratory with few blocks"
+      },
+      "contextVsProduction": {
+        "skillPercent": -0.031017636530417114,
+        "low95": -0.24287943006446877,
+        "high95": 0.0864994095481797,
+        "blocks": 6,
+        "method": "1000 paired calendar-month block bootstrap samples; exploratory with few blocks"
+      },
+      "directVsProduction": {
+        "skillPercent": -0.653923755618635,
+        "low95": -3.6381057807328476,
+        "high95": 3.7732238607181334,
+        "blocks": 6,
+        "method": "1000 paired calendar-month block bootstrap samples; exploratory with few blocks"
+      },
+      "directContextVsProduction": {
+        "skillPercent": -2.5143660191864203,
+        "low95": -6.358464621945137,
+        "high95": 2.7702575274995533,
+        "blocks": 6,
+        "method": "1000 paired calendar-month block bootstrap samples; exploratory with few blocks"
+      }
+    },
+    "limitations": [
+      "Fixed convenience universe; not a survivorship-free exchange panel.",
+      "Downloaded adjusted history is a current snapshot, not a vintage point-in-time archive.",
+      "The same source provides targets and inputs.",
+      "Success on a historical holdout does not establish future accuracy."
+    ]
+  }
+}

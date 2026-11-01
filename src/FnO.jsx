@@ -7,6 +7,7 @@ import { Empty, PanelTitle, SortTh, exportCSV, sortRows, tone } from './ui';
 
 import { optionFreshness } from './optionSignal.js';
 import './fno.css';
+import NiftyEdge from './NiftyEdge.jsx';
 
 // Live NSE option chain; the broad futures scanner is explicitly end-of-day.
 const INDEX_YAHOO = { NIFTY: '^NSEI', BANKNIFTY: '^NSEBANK', FINNIFTY: 'NIFTY_FIN_SERVICE.NS' };
@@ -186,9 +187,16 @@ function Buildup({ onOpen, refresh, watch }) {
 }
 
 export default function FnO({ symbol, onOpen, refresh, onRefresh, watch }) {
+  const [desk, setDesk] = useState('edge');
   return <>
+    <div className="screen-filters" role="group" aria-label="Futures and options desk">
+      <button className={desk === 'edge' ? 'active' : ''} aria-pressed={desk === 'edge'} onClick={() => setDesk('edge')}>NIFTY EDGE</button>
+      <button className={desk === 'chain' ? 'active' : ''} aria-pressed={desk === 'chain'} onClick={() => setDesk('chain')}>Option chain & futures</button>
+    </div>
+    {desk === 'edge' ? <NiftyEdge /> : <>
     <OptionChain symbol={symbol} onOpen={onOpen} refresh={refresh} onRefresh={onRefresh} />
     <LiveFutures refresh={refresh} />
     <Buildup onOpen={onOpen} refresh={refresh} watch={watch} />
+    </>}
   </>;
 }

@@ -1,0 +1,108 @@
+.research-stack { display:grid; gap:20px; min-width:0; }
+.research-tools { padding:22px; min-width:0; }
+.research-tools > p,.stock-insight li,.research-tools details { line-height:1.7; }
+.research-tools h3 { margin:22px 0 10px; }
+.analytics-stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:20px 0; }
+.analytics-stats > div { display:flex; flex-direction:column; gap:8px; padding:18px; border:1px solid var(--line); border-radius:10px; background:var(--theme-subtle); }
+.analytics-stats strong { font-size:24px; font-variant-numeric:tabular-nums; }
+.analytics-stats span { color:var(--muted); font-size:12px; line-height:1.5; }
+.insight-actions,.insight-heading { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+.insight-heading { justify-content:space-between; }
+.insight-actions label,.insight-filter,.personal-rule-form label { display:flex; flex-direction:column; gap:8px; font-size:13px; min-width:0; }
+.insight-actions select { max-width:100%; }
+.insight-filter { max-width:420px; margin:20px 0; }
+.breakout-cards { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; max-height:550px; overflow:auto; }
+.breakout-card { text-align:left; display:flex; flex-direction:column; gap:10px; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:20px; color:var(--text); }
+.breakout-card:hover,.breakout-card.selected { border-color:var(--accent); background:var(--theme-subtle); }
+.breakout-card h3,.breakout-card p { margin:0; }
+.breakout-card span,.breakout-card p { color:var(--muted); font-size:12px; }
+.breakout-card b { color:var(--accent); font-size:13px; margin-top:auto; }
+.personal-rule-form { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; align-items:end; margin:24px 0; }
+.personal-rule-form input,.personal-rule-form select { width:100%; min-width:0; }
+.personal-rule-list > div { display:flex; align-items:center; gap:12px; border-top:1px solid var(--line); padding:16px 0; }
+.personal-rule-list > div > div { flex:1; min-width:0; overflow-wrap:anywhere; }
+.personal-rule-list p,.personal-rule-list small { color:var(--muted); font-size:12px; line-height:1.6; }
+@media(max-width:760px) {
+  .analytics-stats,.breakout-cards,.personal-rule-form { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .research-tools { padding:16px; }
+  .analytics-stats > div { padding:12px; }
+  .analytics-stats strong { font-size:21px; }
+  .insight-actions > label { width:100%; }
+}
+@media(max-width:460px) {
+  .breakout-cards,.personal-rule-form { grid-template-columns:1fr; }
+  .personal-rule-list > div { flex-wrap:wrap; }
+  .personal-rule-list > div > div { flex-basis:100%; }
+}
+
+.stock-insight { scroll-margin-top:90px; }
+
+/* Keep discovery beside company research; prioritize the business over chart statistics. */
+.breakout-research-layout { display:grid; grid-template-columns:248px minmax(0,1fr); gap:16px; align-items:start; }
+.breakout-directory { position:sticky; top:80px; padding:16px; min-width:0; }
+.breakout-directory-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.breakout-directory-heading h2 { font-size:19px; margin:4px 0; }
+.breakout-directory-heading h2 small { color:var(--muted); font-size:12px; }
+.breakout-directory-heading .button { padding:7px 9px; font-size:11px; }
+.breakout-directory input { width:100%; margin:8px 0 12px; min-width:0; }
+.breakout-compact-list { max-height:calc(100vh - 300px); overflow:auto; display:grid; gap:4px; }
+.breakout-compact-list button { padding:11px 10px; border:1px solid transparent; border-radius:8px; background:transparent; color:var(--text); text-align:left; min-width:0; }
+.breakout-compact-list button:hover,.breakout-compact-list button.selected { border-color:var(--theme-accent-border); background:var(--theme-selected); }
+.breakout-compact-list button > span { display:flex; justify-content:space-between; gap:8px; }
+.breakout-compact-list strong { font-size:12px; }
+.breakout-compact-list b { font-size:11px; font-weight:500; }
+.breakout-compact-list small { display:block; color:var(--muted); font-size:11px; line-height:1.5; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.breakout-compact-list button > small { margin:2px 0 5px; }
+.breakout-mobile-picker { display:none; }
+.breakout-company-column { display:grid; gap:12px; min-width:0; }
+.company-article { padding:20px; }
+.company-article-heading { display:flex; justify-content:space-between; align-items:start; gap:16px; }
+.company-article-heading h2 { margin:6px 0; font-size:25px; line-height:1.25; }
+.company-article-heading p { margin:0; color:var(--muted); font-size:12px; line-height:1.6; }
+.company-session-price { display:flex; flex-direction:column; gap:5px; text-align:right; flex-shrink:0; }
+.company-session-price strong { font-size:20px; }
+.company-session-price small,.company-session-price span { font-size:10px; color:var(--muted); }
+.company-toolbar { display:flex; gap:8px; flex-wrap:wrap; margin:14px 0 20px; }
+.company-toolbar .button { padding:8px 11px; font-size:11px; }
+.company-section-heading { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+.company-brief h3 { font-size:14px; margin:0 0 9px; }
+.company-brief p { font-size:12px; line-height:1.8; margin:0 0 12px; }
+.company-section-heading a { font-size:11px; margin-bottom:9px; }
+.company-business p { color:var(--muted); }
+.company-financial-strip { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); margin:18px 0 8px; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+.company-financial-strip > div { padding:12px; display:flex; flex-direction:column; gap:7px; min-width:0; border-bottom:1px solid var(--line); }
+.company-financial-strip > div:nth-child(-n+4) { background:var(--theme-subtle); }
+.company-financial-strip span { font-size:10px; color:var(--muted); line-height:1.5; }
+.company-financial-strip strong { font-size:17px; font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+.company-data-note,.company-brief .company-data-note { font-size:10px; color:var(--muted); line-height:1.6; margin:8px 0 14px; }
+.company-editorial-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin:20px 0; }
+.company-editorial-grid small { font-size:10px; color:var(--muted); line-height:1.6; display:block; }
+.company-financial-history,.company-technical { padding:14px 0; border-top:1px solid var(--line); }
+.company-financial-history summary,.company-technical summary,.company-risk-details > summary { cursor:pointer; font-size:12px; font-weight:600; line-height:1.6; }
+.company-financial-history table { font-size:11px; margin-top:12px; }
+.company-source-links { display:flex; flex-wrap:wrap; gap:8px 14px; padding:10px 0; font-size:10px; line-height:1.6; color:var(--muted); }
+.company-risk-details { padding:16px 20px; }
+.company-risk-details .research-tools { border:0; padding:16px 0 0; box-shadow:none; }
+.company-technical h3 { font-size:13px; margin-top:16px; }
+.company-technical p,.company-technical li { font-size:12px; line-height:1.7; }
+@media(min-width:1500px) { .breakout-research-layout { grid-template-columns:270px minmax(0,1fr); } }
+@media(max-width:1050px) {
+  .breakout-research-layout { grid-template-columns:210px minmax(0,1fr); gap:12px; }
+  .company-editorial-grid { grid-template-columns:1fr; gap:12px; }
+  .company-financial-strip { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:760px) {
+  .breakout-research-layout { grid-template-columns:1fr; }
+  .breakout-directory { position:static; padding:12px 14px; }
+  .breakout-directory .company-data-note { margin:4px 0 8px; }
+  .breakout-directory .company-data-note br { display:none; }
+  .breakout-desktop-list { display:none; }
+  .breakout-mobile-picker { display:flex; flex-direction:column; gap:5px; font-size:11px; color:var(--muted); }
+  .breakout-mobile-picker select { width:100%; min-width:0; }
+  .company-article { padding:16px; }
+  .company-article-heading { flex-wrap:wrap; gap:10px; }
+  .company-article-heading h2 { font-size:22px; }
+  .company-session-price { flex-direction:row; align-items:center; gap:10px; text-align:left; }
+  .company-toolbar { margin:12px 0 18px; }
+  .company-financial-strip strong { font-size:17px; }
+}

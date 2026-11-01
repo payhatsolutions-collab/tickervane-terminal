@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-31",
+  "production": "https://alphanova48.in/futures-options",
+  "deployment": {
+    "id": "dpl_5VrJUQoLhYc7QbBRR7C5HXHkby4b",
+    "url": "https://alphanova2-boheq0jgc-wdcre.vercel.app",
+    "status": "promoted"
+  },
+  "rollback": "vercel promote https://alphanova2-8g4btgsfd-wdcre.vercel.app --yes",
+  "validation": {
+    "existing_tests": 319,
+    "journal_tests": 4,
+    "python_tests": 5,
+    "hosted_build": "passed",
+    "public_snapshot": "200 JSON; three expiries, verified lot size, closed-session NO TRADE",
+    "browser": "F&O embedded desk loaded, lab populated, old option-chain desk selectable"
+  },
+  "free_plan_design": "on-demand compute, browser journal, versioned lab; no new cron jobs or paid services"
+}

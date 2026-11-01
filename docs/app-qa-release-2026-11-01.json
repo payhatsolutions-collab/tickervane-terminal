@@ -1,0 +1,112 @@
+{
+  "date": "2026-11-01",
+  "production": "https://alphanova48.in",
+  "deployment": {
+    "id": "dpl_2RiLNiiup6NQvrua419Au5BEqQWA",
+    "url": "https://alphanova2-rkefhn98b-wdcre.vercel.app",
+    "status": "promoted"
+  },
+  "rollback": "vercel promote https://alphanova2-ks5hwni7b-wdcre.vercel.app --yes",
+  "tests": {
+    "javascript": 358,
+    "python": 5,
+    "failed": 0
+  },
+  "mainAsset": "/assets/index-BAMmyLgF.js",
+  "mainAssetBytes": 483922,
+  "routes": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/charts",
+      "status": 200
+    },
+    {
+      "path": "/forecast",
+      "status": 200
+    },
+    {
+      "path": "/markets",
+      "status": 200
+    },
+    {
+      "path": "/screener",
+      "status": 200
+    },
+    {
+      "path": "/delivery",
+      "status": 200
+    },
+    {
+      "path": "/futures-options",
+      "status": 200
+    },
+    {
+      "path": "/institutional-flows",
+      "status": 200
+    },
+    {
+      "path": "/news",
+      "status": 200
+    },
+    {
+      "path": "/watchlist",
+      "status": 200
+    },
+    {
+      "path": "/portfolio",
+      "status": 200
+    },
+    {
+      "path": "/trade-journal",
+      "status": 200
+    },
+    {
+      "path": "/price-alerts",
+      "status": 200
+    }
+  ],
+  "apis": [
+    {
+      "path": "/api/market?op=quotes&symbols=%5ENSEI%2CTCS.NS",
+      "status": 200,
+      "ms": 1014,
+      "cacheControl": "public, max-age=0",
+      "quotes": 2
+    },
+    {
+      "path": "/api/market?op=screen",
+      "status": 200,
+      "ms": 538,
+      "cacheControl": "public, max-age=300",
+      "rows": 499
+    },
+    {
+      "path": "/api/market?op=chart&symbol=TCS.NS&range=5y&adjusted=1&daily=1",
+      "status": 200,
+      "ms": 444,
+      "cacheControl": "public, max-age=0",
+      "bars": 1236
+    },
+    {
+      "path": "/api/nifty_edge?op=lab",
+      "status": 200,
+      "ms": 6223,
+      "cacheControl": "private, no-store"
+    },
+    {
+      "path": "/api/market?op=quotes&symbols=QAUNAVAILABLE",
+      "status": 503,
+      "ms": 1010,
+      "cacheControl": "no-store"
+    }
+  ],
+  "browser": {
+    "homepage": "Loaded real index and setup quotes",
+    "stockSearch": "TEMPSENS returned Tempsens Instruments (India)",
+    "consoleErrors": 0,
+    "screenshot": "/Users/sarda/.codex/visualizations/2026/10/31/01a1941e-6ada-7942-9e97-23e80308aed0/alphanova-live-2026-11-01.jpg"
+  }
+}

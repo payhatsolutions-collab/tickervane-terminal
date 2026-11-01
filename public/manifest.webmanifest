@@ -6,15 +6,14 @@
   "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#04090e",
-  "theme_color": "#04090e",
+  "background_color": "#0c1116",
+  "theme_color": "#0c1116",
+  "shortcuts": [
+    { "name": "Your watchlist", "short_name": "Watchlist", "url": "/watchlist", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Find stocks", "short_name": "Screener", "url": "/screener", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Charts & research", "short_name": "Charts", "url": "/charts", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] }
+  ],
   "icons": [
-    {
-      "src": "/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
     {
       "src": "/icon-192.png",
       "sizes": "192x192",

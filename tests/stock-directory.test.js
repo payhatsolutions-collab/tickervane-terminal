@@ -5,6 +5,18 @@ import { buildBrokerOrder } from '../src/brokers.js';
 import { parseStockCSV, mergeStockLists, stockSources } from '../src/stockCatalog.js';
 import { createStockDirectoryLoader } from '../lib/stockDirectory.js';
 import handler from '../api/market.js';
+import { stockDirectorySource } from '../scripts/stock-directory-source.mjs';
+
+test('compact generated catalogs preserve names, symbols, sectors and snapshot dates', async () => {
+  const stocks = [
+    { symbol: 'M&M', name: 'Quotes "and" apostrophes\' & a new\nline', sector: 'Others' },
+    { symbol: 'SPECIAL', name: 'Unicode ₹ and \\ paths', sector: 'Financials' },
+  ];
+  const date = '2026-10-13T23:19:42.076Z';
+  const module = await import('data:text/javascript;base64,' + Buffer.from(stockDirectorySource(stocks, date)).toString('base64'));
+  assert.deepEqual(module.stockDirectory, stocks);
+  assert.equal(module.stockDirectoryUpdatedAt, date);
+});
 
 test('recent mainboard and SME listings can be found by symbol and company', () => {
   for (const [symbol, company] of [

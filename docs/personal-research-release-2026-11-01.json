@@ -1,0 +1,77 @@
+{
+  "origin": "https://alphanova48.in",
+  "checkedAt": "2026-11-01T12:36:36.194Z",
+  "routes": [
+    {
+      "path": "/screener",
+      "status": 200,
+      "title": "Nifty 500 Screener: Momentum &amp; Delivery | Alpha Nova",
+      "asset": "/assets/index-BSA5TLKv.js"
+    },
+    {
+      "path": "/price-alerts",
+      "status": 200,
+      "title": "Stock Price Alerts &amp; Watchlist Notifications | Alpha Nova",
+      "asset": "/assets/index-BSA5TLKv.js"
+    },
+    {
+      "path": "/",
+      "status": 200,
+      "title": "Alpha Nova | Indian Stock Market Overview &amp; NSE Screener",
+      "asset": "/assets/index-BSA5TLKv.js"
+    },
+    {
+      "path": "/breakouts?symbol=COFORGE.NS",
+      "status": 200,
+      "title": "Breakout Stock Insights &amp; Research | Alpha Nova",
+      "asset": "/assets/index-BSA5TLKv.js"
+    },
+    {
+      "path": "/analytics?symbol=TCS.NS",
+      "status": 200,
+      "title": "Advanced Stock Analytics &amp; Risk Metrics | Alpha Nova",
+      "asset": "/assets/index-BSA5TLKv.js"
+    }
+  ],
+  "apis": [
+    {
+      "path": "/api/market?op=chart&symbol=%5ENSEI&range=1y&adjusted=1",
+      "status": 200,
+      "bars": 247,
+      "adjusted": true
+    },
+    {
+      "path": "/api/market?op=chart&symbol=TCS.NS&range=1y&adjusted=1",
+      "status": 200,
+      "bars": 248,
+      "adjusted": true
+    },
+    {
+      "path": "/api/market?op=screen",
+      "status": 200,
+      "rows": 499,
+      "date": "2026-10-30"
+    }
+  ],
+  "mainAsset": "/assets/index-BSA5TLKv.js",
+  "deployment": {
+    "id": "dpl_3zZcSLJoELJBjkP9n9m3XHRGyfXn",
+    "url": "https://alphanova2-gduw5ie7t-wdcre.vercel.app",
+    "status": "promoted"
+  },
+  "rollback": "vercel promote https://alphanova2-rkefhn98b-wdcre.vercel.app --yes",
+  "tests": {
+    "javascript": 369,
+    "failed": 0,
+    "hostedBuild": "passed"
+  },
+  "alternateDomain": {
+    "origin": "https://tickervane.vercel.app",
+    "path": "/analytics",
+    "mainAsset": "/assets/index-BSA5TLKv.js"
+  },
+  "browser": {
+    "liveBreakoutInsight": "COFORGE evidence and historical analytics rendered",
+    "consoleErrors": 0
+  }
+}

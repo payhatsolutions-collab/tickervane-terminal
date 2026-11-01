@@ -1,15 +1,9 @@
-// Forecast v3: chronological tuning/evaluation, fixed candidate family and seeded simulation.
-// v3 adds two realized-volatility candidates built on a HAR-RV regression
-// (daily/weekly/monthly realized variance, Corsi 2009): HAR volatility with
-// a zero mean, and HAR volatility with a ridge-regularized momentum mean.
-// A small neural net was prototyped for the conditional mean and rejected:
-// on 250–500 daily returns its one-step RMSE lost to predicting zero, so it
-// never earned selection. Volatility is where the forecast skill lives.
-// Everything is refit from data available at each backtest origin only, with
-// seeded arithmetic, so every projection is exactly reproducible.
+// Forecast v4: shared live/backtest construction, point-error selection and rolling validation.
+// Experimental context features are evaluated offline before any production promotion.
 import { forecastDates } from './forecastCalendar.js';
+import { returnFeatures, solveLinear, fitRidgeRows, fitDirectMean } from './forecastRegression.js';
 
-export const FORECAST_VERSION = '3.1.0';
+export const FORECAST_VERSION = '4.0.0';
 
 const mean = xs => xs.reduce((a, b) => a + b, 0) / xs.length;
 const quantile = (xs, p) => { const x = (xs.length - 1) * p, i = Math.floor(x); return xs[i] + (xs[Math.min(i + 1, xs.length - 1)] - xs[i]) * (x - i); };
@@ -21,13 +15,14 @@ const candidates = [
   { id: 'garch-drift', label: 'Regularized drift · GARCH Student-t', window: 504, type: 'garch', drift: true },
   { id: 'har', label: 'HAR volatility · Student-t', window: 504, type: 'har' },
   { id: 'har-trend', label: 'HAR volatility · Ridge momentum', window: 504, type: 'har-trend' },
+  { id: 'trend-30', label: '30-session trend · adaptive volatility', window: 252, type: 'ewma', trend: true },
+  { id: 'ridge-direct', label: 'Direct horizon ridge · adaptive volatility', window: 504, type: 'ewma', direct: true },
+  { id: 'ridge-context', label: 'Direct horizon ridge · market, sector and volume', window: 504, type: 'ewma', direct: true, context: true },
 ];
 
 // ---------------------------------------------------------------------------
-// Headline trend drift: linear trend of cumulative log-returns over the last
-// 30 sessions, clamped to ±1%/day. Zero-drift medians are statistically safe
-// but read as "just the LTP" — this gives the headline number a direction
-// while bands still carry the volatility-model uncertainty. Experimental.
+// A 30-session trend is an explicit candidate, scored like every other model.
+// It is never added on top of another model's prediction.
 // ---------------------------------------------------------------------------
 export function trendDriftPerDay(returns) {
   const window = returns.slice(-30);
@@ -47,81 +42,12 @@ export function trendDriftPerDay(returns) {
 // log-return units): five daily lags, 5-day and 20-day momentum, and 20-day
 // realized dispersion. Standardized inside each training window.
 // ---------------------------------------------------------------------------
-const FEATURES = 8;
-const HISTORY_LAGS = 20;
-
-function returnFeatures(history) {
-  const n = history.length;
-  const lag = k => (n - k >= 0 ? history[n - k] : 0);
-  let momentum5 = 0, momentum20 = 0;
-  for (let k = 1; k <= 5; k++) momentum5 += lag(k);
-  momentum5 /= 5;
-  for (let k = 1; k <= HISTORY_LAGS; k++) momentum20 += lag(k);
-  momentum20 /= HISTORY_LAGS;
-  let dispersion = 0;
-  for (let k = 1; k <= HISTORY_LAGS; k++) dispersion += (lag(k) - momentum20) ** 2;
-  return [lag(1), lag(2), lag(3), lag(4), lag(5), momentum5, momentum20, Math.sqrt(dispersion / HISTORY_LAGS)];
-}
-
-function designRows(returns) {
-  const rows = [];
-  for (let i = HISTORY_LAGS; i < returns.length; i++) rows.push({ end: i, x: returnFeatures(returns.slice(0, i)), y: returns[i] });
-  return rows;
-}
-
-function standardizeColumns(rows) {
-  const p = rows[0].x.length;
-  const center = Array(p).fill(0), scale = Array(p).fill(0);
-  for (const row of rows) for (let j = 0; j < p; j++) center[j] += row.x[j];
-  for (let j = 0; j < p; j++) center[j] /= rows.length;
-  for (const row of rows) for (let j = 0; j < p; j++) scale[j] += (row.x[j] - center[j]) ** 2;
-  for (let j = 0; j < p; j++) { scale[j] = Math.sqrt(scale[j] / rows.length); if (!(scale[j] > 1e-10)) scale[j] = 1; }
-  return { center, scale };
-}
-
-function solveLinear(system, rhs) {
-  const n = rhs.length;
-  const augmented = system.map((row, i) => [...row, rhs[i]]);
-  for (let col = 0; col < n; col++) {
-    let pivot = col;
-    for (let row = col + 1; row < n; row++) if (Math.abs(augmented[row][col]) > Math.abs(augmented[pivot][col])) pivot = row;
-    if (!(Math.abs(augmented[pivot][col]) > 1e-12)) continue;
-    [augmented[col], augmented[pivot]] = [augmented[pivot], augmented[col]];
-    for (let row = 0; row < n; row++) {
-      if (row === col) continue;
-      const factor = augmented[row][col] / augmented[col][col];
-      if (factor === 0) continue;
-      for (let k = col; k <= n; k++) augmented[row][k] -= factor * augmented[col][k];
-    }
-  }
-  return augmented.map((row, i) => (Math.abs(row[i]) > 1e-12 ? row[n] / row[i] : 0));
-}
-
-// Ridge-regularized linear map from momentum features to next-day return.
-// Lambda is fixed before any evaluation, so no tuning-set peeking.
-const RIDGE_LAMBDA = 20;
 export function fitRidgeMean(returns) {
-  const rows = designRows(returns);
+  const rows = [];
+  for (let i = 20; i < returns.length; i++) rows.push({ x: returnFeatures(returns, i), y: returns[i] });
   if (rows.length < 30) return { predict: () => 0, residuals: returns.slice() };
-  const { center, scale } = standardizeColumns(rows);
-  const dimension = FEATURES + 1;
-  const system = Array.from({ length: dimension }, () => Array(dimension).fill(0));
-  const rhs = Array(dimension).fill(0);
-  for (const row of rows) {
-    const extended = [...row.x.map((value, j) => (value - center[j]) / scale[j]), 1];
-    for (let a = 0; a < dimension; a++) {
-      rhs[a] += extended[a] * row.y;
-      for (let b = 0; b < dimension; b++) system[a][b] += extended[a] * extended[b];
-    }
-  }
-  for (let j = 0; j < FEATURES; j++) system[j][j] += RIDGE_LAMBDA;
-  const weights = solveLinear(system, rhs);
-  const raw = x => {
-    let value = weights[FEATURES];
-    for (let j = 0; j < FEATURES; j++) value += weights[j] * (x[j] - center[j]) / scale[j];
-    return value;
-  };
-  return { predict: history => raw(returnFeatures(history)), residuals: rows.map(row => row.y - raw(row.x)) };
+  const model = fitRidgeRows(rows);
+  return { predict: history => model.predict(returnFeatures(history)), residuals: model.residuals };
 }
 
 // HAR-RV-lite: ordinary least squares of squared returns on daily, weekly
@@ -177,7 +103,7 @@ function garchGrid(residuals, variance) {
   return best;
 }
 
-function fit(returns, candidate) {
+function fit(returns, candidate, { bars, horizon, context } = {}) {
   const xs = returns.slice(-candidate.window), average = mean(xs);
   const variance = Math.max(1e-12, mean(xs.map(x => (x - average) ** 2)));
   if (candidate.type === 'har' || candidate.type === 'har-trend') {
@@ -192,13 +118,16 @@ function fit(returns, candidate) {
     return { ...har, variance: harForecast(har.coefs, har.trainVariance, xs), drift: 0, student: true,
       meanPredict, meanBias, tail: [...padding, ...xs.slice(-HAR_LAGS)] };
   }
-  const drift = candidate.drift ? Math.max(-Math.sqrt(variance / xs.length), Math.min(Math.sqrt(variance / xs.length), average * .2)) : 0;
+  const direct = candidate.direct ? fitDirectMean(bars.slice(-(candidate.window + 1)), horizon, candidate.context ? context || {} : null) : null;
+  const drift = direct ? Math.max(-MEAN_CLAMP, Math.min(MEAN_CLAMP, direct.prediction / horizon))
+    : candidate.trend ? trendDriftPerDay(xs)
+    : candidate.drift ? Math.max(-Math.sqrt(variance / xs.length), Math.min(Math.sqrt(variance / xs.length), average * .2)) : 0;
   const residuals = xs.map(x => x - drift);
   if (candidate.type === 'constant') return { variance, drift, alpha: 0, beta: 1, omega: 0, student: false };
   if (candidate.type === 'ewma') {
     let v = variance;
     for (const r of residuals) v = .94 * v + .06 * r * r;
-    return { variance: v, drift, alpha: .06, beta: .94, omega: 0, student: false };
+    return { variance: v, drift, alpha: .06, beta: .94, omega: 0, student: false, available: direct?.available ?? true };
   }
   return { ...garchGrid(residuals, variance), drift };
 }
@@ -214,7 +143,7 @@ function random(seed) {
 // recursive simulation explode.
 const MEAN_CLAMP = 0.02;
 
-function simulate(model, horizon, count, seed) {
+function simulate(model, horizon, count, seed, terminalOnly = false) {
   const normal = random(seed), steps = Array.from({ length: horizon }, () => []);
   // Antithetic pairs reduce Monte Carlo noise and preserve a zero-drift median.
   for (let i = 0; i < count / 2; i++) {
@@ -234,7 +163,7 @@ function simulate(model, horizon, count, seed) {
         const stepA = Math.sqrt(harForecast(model.coefs, model.trainVariance, historyA)) * shock * scale;
         const stepB = -Math.sqrt(harForecast(model.coefs, model.trainVariance, historyB)) * shock * scale;
         totalA += muA + stepA; totalB += muB + stepB;
-        steps[h].push(totalA, totalB);
+        if (!terminalOnly || h === horizon - 1) steps[h].push(totalA, totalB);
         historyA.push(muA + stepA); historyB.push(muB + stepB);
         if (historyA.length > 40) historyA.splice(0, historyA.length - 40);
         if (historyB.length > 40) historyB.splice(0, historyB.length - 40);
@@ -247,7 +176,7 @@ function simulate(model, horizon, count, seed) {
       if (model.student) { let chi = 0; for (let k = 0; k < 7; k++) chi += normal() ** 2; shock *= Math.sqrt(5 / Math.max(chi, 1e-12)); }
       const r = Math.sqrt(v) * shock;
       log += r;
-      steps[h].push(model.drift * (h + 1) + log, model.drift * (h + 1) - log);
+      if (!terminalOnly || h === horizon - 1) steps[h].push(model.drift * (h + 1) + log, model.drift * (h + 1) - log);
       v = model.omega + model.alpha * r * r + model.beta * v;
     }
   }
@@ -258,7 +187,9 @@ function summarize(samples) {
   return { median: quantile(samples, .5), low50: quantile(samples, .25), high50: quantile(samples, .75), low80: quantile(samples, .1), high80: quantile(samples, .9), low95: quantile(samples, .025), high95: quantile(samples, .975) };
 }
 
-function score(samples, actual) {
+const direction = value => Math.abs(Math.expm1(value)) <= .0005 ? 0 : Math.sign(value);
+
+export function scoreForecast(samples, actual) {
   const q = summarize(samples);
   const interval = (l, u, alpha) => u - l + 2 / alpha * Math.max(0, l - actual, actual - u);
   const probability = samples.filter(x => x > 0).length / samples.length;
@@ -266,6 +197,11 @@ function score(samples, actual) {
     // Weighted interval score in log-return units, rewards calibration AND sharpness.
     wis: (.5 * Math.abs(q.median - actual) + .1 * interval(q.low80, q.high80, .2) + .025 * interval(q.low95, q.high95, .05)) / 2.5,
     error: Math.abs(q.median - actual) * 100,
+    returnMae: Math.abs(Math.expm1(q.median) - Math.expm1(actual)) * 100,
+    squaredReturnError: ((Math.expm1(q.median) - Math.expm1(actual)) * 100) ** 2,
+    directionHit: Number(direction(q.median) === direction(actual)),
+    directionCalled: Number(direction(q.median) !== 0),
+    calledDirectionHit: Number(direction(q.median) !== 0 && direction(q.median) === direction(actual)),
     coverage80: actual >= q.low80 && actual <= q.high80 ? 100 : 0,
     coverage95: actual >= q.low95 && actual <= q.high95 ? 100 : 0,
     brier: (probability - Number(actual > 0)) ** 2, probability, outcome: Number(actual > 0),
@@ -289,53 +225,104 @@ export function compareForecasts(selectedWis, baselineWis) {
   return 'tie';
 }
 
+// The objective and gates are fixed before the locked benchmark is opened.
+// Directional forecasts must improve point error by 5% while preserving WIS;
+// uncertainty-only changes may win on WIS when their point error ties baseline.
+export function selectForecastCandidate(scores) {
+  const baseline = scores.find(row => row.id === 'baseline');
+  let selected = baseline;
+  const uncertainty = scores.filter(row => row.available !== false && Number.isFinite(row.wis) && Math.abs(row.returnMae - baseline.returnMae) <= 1e-10)
+    .sort((a, b) => a.wis - b.wis)[0];
+  if (uncertainty && uncertainty.wis < baseline.wis * .95) selected = uncertainty;
+  const winner = scores.filter(row => row.available !== false && Number.isFinite(row.returnMae) && row.wis <= baseline.wis * 1.05)
+    .sort((a, b) => a.returnMae - b.returnMae || a.wis - b.wis)[0];
+  if (winner && winner.returnMae < baseline.returnMae * .95) selected = winner;
+  return selected.id;
+}
+
+export function aggregateForecastScores(rows) {
+  if (!rows.length) return null;
+  const metrics = Object.fromEntries(['wis', 'error', 'returnMae', 'coverage80', 'coverage95', 'brier'].map(metric => [metric, mean(rows.map(r => r[metric]))]));
+  const calls = rows.reduce((n, r) => n + r.directionCalled, 0);
+  return { ...metrics, returnRmse: Math.sqrt(mean(rows.map(r => r.squaredReturnError))),
+    directionAccuracy: mean(rows.map(r => r.directionHit)) * 100,
+    directionalCoverage: calls / rows.length * 100,
+    directionalAccuracyWhenCalled: calls ? rows.reduce((n, r) => n + r.calledDirectionHit, 0) / calls * 100 : null };
+}
+
 export function projectForecast(bars, horizon = 10, options = {}) {
   if (![5, 10, 20, 30].includes(horizon)) throw new Error('Choose a supported forecast horizon.');
-  if (bars.length < 70 || bars.some(b => !Number.isFinite(b.close) || b.close <= 0)) throw new Error('At least 70 valid daily prices are needed for a forecast.');
+  if (!Array.isArray(bars) || bars.length < 70 || bars.some(b => !Number.isFinite(b.close) || b.close <= 0)) throw new Error('At least 70 valid daily prices are needed for a forecast.');
   const times = bars.map(b => typeof b.time === 'number' ? b.time * 1000 : Date.parse(`${b.time}T12:00:00Z`));
   if (times.some((t, i) => !Number.isFinite(t) || (i && t <= times[i - 1]))) throw new Error('History must contain unique, chronological daily sessions.');
   const logs = bars.map(b => Math.log(b.close)), returns = logs.slice(1).map((x, i) => x - logs[i]);
+  // Development assessment found no incremental gain from the new mean
+  // candidates. They remain opt-in research paths, not production defaults.
+  const family = candidates.filter(c => (!c.context || options.experimentalContext)
+    && (!c.trend && !c.direct || options.experimentalMeans || options.experimentalContext || options.candidateIds?.includes(c.id) || options.candidateId === c.id)
+    && (!options.candidateIds || options.candidateIds.includes(c.id)));
+  if (!family.some(c => c.id === 'baseline')) throw new Error('Forecast candidates must include the baseline.');
   const origins = [];
-  // Non-overlapping target periods; training windows may overlap.
   for (let origin = 252; origin + horizon < bars.length; origin += horizon) origins.push(origin);
-  const split = Math.floor(origins.length * .6), tuning = origins.slice(0, split), evaluation = origins.slice(split);
-  const enough = tuning.length >= 8 && evaluation.length >= 5;
-  let selected = candidates[0];
-  const tuningScores = [];
+  const split = Math.floor(origins.length * .6), evaluationOrigins = origins.slice(split);
+  const enough = split >= 8 && evaluationOrigins.length >= 5;
+  const cache = new Map();
   const run = (candidate, origin) => {
-    const samples = simulate(fit(returns.slice(0, origin), candidate), horizon, 512, 4100 + origin).at(-1);
-    return score(samples, logs[origin + horizon] - logs[origin]);
+    const key = `${candidate.id}:${origin}`;
+    if (!cache.has(key)) {
+      const model = fit(returns.slice(0, origin), candidate, { bars: bars.slice(0, origin + 1), horizon, context: options.context });
+      const samples = simulate(model, horizon, 512, 4100 + origin, true).at(-1);
+      cache.set(key, { ...scoreForecast(samples, logs[origin + horizon] - logs[origin]), available: model.available !== false });
+    }
+    return cache.get(key);
   };
-  if (enough) {
-    for (const candidate of candidates) tuningScores.push({ id: candidate.id, label: candidate.label, score: mean(tuning.map(origin => run(candidate, origin).wis)) });
-    const winner = [...tuningScores].sort((a, b) => a.score - b.score)[0];
-    if (winner.score < tuningScores[0].score * .95) selected = candidates.find(c => c.id === winner.id);
-  }
-  const records = enough ? evaluation.map(origin => ({ origin, selected: run(selected, origin), baseline: run(candidates[0], origin) })) : [];
-  const aggregate = key => records.length ? Object.fromEntries(['wis', 'error', 'coverage80', 'coverage95', 'brier'].map(metric => [metric, mean(records.map(r => r[key][metric]))])) : null;
+  const selectAt = origin => {
+    // A historical target is eligible only once its closing price was known.
+    const matured = origins.filter(t => t + horizon <= origin), prior = matured.slice(-32);
+    if (matured.length < 14) return { candidate: family[0], scores: [], prior };
+    const scores = family.map(candidate => ({ id: candidate.id, label: candidate.label,
+      ...aggregateForecastScores(prior.map(t => run(candidate, t))),
+      available: prior.every(t => run(candidate, t).available),
+      score: mean(prior.map(t => run(candidate, t).returnMae)) }));
+    const id = selectForecastCandidate(scores);
+    let candidate = family.find(c => c.id === id);
+    if (candidate.direct && !fit(returns.slice(0, origin), candidate, { bars: bars.slice(0, origin + 1), horizon, context: options.context }).available) candidate = family[0];
+    return { candidate, scores, prior };
+  };
+  const forced = options.candidateId && family.find(c => c.id === options.candidateId);
+  if (options.candidateId && !forced) throw new Error('Unknown forecast candidate.');
+  const selection = forced ? { candidate: forced, scores: [], prior: [] } : selectAt(bars.length - 1);
+  const selected = selection.candidate;
+  const records = enough && options.includeEvaluation !== false ? evaluationOrigins.map(origin => {
+    const historical = selectAt(origin);
+    return { origin, date: bars[origin].time, selectionEnd: historical.prior.length ? bars[historical.prior.at(-1) + horizon].time : null,
+      modelId: historical.candidate.id, selected: run(historical.candidate, origin), baseline: run(family[0], origin) };
+  }) : [];
+  const aggregate = key => aggregateForecastScores(records.map(r => r[key]));
   const calibration = Array.from({ length: 5 }, (_, i) => {
     const rows = records.filter(r => Math.min(4, Math.floor(r.selected.probability * 5)) === i);
     return { label: `${i * 20}–${(i + 1) * 20}%`, count: rows.length, predicted: rows.length ? mean(rows.map(r => r.selected.probability)) * 100 : null, observed: rows.length ? mean(rows.map(r => r.selected.outcome)) * 100 : null };
   });
-  const simulation = simulate(fit(returns, selected), horizon, 4096, 20261007);
+  const model = fit(returns, selected, { bars, horizon, context: options.context });
+  const simulation = simulate(model, horizon, 4096, 20261007);
   const calendar = forecastDates(bars.at(-1).time, horizon, options.symbol);
   const last = logs.at(-1), lastClose = bars.at(-1).close;
-  const drift = trendDriftPerDay(returns);
   const points = simulation.map((samples, i) => {
-    const q = summarize(samples);
-    // Headline path follows the 30-session trend; bands keep the
-    // volatility-model spreads so uncertainty stays honest.
-    const center = last + drift * (i + 1) + q.median;
-    const price = offset => Math.exp(center + offset);
-    return { date: calendar.dates[i], close: Math.exp(center), lower: price(q.low95 - q.median), upper: price(q.high95 - q.median), lower80: price(q.low80 - q.median), upper80: price(q.high80 - q.median), lower50: price(q.low50 - q.median), upper50: price(q.high50 - q.median) };
+    const q = summarize(samples), price = value => Math.exp(last + value);
+    return { date: calendar.dates[i], close: price(q.median), lower: price(q.low95), upper: price(q.high95),
+      lower80: price(q.low80), upper80: price(q.high80), lower50: price(q.low50), upper50: price(q.high50) };
   });
   if (points.some(p => Object.entries(p).some(([k, v]) => k !== 'date' && (!Number.isFinite(v) || v <= 0)))) throw new Error('This price series cannot produce a stable projection.');
   const gaps = times.slice(1).filter((t, i) => t - times[i] > 7 * 86400000).length;
-  return { points, model: selected.label, modelId: selected.id, version: FORECAST_VERSION, observations: bars.length, trainingWindow: Math.min(returns.length, selected.window), trainedThrough: bars.at(-1).time,
-    lastClose, driftPerDay: drift, trend: { driftPerDay: drift, method: '30-session log-price trend, ±1%/day clamp, experimental' },
+  const drift = Math.log(points.at(-1).close / lastClose) / horizon;
+  return { points, model: selected.label, modelId: selected.id, modelAvailable: model.available !== false, version: FORECAST_VERSION, observations: bars.length,
+    trainingWindow: Math.min(returns.length, selected.window), trainedThrough: bars.at(-1).time,
+    lastClose, driftPerDay: drift, trend: { driftPerDay: drift, method: 'Selected model median; identical forecast construction in historical evaluation and live output' },
     change: (points.at(-1).close / lastClose - 1) * 100, samples: simulation.at(-1), calendar: calendar.note,
     quality: gaps ? `${gaps} gaps longer than seven calendar days; interpret results cautiously.` : null,
-    evaluation: { count: records.length, tuningCount: enough ? tuning.length : 0, start: records.length ? bars[records[0].origin].time : null, end: records.length ? bars[records.at(-1).origin + horizon].time : null, selected: aggregate('selected'), baseline: aggregate('baseline'), calibration, tuningScores,
-      selectionEnd: enough ? bars[tuning.at(-1) + horizon].time : null,
-      note: enough ? 'Selection fixed before evaluation. Target periods do not overlap; results can still be statistically dependent.' : 'Insufficient history for separate selection and evaluation. Using the baseline; no accuracy claim.' } };
+    evaluation: { count: records.length, tuningCount: selection.prior.length, start: records.length ? bars[records[0].origin].time : null,
+      end: records.length ? bars[records.at(-1).origin + horizon].time : null, selected: aggregate('selected'), baseline: aggregate('baseline'),
+      calibration, tuningScores: selection.scores, records,
+      selectionEnd: selection.prior.length ? bars[selection.prior.at(-1) + horizon].time : null,
+      note: enough ? 'Rolling model selection uses only previously completed targets at each origin. Target periods do not overlap; results can still be statistically dependent.' : 'Insufficient history for separate selection and evaluation. Using the baseline; no accuracy claim.' } };
 }

@@ -1,4 +1,5 @@
 .signup-entry { min-height: 38px; flex-shrink: 0; }
+.signup-entry-suggested { border-color: var(--accent); background: var(--theme-accent-surface, #1c2b44); }
 .signup-entry span { max-width: 110px; overflow: hidden; text-overflow: ellipsis; }
 .signup-dialog { width: min(460px, calc(100vw - 28px)); max-height: calc(100dvh - 32px); overflow: auto; margin: auto; border: 1px solid var(--line); border-radius: 20px; padding: 32px; background: var(--panel); color: var(--text); box-shadow: 0 24px 100px #0005; }
 .signup-dialog::backdrop { background: #050b16a8; backdrop-filter: blur(5px); }
