@@ -4,11 +4,10 @@ import { Activity, ArrowDownUp } from "lucide-react";
 
 export const tone = (n) =>
   Number.isFinite(n) ? (n >= 0 ? "positive" : "negative") : "muted";
-export function PanelTitle({ title, tag, children }) {
+export function PanelTitle({ title, children }) {
   return (
     <div className="panel-title">
       <div>
-        <span className="panel-tag">{tag}</span>
         <h2>{title}</h2>
       </div>
       <div>{children}</div>

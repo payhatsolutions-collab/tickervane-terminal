@@ -90,6 +90,29 @@ test('analytics renders missing data as unavailable rather than fabricated metri
   assert.doesNotMatch(html, /NaN|undefined/);
 });
 
+test('analytics renders market charts, matched performance, drawdown and sortable industry returns', async t => {
+  t.mock.method(globalThis, 'fetch', async url => ({ ok: true, json: async () => url.includes('op=screen') ? {
+    date: '2026-10-30', rows: [
+      { symbol: 'TCS', industry: 'IT', above200: true, r3m: 12, rs3m: 4, volRatio: 1.2 },
+      { symbol: 'ITC', industry: 'Consumer', above200: false, r3m: -3 },
+      { symbol: 'INFY', industry: 'IT', above200: null, r3m: null },
+    ],
+  } : { adjusted: true, timezone: 'Asia/Kolkata', bars: [100, 110, 90].map((close, i) => ({ time: `2026-10-0${i + 1}`, close })) } }));
+  clearCache();
+  await Promise.all([
+    load('/api/market?op=screen'),
+    load('/api/market?op=chart&symbol=TCS.NS&range=1y&adjusted=1'),
+    load('/api/market?op=chart&symbol=%5ENSEI&range=1y&adjusted=1'),
+  ]);
+  const html = renderToStaticMarkup(React.createElement(AdvancedAnalytics, {
+    symbol: 'TCS.NS', refresh: 0, onRefresh: noop, onSelect: noop, watch: [],
+  }));
+  for (const label of ['How broad is the market?', 'Industry momentum', 'Cumulative return chart', 'Historical drawdown chart', 'matched dates', '1 stocks unavailable', 'Coverage &amp; methodology']) assert.ok(html.includes(label), label);
+  assert.match(html, /aria-sort="none"[^>]*><button>Median 3M return/);
+  assert.doesNotMatch(html, /NaN|undefined|Infinity/);
+  clearCache();
+});
+
 test('market snapshot distinguishes unavailable quotes from zero and uses only supplied prices', () => {
   const html = renderToStaticMarkup(React.createElement(MarketOverview, {
     quotes: { '^NSEI': { price: 25000, change: -1.25, marketTime: 1793072700, spark: [100, 102, 101] }, '^NSEBANK': { price: 0, change: 0 } },

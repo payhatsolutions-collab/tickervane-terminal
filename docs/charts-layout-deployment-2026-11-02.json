@@ -1,0 +1,138 @@
+{
+  "date": "2026-11-02",
+  "project": "alphanova2",
+  "changes": [
+    "Moved the Charts watchlist after company news in document and desktop/mobile layout order.",
+    "Removed Bloomberg-style section badges from both PanelTitle components."
+  ],
+  "deployment": {
+    "id": "dpl_HTcWVogTXeyuM1g7hh1vK9cMf6KZ",
+    "url": "https://alphanova2-9l49bpixl-wdcre.vercel.app",
+    "status": "promoted"
+  },
+  "production": "https://alphanova48.in/charts",
+  "previousDeployment": {
+    "id": "dpl_GiSDNqLCvByN6x7h2pDsf34kNcNR",
+    "url": "https://alphanova2-dgrovo3xd-wdcre.vercel.app"
+  },
+  "rollbackCommand": "vercel promote https://alphanova2-dgrovo3xd-wdcre.vercel.app --yes",
+  "tests": {
+    "passed": 374,
+    "failed": 0,
+    "cancelled": 0
+  },
+  "localBuild": "passed",
+  "hostedBuild": "passed",
+  "stagedHtml": {
+    "verified": true,
+    "script": "/assets/index-_AO581nT.js",
+    "stylesheet": "/assets/index-B8j9onGb.css"
+  },
+  "productionBrowser": {
+    "origin": "https://alphanova48.in",
+    "results": [
+      {
+        "width": 1440,
+        "planner": false,
+        "last": true,
+        "tags": 0,
+        "watchTop": 2663.46875,
+        "otherBottom": 2645.46875,
+        "areas": "\"chart\" \"research\" \"company\" \"news\" \"watch\"",
+        "overflow": false,
+        "headings": [
+          "Price & technicals",
+          "Performance & delivery",
+          "Company insights",
+          "Company news",
+          "Watchlist"
+        ]
+      },
+      {
+        "width": 1440,
+        "planner": true,
+        "last": true,
+        "tags": 0,
+        "watchTop": 2663.46875,
+        "otherBottom": 2645.46875,
+        "areas": "\"chart technical\" \"research technical\" \"company company\" \"news news\" \"watch watch\"",
+        "overflow": false,
+        "headings": [
+          "Price & technicals",
+          "Performance & delivery",
+          "Company insights",
+          "Company news",
+          "Watchlist"
+        ]
+      },
+      {
+        "width": 900,
+        "planner": false,
+        "last": true,
+        "tags": 0,
+        "watchTop": 3162.796875,
+        "otherBottom": 3144.796875,
+        "areas": "\"chart\" \"research\" \"company\" \"news\" \"watch\"",
+        "overflow": false,
+        "headings": [
+          "Price & technicals",
+          "Performance & delivery",
+          "Company insights",
+          "Company news",
+          "Watchlist"
+        ]
+      },
+      {
+        "width": 900,
+        "planner": true,
+        "last": true,
+        "tags": 0,
+        "watchTop": 3288.796875,
+        "otherBottom": 3270.796875,
+        "areas": "\"technical\" \"chart\" \"research\" \"company\" \"news\" \"watch\"",
+        "overflow": false,
+        "headings": [
+          "Price & technicals",
+          "Performance & delivery",
+          "Company insights",
+          "Company news",
+          "Watchlist"
+        ]
+      },
+      {
+        "width": 390,
+        "planner": false,
+        "last": true,
+        "tags": 0,
+        "watchTop": 3721.03125,
+        "otherBottom": 3705.03125,
+        "areas": "\"chart\" \"research\" \"company\" \"news\" \"watch\"",
+        "overflow": false,
+        "headings": [
+          "Price & technicals",
+          "Performance & delivery",
+          "Company insights",
+          "Company news",
+          "Watchlist"
+        ]
+      },
+      {
+        "width": 390,
+        "planner": true,
+        "last": true,
+        "tags": 0,
+        "watchTop": 3834.03125,
+        "otherBottom": 3818.03125,
+        "areas": "\"technical\" \"chart\" \"research\" \"company\" \"news\" \"watch\"",
+        "overflow": false,
+        "headings": [
+          "Price & technicals",
+          "Performance & delivery",
+          "Company insights",
+          "Company news",
+          "Watchlist"
+        ]
+      }
+    ]
+  }
+}

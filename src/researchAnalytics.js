@@ -1,4 +1,5 @@
 const mean = values => values.length ? values.reduce((a, b) => a + b, 0) / values.length : null;
+const cleanHistory = input => [...new Map(input.filter(b => /^\d{4}-\d{2}-\d{2}$/.test(b.time) && Number.isFinite(b.close) && b.close > 0).map(b => [b.time, b])).values()].sort((a, b) => a.time.localeCompare(b.time));
 export const median = values => {
   const sorted = values.filter(Number.isFinite).sort((a, b) => a - b);
   const middle = Math.floor(sorted.length / 2);
@@ -19,8 +20,7 @@ export function screenAnalytics(rows = []) {
 // Adjusted completed daily closes only. Returns are paired by BOTH session dates
 // so gaps in either series cannot silently create mismatched beta observations.
 export function historyAnalytics(bars = [], benchmark = []) {
-  const clean = input => [...new Map(input.filter(b => /^\d{4}-\d{2}-\d{2}$/.test(b.time) && Number.isFinite(b.close) && b.close > 0).map(b => [b.time, b])).values()].sort((a, b) => a.time.localeCompare(b.time));
-  const series = clean(bars), bench = clean(benchmark);
+  const series = cleanHistory(bars), bench = cleanHistory(benchmark);
   const returns = input => input.slice(1).map((b, i) => ({ key: `${input[i].time}/${b.time}`, value: b.close / input[i].close - 1 }));
   const daily = returns(series), values = daily.map(r => r.value);
   const average = mean(values);
@@ -41,6 +41,26 @@ export function historyAnalytics(bars = [], benchmark = []) {
     sharpe: sufficient && variance > 0 ? average / Math.sqrt(variance) * Math.sqrt(252) : null,
     beta: pairs.length >= 20 && benchVariance > 0 ? covariance / benchVariance : null,
     correlation: pairs.length >= 20 && benchVariance > 0 && stockVariance > 0 ? Math.max(-1, Math.min(1, covariance / Math.sqrt(stockVariance * benchVariance))) : null,
+  };
+}
+
+// Compare both instruments from the same starting close on shared dates.
+// Drawdown retains the stock's full history, including unmatched sessions.
+export function historySeries(bars = [], benchmark = []) {
+  const stock = cleanHistory(bars), reference = new Map(cleanHistory(benchmark).map(bar => [bar.time, bar.close]));
+  const aligned = stock.filter(bar => reference.has(bar.time));
+  const benchmarkAligned = aligned.length >= 2;
+  const compared = benchmarkAligned ? aligned : stock;
+  const first = compared[0];
+  let peak = stock[0]?.close;
+  return {
+    benchmarkAligned,
+    performance: compared.map(bar => ({ time: bar.time, value: (bar.close / first.close - 1) * 100,
+      benchmark: benchmarkAligned ? (reference.get(bar.time) / reference.get(first.time) - 1) * 100 : null })),
+    drawdown: stock.map(bar => {
+      peak = Math.max(peak, bar.close);
+      return { time: bar.time, value: (bar.close / peak - 1) * 100 };
+    }),
   };
 }
 

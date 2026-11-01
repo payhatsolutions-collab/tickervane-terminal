@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-02",
+  "project": "alphanova2",
+  "changes": [
+    "Added market breadth donut and industry momentum charts with leaders/laggards controls.",
+    "Added interactive adjusted-return comparison against Nifty 50 and historical drawdown charts.",
+    "Condensed risk metrics and moved detailed explanations into expandable sections.",
+    "Added numeric industry return sorting in both directions, with missing medians last, share bars and return bars.",
+    "Adapted chart dimensions and controls for phones and both appearance themes."
+  ],
+  "deployment": {
+    "id": "dpl_9yhp7JEBsY8G7GR4F4rZ8Em9e4mQ",
+    "url": "https://alphanova2-nsoqjwa8k-wdcre.vercel.app",
+    "status": "promoted"
+  },
+  "production": "https://alphanova48.in/analytics",
+  "previousDeployment": "https://alphanova2-9l49bpixl-wdcre.vercel.app",
+  "rollbackCommand": "vercel promote https://alphanova2-9l49bpixl-wdcre.vercel.app --yes",
+  "tests": { "passed": 378, "failed": 0, "cancelled": 0 },
+  "localBuild": "passed",
+  "hostedBuild": "passed",
+  "stagedHtml": { "verified": true, "script": "/assets/index-oxv_Bt6y.js" },
+  "verification": {
+    "local": ["Both appearance themes", "Watchlist/all universe switching", "Leaders/laggards switching", "Period selection", "Keyboard chart exploration"],
+    "production": {
+      "marketStocks": 499,
+      "historyCharts": 2,
+      "descendingFirst": "Media Entertainment & Publication +9.02%",
+      "ascendingFirst": "Diversified -30.89%",
+      "mobileViewport": 390,
+      "mobileBodyOverflow": false,
+      "screenshots": ["docs/analytics-desktop-2026-11-02.jpg", "docs/analytics-mobile-2026-11-02.jpg"]
+    }
+  }
+}

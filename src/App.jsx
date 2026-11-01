@@ -146,11 +146,10 @@ function Spark({ values = [], change }) {
     </svg>
   );
 }
-function PanelTitle({ title, tag, children }) {
+function PanelTitle({ title, children }) {
   return (
     <div className="panel-title">
       <div>
-        <span className="panel-tag">{tag}</span>
         <h2>{title}</h2>
       </div>
       <div>{children}</div>
@@ -1563,71 +1562,6 @@ export default function App() {
                   ))}
                 </div>
               </section>
-              <section
-                className="panel watch-panel"
-                id="watchlist-panel"
-                ref={watchPanelRef}
-              >
-                <PanelTitle title="Watchlist" tag="WL">
-                  <span className="muted">{watch.length} / 40</span>
-                </PanelTitle>
-                <div className="watch-changed">
-                  {watchSummary.known ? (
-                    <>
-                      <span>
-                        <strong
-                          className={
-                            watchSummary.avg >= 0 ? "positive" : "negative"
-                          }
-                        >
-                          {pct(watchSummary.avg)}
-                        </strong>{" "}
-                        avg today
-                      </span>
-                      <span>
-                        {watchSummary.up} up · {watchSummary.down} down
-                        {watchSummary.flat
-                          ? ` · ${watchSummary.flat} flat`
-                          : ""}
-                      </span>
-                      {watchSummary.top && (
-                        <span>
-                          Biggest move{" "}
-                          <button
-                            className="link"
-                            onClick={() => choose(watchSummary.top.symbol)}
-                          >
-                            {short(watchSummary.top.symbol)}{" "}
-                            {pct(watchSummary.top.q.change)}
-                          </button>
-                        </span>
-                      )}
-                    </>
-                  ) : (
-                    <span className="muted">Awaiting quotes</span>
-                  )}
-                </div>
-                <Heatmap
-                  compact
-                  rows={watch.map((s) => ({ symbol: s, ...quotes[s] }))}
-                  onOpen={choose}
-                />
-                <div className="watch-list-head">
-                  <strong>Saved instruments</strong>
-                  <button className="button" onClick={() => openSearch()}>
-                    <Plus size={14} /> Add
-                  </button>
-                </div>
-                {watch.length ? (
-                  marketTable(true)
-                ) : (
-                  <div className="watch-empty">
-                    Star any instrument to pin it here for one-tap research.
-                    <br />
-                    Try RELIANCE, NVDA or BTC-USD.
-                  </div>
-                )}
-              </section>
               <ResearchCharts
                 isNSE={isNS}
                 bars={dailyBars}
@@ -2020,6 +1954,71 @@ export default function App() {
               </section>
 
               <Suspense fallback={<div className="loading" role="status">Loading news…</div>}><News symbol={symbol} refresh={refresh} /></Suspense>
+              <section
+                className="panel watch-panel"
+                id="watchlist-panel"
+                ref={watchPanelRef}
+              >
+                <PanelTitle title="Watchlist" tag="WL">
+                  <span className="muted">{watch.length} / 40</span>
+                </PanelTitle>
+                <div className="watch-changed">
+                  {watchSummary.known ? (
+                    <>
+                      <span>
+                        <strong
+                          className={
+                            watchSummary.avg >= 0 ? "positive" : "negative"
+                          }
+                        >
+                          {pct(watchSummary.avg)}
+                        </strong>{" "}
+                        avg today
+                      </span>
+                      <span>
+                        {watchSummary.up} up · {watchSummary.down} down
+                        {watchSummary.flat
+                          ? ` · ${watchSummary.flat} flat`
+                          : ""}
+                      </span>
+                      {watchSummary.top && (
+                        <span>
+                          Biggest move{" "}
+                          <button
+                            className="link"
+                            onClick={() => choose(watchSummary.top.symbol)}
+                          >
+                            {short(watchSummary.top.symbol)}{" "}
+                            {pct(watchSummary.top.q.change)}
+                          </button>
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="muted">Awaiting quotes</span>
+                  )}
+                </div>
+                <Heatmap
+                  compact
+                  rows={watch.map((s) => ({ symbol: s, ...quotes[s] }))}
+                  onOpen={choose}
+                />
+                <div className="watch-list-head">
+                  <strong>Saved instruments</strong>
+                  <button className="button" onClick={() => openSearch()}>
+                    <Plus size={14} /> Add
+                  </button>
+                </div>
+                {watch.length ? (
+                  marketTable(true)
+                ) : (
+                  <div className="watch-empty">
+                    Star any instrument to pin it here for one-tap research.
+                    <br />
+                    Try RELIANCE, NVDA or BTC-USD.
+                  </div>
+                )}
+              </section>
             </div>
           )}
           {page === "Forecast" && (

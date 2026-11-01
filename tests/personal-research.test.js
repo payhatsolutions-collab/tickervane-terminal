@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { historyAnalytics, screenAnalytics, breakoutInsight } from '../src/researchAnalytics.js';
+import { historyAnalytics, historySeries, screenAnalytics, breakoutInsight } from '../src/researchAnalytics.js';
+import { sortRows } from '../src/table.js';
 import { cleanPersonalRule, evaluatePersonalRules } from '../src/personalAlerts.js';
 import { buildBackup, parseBackup } from '../src/backup.js';
 import { viewURL, viewFromLocation } from '../src/navigation.js';
@@ -57,6 +58,41 @@ test('market analytics exclude missing observations and insight copy exposes fai
   assert.equal(stats.sectors[0].count, 2);
   const insight = breakoutInsight({ breakout20: true, volRatio: 1.2, rsi: 80, above200: false, rs3m: -5 });
   assert.equal(insight.confirmed, false); assert.equal(insight.cautions.length, 4);
+});
+test('performance charts rebase on shared dates while drawdown keeps the full stock history', () => {
+  const bars = [100, 120, 90, 110].map((close, i) => ({ time: `2026-10-0${i + 1}`, close }));
+  const series = historySeries(bars, [{ time: '2026-10-02', close: 200 }, { time: '2026-10-04', close: 220 }]);
+  assert.equal(series.benchmarkAligned, true);
+  assert.deepEqual(series.performance.map(point => point.time), ['2026-10-02', '2026-10-04']);
+  assert.equal(series.performance[0].value, 0);
+  assert.equal(series.performance[0].benchmark, 0);
+  assert.ok(Math.abs(series.performance[1].value - (110 / 120 - 1) * 100) < 1e-10);
+  assert.ok(Math.abs(series.performance[1].benchmark - 10) < 1e-10);
+  assert.equal(series.drawdown.length, 4);
+  assert.equal(Math.min(...series.drawdown.map(point => point.value)), historyAnalytics(bars).maxDrawdown);
+});
+test('chart series handles invalid, duplicate, unordered and missing benchmark history', () => {
+  const series = historySeries([
+    { time: '2026-10-02', close: 0 }, { time: '2026-10-03', close: 120 },
+    { time: '2026-10-01', close: 50 }, { time: '2026-10-01', close: 100 },
+    { time: 'invalid', close: 999 }, { time: '2026-10-04', close: NaN },
+  ], [{ time: '2026-10-01', close: 200 }]);
+  assert.equal(series.benchmarkAligned, false);
+  assert.equal(series.performance.length, 2);
+  assert.equal(series.performance[0].time, '2026-10-01');
+  assert.ok(Math.abs(series.performance[1].value - 20) < 1e-10);
+  assert.ok(series.performance.every(point => point.benchmark === null));
+  assert.deepEqual(historySeries([]), { benchmarkAligned: false, performance: [], drawdown: [] });
+});
+test('industry returns sort numerically in either direction with missing medians last', () => {
+  const stats = screenAnalytics([
+    { industry: 'Negative', r3m: -5 }, { industry: 'Flat', r3m: 0 },
+    { industry: 'Positive', r3m: 12 }, { industry: 'Positive', r3m: 8 },
+    { industry: 'Missing', r3m: null },
+  ]);
+  assert.deepEqual(sortRows(stats.sectors, ['return3m', -1]).map(row => row.industry), ['Positive', 'Flat', 'Negative', 'Missing']);
+  assert.deepEqual(sortRows(stats.sectors, ['return3m', 1]).map(row => row.industry), ['Negative', 'Flat', 'Positive', 'Missing']);
+  assert.equal(stats.sectors[0].industry, 'Positive');
 });
 test('personal rules survive backups while older backups preserve existing personal rules', () => {
   const payload = buildBackup({ watch: [], positions: [], alerts: [], personalRules: [rule, { ...rule, metric: 'bogus' }] });
