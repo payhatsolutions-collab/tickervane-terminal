@@ -1,0 +1,30 @@
+{
+  "checkedAt": "2026-11-09T21:28:31.915332+00:00",
+  "status": "promoted-and-verified",
+  "deploymentId": "dpl_FXRPJdhRFF9t6opKsvnz5iJd6PBi",
+  "deployment": "https://alphanova2-i554hp3ri-wdcre.vercel.app",
+  "production": "https://alphanova48.in/charts",
+  "previousDeployment": "https://alphanova2-2jyan3tsu-wdcre.vercel.app",
+  "sourceComparison": {
+    "unchangedExistingFiles": 190,
+    "changedExistingFiles": [
+      "content/nse-history.json",
+      "content/stock-snapshot.json",
+      "src/App.jsx",
+      "src/Chart.jsx"
+    ],
+    "missingExistingFiles": []
+  },
+  "addedApplicationFiles": [
+    "src/chart-workspace.css"
+  ],
+  "verification": {
+    "testsPassed": 396,
+    "hostedProductionBuild": "passed",
+    "stagedChartHistoryBars": 126,
+    "liveBundle": "index-BLLf02Fz.js",
+    "liveBrowser": "Chart studio, candles, controls and Research lens rendered",
+    "browserErrors": []
+  },
+  "rollbackCommand": "node /Users/sarda/.npm/_npx/67eb4586ca667318/node_modules/vercel/dist/index.js promote https://alphanova2-2jyan3tsu-wdcre.vercel.app --yes"
+}

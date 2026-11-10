@@ -10,4 +10,10 @@ export default defineConfig({plugins:[react(),{name:'local-api',configureServer(
   const env = loadEnv(server.config.mode, server.config.root, 'BLOB_');
   if (!process.env.BLOB_READ_WRITE_TOKEN && env.BLOB_READ_WRITE_TOKEN) process.env.BLOB_READ_WRITE_TOKEN = env.BLOB_READ_WRITE_TOKEN;
   mount(server,'/api/market',market);mount(server,'/api/push',push);mount(server,'/api/signup',signup);
-}}],server:{host:'127.0.0.1',port:5177,strictPort:true},build:{sourcemap:false,chunkSizeWarningLimit:600}});
+}}],server:{host:'127.0.0.1',port:5177,strictPort:true,proxy:{'/api/lodestar':'http://127.0.0.1:5189'}},build:{sourcemap:false,chunkSizeWarningLimit:600,
+  rollupOptions: { output: { manualChunks(id) {
+    // Stable dependencies stay cached when application code changes.
+    if (/\/node_modules\/(react|react-dom|scheduler)\//.test(id)) return 'react-vendor';
+    if (id.endsWith('/src/stocks.js')) return 'stock-directory';
+  } } },
+}});

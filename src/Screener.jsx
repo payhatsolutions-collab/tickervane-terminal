@@ -24,7 +24,7 @@ const COLUMNS = [
 ];
 const blank = { id: 'custom', name: 'Custom screen', when: [['score', 'min', 60]], industry: '' };
 
-export default function Screener({ view, setView, onOpen, watch, toggleWatch, refresh, onRefresh, saved, setSaved, pushOn, notify, goAlerts, onInsight, onAnalytics }) {
+export default function Screener({ view, setView, onOpen, watch, toggleWatch, refresh, onRefresh, saved, setSaved, pushOn, notify, goAlerts, onInsight, onAnalytics, onFundamentals }) {
   const { data, loading, error } = useFeed('/api/market?op=screen', refresh);
   const [savedOpen, setSavedOpen] = useState(false);
   const [toolsOpen, setToolsOpen] = useState(false);
@@ -140,7 +140,7 @@ export default function Screener({ view, setView, onOpen, watch, toggleWatch, re
           <th className="screen-metric metric-trend">Trend</th><th><Star size={13} /></th>
         </tr></thead><tbody>
           {rows.slice(0, limit).map(r => { const w = (watch || []).includes(r.symbol + '.NS'); return <tr key={r.symbol} data-quote-symbol={r.symbol + '.NS'}>
-            <td><div className="screen-stock"><button className="instrument" onClick={() => onOpen(r.symbol + '.NS')}><strong>{r.symbol}</strong><span>{r.name} · {r.industry}</span></button>{active === "breakout20" && onInsight && <button className="button" onClick={() => onInsight(r.symbol + ".NS")}>Read insight</button>}{showCharts && <Suspense fallback={<span className="screen-chart-placeholder">Loading chart…</span>}><ScreenChart range={chartRange} symbol={r.symbol} refresh={refresh} /></Suspense>}</div></td>
+            <td><div className="screen-stock"><button className="instrument" onClick={() => onOpen(r.symbol + '.NS')}><strong>{r.symbol}</strong><span>{r.name} · {r.industry}</span></button>{onFundamentals && <button className="link" onClick={() => onFundamentals(r.symbol + ".NS")}>Fundamentals ↗</button>}{active === "breakout20" && onInsight && <button className="button" onClick={() => onInsight(r.symbol + ".NS")}>Read insight</button>}{showCharts && <Suspense fallback={<span className="screen-chart-placeholder">Loading chart…</span>}><ScreenChart range={chartRange} symbol={r.symbol} refresh={refresh} /></Suspense>}</div></td>
             <td className="number"><LatestQuote quote={latest.quotes[r.symbol + '.NS']} /></td>
             <td><span className="score"><i style={{ width: (r.score ?? 0) + '%' }} /><b>{r.score ?? '—'}</b></span></td>
             {COLUMNS.map(([k, , f, colored], i) => <td key={k} className={`number ${colored ? tone(r[k]) : ''} screen-metric metric-${k}`}>{f(r)}</td>)}

@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {buildBrokerOrder,orderTicket,KITE_BASKET_URL} from '../src/brokers.js';
 
@@ -22,5 +23,8 @@ test('production policy allows the documented basket destination without remote 
   const csp = config.headers.flatMap(x=>x.headers).find(x=>x.key==='Content-Security-Policy').value;
   assert.ok(csp.includes(`form-action 'self' ${new URL(KITE_BASKET_URL).origin}`));
   const scriptSources = csp.split(';').find(part=>part.trim().startsWith('script-src ')).trim().split(/\s+/).slice(1);
-  assert.deepEqual(scriptSources, ["'self'"]);
+  const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+  const theme = html.match(/<script>([\s\S]*?)<\/script>/)[1];
+  const hash = createHash('sha256').update(theme).digest('base64');
+  assert.deepEqual(scriptSources, ["'self'", `'sha256-${hash}'`]);
 });

@@ -1,15 +1,43 @@
 import { useEffect, useRef, useState } from "react";
 
+import { normalizeSymbol, sliceDailyHistory } from './symbols.js';
+
 const memory = new Map(),
   pending = new Map();
 export function clearCache() {
   memory.clear();
   pending.clear();
+  quoteValues.clear();
+}
+
+export function cacheLifetime(url) {
+  const params = new URL(url, 'http://localhost').searchParams;
+  const op = params.get('op');
+  // Historical research refreshes every five minutes; live quotes and
+  // intraday charts retain their existing 15-second freshness window.
+  return ['quotes', 'options', 'live-futures'].includes(op) ||
+    (op === 'chart' && ['1d', '5d'].includes(params.get('range'))) ? 15000 : 300000;
 }
 
 export async function load(url, force = false) {
+  const parsed = new URL(url, 'http://localhost');
+  if (parsed.pathname === '/api/market' && parsed.searchParams.get('op') === 'chart') {
+    const symbol = normalizeSymbol(parsed.searchParams.get('symbol'));
+    const range = parsed.searchParams.get('range');
+    const sharedRange = ['1mo', '3mo', '6mo'].includes(range) ? '1y' : range;
+    if (symbol !== parsed.searchParams.get('symbol') || sharedRange !== range) {
+      parsed.searchParams.set('symbol', symbol);
+      parsed.searchParams.set('range', sharedRange);
+      const sharedURL = parsed.pathname + parsed.search;
+      const data = sliceDailyHistory(await load(sharedURL, force), range);
+      // Retain the derived view too, so a failed refresh can keep the last
+      // rendered candles while all ranges still share one upstream request.
+      memory.set(url, { data, at: memory.get(sharedURL)?.at || Date.now() });
+      return data;
+    }
+  }
   const cached = memory.get(url);
-  if (!force && cached && Date.now() - cached.at < (/op=(quotes|chart|options|live-futures)\b/.test(url) ? 15000 : 300000)) return cached.data;
+  if (!force && cached && Date.now() - cached.at < cacheLifetime(url)) return cached.data;
   if (pending.has(url)) return pending.get(url);
   // Timeout so a stalled upstream becomes a retryable error instead of an endless spinner.
   const p = fetch(url, { signal: AbortSignal.timeout?.(30000) })
@@ -81,12 +109,12 @@ export function useFeed(url, refresh = 0) {
     : { url, data: memory.get(url)?.data || null, loading: !!url, error: null };
 }
 
-export function useSaved(key, initial) {
+export function useSaved(key, initial, validate = value => value) {
   const [value, set] = useState(() => {
     try {
       const raw = localStorage.getItem(key);
       if (raw == null) return initial;
-      const j = JSON.parse(raw);
+      const j = validate(JSON.parse(raw));
       if (Array.isArray(initial)) return Array.isArray(j) ? j : initial;
       if (initial && typeof initial === "object")
         return j && typeof j === "object" && !Array.isArray(j) ? j : initial;
@@ -120,6 +148,44 @@ function useQuotePulse() {
   return pulse;
 }
 
+const quoteValues = new Map(), quotePending = new Map(), quoteQueue = new Map();
+let quoteScheduled = false;
+export function loadQuoteSet(symbols, force = false) {
+  const now = Date.now();
+  const requests = symbols.map(symbol => {
+    const hit = quoteValues.get(symbol);
+    if (!force && hit && now - hit.at < 15000) return Promise.resolve(hit.data);
+    if (quotePending.has(symbol)) return quotePending.get(symbol);
+    const request = new Promise((resolve, reject) => quoteQueue.set(symbol, { resolve, reject }));
+    quotePending.set(symbol, request);
+    return request;
+  });
+  if (!quoteScheduled && quoteQueue.size) {
+    quoteScheduled = true;
+    queueMicrotask(() => {
+      quoteScheduled = false;
+      const entries = [...quoteQueue];
+      quoteQueue.clear();
+      for (let i = 0; i < entries.length; i += 16) {
+        const batch = entries.slice(i, i + 16).sort(([a], [b]) => a.localeCompare(b));
+        load('/api/market?op=quotes&symbols=' + encodeURIComponent(batch.map(([symbol]) => symbol).join(',')), force)
+          .then(data => {
+            for (const [symbol, task] of batch) {
+              const quote = data.quotes?.find(quote => quote.symbol === symbol);
+              if (quote) { quoteValues.set(symbol, { data: quote, at: Date.now() }); task.resolve(quote); }
+              else task.reject(new Error(`Quote unavailable: ${symbol}`));
+            }
+          }, error => batch.forEach(([, task]) => task.reject(error)))
+          .finally(() => batch.forEach(([symbol]) => quotePending.delete(symbol)));
+      }
+    });
+  }
+  return Promise.allSettled(requests).then(results => ({
+    quotes: results.flatMap(result => result.status === 'fulfilled' ? [result.value] : []),
+    errors: results.flatMap((result, i) => result.status === 'rejected' ? [symbols[i]] : []),
+  }));
+}
+
 export function useQuotes(symbols, refresh = 0) {
   const pulse = useQuotePulse();
   const key = [...new Set((symbols || []).filter(Boolean))].sort().join(",");
@@ -135,26 +201,10 @@ export function useQuotes(symbols, refresh = 0) {
     lastRefresh.current = refresh;
     const list = key.split(",");
     set((s) => ({ ...s, loading: true, error: null }));
-    Promise.allSettled(
-      Array.from({ length: Math.ceil(list.length / 16) }, (_, i) =>
-        load(
-          "/api/market?op=quotes&symbols=" +
-            encodeURIComponent(list.slice(i * 16, i * 16 + 16).join(",")),
-          shouldForce,
-        ),
-      ),
-    ).then((results) => {
+    loadQuoteSet(list, shouldForce).then((result) => {
       if (!active) return;
-      const quotes = {},
-        missing = [];
-      for (const r of results) {
-        if (r.status === "fulfilled") {
-          r.value.quotes.forEach((q) => (quotes[q.symbol] = q));
-          missing.push(...(r.value.errors || []));
-        } else {
-          missing.push(r.reason?.message || "Quote unavailable");
-        }
-      }
+      const quotes = Object.fromEntries(result.quotes.map(quote => [quote.symbol, quote]));
+      const missing = result.errors;
       if (!active) return;
       set((previous) => ({
         quotes: Object.fromEntries(

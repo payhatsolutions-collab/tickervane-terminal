@@ -17,9 +17,23 @@
       "maxDuration": 120,
       "includeFiles": "nifty_edge/**",
       "excludeFiles": "{node_modules/**,public/**,dist/**,docs/**,tests/**,outputs/**,output/**,football-game/**,.git/**,.venv/**,.vercel/**,**/__pycache__/**,**/tests/**,**/test/**}"
+    },
+    "api/lodestar/index.py": {
+      "maxDuration": 120,
+      "includeFiles": "lodestar_engine/**",
+      "excludeFiles": "{node_modules/**,public/**,dist/**,docs/**,tests/**,outputs/**,output/**,football-game/**,.git/**,.venv/**,.vercel/**,**/__pycache__/**,**/tests/**,**/test/**}"
     }
   },
   "headers": [
+    {
+      "source": "/assets/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
     {
       "source": "/",
       "has": [
@@ -78,7 +92,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://query1.finance.yahoo.com https://query2.finance.yahoo.com https://feeds.finance.yahoo.com https://news.google.com; worker-src 'self'; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://kite.zerodha.com"
+          "value": "default-src 'self'; script-src 'self' 'sha256-bXxLjo8peKFkgOgtq/Z8w7KE4srTnnyv/QDwWmWSLR4='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://query1.finance.yahoo.com https://query2.finance.yahoo.com https://feeds.finance.yahoo.com https://news.google.com; worker-src 'self'; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://kite.zerodha.com"
         },
         {
           "key": "Cross-Origin-Opener-Policy",
@@ -91,7 +105,7 @@
       ]
     },
     {
-      "source": "/:path(charts|forecast|markets|screener|delivery|futures-options|institutional-flows|news)",
+      "source": "/:path(charts|fundamentals|forecast|markets|screener|breakouts|analytics|delivery|futures-options|institutional-flows|news)",
       "headers": [
         {
           "key": "X-Robots-Tag",
@@ -132,7 +146,24 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://query1.finance.yahoo.com https://query2.finance.yahoo.com https://feeds.finance.yahoo.com https://news.google.com; worker-src 'self'; manifest-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://kite.zerodha.com"
+          "value": "default-src 'self'; script-src 'self' 'sha256-bXxLjo8peKFkgOgtq/Z8w7KE4srTnnyv/QDwWmWSLR4='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://query1.finance.yahoo.com https://query2.finance.yahoo.com https://feeds.finance.yahoo.com https://news.google.com; worker-src 'self'; manifest-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://kite.zerodha.com"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        }
+      ]
+    },
+    {
+      "source": "/lodestar/:path*",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'sha256-bXxLjo8peKFkgOgtq/Z8w7KE4srTnnyv/QDwWmWSLR4='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://query1.finance.yahoo.com https://query2.finance.yahoo.com https://feeds.finance.yahoo.com https://news.google.com; worker-src 'self'; manifest-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://kite.zerodha.com"
         },
         {
           "key": "X-Robots-Tag",
@@ -164,6 +195,107 @@
         }
       ],
       "destination": "https://alphanova48.in/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/fundamentals",
+      "has": [
+        {
+          "type": "host",
+          "value": "tickervane.vercel.app"
+        }
+      ],
+      "destination": "https://alphanova48.in/fundamentals",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "alphanova48.in"
+        },
+        {
+          "type": "query",
+          "key": "page",
+          "value": "Fundamentals"
+        }
+      ],
+      "destination": "/fundamentals",
+      "permanent": true
+    },
+    {
+      "source": "/fundamentals.html",
+      "destination": "/fundamentals",
+      "permanent": true
+    },
+    {
+      "source": "/breakouts",
+      "has": [
+        {
+          "type": "host",
+          "value": "tickervane.vercel.app"
+        }
+      ],
+      "destination": "https://alphanova48.in/breakouts",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "alphanova48.in"
+        },
+        {
+          "type": "query",
+          "key": "page",
+          "value": "Breakouts"
+        }
+      ],
+      "destination": "/breakouts",
+      "permanent": true
+    },
+    {
+      "source": "/breakouts.html",
+      "destination": "/breakouts",
+      "permanent": true
+    },
+    {
+      "source": "/analytics",
+      "has": [
+        {
+          "type": "host",
+          "value": "tickervane.vercel.app"
+        }
+      ],
+      "destination": "https://alphanova48.in/analytics",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "alphanova48.in"
+        },
+        {
+          "type": "query",
+          "key": "page",
+          "value": "Analytics"
+        }
+      ],
+      "destination": "/analytics",
+      "permanent": true
+    },
+    {
+      "source": "/analytics.html",
+      "destination": "/analytics",
+      "permanent": true
+    },
+    {
+      "source": "/stock-pages/:symbol.html",
+      "destination": "/stocks/:symbol",
       "permanent": true
     },
     {
@@ -598,6 +730,14 @@
   ],
   "rewrites": [
     {
+      "source": "/api/lodestar",
+      "destination": "/api/lodestar/index"
+    },
+    {
+      "source": "/stocks/:symbol",
+      "destination": "/stock-pages/:symbol.html"
+    },
+    {
       "source": "/charts",
       "destination": "/charts.html"
     },
@@ -652,6 +792,10 @@
     {
       "source": "/analytics",
       "destination": "/analytics.html"
+    },
+    {
+      "source": "/fundamentals",
+      "destination": "/fundamentals.html"
     }
   ]
 }

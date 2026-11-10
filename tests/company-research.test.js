@@ -28,6 +28,17 @@ test('missing units, dates or financials do not become invented figures or zero'
   assert.equal(blank.period, undefined);
   assert.equal(companyMoney(null), '—'); assert.equal(companyMoney(0), '₹0.0 Cr');
 });
+test('quarterly charts preserve rupee EPS, crore amounts and missing values', () => {
+  const quarters = `<section id="quarters"><p>Consolidated Figures in Rs. Crores</p><table class="data-table"><tr><th></th><th data-date-key="2026-06-30">Jun 2026</th><th data-date-key="2026-09-30">Sep 2026</th></tr><tr><td>Sales</td><td>100</td><td>120</td></tr><tr><td>Net Profit</td><td>(5)</td><td>12</td></tr><tr><td>Operating Profit</td><td>10</td><td></td></tr><tr><td>EPS in Rs</td><td>(0.5)</td><td>1.2</td></tr></table></section>`;
+  const company = parseCompanyFinancials(table.replace(/<section id="quarters">[\s\S]*$/, quarters).replace('</tbody>', '<tr><td>EPS in Rs</td><td>10</td><td>9</td><td>(3)</td></tr></tbody>'), 'X.NS', '');
+  assert.equal(company.history[0].eps, 10);
+  assert.equal(company.quarterlyHistory[0].revenue, 100e7);
+  assert.equal(company.quarterlyHistory[0].eps, -0.5);
+  assert.equal(company.quarterlyHistory[0].netMargin, -0.05);
+  assert.equal(company.quarterlyHistory[1].operatingMargin, null);
+  assert.equal(company.quarterlyHistory[1].end, '2026-09-30');
+  assert.deepEqual(parseCompanyFinancials(quarters.replace('Figures in Rs. Crores', ''), 'X.NS', '').quarterlyHistory, []);
+});
 test('fundamentals expose coherent statement data and keep TTM amounts separate from market value', () => {
   const ratios = `<div id="top-ratios"><li><span class="name">Market Cap</span><span class="number">20,000</span> Cr.</li><li><span class="name">ROE</span><span class="number">15</span>%</li></div>`;
   const fund = normalizeScreener(ratios + html, 'X.NS');

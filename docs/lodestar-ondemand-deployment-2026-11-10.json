@@ -1,0 +1,32 @@
+{
+  "status": "promoted and live browser verified",
+  "deployment": "https://alphanova2-i228vs3bk-wdcre.vercel.app",
+  "deploymentId": "dpl_AeL8kaLgv3h9pXqawiFWNhSdqN5Y",
+  "production": "https://alphanova48.in/fundamentals?symbol=TEGA.NS",
+  "previousProduction": "https://alphanova2-fnv5j8hnq-wdcre.vercel.app",
+  "upstreamRevision": "4d172b4775fbd8c16768d52ca81012a738ab77b2",
+  "engineSha256": "4af4ec094d921034c8051ebea70639104618f8a545233710a0c92ffa1c13e4df",
+  "checks": {
+    "javascriptTests": 408,
+    "pythonTests": 4,
+    "localBuild": "passed",
+    "hostedBuild": "passed after isolating function requirements",
+    "hostedTEGA": {
+      "score": 50.9,
+      "action": "HOLD",
+      "coverage": 0.88,
+      "scoredPillars": 6
+    },
+    "hostedTEXINFRA": {
+      "score": 35.6,
+      "action": "SELL",
+      "coverage": 0.67,
+      "scoredPillars": 5
+    },
+    "liveBrowserTEGA": "51/100, HOLD; all six pillar values rendered",
+    "consoleErrors": 0,
+    "originalCSS": "unchanged"
+  },
+  "screenshot": "docs/lodestar-tega-scored-live-2026-11-10.png",
+  "rollback": "vercel promote https://alphanova2-fnv5j8hnq-wdcre.vercel.app --yes"
+}

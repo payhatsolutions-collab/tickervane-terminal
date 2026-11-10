@@ -6,6 +6,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { normalizeSymbol, stockResearchURL } from './symbols.js';
 import { WORKSPACE_SEO, updatePageMetadata } from "./seo.js";
 const News = lazy(() => import("./News.jsx"));
 import Navigation from "./Navigation.jsx";
@@ -26,13 +27,17 @@ import "./insights.css";
 import PersonalAlerts, { PersonalAlertMonitor } from './PersonalAlerts.jsx';
 const AdvancedAnalytics = lazy(() => import('./AdvancedAnalytics.jsx'));
 const BreakoutInsights = lazy(() => import('./BreakoutInsights.jsx'));
+const Fundamentals = lazy(() => import('./Fundamentals.jsx'));
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { PAGES, PAGE_LABELS, viewFromSearch, viewFromLocation, workspaceSearch, viewURL } from "./navigation.js";
 import { exportCSV, sortRows } from "./ui";
 import { buildBackup, parseBackup } from "./backup";
+import { cleanPositions, cleanPriceAlerts, cleanDeliveryHistory } from './savedRecords.js';
+import { cleanSymbols } from './watchlistTools.js';
 import { presetFromSearch } from "./screens";
 import {
   Activity,
+  CandlestickChart,
   ArrowLeft,
   ArrowDownUp,
   ArrowUpRight,
@@ -109,6 +114,8 @@ import {
   short,
 } from "./data";
 import { signalSnapshot, marketRegime, nseSession } from "./marketMath";
+import ChartScores from "./ChartScores.jsx";
+import "./chart-workspace.css";
 const ranges = {
   "1D": "1d",
   "5D": "5d",
@@ -240,6 +247,7 @@ function Clock() {
 export default function App() {
   const mobileLayout = useMobileLayout();
   const [navCollapsed, setNavCollapsed] = useSaved("an2-nav-collapsed", false);
+  const [chartNavCollapsed, setChartNavCollapsed] = useState(true);
   const [plannerOpen, setPlannerOpen] = useState(false);
   const incomingShareHash = useRef(location.hash);
   const [sharedWatchlist, setSharedWatchlist] = useState(() => readSharedWatchlist(location.hash));
@@ -283,8 +291,8 @@ export default function App() {
         return "Today";
       }
     }),
-    [symbol, setSymbol] = useSaved("an2-symbol", "RELIANCE.NS"),
-    [watch, setWatch] = useSaved("an2-watch", []);
+    [symbol, setSymbol] = useSaved("an2-symbol", viewFromLocation(location).symbol, value => viewFromLocation(location, { symbol: normalizeSymbol(value) }).symbol),
+    [watch, setWatch] = useSaved("an2-watch", [], cleanSymbols);
   useEffect(() => {
     recordVisit(existingVisitor);
     const revisit = () => { if (document.visibilityState === "visible") recordVisit(existingVisitor); };
@@ -311,9 +319,9 @@ export default function App() {
     notes: "",
   };
   const setDraft = (d) => setDrafts((prev) => ({ ...prev, [symbol]: d }));
-  const [positions, setPositions] = useSaved("an2-positions", []),
-    [alerts, setAlerts] = useSaved("an2-alerts", []),
-    [range, setRange] = useSaved("an2-range", "6mo"),
+  const [positions, setPositions] = useSaved("an2-positions", [], cleanPositions),
+    [alerts, setAlerts] = useSaved("an2-alerts", [], cleanPriceAlerts),
+    [range, setRange] = useSaved("an2-range", viewFromLocation(location).range, value => viewFromLocation(location, { range: value }).range),
     [type, setType] = useSaved("an2-chart-type", "Candles"),
     [indicators, setIndicators] = useSaved("an2-indicators", [
       "Volume",
@@ -332,12 +340,19 @@ export default function App() {
     [form, setForm] = useState(null),
     [backupMsg, setBackupMsg] = useState(""),
     [backupErr, setBackupErr] = useState("");
+  useEffect(() => {
+    if (!focus) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = previousOverflow; };
+  }, [focus]);
   const [alertPrefs, setAlertPrefs] = useSaved("an2-alert-prefs", {
       browser: false,
     }),
     [deliveryHistory, setDeliveryHistory] = useSaved(
       "an2-delivery-history",
       [],
+      cleanDeliveryHistory,
     );
   const [personalRules, setPersonalRules] = useSaved("an2-personal-rules", []);
   const [personalEvents, setPersonalEvents] = useSaved("an2-personal-events", []);
@@ -364,7 +379,7 @@ export default function App() {
     screenerView,
   });
   const navigate = (next) => {
-    const target = { ...currentView(), ...next };
+    const target = { ...currentView(), ...next, symbol: normalizeSymbol(next.symbol || symbol) };
     if (target.page === page && target.symbol === symbol) return;
     const stack = [...backStack, currentView()].slice(-50);
     window.history.replaceState(
@@ -539,7 +554,7 @@ export default function App() {
             ? "News"
             : searchTarget === "forecast" || page === "Forecast"
               ? "Forecast"
-              : "Terminal",
+              : page === "Fundamentals" ? "Fundamentals" : "Terminal",
         symbol: s,
       });
     setFocus(false);
@@ -602,7 +617,7 @@ export default function App() {
       window.history.replaceState({ ...window.history.state, anView: currentView() }, "", next + shareHash);
     } catch {}
   }, [symbol, page, range, screenerView.active, sharedWatchlist]);
-  useEffect(() => { updatePageMetadata(page); }, [page]);
+  useEffect(() => { updatePageMetadata(page, document, { symbol, name: meta.name }); }, [page, symbol, meta.name]);
   useEffect(() => {
     const r = setInterval(() => {
       if (!document.hidden) setRefresh((x) => x + 1);
@@ -1227,7 +1242,7 @@ export default function App() {
     setForm(null);
   }
   return (
-    <div className={`app ${navCollapsed ? "nav-collapsed" : ""} ${page === "Today" ? "research-home" : ""} ${page === "Delivery" ? "delivery-workspace" : ""} ${page === "Markets" ? "markets-workspace" : ""} ${focus ? "chart-focus" : ""}`}>
+    <div className={`app ${(page === "Terminal" ? chartNavCollapsed : navCollapsed) ? "nav-collapsed" : ""} ${page === "Today" ? "research-home" : ""} ${page === "Delivery" ? "delivery-workspace" : ""} ${page === "Markets" ? "markets-workspace" : ""} ${page === "Terminal" ? "charts-workspace" : ""} ${focus ? "chart-focus" : ""}`}>
       <SpeedInsights route={(WORKSPACE_SEO[page] || WORKSPACE_SEO.Today).path} />
       <a href="#main-content" className="skip-link">
         Skip to content
@@ -1272,8 +1287,8 @@ export default function App() {
       </header>
       <Navigation
         mobile={mobileLayout}
-        collapsed={navCollapsed}
-        onToggleCollapsed={() => setNavCollapsed(value => !value)}
+        collapsed={page === "Terminal" ? chartNavCollapsed : navCollapsed}
+        onToggleCollapsed={() => page === "Terminal" ? setChartNavCollapsed(value => !value) : setNavCollapsed(value => !value)}
         registration={mobileLayout ? <SignupPrompt busy={guideOpen || showSearch || help || !!form} /> : null}
         page={page}
         onPage={(name) => {
@@ -1306,7 +1321,7 @@ export default function App() {
         {guideOpen && page === "Watchlist" && <Suspense fallback={<div className="loading" role="status">Loading guide…</div>}><Onboarding directoryVersion={directoryVersion} state={onboarding} onState={setOnboarding} watch={watchedStocks}
           onToggle={toggleWatch} onNavigate={navigate} onAlert={openWatchAlert}
           alerts={alerts} pushOn={!!alertPrefs?.push} /></Suspense>}
-        <div className="workspace-toolbar">
+        <div className={`workspace-toolbar ${page === "Fundamentals" ? "fund-page-toolbar" : ""}`} hidden={page === "Terminal" || page === "Fundamentals"}>
           {previousView && <button className="icon-button workspace-back" onClick={goBack} aria-label={`Back to ${previousLabel}`} title={`Back to ${previousLabel}`}><ArrowLeft size={18} /></button>}
           <div className="workspace-heading"><span className="eyebrow">{page === "Today" ? "YOUR RESEARCH, CONNECTED" : "ALPHA NOVA WORKSPACE"}</span><h1>{PAGE_LABELS[page]}</h1><p>{page === "Today" ? "Market context. Clearer decisions." : page === "Watchlist" ? "Your companies. A clearer picture." : page === "Screener" ? "Find the stocks that fit your process." : page === "Terminal" ? "Explore the price. Build your thesis." : page === "Portfolio" ? "A complete view of what you hold." : page === "Alerts" ? "Follow the prices that matter to you." : page === "News" ? "Stay close to the stories behind the market." : "Turn market information into informed research."}</p></div>
           {page === "Today" ? <MarketPulse quote={quotes['^NSEI']} loading={benchmarkFeed.loading} /> : <span className="feed-status"><i className={quotesLoading ? "pending" : quotesError ? "warning" : ""} />{quotesLoading ? "Updating prices" : quotesError ? "Partial data" : "Quotes may be delayed"}</span>}
@@ -1337,15 +1352,22 @@ export default function App() {
           {page === "Terminal" && (
             <div className={`terminal-grid ${plannerOpen ? "planner-open" : "planner-closed"}`}>
               <section className="panel chart-panel">
-                <PanelTitle title="Price & technicals" tag="GP">
-                  <button
-                    className="icon-button"
-                    aria-label={focus ? "Exit chart focus" : "Expand chart"}
-                    onClick={() => setFocus(!focus)}
-                  >
-                    {focus ? <X size={15} /> : <Maximize2 size={15} />}
-                  </button>
-                </PanelTitle>
+                <div className="chart-workspace-heading">
+                  <div className="chart-workspace-title">
+                    {previousView && <button className="icon-button" onClick={goBack} aria-label={`Back to ${previousLabel}`} title={`Back to ${previousLabel}`}><ArrowLeft size={16} /></button>}
+                    <CandlestickChart size={18} /><h1>Chart studio</h1><span>PRICE & TECHNICALS</span>
+                  </div>
+                  <div className="chart-workspace-actions">
+                    <button className="button chart-plan-toggle" aria-label={plannerOpen ? "Hide plan" : "Trade plan"} aria-expanded={plannerOpen} aria-controls="trade-planner" onClick={() => { setFocus(false); setPlannerOpen(value => !value); }}><Target size={14} /><span>{plannerOpen ? "Hide plan" : "Trade plan"}</span></button>
+                    <button className={`button chart-save ${watch.includes(symbol) ? "starred" : ""}`} aria-pressed={watch.includes(symbol)} onClick={() => toggleWatch(symbol)}>
+                      <Star size={14} fill={watch.includes(symbol) ? "currentColor" : "none"} />{watch.includes(symbol) ? "Saved" : "Save stock"}
+                    </button>
+                    <button className="button" aria-label="Create alert" onClick={() => setForm("alert")}><Bell size={14} /><span>Create alert</span></button>
+                    <button className="icon-button" title={focus ? "Exit chart focus (Esc)" : "Expand chart"} aria-label={focus ? "Exit chart focus" : "Expand chart"} aria-pressed={focus} onClick={() => setFocus(!focus)}>
+                      {focus ? <X size={16} /> : <Maximize2 size={16} />}
+                    </button>
+                  </div>
+                </div>
                 <div className="security-header">
                   <div className="security-identity">
                     <span className="security-logo">
@@ -1381,6 +1403,164 @@ export default function App() {
                     </span>
                   </div>
                 </div>
+                <div className="chart-workbench">
+                  <div className="chart-main">
+                  <div className="chart-toolbar">
+                    <div className="segments" role="group" aria-label="Chart time range">
+                      {Object.entries(ranges).map(([label, v]) => (
+                        <button
+                          key={v}
+                          aria-pressed={range === v}
+                          className={range === v ? "active" : ""}
+                          onClick={() => setRange(v)}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="chart-tools">
+                      <select
+                        aria-label="Chart type"
+                        value={type}
+                        onChange={(e) => setType(e.target.value)}
+                      >
+                        <option>Candles</option>
+                        <option>Area</option>
+                      </select>
+                      <button
+                        className="icon-button"
+                        title="Reset chart view"
+                        aria-label="Reset chart view"
+                        onClick={() => setReset((x) => x + 1)}
+                      >
+                        <RefreshCw size={13} />
+                      </button>
+                      <button
+                        className="icon-button"
+                        title="Export chart data"
+                        aria-label="Export chart data"
+                        disabled={!bars.length}
+                        onClick={() =>
+                          exportCSV(
+                            [
+                              ["Time", "Open", "High", "Low", "Close", "Volume"],
+                              ...bars.map((b) => [
+                                typeof b.time === "number"
+                                  ? new Date(b.time * 1000).toISOString()
+                                  : b.time,
+                                b.open,
+                                b.high,
+                                b.low,
+                                b.close,
+                                b.volume,
+                              ]),
+                            ],
+                            `${short(symbol)}-${range}.csv`,
+                          )
+                        }
+                      >
+                        <Download size={14} />
+                      </button>
+                      <button
+                        className="icon-button"
+                        title="Copy link to this view"
+                        aria-label="Copy link to this view"
+                        onClick={copyLink}
+                      >
+                        {copied ? <Check size={14} /> : <Share2 size={14} />}
+                      </button>
+                    </div>
+                  </div>
+                  <details className="indicator-menu"><summary><SlidersHorizontal size={14} /> Indicators <span className="indicator-count">{indicators.length}</span><span className="indicator-active-list">{indicators.join(" · ") || "Price only"}</span></summary><div className="indicator-toolbar">
+                    {[
+                      "Volume",
+                      "EMA 20",
+                      "EMA 50",
+                      "Bollinger",
+                      "RSI 14",
+                      "VWAP",
+                      "Key levels",
+                    ].map((i) => (
+                      <button
+                        key={i}
+                        className={indicators.includes(i) ? "enabled" : ""}
+                        aria-pressed={indicators.includes(i)}
+                        disabled={i === "VWAP" && !["1d", "5d"].includes(range)}
+                        title={
+                          i === "VWAP"
+                            ? "Session VWAP · 1D and 5D ranges"
+                            : i === "Key levels"
+                              ? "Prior H/L, pivot, R1, S1 and plan lines"
+                              : undefined
+                        }
+                        onClick={() =>
+                          setIndicators(
+                            indicators.includes(i)
+                              ? indicators.filter((x) => x !== i)
+                              : [...indicators, i],
+                          )
+                        }
+                      >
+                        {indicators.includes(i) && <span />}
+                        {i}
+                      </button>
+                    ))}
+                  </div>
+                  </details>
+                  <div className="chart-area">
+                    {history.loading && !history.data ? (
+                      <Empty
+                        title="Loading market history"
+                        description={`${meta.name} · ${range.toUpperCase()}`}
+                      />
+                    ) : history.error && !history.data ? (
+                      <Empty
+                        title="Price history unavailable"
+                        description={history.error}
+                      >
+                        <button
+                          className="button"
+                          onClick={() => setRefresh((x) => x + 1)}
+                        >
+                          Retry data
+                        </button>
+                      </Empty>
+                    ) : (
+                        <Suspense
+                          fallback={<div className="loading">Loading chart…</div>}
+                        >
+                          <ResearchChart
+                            key={symbol}
+                            symbol={symbol}
+                            saved={watch.includes(symbol)}
+                            onSave={() => toggleWatch(symbol)}
+                            bars={bars}
+                            levels={
+                              indicators.includes("Key levels") ? levels : null
+                            }
+                            plan={draft}
+                            type={type}
+                            indicators={indicators}
+                            range={range}
+                            reset={reset}
+                          />
+                        </Suspense>
+                    )}
+                  </div>
+                  <div className="chart-caption">
+                    {stockResearchURL(symbol) && <a href={stockResearchURL(symbol)}>Delivery history &amp; shareable research</a>}
+                    <span>
+                      {history.data?.source || "Yahoo Finance"} · {dataStamp(quote)} · quotes may be delayed
+                      {history.data?.fallback ? ` · ${history.data.source} · partial history: ${history.data.bars?.length} daily sessions through ${history.data.asOf || history.data.bars?.at(-1)?.time}` : history.error ? " · last cached data" : ""}
+                    </span>
+                    <button onClick={() => setForm("alert")}>
+                      <Bell size={12} /> Set alert
+                    </button>
+                  </div>
+                  <div className="chart-interaction-hint"><span>{type === "Candles" ? <><i className="candle-key candle-up" /> Up candle <i className="candle-key candle-down" /> Down candle</> : <><i className="candle-key candle-up" /> Closing price</>}</span><span>Drag to pan · Scroll to zoom · 1–8 to change range</span></div>
+                  </div>
+                <aside className="chart-insights" aria-label="Chart research insights">
+                  <div className="chart-insights-heading"><span className="insights-kicker">THE BIG PICTURE</span><h3>Research lens <Activity size={15} /></h3><p>Daily signals. Deeper conviction.</p></div>
                 <div
                   className="regime-strip"
                   role="status"
@@ -1389,157 +1569,19 @@ export default function App() {
                   <span className="regime-label">REGIME</span>
                   <strong className={regime.tone}>{regime.label}</strong>
                 </div>
-                <div className="chart-toolbar">
-                  <div className="segments">
-                    {Object.entries(ranges).map(([label, v]) => (
-                      <button
-                        key={v}
-                        aria-pressed={range === v}
-                        className={range === v ? "active" : ""}
-                        onClick={() => setRange(v)}
-                      >
-                        {label}
-                      </button>
-                    ))}
+                <ChartScores
+                  signal={signal}
+                  fund={fund}
+                  dailyLoading={daily.loading}
+                  fundLoading={fundFeed.loading}
+                  dailyError={daily.error}
+                  fundError={fundFeed.error}
+                />
+                  <div className="chart-trend-summary">
+                    <div><span>DAILY TREND</span><strong className={signal.verdict === "Bullish" ? "positive" : signal.verdict === "Bearish" ? "negative" : "muted"}>{signal.rules.length ? signal.verdict : "Awaiting data"}</strong></div>
+                    <div className="chart-trend-steps" aria-hidden="true">{Array.from({ length: 5 }, (_, i) => <i key={i} className={signal.rules[i] ? signal.rules[i].bias > 0 ? "up" : signal.rules[i].bias < 0 ? "down" : "neutral" : ""} />)}</div>
+                    <p>{signal.rules.length ? `${signal.rules.filter(rule => rule.bias > 0).length} of ${signal.rules.length} daily signals are bullish` : "Daily history is needed to assess the trend"}</p>
                   </div>
-                  <div className="chart-tools">
-                    <select
-                      aria-label="Chart type"
-                      value={type}
-                      onChange={(e) => setType(e.target.value)}
-                    >
-                      <option>Candles</option>
-                      <option>Area</option>
-                    </select>
-                    <button
-                      className="icon-button"
-                      title="Reset chart view"
-                      aria-label="Reset chart view"
-                      onClick={() => setReset((x) => x + 1)}
-                    >
-                      <RefreshCw size={13} />
-                    </button>
-                    <button
-                      className="icon-button"
-                      title="Export chart data"
-                      aria-label="Export chart data"
-                      disabled={!bars.length}
-                      onClick={() =>
-                        exportCSV(
-                          [
-                            ["Time", "Open", "High", "Low", "Close", "Volume"],
-                            ...bars.map((b) => [
-                              typeof b.time === "number"
-                                ? new Date(b.time * 1000).toISOString()
-                                : b.time,
-                              b.open,
-                              b.high,
-                              b.low,
-                              b.close,
-                              b.volume,
-                            ]),
-                          ],
-                          `${short(symbol)}-${range}.csv`,
-                        )
-                      }
-                    >
-                      <Download size={14} />
-                    </button>
-                    <button
-                      className="icon-button"
-                      title="Copy link to this view"
-                      aria-label="Copy link to this view"
-                      onClick={copyLink}
-                    >
-                      {copied ? <Check size={14} /> : <Share2 size={14} />}
-                    </button>
-                  </div>
-                </div>
-                <details className="indicator-menu"><summary>Indicators · {indicators.length} active</summary><div className="indicator-toolbar">
-                  {[
-                    "Volume",
-                    "EMA 20",
-                    "EMA 50",
-                    "Bollinger",
-                    "RSI 14",
-                    "VWAP",
-                    "Key levels",
-                  ].map((i) => (
-                    <button
-                      key={i}
-                      className={indicators.includes(i) ? "enabled" : ""}
-                      aria-pressed={indicators.includes(i)}
-                      disabled={i === "VWAP" && !["1d", "5d"].includes(range)}
-                      title={
-                        i === "VWAP"
-                          ? "Session VWAP · 1D and 5D ranges"
-                          : i === "Key levels"
-                            ? "Prior H/L, pivot, R1, S1 and plan lines"
-                            : undefined
-                      }
-                      onClick={() =>
-                        setIndicators(
-                          indicators.includes(i)
-                            ? indicators.filter((x) => x !== i)
-                            : [...indicators, i],
-                        )
-                      }
-                    >
-                      {indicators.includes(i) && <span />}
-                      {i}
-                    </button>
-                  ))}
-                </div>
-                </details>
-                <div className="chart-area">
-                  {history.loading && !history.data ? (
-                    <Empty
-                      title="Loading market history"
-                      description={`${meta.name} · ${range.toUpperCase()}`}
-                    />
-                  ) : history.error && !history.data ? (
-                    <Empty
-                      title="Price history unavailable"
-                      description={history.error}
-                    >
-                      <button
-                        className="button"
-                        onClick={() => setRefresh((x) => x + 1)}
-                      >
-                        Retry data
-                      </button>
-                    </Empty>
-                  ) : (
-                      <Suspense
-                        fallback={<div className="loading">Loading chart…</div>}
-                      >
-                        <ResearchChart
-                          key={symbol}
-                          symbol={symbol}
-                          saved={watch.includes(symbol)}
-                          onSave={() => toggleWatch(symbol)}
-                          bars={bars}
-                          levels={
-                            indicators.includes("Key levels") ? levels : null
-                          }
-                          plan={draft}
-                          type={type}
-                          indicators={indicators}
-                          range={range}
-                          reset={reset}
-                        />
-                      </Suspense>
-                  )}
-                </div>
-                <div className="chart-caption">
-                  <span>
-                    Yahoo Finance · {dataStamp(quote)} · quotes may be delayed
-                    {history.error ? " · last cached data" : ""}
-                  </span>
-                  <button onClick={() => setForm("alert")}>
-                    <Bell size={12} /> Set alert
-                  </button>
-                </div>
                 <details className="compact-details">
                   <summary>Daily levels & pivots</summary>
                   <Suspense fallback={<div className="loading" role="status">Loading daily levels…</div>}><KeyLevels
@@ -1561,6 +1603,9 @@ export default function App() {
                     </div>
                   ))}
                 </div>
+                  <div className="chart-insights-note"><ShieldCheck size={13} /><span>Research signals, not recommendations.<br />Based on available market data.</span></div>
+                </aside>
+                </div>
               </section>
               <ResearchCharts
                 isNSE={isNS}
@@ -1571,6 +1616,7 @@ export default function App() {
               />
               <section className="panel company-panel">
                 <PanelTitle title="Company insights" tag="FA">
+                  <button className="button" onClick={() => navigate({ page: "Fundamentals", symbol })}>Lodestar fundamentals <ArrowUpRight size={14} /></button>
                   <button
                     className={`icon-button ${watch.includes(symbol) ? "starred" : ""}`}
                     aria-label={`${watch.includes(symbol) ? "Remove" : "Add"} ${short(symbol)} ${watch.includes(symbol) ? "from" : "to"} watchlist`}
@@ -2032,9 +2078,11 @@ export default function App() {
           )}
           {page === "Analytics" && <AdvancedAnalytics symbol={symbol} refresh={refresh} onRefresh={() => setRefresh(x => x + 1)} onSelect={s => navigate({ page: "Analytics", symbol: s })} watch={watch} />}
           {page === "Breakouts" && <BreakoutInsights symbol={symbol} refresh={refresh} onRefresh={() => setRefresh(x => x + 1)} onSelect={s => navigate({ page: "Breakouts", symbol: s })} onOpen={openSymbol} onAlert={openWatchAlert} watch={watch} toggleWatch={toggleWatch} />}
+          {page === "Fundamentals" && <Fundamentals symbol={symbol} refresh={refresh} onSelect={s => navigate({ page: "Fundamentals", symbol: s })} onOpen={openSymbol} watch={watch} toggleWatch={toggleWatch} />}
           {page === "Screener" && (
             <div className="screener-workspace">
               <Screener
+                onFundamentals={s => navigate({ page: "Fundamentals", symbol: s })}
                 onInsight={s => navigate({ page: "Breakouts", symbol: s })}
                 onAnalytics={() => setPage("Analytics")}
                 view={screenerView}
@@ -2730,6 +2778,7 @@ export default function App() {
         <span>Market data may be delayed · Research only</span>
         <a href="/stock-prices.html">Stock prices</a>
         <a href="/stock-market-app.html">Stock market app</a>
+        <a href="/stocks/">Stock research</a>
         <a href="/about.html">About & data sources</a>
         <a href="/privacy.html">Privacy</a>
         <a

@@ -1,0 +1,4 @@
+.app #main-content:has(.lodestar-host){padding:0;min-width:0}
+.lodestar-host{width:100%;margin:0;padding:0;background:#07090d}
+.lodestar-host iframe{display:block;width:100%;height:calc(100dvh - 115px);min-height:560px;border:0;background:#07090d}
+@media(max-width:700px){.lodestar-host iframe{height:calc(100dvh - 174px);min-height:400px}}

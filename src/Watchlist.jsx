@@ -21,7 +21,7 @@ function WatchlistRow({ symbol, quote, range, refresh, onNavigate, onToggle, onA
   const signalTone = signal.verdict === "Bullish" ? "positive" : signal.verdict === "Bearish" ? "negative" : "muted";
   const SignalIcon = signal.verdict === "Bullish" ? TrendingUp : signal.verdict === "Bearish" ? TrendingDown : Minus;
   return <article ref={host}>
-    <div className="saved-watchlist-stock"><ViewLink page="Terminal" symbol={symbol} onNavigate={onNavigate}>{short(symbol)}</ViewLink><span>{directory.get(symbol)?.name || symbol}</span></div>
+    <div className="saved-watchlist-stock"><ViewLink page="Terminal" symbol={symbol} onNavigate={onNavigate}>{short(symbol)}</ViewLink><span>{directory.get(symbol)?.name || symbol}</span><ViewLink page="Fundamentals" symbol={symbol} onNavigate={onNavigate}>Fundamentals ↗</ViewLink></div>
     <div className="saved-watchlist-price"><strong>{fmt(quote?.price)} <small>{quote?.currency || ""}</small></strong><span className={tone(quote?.change)}>{pct(quote?.change)} <small>today</small></span></div>
     <div className="saved-watchlist-signal" aria-busy={feed.loading}>
       {available ? <details>

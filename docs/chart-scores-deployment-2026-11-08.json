@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-11-08T13:13:50.623624+00:00",
+  "status": "promoted-and-verified",
+  "deploymentId": "dpl_FcFZavgH27j7gKt1QgS9BioNDwLt",
+  "deployment": "https://alphanova2-3hbltha88-wdcre.vercel.app",
+  "production": "https://alphanova48.in/charts",
+  "previousDeployment": "https://alphanova2-eb3uxytg2-wdcre.vercel.app",
+  "sourceComparison": {
+    "unchangedExistingFiles": 190,
+    "changedExistingFiles": [
+      "src/App.jsx"
+    ],
+    "missingExistingFiles": []
+  },
+  "addedApplicationFiles": [
+    "src/ChartScores.jsx",
+    "src/chartScores.js",
+    "src/chart-scores.css"
+  ],
+  "verification": {
+    "testsPassed": 44,
+    "localViteBuild": "passed",
+    "hostedProductionBuild": "passed",
+    "stagedChartsPage": "tested bundle confirmed",
+    "liveBrowser": "All three scores visible above chart",
+    "symbol": "HDFCBANK.NS",
+    "scores": {
+      "alphaNova": 74,
+      "technical": 90,
+      "fundamental": 57
+    },
+    "bundle": "index-BXl1AEdj.js"
+  },
+  "rollbackCommand": "node /Users/sarda/.npm/_npx/67eb4586ca667318/node_modules/vercel/dist/index.js promote https://alphanova2-eb3uxytg2-wdcre.vercel.app --yes"
+}

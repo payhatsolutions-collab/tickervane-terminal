@@ -1,5 +1,9 @@
 # Alpha Nova Terminal
 
+## Company fundamentals (2026-11-10)
+
+The Fundamentals workspace embeds Lodestar's original interface and six-pillar company research into Alpha Nova: scores, annual/quarterly financials, bull/bear evidence, risk flags, analyst estimates and valuation. It combines dated published assessments with on-demand analysis using the original Lodestar engine across the company directory, falling back to available statements when source data is insufficient, and links directly from Charts & plan, Screener and Watchlist. The compact mobile tray is Top Setups, Delivery, Markets, Fundamentals and More. Coverage, caching, limitations and verification: [Fundamentals](docs/FUNDAMENTALS.md).
+
 A personal research terminal for Indian and global markets. Built with React, Vite and TradingView Lightweight Charts. Market data comes from public Yahoo Finance endpoints; Indian news falls back to Google News RSS.
 
 ## Features

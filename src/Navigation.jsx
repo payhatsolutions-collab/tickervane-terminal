@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   Activity,
   Bell,
+  BookOpen,
   Globe2,
   History,
   Landmark,
@@ -29,6 +30,7 @@ const icons = {
   Forecast: Activity,
   Markets: Globe2,
   Screener: SlidersHorizontal,
+  Fundamentals: BookOpen,
   Breakouts: Radar,
   Analytics: Activity,
   Delivery: Radar,
@@ -40,7 +42,7 @@ const icons = {
   Journal: History,
   Alerts: Bell,
 };
-const primary = ["Today", "Watchlist", "Delivery", "Markets"];
+const primary = ["Today", "Delivery", "Markets", "Fundamentals"];
 
 export default function Navigation({
   mobile,

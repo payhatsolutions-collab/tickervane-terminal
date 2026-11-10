@@ -1,0 +1,52 @@
+{
+  "date": "2026-11-10",
+  "status": "promoted and verified",
+  "deploymentId": "dpl_EYbJTTCGmMYhDsRbe7Sd6YznwdnN",
+  "deployment": "https://alphanova2-fnv5j8hnq-wdcre.vercel.app",
+  "production": "https://alphanova48.in/fundamentals",
+  "bundle": "/assets/index-CmDxO5e2.js",
+  "upstreamCommit": "4d172b4775fbd8c16768d52ca81012a738ab77b2",
+  "originalStylesheetSha256": "7058ca8d498a6031edff23451290963413b018e9ed5e8ce24637ee1c112f8d77",
+  "checks": {
+    "fullSuite": {
+      "passed": 405,
+      "failed": 0
+    },
+    "finalFocusedSuite": {
+      "passed": 14,
+      "failed": 0,
+      "includesAdditionalQuarterlyRegression": true
+    },
+    "localBuild": "passed",
+    "hostedBuild": "passed",
+    "stagedOriginalStylesheet": "exact match",
+    "sameOriginFrameHeaders": "passed",
+    "fullReport": {
+      "symbol": "RELIANCE.NS",
+      "score": 60.5
+    },
+    "extendedReport": {
+      "symbol": "TEXINFRA.NS",
+      "quarterCount": 8,
+      "score": null
+    },
+    "liveDesktop": "passed",
+    "liveMobile390": "passed",
+    "fiveItemTray": "passed",
+    "liveSearchAndParentRouteSync": "passed",
+    "browserConsoleErrors": 0
+  },
+  "coverage": {
+    "publishedFullReports": 219,
+    "searchableCompanies": 3263,
+    "otherCompanies": "Available provider financials; no fabricated scores or calls"
+  },
+  "screenshots": [
+    "docs/lodestar-original-desktop-2026-11-10.png",
+    "docs/lodestar-original-mobile-2026-11-10.png",
+    "docs/lodestar-original-expanded-mobile-2026-11-10.png"
+  ],
+  "previousProduction": "https://alphanova2-zn53dmfqs-wdcre.vercel.app",
+  "previousProductionNote": "Earlier redesigned Fundamentals UI; superseded at user request.",
+  "rollback": "vercel promote https://alphanova2-zn53dmfqs-wdcre.vercel.app --yes"
+}
