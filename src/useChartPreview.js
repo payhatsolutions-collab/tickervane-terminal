@@ -11,7 +11,8 @@ export function useChartPreview(symbol, refresh = 0) {
     if (!host.current) return;
     if (!('IntersectionObserver' in window)) { setVisible(true); return; }
     const observer = new IntersectionObserver(entries => {
-      if (entries.some(e => e.isIntersecting)) { setVisible(true); observer.disconnect(); }
+      // Keep observing: rows scrolled out of view must stop periodic refreshes.
+      setVisible(entries.some(e => e.isIntersecting));
     }, { rootMargin: '160px' });
     observer.observe(host.current);
     return () => observer.disconnect();

@@ -1,0 +1,240 @@
+{
+  "checkedAt": "2026-11-07T04:21:55.232Z",
+  "previousDeployment": "https://alphanova2-pmzxko3y4-wdcre.vercel.app",
+  "candidateDeployment": "https://alphanova2-eb3uxytg2-wdcre.vercel.app",
+  "comparison": {
+    "unchangedSourceFiles": 185,
+    "changedSourceFiles": [
+      "public/sitemap.xml",
+      "scripts/build-stock-pages.mjs",
+      "scripts/build-workspace-seo.mjs",
+      "scripts/generate-seo.mjs",
+      "src/seo.js",
+      "vercel.json"
+    ],
+    "removedSourceFiles": []
+  },
+  "validation": {
+    "testsPassed": 26,
+    "testsFailed": 0
+  },
+  "status": "promoted-and-verified",
+  "deploymentId": "dpl_GrxkGmsgW76shEBNW3eaXtw6B7mX",
+  "production": "https://alphanova48.in",
+  "completedAt": "2026-11-07T04:27:49.178Z",
+  "stagingVerification": {
+    "base": "https://alphanova2-eb3uxytg2-wdcre.vercel.app",
+    "checkedAt": "2026-11-07T04:26:28.412Z",
+    "passed": true,
+    "checks": [
+      {
+        "path": "/analytics.html",
+        "status": 308,
+        "location": "/analytics"
+      },
+      {
+        "path": "/breakouts.html",
+        "status": 308,
+        "location": "/breakouts"
+      },
+      {
+        "path": "/stock-pages/RELIANCE.html",
+        "status": 308,
+        "location": "/stocks/RELIANCE"
+      },
+      {
+        "path": "/stock-pages/M%26M.html",
+        "status": 308,
+        "location": "/stocks/M%26M"
+      },
+      {
+        "path": "/charts.html?symbol=TCS.NS&range=1y",
+        "status": 308,
+        "location": "/charts?symbol=TCS.NS&range=1y"
+      },
+      {
+        "path": "/",
+        "status": 200,
+        "canonical": "https://alphanova48.in/",
+        "robots": "noindex"
+      },
+      {
+        "path": "/analytics",
+        "status": 200,
+        "canonical": "https://alphanova48.in/analytics",
+        "robots": "index, follow, max-image-preview:large"
+      },
+      {
+        "path": "/breakouts",
+        "status": 200,
+        "canonical": "https://alphanova48.in/breakouts",
+        "robots": "index, follow, max-image-preview:large"
+      },
+      {
+        "path": "/charts?symbol=TCS.NS&range=1y",
+        "status": 200,
+        "canonical": "https://alphanova48.in/charts",
+        "robots": "index, follow, max-image-preview:large"
+      },
+      {
+        "path": "/stocks/RELIANCE",
+        "status": 200,
+        "canonical": "https://alphanova48.in/stocks/RELIANCE",
+        "robots": "noindex"
+      },
+      {
+        "path": "/stocks/M%26M",
+        "status": 200,
+        "canonical": "https://alphanova48.in/stocks/M%26M",
+        "robots": "noindex"
+      },
+      {
+        "path": "/stocks/",
+        "status": 200,
+        "canonical": "https://alphanova48.in/stocks/",
+        "robots": "noindex"
+      },
+      {
+        "path": "/portfolio",
+        "status": 200,
+        "canonical": "https://alphanova48.in/portfolio",
+        "robots": "noindex, follow"
+      },
+      {
+        "path": "/sitemap.xml",
+        "status": 200,
+        "urls": 525,
+        "snapshotDate": "2026-11-06"
+      },
+      {
+        "path": "/not-a-real-page-seo-audit",
+        "status": 404
+      },
+      {
+        "path": "/api/market?op=overview",
+        "status": 200,
+        "date": "2026-11-06"
+      },
+      {
+        "path": "/api/market?op=chart&symbol=TCS.NS&range=1y",
+        "status": 200,
+        "bars": 248
+      }
+    ]
+  },
+  "productionVerification": {
+    "base": "https://alphanova48.in",
+    "checkedAt": "2026-11-07T04:26:53.971Z",
+    "passed": true,
+    "checks": [
+      {
+        "path": "/analytics.html",
+        "status": 308,
+        "location": "/analytics"
+      },
+      {
+        "path": "/breakouts.html",
+        "status": 308,
+        "location": "/breakouts"
+      },
+      {
+        "path": "/stock-pages/RELIANCE.html",
+        "status": 308,
+        "location": "/stocks/RELIANCE"
+      },
+      {
+        "path": "/stock-pages/M%26M.html",
+        "status": 308,
+        "location": "/stocks/M%26M"
+      },
+      {
+        "path": "/charts.html?symbol=TCS.NS&range=1y",
+        "status": 308,
+        "location": "/charts?symbol=TCS.NS&range=1y"
+      },
+      {
+        "path": "/",
+        "status": 200,
+        "canonical": "https://alphanova48.in/",
+        "robots": "index, follow, max-image-preview:large"
+      },
+      {
+        "path": "/analytics",
+        "status": 200,
+        "canonical": "https://alphanova48.in/analytics",
+        "robots": "index, follow, max-image-preview:large"
+      },
+      {
+        "path": "/breakouts",
+        "status": 200,
+        "canonical": "https://alphanova48.in/breakouts",
+        "robots": "index, follow, max-image-preview:large"
+      },
+      {
+        "path": "/charts?symbol=TCS.NS&range=1y",
+        "status": 200,
+        "canonical": "https://alphanova48.in/charts",
+        "robots": "index, follow, max-image-preview:large"
+      },
+      {
+        "path": "/stocks/RELIANCE",
+        "status": 200,
+        "canonical": "https://alphanova48.in/stocks/RELIANCE",
+        "robots": null
+      },
+      {
+        "path": "/stocks/M%26M",
+        "status": 200,
+        "canonical": "https://alphanova48.in/stocks/M%26M",
+        "robots": null
+      },
+      {
+        "path": "/stocks/",
+        "status": 200,
+        "canonical": "https://alphanova48.in/stocks/",
+        "robots": null
+      },
+      {
+        "path": "/portfolio",
+        "status": 200,
+        "canonical": "https://alphanova48.in/portfolio",
+        "robots": "noindex, follow"
+      },
+      {
+        "path": "/sitemap.xml",
+        "status": 200,
+        "urls": 525,
+        "snapshotDate": "2026-11-06"
+      },
+      {
+        "path": "/not-a-real-page-seo-audit",
+        "status": 404
+      },
+      {
+        "path": "/api/market?op=overview",
+        "status": 200,
+        "date": "2026-11-06"
+      },
+      {
+        "path": "/api/market?op=chart&symbol=TCS.NS&range=1y",
+        "status": 200,
+        "bars": 248
+      }
+    ]
+  },
+  "legacyRedirects": {
+    "analyticsQuery": 308,
+    "breakoutsQuery": 308,
+    "analyticsOldHost": 308,
+    "breakoutsOldHost": 308
+  },
+  "browser": {
+    "chartSymbol": "TCS.NS",
+    "range": "1y",
+    "canonical": "https://alphanova48.in/charts",
+    "chartRendered": true,
+    "chartCanvases": 7,
+    "stockSpecificTitle": true
+  },
+  "rollbackCommand": "node /Users/sarda/.npm/_npx/67eb4586ca667318/node_modules/vercel/dist/index.js promote https://alphanova2-pmzxko3y4-wdcre.vercel.app --yes"
+}

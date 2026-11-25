@@ -22,7 +22,7 @@
 .analytics-chart-card { padding:20px; min-width:0; border:1px solid var(--line); border-radius:10px; background:var(--panel); }
 .analytics-chart-heading { display:flex; justify-content:space-between; align-items:center; gap:12px; }
 .analytics-chart-heading > svg { color:var(--accent); flex-shrink:0; }
-.analytics-eyebrow { font-size:9px; letter-spacing:1.2px; color:var(--muted); font-weight:550; }
+.analytics-eyebrow { font-size:10px; letter-spacing:1.2px; color:var(--muted); font-weight:550; }
 .research-tools .analytics-chart-heading h3 { margin:7px 0 0; font-size:15px; font-weight:550; line-height:1.4; }
 .analytics-breadth-body { display:flex; align-items:center; justify-content:center; gap:22px; min-height:245px; }
 .analytics-donut { width:190px; flex-shrink:0; position:relative; }
@@ -30,7 +30,7 @@
 .analytics-donut > div { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; align-items:center; pointer-events:none; }
 .analytics-donut strong { font-size:36px; font-weight:550; letter-spacing:-1.5px; font-variant-numeric:tabular-nums; }
 .analytics-donut span { font-size:10px; margin-top:4px; }
-.analytics-donut small { font-size:9px; color:var(--muted); margin-top:5px; }
+.analytics-donut small { font-size:10px; color:var(--muted); margin-top:5px; }
 .analytics-breadth-legend { display:grid; gap:19px; min-width:0; flex:1; max-width:220px; }
 .analytics-breadth-legend > div { display:flex; align-items:center; gap:8px; font-size:11px; }
 .analytics-breadth-legend i { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
@@ -47,7 +47,7 @@
 .analytics-diverging-track { position:relative; height:18px; background:var(--theme-subtle); border-radius:3px; }
 .analytics-diverging-track::after { position:absolute; content:''; left:50%; height:100%; width:1px; background:var(--muted); opacity:.5; }
 .analytics-diverging-track i { position:absolute; top:3px; bottom:3px; border-radius:2px; background:currentColor; }
-.analytics-bar-axis { display:flex; justify-content:space-between; margin-left:calc((100% - 93px) / 2.3 + 12px); margin-right:81px; color:var(--muted); font-size:9px; }
+.analytics-bar-axis { display:flex; justify-content:space-between; margin-left:calc((100% - 93px) / 2.3 + 12px); margin-right:81px; color:var(--muted); font-size:10px; }
 .analytics-chart-unit { font-size:11px; color:var(--muted); }
 .analytics-chart-readout { display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px; min-height:45px; font-size:10px; font-variant-numeric:tabular-nums; color:var(--muted); }
 .analytics-chart-readout strong { font-weight:550; }
@@ -92,7 +92,7 @@
 .analytics-table-return { display:flex; align-items:center; justify-content:flex-end; gap:18px; }
 .analytics-table-return .analytics-diverging-track { width:100px; height:16px; }
 .analytics-table-return > div:last-child { min-width:75px; }
-.analytics-table-return small { display:block; margin-top:4px; font-size:9px; color:var(--muted); }
+.analytics-table-return small { display:block; margin-top:4px; font-size:10px; color:var(--muted); }
 .analytics-chart-empty { min-height:180px; display:grid; place-items:center; color:var(--muted); font-size:12px; line-height:1.6; text-align:center; }
 @media (max-width:1200px) {
   .analytics-breadth-body { gap:14px; }
@@ -130,7 +130,7 @@
   .analytics-breadth-legend b { font-size:11px; }
   .analytics-chart-card { padding:14px; }
   .research-tools .analytics-chart-heading h3 { font-size:14px; }
-  .analytics-eyebrow { font-size:8px; letter-spacing:.9px; }
+  .analytics-eyebrow { font-size:10px; letter-spacing:.9px; }
   .analytics-rank-row { grid-template-columns:minmax(85px,1fr) minmax(60px,1.1fr) 61px; gap:8px; }
   .analytics-rank-row > span,.analytics-rank-row > b { font-size:10px; }
   .analytics-bar-axis { margin-left:calc((100% - 77px) / 2.1 + 8px); margin-right:69px; }
@@ -138,8 +138,8 @@
   .analytics-risk-metrics > div { padding:12px; }
   .analytics-table-return .analytics-diverging-track { display:none; }
   .analytics-industry-table table { min-width:520px; }
-  .analytics-chart-readout { font-size:9px; gap:7px; padding:12px 0; }
-  .analytics-chart-note { font-size:9px; }
+  .analytics-chart-readout { font-size:10px; gap:7px; padding:12px 0; }
+  .analytics-chart-note { font-size:10px; }
 }
 @media (max-width:370px) {
   .analytics-breadth-body { flex-direction:column; gap:10px; padding-top:15px; }

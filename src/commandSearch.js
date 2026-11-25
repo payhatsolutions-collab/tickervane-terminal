@@ -4,7 +4,7 @@ const aliases = {
   Today: 'home dashboard overview', Terminal: 'chart technical analysis plan',
   Forecast: 'forecast scenarios', Markets: 'market breadth sectors indices',
   Screener: 'screen filters scan stocks', Delivery: 'delivery accumulation volume',
-  FnO: 'options derivatives futures nifty edge', Flows: 'institutional fii dii flows',
+  FnO: 'options derivatives futures nifty', Flows: 'institutional fii dii flows',
   News: 'news headlines', Watchlist: 'watchlist saved favorites',
   Portfolio: 'holdings positions portfolio backup restore',
   Journal: 'journal trades history', Alerts: 'alerts notifications price',

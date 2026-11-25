@@ -6,6 +6,7 @@ import { historyAnalytics, historySeries, screenAnalytics } from './researchAnal
 import { fmt, pct, short } from './data.js';
 import { Empty, PanelTitle, SortTh, exportCSV, sortRows, tone } from './ui.jsx';
 import { BreadthChart, HistoryChart, IndustryMomentum } from './AnalyticsCharts.jsx';
+import { ProPill } from './ProExample.jsx';
 import './analytics.css';
 
 export function AnalyticsSummary({ rows = [] }) {
@@ -72,14 +73,15 @@ function IndustryParticipation({ stats }) {
   </section>;
 }
 
-export default function AdvancedAnalytics({ symbol, refresh, onRefresh, onSelect, watch = [] }) {
+// `preview`: the reader has no Pro access, so `symbol` is the free example and any other stock opens the paywall.
+export default function AdvancedAnalytics({ symbol, refresh, onRefresh, onSelect, watch = [], preview = false }) {
   const feed = useFeed('/api/market?op=screen', refresh);
   const [scope, setScope] = useState('all');
   const rows = useMemo(() => (feed.data?.rows || []).filter(row => scope === 'all' || watch.includes(`${row.symbol}.NS`)), [feed.data, scope, watch]);
   const stats = useMemo(() => screenAnalytics(rows), [rows]);
   return <div className="research-stack advanced-analytics"><section className="panel research-tools analytics-market-panel">
     <PanelTitle title="The market, at a glance"><button className="button" onClick={onRefresh}><RefreshCw size={14} aria-hidden="true" />Refresh</button></PanelTitle>
-    <div className="analytics-toolbar"><div className="insight-actions"><label>Universe <select value={scope} onChange={e => setScope(e.target.value)}><option value="all">Nifty 500</option><option value="watchlist">My NSE watchlist</option></select></label><label>Stock <select value={symbol} onChange={e => onSelect(e.target.value)}>{!(feed.data?.rows || []).some(r => `${r.symbol}.NS` === symbol) && <option value={symbol}>{short(symbol)}</option>}{(feed.data?.rows || []).map(row => <option value={`${row.symbol}.NS`} key={row.symbol}>{row.symbol} · {row.name}</option>)}</select></label></div>{feed.data && <span className="analytics-session">{feed.loading ? 'Updating · ' : ''}Session {feed.data.date || 'date unavailable'}</span>}</div>
+    <div className="analytics-toolbar"><div className="insight-actions"><label>Universe <select value={scope} onChange={e => setScope(e.target.value)}><option value="all">Nifty 500</option><option value="watchlist">My NSE watchlist</option></select></label><label>Stock{preview && <ProPill />} <select value={symbol} onChange={e => onSelect(e.target.value)}>{!(feed.data?.rows || []).some(r => `${r.symbol}.NS` === symbol) && <option value={symbol}>{short(symbol)}</option>}{(feed.data?.rows || []).map(row => <option value={`${row.symbol}.NS`} key={row.symbol}>{row.symbol} · {row.name}</option>)}</select></label></div>{feed.data && <span className="analytics-session">{feed.loading ? 'Updating · ' : ''}Session {feed.data.date || 'date unavailable'}</span>}</div>
     {feed.loading && !feed.data ? <p role="status">Loading market analytics…</p> : !feed.data ? <Empty title="Market analytics unavailable" description={feed.error} /> : <>
       {!rows.length ? <Empty title="No covered stocks in this selection" description="Add NSE stocks to your watchlist to see their market participation." /> : <><AnalyticsSummary rows={rows} /><div className="analytics-market-grid"><BreadthChart rows={rows} stats={stats} /><IndustryMomentum sectors={stats.sectors} /></div></>}
       <div className="analytics-data-note">{feed.data.source || 'Yahoo Finance + NSE'}{feed.error ? ' · Cached data; refresh failed' : ''}</div>

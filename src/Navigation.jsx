@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   Activity,
   Bell,
+  BookOpen,
   Globe2,
   History,
   Landmark,
@@ -21,7 +22,7 @@ import {
 } from "lucide-react";
 import { NAV_GROUPS, PAGE_LABELS, workspaceURL } from "./navigation.js";
 import ThemeToggle from "./ThemeToggle.jsx";
-import InstallApp from "./InstallApp.jsx";
+import { InstallLink } from "./InstallApp.jsx";
 
 const icons = {
   Today: Target,
@@ -29,6 +30,7 @@ const icons = {
   Forecast: Activity,
   Markets: Globe2,
   Screener: SlidersHorizontal,
+  Fundamentals: BookOpen,
   Breakouts: Radar,
   Analytics: Activity,
   Delivery: Radar,
@@ -40,10 +42,9 @@ const icons = {
   Journal: History,
   Alerts: Bell,
 };
-const primary = ["Today", "Watchlist", "Delivery", "Markets"];
+const primary = ["Today", "Terminal", "Markets", "Fundamentals"];
 
 export default function Navigation({
-  mobile,
   page,
   collapsed,
   onToggleCollapsed,
@@ -54,6 +55,7 @@ export default function Navigation({
   onRefresh,
   watchCount = 0,
   alertCount = 0,
+  proPages = [],
 }) {
   const [open, setOpen] = useState(false);
   const dialog = useRef(null);
@@ -86,19 +88,21 @@ export default function Navigation({
       >
         <Icon size={18} />
         <span>
-          {mobile && name === "Delivery" ? "Delivery" : PAGE_LABELS[name]}
+          {mobile && name === "Terminal" ? "Charts" : PAGE_LABELS[name]}
         </span>
         {!mobile && name === "Watchlist" && watchCount > 0 && <b className="nav-count">{watchCount}</b>}
         {!mobile && name === "Alerts" && alertCount > 0 && <b className="nav-count">{alertCount}</b>}
         {name === "Alerts" && triggered && <i className="alert-dot" />}
+        {proPages.includes(name) && <b className="nav-pro" aria-label="Alpha Nova Pro">PRO</b>}
       </a>
     );
   };
   return (
     <>
       <nav id="desktop-navigation" className="desktop-nav" aria-label="Main navigation">
-        <div className="nav-workspace"><span className="workspace-avatar">AN</span><div><strong>Personal workspace</strong><small>Saved on this device</small></div></div>
+        <div className="nav-workspace"><span className="workspace-avatar">AN</span><div><strong>Personal workspace</strong><small>Your tools and research</small></div></div>
         <button className="nav-collapse" onClick={onToggleCollapsed} aria-expanded={!collapsed} aria-label={collapsed ? "Expand navigation" : "Collapse navigation"} title={collapsed ? "Expand navigation" : "Collapse navigation"}>{collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}<span>Your workspace</span></button>
+        <InstallLink className="install-app" label="Install app" source="sidebar" />
         {NAV_GROUPS.map((group) => (
           <div className="nav-group" key={group.label}>
             <span className="nav-group-label">{group.label}</span>
@@ -106,7 +110,6 @@ export default function Navigation({
           </div>
         ))}
         <div className="nav-bottom">
-          {!mobile && <InstallApp />}
           <ThemeToggle />
           <div className="nav-refresh">
             <span>Quotes refresh · 30 sec</span>
@@ -152,6 +155,7 @@ export default function Navigation({
             <X size={20} />
           </button>
         </div>
+        <InstallLink className="install-app" label="Install app" source="more_menu" />
         {NAV_GROUPS.map((group) => (
           <div className="nav-group" key={group.label}>
             <span className="nav-group-label">{group.label}</span>
@@ -160,7 +164,6 @@ export default function Navigation({
             </div>
           </div>
         ))}
-        {mobile && <InstallApp />}
         <button className="button navigation-menu-refresh" onClick={onRefresh}>
           <RefreshCw size={16} className={loading ? "spin" : ""} /> Refresh
           market data

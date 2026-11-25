@@ -101,3 +101,14 @@ export function validJournalEntry(t) {
   if (t.side==='long' ? !(t.stop<t.entry&&t.entry<t.target) : !(t.target<t.entry&&t.entry<t.stop)) return false;
   return t.status !== 'closed' || tradeOutcome(t,t.exit,t.fees) !== null;
 }
+
+export function cleanJournalEntries(entries) {
+  if (!Array.isArray(entries)) return [];
+  return entries.filter(validJournalEntry).map(entry => {
+    const trade = { ...entry };
+    for (const field of ['notes', 'review', 'setup', 'product']) {
+      if (typeof trade[field] !== 'string') delete trade[field];
+    }
+    return trade;
+  });
+}

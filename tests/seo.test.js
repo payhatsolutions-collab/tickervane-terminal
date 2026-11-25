@@ -5,11 +5,11 @@ import assert from 'node:assert/strict';
 import { readFile, stat } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { PRESETS, describe, presetFromSearch } from '../src/screens.js';
-import { guides } from '../content/seo/screens.mjs';
+import { guides, updated, pricingUpdated } from '../content/seo/screens.mjs';
 
 const origin = 'https://alphanova48.in';
 const decode = s => s.replaceAll('&amp;','&').replaceAll('&lt;','<').replaceAll('&gt;','>').replaceAll('&quot;','"').replaceAll('&#39;',"'");
-const localFile = path => path === '/' ? 'dist/index.html' : 'dist'+(Object.values(WORKSPACE_SEO).some(p=>p.path===path)?path+'.html':path.endsWith('/')?path+'index.html':path);
+const localFile = path => /^\/stocks\/[^/]+$/.test(path) ? 'dist/stock-pages/'+decodeURIComponent(path.slice(8))+'.html' : path === '/' ? 'dist/index.html' : 'dist'+(Object.values(WORKSPACE_SEO).some(p=>p.path===path)?path+'.html':path.endsWith('/')?path+'index.html':path);
 
 test('guide deep links select only known presets in the screener workspace', () => {
   for (const p of PRESETS) assert.equal(presetFromSearch('?page=Screener&screen='+p.id),p.id);
@@ -21,7 +21,7 @@ test('public guide generation preserves rules, canonicals, structured data and l
   const sitemap = await readFile('public/sitemap.xml','utf8');
   const urls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]);
   assert.equal(new Set(urls).size,urls.length);
-  assert.equal(urls.length,25);
+  assert.equal(urls.length,26);
   const titles = new Set();
   const descriptions = new Set();
   for (const url of urls) {
@@ -49,8 +49,9 @@ test('public guide generation preserves rules, canonicals, structured data and l
       if (target.origin!==origin) continue;
       const path = target.pathname;
       if (path === '/api/market') {
-        assert.equal(target.search, '?op=screen', 'only the public screen feed is preloaded');
-        assert.ok(html.includes('<link rel="preload" as="fetch" href="/api/market?op=screen" crossorigin="anonymous" />'));
+        const op = new URL(url).pathname === '/' ? 'overview' : 'screen';
+        assert.equal(target.search, '?op=' + op);
+        assert.ok(html.includes(`href="/api/market?op=${op}" crossorigin="anonymous"`));
         continue;
       }
       if (path.startsWith('/src/')) { assert.ok((await stat(path.slice(1))).isFile()); continue; }
@@ -119,6 +120,67 @@ test('client navigation restores robots, canonical and structured metadata in bo
   }
 });
 
+test('stock selection keeps the chart canonical consistent with initial HTML', async () => {
+  const attributes = new Map();
+  const script = { textContent: JSON.stringify({'@graph': [{'@type':'WebPage', dateModified:'2000-01-01'}]}) };
+  const doc = {
+    querySelector: selector => ({setAttribute: (key, value) => attributes.set(`${selector}:${key}`, value)}),
+    querySelectorAll: () => [script],
+  };
+  const html = await readFile('dist/charts.html', 'utf8');
+  const canonical = html.match(/rel="canonical" href="([^"]+)"/)[1];
+  for (const stock of [{symbol:'TCS.NS', name:'Tata Consultancy Services'}, {symbol:'M&M.NS'}, {symbol:'AAPL'}]) {
+    updatePageMetadata('Terminal', doc, stock);
+    assert.equal(attributes.get('link[rel="canonical"]:href'), canonical);
+    assert.equal(attributes.get('meta[property="og:url"]:content'), canonical);
+    assert.ok(doc.title.includes(stock.symbol.replace(/\.NS$/, '')));
+    const node = JSON.parse(script.textContent)['@graph'][0];
+    assert.equal(node.url, canonical);
+    assert.ok(!('dateModified' in node));
+  }
+});
+
+test('sitemap dates describe content revisions, not the build date', async () => {
+  const sitemap = await readFile('dist/sitemap.xml', 'utf8');
+  const research = JSON.parse(await readFile('content/stock-research.json', 'utf8'));
+  const editorial = new Set(['/screens.html', '/methodology.html', '/pricing.html', ...guides.map(g => `/screens/${g.slug}.html`)]);
+  for (const [, entry] of sitemap.matchAll(/<url>(.*?)<\/url>/gs)) {
+    const path = new URL(decode(entry.match(/<loc>(.*?)<\/loc>/)[1])).pathname;
+    const lastmod = entry.match(/<lastmod>(.*?)<\/lastmod>/)?.[1];
+    if (path.startsWith('/stocks/')) {
+      const html = await readFile(localFile(path), 'utf8');
+      const graph = JSON.parse(html.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1])['@graph'];
+      assert.equal(lastmod, graph[0].dateModified, path);
+      if (lastmod) {
+        assert.match(lastmod, /^\d{4}-\d{2}-\d{2}$/);
+        assert.ok([research.cash, research.pe, research.cap, research.futures, research.trades].some(report => report?.date === lastmod) || html.includes('<time datetime="' + lastmod + '">'), path);
+      }
+    } else assert.equal(lastmod, path === '/pricing.html' ? pricingUpdated : editorial.has(path) ? updated : undefined, path);
+  }
+  for (const seo of Object.values(WORKSPACE_SEO)) {
+    const html = await readFile(localFile(seo.path), 'utf8');
+    const graph = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])['@graph'];
+    assert.ok(!('dateModified' in graph.find(node => node['@type'] === 'WebPage')));
+  }
+});
+
+test('all workspace HTML aliases and legacy deep links have permanent canonical redirects', async () => {
+  const { redirects } = JSON.parse(await readFile('vercel.json', 'utf8'));
+  for (const [page, seo] of Object.entries(WORKSPACE_SEO)) {
+    if (seo.path === '/') continue;
+    const alias = redirects.find(rule => rule.source === seo.path + '.html' && !rule.has);
+    assert.equal(alias?.destination, seo.path, page);
+    assert.equal(alias?.permanent, true, page);
+    const legacy = redirects.find(rule => rule.source === '/' && rule.has?.some(h => h.type === 'query' && h.key === 'page' && h.value === page));
+    assert.equal(legacy?.destination, seo.path, page);
+    const host = redirects.find(rule => rule.source === seo.path && rule.has?.some(h => h.type === 'host' && h.value === 'tickervane.vercel.app'));
+    assert.equal(host?.destination, origin + seo.path, page);
+  }
+  const stock = redirects.find(rule => rule.source === '/stock-pages/:symbol.html');
+  assert.equal(stock?.destination, '/stocks/:symbol');
+  assert.equal(stock?.permanent, true);
+});
+
 test('hosting redirects www to the apex and keeps private robots directives separate', async () => {
   const config = JSON.parse(await readFile('vercel.json', 'utf8'));
   const redirect = config.redirects.find(r => r.has?.some(h => h.type === 'host' && h.value === 'www.alphanova48.in'));
@@ -129,4 +191,58 @@ test('hosting redirects www to the apex and keeps private robots directives sepa
   assert.equal(privateRule.headers.find(h => h.key === 'X-Robots-Tag').value, 'noindex, follow');
   const publicRule = config.headers.find(h => h.source.startsWith('/:path(charts|'));
   for (const path of ['watchlist','portfolio','trade-journal','price-alerts']) assert.ok(!publicRule.source.includes(path));
+});
+
+test('stock pages publish dated, stock-specific data and wide share previews in the deployed sitemap', async () => {
+  const { screen } = JSON.parse(await readFile('content/stock-snapshot.json', 'utf8'));
+  const sitemap = await readFile('dist/sitemap.xml', 'utf8');
+  for (const row of screen.rows) {
+    const html = await readFile(`dist/stock-pages/${row.symbol}.html`, 'utf8');
+    const path = '/stocks/' + encodeURIComponent(row.symbol);
+    assert.ok(html.includes(`href="${origin}${path.replaceAll('&', '&amp;')}"`), row.symbol);
+    assert.ok(html.includes(screen.date));
+    assert.ok(html.includes('Delivery percentage and recent history'));
+    assert.ok(html.includes(`symbol=${encodeURIComponent(row.symbol + '.NS')}`));
+    assert.ok(sitemap.includes(`<loc>${origin}${path.replaceAll('&', '&amp;')}</loc>`), row.symbol);
+    const png = await readFile(`dist/share/${row.symbol}.png`);
+    assert.equal(png.readUInt32BE(16), 1200); assert.equal(png.readUInt32BE(20), 630);
+  }
+  assert.ok(!(await readFile('dist/index.html', 'utf8')).includes('fonts.googleapis.com'));
+});
+
+test('the directory links every stock profile and sitemaps only profiles with evidence', async () => {
+  const data = JSON.parse(await readFile('content/stock-research.json', 'utf8'));
+  const symbols = JSON.parse(await readFile('content/stock-symbols.json', 'utf8'));
+  const sitemap = await readFile('dist/sitemap.xml', 'utf8');
+  const urls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(m => decode(m[1]));
+  assert.equal(new Set(urls).size, urls.length);
+  const listed = new Set(urls);
+  const hub = await readFile('dist/stocks/index.html', 'utf8');
+  const discovered = new Set();
+  for (const group of new Set([...hub.matchAll(/href="(\/stocks\/by-symbol\/[^"]+\/)"/g)].map(m => m[1]))) {
+    assert.ok(listed.has(origin + group));
+    const html = await readFile(localFile(group), 'utf8');
+    for (const [, path] of html.matchAll(/href="(\/stocks\/[^/"]+)"/g)) discovered.add(decodeURIComponent(path.slice(8)));
+  }
+  assert.deepEqual(discovered, new Set(symbols));
+  for (const symbol of Object.keys(data.listings)) assert.ok(listed.has(origin + '/stocks/' + encodeURIComponent(symbol)), symbol);
+  for (const symbol of symbols) {
+    const path = '/stocks/' + encodeURIComponent(symbol);
+    const html = await readFile(localFile(path), 'utf8');
+    assert.ok(!html.includes('undefined'), symbol);
+    const listing = data.listings[symbol];
+    if (listing) assert.ok(html.includes(listing.series + ' series'), symbol);
+    assert.ok(html.includes(`rel="canonical" href="${origin + path}"`), symbol);
+    assert.equal(listed.has(origin + path), !html.includes('content="noindex,follow"'), symbol);
+    for (const heading of ['Futures open interest', 'Bulk and block deals', 'Company fundamentals']) assert.ok(html.includes('<h2>' + heading + '</h2>'), symbol);
+  }
+  const sample = data.futures.rows.find(row => data.pe.values[row.symbol] && data.cap.values[row.symbol] && data.cash.history[row.symbol]);
+  const html = await readFile(localFile('/stocks/' + encodeURIComponent(sample.symbol)), 'utf8');
+  assert.ok(html.includes('<dt>Open contracts</dt><dd>' + sample.oi.toLocaleString('en-IN') + '</dd>'));
+  assert.ok(html.includes(data.pe.values[sample.symbol].toLocaleString('en-IN') + '×'));
+  const deal = data.trades.rows.find(r => discovered.has(r.symbol));
+  const dealHtml = await readFile(localFile('/stocks/' + encodeURIComponent(deal.symbol)), 'utf8');
+  assert.ok(decode(dealHtml).includes(deal.client));
+  const latest = data.cash.history['M&M'].at(-1);
+  assert.ok((await readFile(localFile('/stocks/M%26M'), 'utf8')).includes('₹' + latest[1].toLocaleString('en-IN')));
 });

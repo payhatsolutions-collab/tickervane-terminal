@@ -1,0 +1,182 @@
+[
+  {
+    "workspace": "Top Setups",
+    "componentVisible": true,
+    "headings": [
+      "Top SetupsA clearer view of the market.",
+      "Top Setups",
+      "Setup watch",
+      "Your watchlist",
+      " Price alerts",
+      "How broad is the move?",
+      "Pick up where you left off"
+    ],
+    "rootHasContent": true,
+    "title": "Alpha Nova | Indian Stock Market Overview & NSE Screener"
+  },
+  {
+    "workspace": "Charts & plan",
+    "componentVisible": true,
+    "headings": [
+      "Charts & plan",
+      "Chart studio",
+      "Performance & delivery",
+      "Company insights",
+      "Company news",
+      "Watchlist"
+    ],
+    "rootHasContent": true,
+    "title": "Tata Consultancy Services (TCS) Chart & Delivery | Alpha Nova"
+  },
+  {
+    "workspace": "Forecast",
+    "componentVisible": true,
+    "headings": [
+      "Forecast"
+    ],
+    "rootHasContent": true,
+    "title": "Stock Price Forecast & Market Research | Alpha Nova"
+  },
+  {
+    "workspace": "Markets",
+    "componentVisible": true,
+    "headings": [
+      "Markets",
+      "Market pulse"
+    ],
+    "rootHasContent": true,
+    "title": "Indian & Global Stock Market Overview | Alpha Nova"
+  },
+  {
+    "workspace": "Screener",
+    "componentVisible": true,
+    "headings": [
+      "Screener",
+      "Screen the Nifty 500",
+      "Saved screens",
+      "Saved screens"
+    ],
+    "rootHasContent": true,
+    "title": "Nifty 500 Screener: Momentum & Delivery | Alpha Nova"
+  },
+  {
+    "workspace": "Fundamentals",
+    "componentVisible": true,
+    "headings": [
+      "Fundamentals"
+    ],
+    "rootHasContent": true,
+    "title": "Stock Fundamentals & Lodestar Analysis | Alpha Nova"
+  },
+  {
+    "workspace": "Breakout insights",
+    "componentVisible": true,
+    "headings": [
+      "Breakout insights",
+      "Breakouts 14",
+      "Tata Consultancy Services"
+    ],
+    "rootHasContent": true,
+    "title": "Breakout Stock Insights & Research | Alpha Nova"
+  },
+  {
+    "workspace": "Advanced analytics",
+    "componentVisible": true,
+    "headings": [
+      "Advanced analytics",
+      "The market, at a glance",
+      "TCS · performance & risk",
+      "Industry participation"
+    ],
+    "rootHasContent": true,
+    "title": "Advanced Stock Analytics & Risk Metrics | Alpha Nova"
+  },
+  {
+    "workspace": "Delivery radar",
+    "componentVisible": true,
+    "headings": [
+      "Delivery radar",
+      "Delivery radar",
+      "Filters & tools",
+      "",
+      "Daily delivery digest"
+    ],
+    "rootHasContent": true,
+    "title": "NSE Stock Delivery Spikes & Volume Radar | Alpha Nova"
+  },
+  {
+    "workspace": "Futures & options",
+    "componentVisible": true,
+    "headings": [
+      "Futures & options"
+    ],
+    "rootHasContent": true,
+    "title": "NSE Option Chain & Futures Open Interest | Alpha Nova"
+  },
+  {
+    "workspace": "Institutional flows",
+    "componentVisible": true,
+    "headings": [
+      "Institutional flows",
+      "Institutional flows",
+      "Bulk & block deals"
+    ],
+    "rootHasContent": true,
+    "title": "FII DII Flows, Bulk Deals & Derivatives | Alpha Nova"
+  },
+  {
+    "workspace": "News",
+    "componentVisible": true,
+    "headings": [
+      "News",
+      "Market newswire"
+    ],
+    "rootHasContent": true,
+    "title": "Stock Market News & Company Headlines | Alpha Nova"
+  },
+  {
+    "workspace": "Watchlist",
+    "componentVisible": true,
+    "headings": [
+      "Watchlist",
+      " Your saved stocks",
+      "Share a stock list",
+      "Your watchlist pulse"
+    ],
+    "rootHasContent": true,
+    "title": "Stock Watchlist, Charts & Technical Signals | Alpha Nova"
+  },
+  {
+    "workspace": "Portfolio",
+    "componentVisible": true,
+    "headings": [
+      "Portfolio",
+      "Holdings",
+      "Backup & restore"
+    ],
+    "rootHasContent": true,
+    "title": "Stock Portfolio Tracker & Holdings Tools | Alpha Nova"
+  },
+  {
+    "workspace": "Trade journal",
+    "componentVisible": true,
+    "headings": [
+      "Trade journal",
+      "Trade journal"
+    ],
+    "rootHasContent": true,
+    "title": "Trading Journal & Stock Trade Review Tools | Alpha Nova"
+  },
+  {
+    "workspace": "Price alerts",
+    "componentVisible": true,
+    "headings": [
+      "Price alerts",
+      "Personalized alerts",
+      "Price monitor",
+      "Delivery history"
+    ],
+    "rootHasContent": true,
+    "title": "Stock Price Alerts & Watchlist Notifications | Alpha Nova"
+  }
+]

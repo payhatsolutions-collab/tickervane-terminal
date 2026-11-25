@@ -50,6 +50,13 @@ test('screens: presets, validation and matching',()=>{
   assert.match(describe([['rsi','max',30],['above200','is',true]]),/RSI 14 ≤ 30 · Above 200 DMA/);
 });
 
+test('positive and negative trend screens require a known trend', () => {
+  const rows = [true, false, null, undefined].map(above200 => ({ above200 }));
+  for (const expected of [true, false]) {
+    assert.deepEqual(runScreen(rows, { when: [['above200', 'is', expected]] }), [{ above200: expected }]);
+  }
+});
+
 const sub={endpoint:'https://fcm.googleapis.com/fcm/send/abc123',keys:{p256dh:'B'.repeat(87),auth:'a'.repeat(22)}};
 test('push subscriptions must point at a real push service',()=>{
   assert.equal(validSubscription(sub),true);

@@ -21,7 +21,7 @@
   .research-home .global-search .search-label-wide{display:none}
   .research-home .global-search kbd,.research-home .top-right{display:none}
   .research-home .benchmark-strip>button{flex-basis:125px;padding:7px 12px;gap:2px}
-  .research-home .benchmark-strip span{font-size:9px}
+  .research-home .benchmark-strip span{font-size:10px}
   .research-home .benchmark-strip strong{font-size:12px}
   .research-home .benchmark-strip .spark{display:none}
   .research-home main{padding:12px 12px 24px}
@@ -33,7 +33,7 @@
   .overview-start{width:100%;gap:6px}
   .overview-start .button{font-size:13px}
   .overview-free{font-size:10px}
-  .research-home .desk-kicker{font-size:9px;letter-spacing:.7px}
+  .research-home .desk-kicker{font-size:10px;letter-spacing:.7px}
   .research-home .desk-playbooks{padding:8px 10px;gap:5px}
   .research-home .desk-candidates{padding:0 10px 10px}
   .research-home .desk-candidates article{padding:12px}

@@ -5,6 +5,7 @@ import { forecastDates } from '../src/forecastCalendar.js';
 import { chart, normalize } from '../api/market.js';
 import { completedForecastBars } from '../src/forecastHistory.js';
 import { fitDirectMean } from '../src/forecastRegression.js';
+import { trendScenario, TREND_SESSIONS } from '../src/forecastScenario.js';
 import { Worker } from 'node:worker_threads';
 function history(n = 1000) {
   let price = 100, date = new Date('2021-01-01T12:00:00Z'), seed = 41;
@@ -210,4 +211,36 @@ test('the actual forecast worker returns the corrected result and recoverable er
   assert.equal(answer.result.points.length, 10);
   assert.equal(answer.result.modelId, 'baseline');
   assert.ok(Math.abs(answer.result.change) < 1e-9);
+});
+
+test('the trend what-if extends the last 30 sessions and is kept apart from the forecast', () => {
+  const steady = Array.from({ length: 60 }, (_, i) => ({ time: i, close: 100 * Math.exp(0.002 * i) }));
+  const up = trendScenario(steady, 10);
+  assert.equal(up.sessions, TREND_SESSIONS);
+  assert.ok(Math.abs(up.close - steady.at(-1).close * Math.exp(0.02)) < 1e-9);
+  assert.ok(Math.abs(up.change - Math.expm1(0.02) * 100) < 1e-9);
+  assert.equal(up.capped, false);
+  const down = trendScenario(steady.map((bar, i) => ({ ...bar, close: 100 * Math.exp(-0.003 * i) })), 10);
+  assert.ok(Math.abs(down.change - Math.expm1(-0.03) * 100) < 1e-9);
+  // Only the last 30 sessions count: an earlier slide does not bend the slope.
+  const recent = [...Array.from({ length: 40 }, (_, i) => ({ close: 500 - i * 5 })), ...steady.slice(-31)];
+  assert.ok(Math.abs(trendScenario(recent, 10).change - up.change) < 1e-9);
+  // A flat series has no trend to extend; a runaway one is capped at 1% a session.
+  assert.equal(trendScenario(steady.map(bar => ({ ...bar, close: 100 })), 10).change, 0);
+  const runaway = trendScenario(steady.map((bar, i) => ({ ...bar, close: 100 * Math.exp(0.05 * i) })), 10);
+  assert.equal(runaway.capped, true);
+  assert.ok(Math.abs(runaway.change - Math.expm1(0.1) * 100) < 1e-9);
+  // Too little or invalid history gives no scenario, never a made-up one.
+  assert.equal(trendScenario(steady.slice(-30), 10), null);
+  assert.equal(trendScenario(steady.map((bar, i) => i === 59 ? { ...bar, close: NaN } : bar), 10), null);
+  assert.equal(trendScenario(null), null);
+  // The forecast does not move with the trend: a steadily rising history still selects on tested error alone,
+  // and the scenario is not a field of the model's output.
+  const bars = history();
+  const forecast = projectForecast(bars, 10);
+  assert.equal(forecast.version, FORECAST_VERSION);
+  assert.ok(!('whatIf' in forecast) && !('scenario' in forecast));
+  const scenario = trendScenario(bars, 10);
+  const logs = bars.map(bar => Math.log(bar.close));
+  assert.ok(Math.abs(Math.log(scenario.close / bars.at(-1).close) - trendDriftPerDay(logs.slice(1).map((x, i) => x - logs[i])) * 10) < 1e-12);
 });

@@ -4,16 +4,16 @@
 .market-pulse:hover:not(:disabled) { color:var(--green); background:var(--theme-positive-surface); }
 .market-pulse.bear:hover:not(:disabled) { color:var(--red); background:var(--theme-negative-surface); }
 .market-pulse-copy { display:grid; gap:0; white-space:nowrap; }
-.market-pulse-copy>span { font-size:8px; color:var(--muted); letter-spacing:1px; font-weight:600; }
+.market-pulse-copy>span { font-size:10px; color:var(--muted); letter-spacing:1px; font-weight:600; }
 .market-pulse-copy strong { font:600 14px/1.5 'IBM Plex Mono',monospace; }
-.market-pulse-copy small { font-size:8px; color:var(--muted); }
+.market-pulse-copy small { font-size:10px; color:var(--muted); }
 .market-animal { display:block; width:82px; height:52px; overflow:visible; }
 @media(max-width:760px) {
   .app .market-pulse { gap:3px; padding:0 2px; min-height:44px; }
   .market-animal { width:57px; height:40px; }
-  .market-pulse-copy>span { font-size:7px; letter-spacing:.5px; }
+  .market-pulse-copy>span { font-size:10px; letter-spacing:.5px; }
   .market-pulse-copy strong { font-size:12px; }
-  .market-pulse-copy small { font-size:7px; }
+  .market-pulse-copy small { font-size:10px; }
   .research-home .workspace-toolbar { gap:6px; }
   .research-home .workspace-toolbar .workspace-back { display:none; }
 }
@@ -34,7 +34,7 @@
 .market-entrance-skip:hover { background:#ffffff18; color:#fff; }
 @keyframes market-entrance-fade { 0%{opacity:0} 12%,83%{opacity:1} 100%{opacity:0} }
 @keyframes market-entrance-rise { 0%{transform:translateY(16px) scale(.9)} 18%,82%{transform:translateY(0) scale(1)} 100%{transform:translateY(-8px) scale(1.03)} }
-@media(max-width:760px) { .market-entrance { padding:20px; } .market-entrance-label { font-size:9px; letter-spacing:2px; } .market-entrance .market-animal { width:100%; height:auto; } }
+@media(max-width:760px) { .market-entrance { padding:20px; } .market-entrance-label { font-size:10px; letter-spacing:2px; } .market-entrance .market-animal { width:100%; height:auto; } }
 @media(prefers-reduced-motion:reduce) { .market-entrance { display:none; } }
 
 /* Reference-inspired artwork: one coherent silhouette, with a grounded upward charge. */

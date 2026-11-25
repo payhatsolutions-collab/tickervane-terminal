@@ -6,14 +6,19 @@ import { StockAnalytics } from './AdvancedAnalytics.jsx';
 import CompanyBrief from './CompanyBrief.jsx';
 import { Empty } from './ui.jsx';
 import { fmt, pct } from './data.js';
+import { rankedBreakouts } from './proExample.js';
+import { ProPill } from './ProExample.jsx';
 
-export default function BreakoutInsights({ symbol, refresh, onRefresh, onSelect, onOpen, onAlert, watch, toggleWatch }) {
+// `preview`: the reader has no Pro access, so `symbol` is the free example and every other company opens the paywall.
+export default function BreakoutInsights({ symbol, refresh, onRefresh, onSelect, onOpen, onAlert, watch, toggleWatch, preview = false }) {
   const feed = useFeed('/api/market?op=screen', refresh);
   const [query, setQuery] = useState('');
   const [riskOpen, setRiskOpen] = useState(false);
   const article = useRef(null);
   const [readRequested, setReadRequested] = useState(false);
-  const matches = runScreen(feed.data?.rows, PRESETS.find(p => p.id === 'breakout20'));
+  // The preview lists companies in the home page's order, so the free example comes first.
+  const matches = preview ? rankedBreakouts(feed.data?.rows) : runScreen(feed.data?.rows, PRESETS.find(p => p.id === 'breakout20'));
+  const locked = row => preview && `${row.symbol}.NS` !== symbol;
   const rows = matches.filter(row => `${row.symbol} ${row.name}`.toLowerCase().includes(query.toLowerCase().trim()));
   const selected = feed.data?.rows?.find(row => `${row.symbol}.NS` === symbol);
   const insight = selected ? breakoutInsight(selected) : null;
@@ -31,8 +36,8 @@ export default function BreakoutInsights({ symbol, refresh, onRefresh, onSelect,
       <p className="company-data-note">20-day high · volume ≥ 1.3× · Session {feed.data?.date || 'unavailable'}{feed.error && feed.data ? ' · cached snapshot' : ''}</p>
       <div className="breakout-desktop-list"><input aria-label="Find a breakout stock" value={query} onChange={e => setQuery(e.target.value)} placeholder="Find a company…" /></div>
       {feed.loading && !feed.data ? <p role="status">Finding confirmed breakouts…</p> : !feed.data ? <Empty title="Breakout data unavailable" description={feed.error} /> : !rows.length ? <p className="muted">{matches.length ? 'No matching companies.' : 'No confirmed breakouts in this snapshot.'}</p> : <>
-        <label className="breakout-mobile-picker">Choose company<select value={matches.some(row => `${row.symbol}.NS` === symbol) ? symbol : ''} onChange={e => select(e.target.value)}><option value="" disabled>Select a breakout company</option>{matches.map(row => <option key={row.symbol} value={`${row.symbol}.NS`}>{row.symbol} · {row.name}</option>)}</select></label>
-        <div className="breakout-compact-list breakout-desktop-list">{rows.map(row => <button key={row.symbol} className={symbol === `${row.symbol}.NS` ? 'selected' : ''} aria-pressed={symbol === `${row.symbol}.NS`} onClick={() => select(`${row.symbol}.NS`)}><span><strong>{row.symbol}</strong><b>{pct(row.change)}</b></span><small>{row.name}</small><span className="muted"><small>{fmt(row.price)} INR</small><small>{fmt(row.volRatio, 1)}× vol</small></span></button>)}</div>
+        <label className="breakout-mobile-picker">Choose company<select value={matches.some(row => `${row.symbol}.NS` === symbol) ? symbol : ''} onChange={e => select(e.target.value)}><option value="" disabled>Select a breakout company</option>{matches.map(row => <option key={row.symbol} value={`${row.symbol}.NS`}>{row.symbol} · {row.name}{locked(row) ? ' · Pro' : ''}</option>)}</select></label>
+        <div className="breakout-compact-list breakout-desktop-list">{rows.map(row => <button key={row.symbol} className={symbol === `${row.symbol}.NS` ? 'selected' : ''} aria-pressed={symbol === `${row.symbol}.NS`} onClick={() => select(`${row.symbol}.NS`)}><span><strong>{row.symbol}{locked(row) && <ProPill />}</strong><b>{pct(row.change)}</b></span><small>{row.name}</small><span className="muted"><small>{fmt(row.price)} INR</small><small>{fmt(row.volRatio, 1)}× vol</small></span></button>)}</div>
       </>}
     </aside>
     <div className="breakout-company-column">

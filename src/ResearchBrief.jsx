@@ -16,7 +16,7 @@ export function WorkspaceSummary({ watch, alerts, journal, onPage }) {
 }
 
 export default function ResearchBrief({ data, loading, error, onPage, onRefresh, recent = [], onOpen, onSearch }) {
-  const metrics = overviewMetrics(data?.rows);
+  const metrics = data?.metrics || overviewMetrics(data?.rows);
   const viewed = [...new Set(recent)].filter(symbol => directory.has(symbol)).slice(0, 3);
   const percent = metrics.risingPercent;
   return <div className="research-brief-grid">

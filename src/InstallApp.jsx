@@ -1,53 +1,127 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowDownToLine, Check, Smartphone, X } from "lucide-react";
+import { ArrowDownToLine, ArrowRight, Check, Gift } from "lucide-react";
+import { growthEvent } from "./growth.js";
+import { inAppBrowser, openInChromeUrl, useHasApp, useInstalled } from "./installState.js";
+import { PRO_APP_TRIAL_DAYS, PRO_PAGES } from "../lib/proPlan.js";
+import { proRequest } from "./pro.js";
 
-export default function InstallApp() {
-  const [prompt, setPrompt] = useState(null);
-  const [installed, setInstalled] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [busy, setBusy] = useState(false);
-  const dialog = useRef(null);
+const fallbackSteps = {
+  ios: ["iPhone or iPad · Safari", "In Safari, tap Share, select “Add to Home Screen”, then tap Add. If you don’t see the option, scroll down in the Share menu."],
+  android: ["Android · Chrome", "In Chrome, open the ⋮ menu and choose “Install app” or “Add to Home screen”, then confirm."],
+  desktop: ["Desktop · Chrome or Edge", "Use the install icon in the address bar. You can also open the browser menu and look for “Install Alpha Nova” or an Apps submenu."],
+};
+function preferredPlatform() {
+  if (/iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)) return "ios";
+  return /Android/i.test(navigator.userAgent) ? "android" : "desktop";
+}
+
+export function InstallLink({ className, label, source, children }) {
+  if (useInstalled()) return null;
+  return <a className={className} href="/install" aria-label={source === "header" ? "Install Alpha Nova" : label} title={label}
+    onClick={() => growthEvent("install_app_clicked", { destination: "/install", source, pathname: window.location.pathname })}>
+    {children || <><ArrowDownToLine size={16} aria-hidden="true" /><span>{label}</span></>}
+  </a>;
+}
+
+function InstallApp() {
+  const installed = useInstalled();
+  const hasApp = useHasApp();
+  // Readers who have used the app trial, or already have Pro, are not offered it again.
+  const [gift, setGift] = useState(true);
   useEffect(() => {
-    const mode = window.matchMedia("(display-mode: standalone)");
-    const sync = () => setInstalled(mode.matches || navigator.standalone === true);
-    const available = event => { event.preventDefault(); setPrompt(event); };
-    const done = () => { setInstalled(true); setPrompt(null); setOpen(false); };
-    sync();
-    mode.addEventListener("change", sync);
-    window.addEventListener("beforeinstallprompt", available);
-    window.addEventListener("appinstalled", done);
+    if (!hasApp) return;
+    let live = true;
+    proRequest("status").then(status => {
+      if (live) setGift(status.configured !== false && !status.active && !status.paused && (!status.signedIn || !!status.appTrialEligible));
+    }).catch(() => { /* The Pro workspace decides when the check is unavailable. */ });
+    return () => { live = false; };
+  }, [hasApp]);
+  const [canPrompt, setCanPrompt] = useState(() => !!window.alphaNovaInstall?.prompt);
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState("");
+  const [manual, setManual] = useState(false);
+  const instructions = useRef(null);
+  const platform = preferredPlatform();
+  // Custom tabs and in-app browsers (the usual route from an ad) can’t install; Chrome can.
+  const openInChrome = platform === "android" && !canPrompt && (manual || inAppBrowser());
+  useEffect(() => {
+    const update = () => setCanPrompt(!!window.alphaNovaInstall?.prompt);
+    window.addEventListener("beforeinstallprompt", update);
+    window.addEventListener("appinstalled", update);
+    update();
     return () => {
-      mode.removeEventListener("change", sync);
-      window.removeEventListener("beforeinstallprompt", available);
-      window.removeEventListener("appinstalled", done);
+      window.removeEventListener("beforeinstallprompt", update);
+      window.removeEventListener("appinstalled", update);
     };
   }, []);
   useEffect(() => {
-    if (open) dialog.current?.showModal();
-    else dialog.current?.close();
-  }, [open]);
-  const install = async () => {
-    if (!prompt) { setOpen(true); return; }
+    if (manual) instructions.current?.querySelector("summary")?.focus();
+  }, [manual]);
+
+  async function install() {
+    const state = window.alphaNovaInstall;
+    const prompt = state?.prompt;
+    if (!prompt) { setManual(true); return; }
+    state.prompt = null;
+    setCanPrompt(false);
     setBusy(true);
+    setMessage("");
+    growthEvent("install_prompt_opened", { destination: "/install" });
     try {
       await prompt.prompt();
-      const result = await prompt.userChoice;
-      if (result.outcome === "accepted") { setInstalled(true); setOpen(false); }
-    } catch { setOpen(true); }
-    finally { setPrompt(null); setBusy(false); }
-  };
-  if (installed) return <div className="app-installed"><Check size={15} /><span>App installed</span></div>;
-  return <>
-    <button className="install-app" aria-label={busy ? "Opening installer…" : "Install app"} title="Install app" onClick={install} disabled={busy}><Smartphone size={18} /><span>{busy ? "Opening installer…" : "Install app"}<small>A home for your research</small></span><ArrowDownToLine size={15} /></button>
-    <dialog ref={dialog} className="dialog install-dialog" aria-labelledby="install-title" onCancel={() => setOpen(false)} onClick={event => { if (event.target === dialog.current) setOpen(false); }}>
-      <button className="icon-button close" aria-label="Close install guide" onClick={() => setOpen(false)}><X size={20} /></button>
-      <img className="install-illustration" src="/alpha-nova-logo.jpg" width="64" height="64" alt="Alpha Nova" />
-      <span className="eyebrow">YOUR POCKET RESEARCH DESK</span>
-      <h2 id="install-title">Alpha Nova. One tap away.</h2>
-      <p>Add Alpha Nova to your home screen for a dedicated, full-screen workspace.</p>
-      <ol><li><strong>Open in Chrome on Android</strong><span>Visit alphanova48.in in your browser.</span></li><li><strong>Open the browser menu ⋮</strong><span>Choose “Add to Home screen” or “Install app”.</span></li><li><strong>Make it part of your routine</strong><span>Launch Alpha Nova from your home screen.</span></li></ol>
-      <p className="install-note">On iPhone, use Safari → Share → Add to Home Screen. An internet connection is needed for market data. Your saved research stays in this browser.</p>
-      <button className="button primary" onClick={() => setOpen(false)}>Got it</button>
-    </dialog>
-  </>;
+      const { outcome } = await prompt.userChoice;
+      growthEvent("install_prompt_result", { outcome });
+      if (outcome === "accepted") setMessage("Follow your browser’s instructions to finish installing.");
+      else { setMessage("You can still install Alpha Nova from your browser menu."); setManual(true); }
+    } catch {
+      setMessage("The browser couldn’t open its installer. Try these steps instead.");
+      setManual(true);
+    } finally { setBusy(false); }
+  }
+
+  return <section className="install-dialog install-card" aria-labelledby="install-title">
+    <img className="install-illustration" src="/icon-192.png" width="64" height="64" alt="" />
+    <span className="eyebrow">YOUR RESEARCH WORKSPACE</span>
+    <h1 id="install-title">Install Alpha Nova</h1>
+    <p>Open your watchlist, charts and market research from your home screen or desktop.</p>
+    {(installed || hasApp) && gift && <div className="install-gift" role="status">
+      <Gift size={22} aria-hidden="true" />
+      <strong>A thank-you for installing</strong>
+      <p>{PRO_APP_TRIAL_DAYS} days of Alpha Nova Pro, free. All {PRO_PAGES.length} Pro workspaces, no payment details and no automatic charge.</p>
+      {/* ?pro=1 opens the trial offer itself, not the workspace's free example. */}
+      <a className="button primary install-action" href="/breakouts?pro=1" onClick={() => growthEvent("pro_cta_clicked", { source: "install", offer: "app_trial" })}>
+        Start my {PRO_APP_TRIAL_DAYS} free days <ArrowRight size={16} />
+      </a>
+      <small>Sign in with Google to begin. Your {PRO_APP_TRIAL_DAYS} days start only when you choose.</small>
+    </div>}
+    {installed && !gift && <div className="app-installed" role="status"><Check size={15} /> App installed</div>}
+    {!installed && <>
+      <button className={`button install-action${hasApp && gift ? "" : " primary"}`} onClick={install} disabled={busy}>
+        <ArrowDownToLine size={18} />{busy ? "Opening installer…" : canPrompt ? "Install Alpha Nova" : "Install on this device"}
+      </button>
+      {message && <p role="status">{message}</p>}
+      {openInChrome && <a className="button install-action" href={openInChromeUrl("/install")} onClick={() => growthEvent("install_open_chrome", { destination: "/install" })}>
+        Open in Chrome to install <ArrowRight size={16} />
+      </a>}
+      <details className="install-instructions" ref={instructions} open={manual ? true : undefined} onToggle={event => {
+        if (!event.currentTarget.open) setManual(false);
+      }}>
+        <summary>Install instructions for your browser</summary>
+        <ol>{[platform, ...Object.keys(fallbackSteps).filter(key => key !== platform)].map(key =>
+          <li key={key}><strong>{fallbackSteps[key][0]}</strong><span>{fallbackSteps[key][1]}</span></li>
+        )}</ol>
+      </details>
+    </>}
+    <p className="install-note">An internet connection is needed for market data. Your existing research stays in its browser unless you back it up.</p>
+    <a className="button" href="/">Back to Alpha Nova</a>
+  </section>;
+}
+
+export function InstallPage() {
+  useEffect(() => {
+    document.title = "Install Alpha Nova | Stock Market Research App";
+    document.querySelector('link[rel="canonical"]')?.setAttribute("href", "https://alphanova48.in/install");
+  }, []);
+  return <div className="app install-page"><main><InstallApp /></main></div>;
 }

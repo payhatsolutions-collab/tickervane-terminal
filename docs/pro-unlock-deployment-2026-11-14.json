@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-14",
+  "status": "deployed-and-promoted",
+  "project": "alphanova2",
+  "deploymentId": "dpl_8a4tWmydLmApdGVvn1DqHorYxdMt",
+  "deploymentUrl": "https://alphanova2-e770khpdm-wdcre.vercel.app",
+  "productionUrl": "https://alphanova48.in",
+  "scope": "Alpha Nova Pro paywall: Forecast, Advanced analytics, Breakout insights, Futures & options and Institutional flows locked behind INR 300 per 30 days, paid by UPI QR and unlocked instantly with a 12-digit UPI reference. See docs/PRO-UNLOCK.md.",
+  "rollback": {
+    "deploymentId": "dpl_4nimAb3msaRr4K9at8F81cYHwSRu",
+    "deploymentUrl": "https://alphanova2-2g7erjlbm-wdcre.vercel.app",
+    "command": "vercel promote https://alphanova2-2g7erjlbm-wdcre.vercel.app --yes"
+  },
+  "verification": {
+    "fullRepositoryTests": 435,
+    "frontendBuild": "passed (npm run build, via tests/seo.test.js and on Vercel)",
+    "staged": "GET /api/pro?op=status 200 configured:true; POST claim without session 401; /pro/upi-qr.png 200 image/png; /, /forecast, /screener, /pricing.html, /privacy.html 200",
+    "live": "Same checks repeated on https://alphanova48.in after promotion; main bundle references the ProGate chunk; /api/pro also answers on tickervane.vercel.app",
+    "notVerified": "A real Google sign-in followed by a UPI reference claim and an operator revoke has not been run on production."
+  }
+}

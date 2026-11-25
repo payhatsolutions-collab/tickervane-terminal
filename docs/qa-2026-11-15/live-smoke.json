@@ -1,0 +1,510 @@
+{
+  "origin": "https://alphanova48.in",
+  "checkedAt": "2026-11-15T01:11:45.657Z",
+  "results": [
+    {
+      "path": "/forecast",
+      "status": 200,
+      "ms": 151,
+      "bytes": 11720,
+      "cache": "HIT"
+    },
+    {
+      "path": "/",
+      "status": 200,
+      "ms": 166,
+      "bytes": 11812,
+      "cache": "HIT"
+    },
+    {
+      "path": "/charts",
+      "status": 200,
+      "ms": 421,
+      "bytes": 11756,
+      "cache": "MISS"
+    },
+    {
+      "path": "/markets",
+      "status": 200,
+      "ms": 278,
+      "bytes": 11802,
+      "cache": "MISS"
+    },
+    {
+      "path": "/screener",
+      "status": 200,
+      "ms": 295,
+      "bytes": 11723,
+      "cache": "MISS"
+    },
+    {
+      "path": "/fundamentals",
+      "status": 200,
+      "ms": 269,
+      "bytes": 11740,
+      "cache": "MISS"
+    },
+    {
+      "path": "/breakouts",
+      "status": 200,
+      "ms": 273,
+      "bytes": 11691,
+      "cache": "MISS"
+    },
+    {
+      "path": "/analytics",
+      "status": 200,
+      "ms": 272,
+      "bytes": 11712,
+      "cache": "MISS"
+    },
+    {
+      "path": "/delivery",
+      "status": 200,
+      "ms": 272,
+      "bytes": 11738,
+      "cache": "MISS"
+    },
+    {
+      "path": "/futures-options",
+      "status": 200,
+      "ms": 283,
+      "bytes": 11765,
+      "cache": "MISS"
+    },
+    {
+      "path": "/institutional-flows",
+      "status": 200,
+      "ms": 270,
+      "bytes": 11771,
+      "cache": "MISS"
+    },
+    {
+      "path": "/news",
+      "status": 200,
+      "ms": 262,
+      "bytes": 11692,
+      "cache": "MISS"
+    },
+    {
+      "path": "/portfolio",
+      "status": 200,
+      "ms": 266,
+      "bytes": 11707,
+      "cache": "MISS"
+    },
+    {
+      "path": "/watchlist",
+      "status": 200,
+      "ms": 272,
+      "bytes": 11696,
+      "cache": "MISS"
+    },
+    {
+      "path": "/trade-journal",
+      "status": 200,
+      "ms": 261,
+      "bytes": 11719,
+      "cache": "MISS"
+    },
+    {
+      "path": "/about.html",
+      "status": 200,
+      "ms": 282,
+      "bytes": 7989,
+      "cache": "MISS"
+    },
+    {
+      "path": "/price-alerts",
+      "status": 200,
+      "ms": 284,
+      "bytes": 11725,
+      "cache": "MISS"
+    },
+    {
+      "path": "/sw.js",
+      "status": 200,
+      "ms": 47,
+      "bytes": 1252,
+      "cache": "HIT"
+    },
+    {
+      "path": "/manifest.webmanifest",
+      "status": 200,
+      "ms": 47,
+      "bytes": 1056,
+      "cache": "HIT"
+    },
+    {
+      "path": "/api/market?op=quotes&symbols=%5ENSEI,RELIANCE.NS,AAPL",
+      "status": 200,
+      "ms": 163,
+      "bytes": 4576,
+      "cache": "MISS",
+      "keys": [
+        "quotes",
+        "errors",
+        "fetchedAt"
+      ],
+      "quotes": 3
+    },
+    {
+      "path": "/api/market?op=chart&symbol=RELIANCE.NS&range=1d",
+      "status": 200,
+      "ms": 163,
+      "bytes": 9520,
+      "cache": "MISS",
+      "keys": [
+        "symbol",
+        "name",
+        "currency",
+        "exchange",
+        "price",
+        "previous",
+        "change",
+        "marketTime",
+        "dayHigh",
+        "dayLow",
+        "volume",
+        "yearHigh",
+        "yearLow",
+        "timezone",
+        "delay",
+        "bars",
+        "source",
+        "fetchedAt",
+        "range",
+        "regularSession"
+      ],
+      "bars": 74
+    },
+    {
+      "path": "/privacy.html",
+      "status": 200,
+      "ms": 272,
+      "bytes": 5251,
+      "cache": "MISS"
+    },
+    {
+      "path": "/api/market?op=screen",
+      "status": 200,
+      "ms": 57,
+      "bytes": 224581,
+      "cache": "HIT",
+      "keys": [
+        "date",
+        "universe",
+        "coverage",
+        "benchmark",
+        "rows",
+        "source",
+        "fetchedAt"
+      ],
+      "rows": 499,
+      "date": "2026-11-13"
+    },
+    {
+      "path": "/api/market?op=delivery&symbol=TCS",
+      "status": 200,
+      "ms": 53,
+      "bytes": 2390,
+      "cache": "MISS",
+      "keys": [
+        "symbol",
+        "stats",
+        "history",
+        "source",
+        "fetchedAt"
+      ]
+    },
+    {
+      "path": "/api/market?op=delivery",
+      "status": 200,
+      "ms": 186,
+      "bytes": 339899,
+      "cache": "MISS",
+      "keys": [
+        "date",
+        "sessions",
+        "baseline",
+        "coverage",
+        "counts",
+        "rows",
+        "source",
+        "sourceUrl",
+        "fetchedAt"
+      ],
+      "rows": 794,
+      "date": "2026-11-13"
+    },
+    {
+      "path": "/api/market?op=fundamentals&symbol=TCS.NS",
+      "status": 200,
+      "ms": 105,
+      "bytes": 4230,
+      "cache": "MISS",
+      "keys": [
+        "symbol",
+        "peTrailing",
+        "peForward",
+        "epsTrailing",
+        "epsForward",
+        "earningsGrowth",
+        "revenueGrowth",
+        "roe",
+        "profitMargin",
+        "debtToEquity",
+        "marketCap",
+        "sector",
+        "industry",
+        "businessSummary",
+        "company",
+        "source",
+        "fetchedAt"
+      ]
+    },
+    {
+      "path": "/api/market?op=chart&symbol=TCS.NS&range=5y&adjusted=1&daily=1",
+      "status": 200,
+      "ms": 236,
+      "bytes": 172154,
+      "cache": "MISS",
+      "keys": [
+        "symbol",
+        "name",
+        "currency",
+        "exchange",
+        "price",
+        "previous",
+        "change",
+        "marketTime",
+        "dayHigh",
+        "dayLow",
+        "volume",
+        "yearHigh",
+        "yearLow",
+        "timezone",
+        "delay",
+        "bars",
+        "source",
+        "fetchedAt",
+        "range",
+        "adjusted",
+        "regularSession"
+      ],
+      "bars": 1236
+    },
+    {
+      "path": "/api/market?op=live-futures&group=nse50_fut",
+      "status": 200,
+      "ms": 127,
+      "bytes": 649,
+      "cache": "MISS",
+      "keys": [
+        "rows",
+        "asOf",
+        "exchangeTimestamp",
+        "sourceUrl",
+        "fetchedAt"
+      ],
+      "rows": 3
+    },
+    {
+      "path": "/api/market?op=news&symbol=TCS.NS",
+      "status": 200,
+      "ms": 655,
+      "bytes": 7106,
+      "cache": "MISS",
+      "keys": [
+        "items",
+        "source",
+        "failedSources",
+        "fetchedAt"
+      ]
+    },
+    {
+      "path": "/api/market?op=options&symbol=NIFTY",
+      "status": 200,
+      "ms": 670,
+      "bytes": 36810,
+      "cache": "MISS",
+      "keys": [
+        "symbol",
+        "expiry",
+        "expiries",
+        "rows",
+        "spot",
+        "atm",
+        "date",
+        "asOf",
+        "exchangeTimestamp",
+        "daysToExpiry",
+        "pcr",
+        "pcrChange",
+        "totals",
+        "maxPain",
+        "callWall",
+        "putWall",
+        "callAdd",
+        "putAdd",
+        "straddle",
+        "movePct",
+        "source",
+        "sourceUrl",
+        "fetchedAt",
+        "freshness",
+        "signal",
+        "symbols"
+      ],
+      "rows": 142,
+      "date": "2026-11-13"
+    },
+    {
+      "path": "/api/market?op=futures",
+      "status": 200,
+      "ms": 527,
+      "bytes": 46643,
+      "cache": "MISS",
+      "keys": [
+        "date",
+        "rows",
+        "counts",
+        "source",
+        "sourceUrl",
+        "fetchedAt"
+      ],
+      "rows": 224,
+      "date": "2026-11-13"
+    },
+    {
+      "path": "/api/market?op=flows",
+      "status": 200,
+      "ms": 106,
+      "bytes": 2386,
+      "cache": "MISS",
+      "keys": [
+        "cash",
+        "cashError",
+        "participants",
+        "participantsError",
+        "fetchedAt"
+      ]
+    },
+    {
+      "path": "/api/market?op=deals",
+      "status": 200,
+      "ms": 91,
+      "bytes": 30395,
+      "cache": "MISS",
+      "keys": [
+        "date",
+        "rows",
+        "partial",
+        "source",
+        "fetchedAt"
+      ],
+      "rows": 162,
+      "date": "2026-11-13"
+    },
+    {
+      "path": "/api/market?op=directory",
+      "status": 200,
+      "ms": 120,
+      "bytes": 223543,
+      "cache": "MISS",
+      "keys": [
+        "stocks",
+        "fetchedAt",
+        "source",
+        "stale"
+      ]
+    },
+    {
+      "path": "/api/signup?op=status",
+      "status": 200,
+      "ms": 90,
+      "bytes": 19,
+      "cache": "MISS",
+      "keys": [
+        "configured"
+      ]
+    },
+    {
+      "path": "/api/market?op=rotation",
+      "status": 200,
+      "ms": 573,
+      "bytes": 7638,
+      "cache": "MISS",
+      "keys": [
+        "date",
+        "weeks",
+        "sectors",
+        "valuation",
+        "source",
+        "fetchedAt"
+      ],
+      "date": "2026-11-13"
+    },
+    {
+      "path": "/nifty-edge/index.html",
+      "status": 200,
+      "ms": 300,
+      "bytes": 10015,
+      "cache": "MISS"
+    },
+    {
+      "path": "/api/push?op=vapid",
+      "status": 200,
+      "ms": 697,
+      "bytes": 115,
+      "cache": "MISS",
+      "keys": [
+        "key",
+        "configured"
+      ]
+    },
+    {
+      "path": "/api/nifty_edge?op=snapshot&capital=1000000&risk_pct=1&max_lots=10",
+      "status": 200,
+      "ms": 5683,
+      "bytes": 35803,
+      "cache": "MISS",
+      "keys": [
+        "quotes_fresh",
+        "lot_verified",
+        "history_date",
+        "generated",
+        "data_time",
+        "market_open",
+        "market_status",
+        "levels",
+        "expiries",
+        "rec",
+        "flows",
+        "positioning",
+        "signals_now",
+        "lab_built",
+        "latency_ms",
+        "hosting"
+      ]
+    },
+    {
+      "path": "/api/nifty_edge?op=lab",
+      "status": 200,
+      "ms": 6155,
+      "bytes": 244939,
+      "cache": "MISS",
+      "keys": [
+        "built_at",
+        "ranges",
+        "costs",
+        "vol",
+        "har",
+        "direction",
+        "folklore",
+        "overlay",
+        "series"
+      ]
+    }
+  ]
+}

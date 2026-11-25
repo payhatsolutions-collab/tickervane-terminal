@@ -1,5 +1,7 @@
 // Editorial content is deliberately curated. Rules are imported from the product at build time.
 export const updated = '2026-10-03';
+// Pricing changes on its own schedule: Pro launched, then Markets and Fundamentals became free.
+export const pricingUpdated = '2026-11-17';
 export const guides = [
   {
     id: 'accumulation', slug: 'delivery-accumulation', name: 'Delivery accumulation screener',

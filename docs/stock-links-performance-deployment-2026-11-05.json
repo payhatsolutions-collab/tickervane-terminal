@@ -1,0 +1,199 @@
+{
+  "date": "2026-11-05",
+  "production": "https://alphanova48.in",
+  "deployment": {
+    "id": "dpl_6bmXBfRM79X5CwkbXnsbUJ9JLBQ9",
+    "url": "https://alphanova2-pmzxko3y4-wdcre.vercel.app",
+    "status": "promoted"
+  },
+  "previousDeployment": {
+    "id": "dpl_nCh8fqSYvZHUzSrHdmsRdva1REhL",
+    "url": "https://alphanova2-6uxdkrq0f-wdcre.vercel.app"
+  },
+  "rollbackCommand": "vercel promote https://alphanova2-6uxdkrq0f-wdcre.vercel.app --yes",
+  "tests": {
+    "passed": 390,
+    "failed": 0,
+    "cancelled": 0
+  },
+  "browserChecks": {
+    "desktop": true,
+    "mobileWidth": 390,
+    "mobileOverflow": false,
+    "stockURLRetained": true,
+    "stockTitle": true,
+    "backNavigation": true,
+    "oneYearRequestCount": 1,
+    "sixMonthRequestCount": 0,
+    "signupStatusRequestCount": 1,
+    "chartRendered": true,
+    "finalLiveChartTitle": "Reliance Industries (RELIANCE) Chart & Delivery | Alpha Nova",
+    "finalLiveBrowserErrors": []
+  },
+  "assets": {
+    "bullBytesBefore": 122098,
+    "bullBytesAfter": 35956,
+    "icon192BytesBefore": 50651,
+    "icon192BytesAfter": 17345,
+    "icon512BytesBefore": 320698,
+    "icon512BytesAfter": 92523
+  },
+  "stockPages": 499,
+  "snapshotDate": "2026-11-04",
+  "fallback": {
+    "source": "NSE bhavcopy",
+    "sessions": 21,
+    "uniqueDates": true,
+    "adjustedForecastsExcluded": true,
+    "partialHistoryLabeled": true,
+    "snapshotRefreshedAtBuild": true
+  },
+  "productionChecks": {
+    "checkedAt": "2026-11-05T01:04:39.009Z",
+    "results": [
+      {
+        "path": "/charts?symbol=RELIANCE",
+        "status": 200,
+        "bytes": 11691
+      },
+      {
+        "path": "/stocks/RELIANCE",
+        "status": 200,
+        "bytes": 4581
+      },
+      {
+        "path": "/stocks/HDFCBANK",
+        "status": 200,
+        "bytes": 4667
+      },
+      {
+        "path": "/sitemap.xml",
+        "status": 200,
+        "bytes": 46926
+      },
+      {
+        "path": "/api/market?op=overview",
+        "status": 200,
+        "bytes": 2993,
+        "source": "Yahoo Finance (1Y daily closes) + NSE delivery bhavcopy",
+        "date": "2026-11-04"
+      },
+      {
+        "path": "/api/market?op=chart&symbol=RELIANCE&range=1y",
+        "status": 200,
+        "bytes": 30094,
+        "symbol": "RELIANCE.NS",
+        "bars": 247,
+        "source": "Yahoo Finance",
+        "asOf": "2026-11-03"
+      },
+      {
+        "path": "/api/market?op=chart&symbol=RELIANCE.NS&range=1y",
+        "status": 200,
+        "bytes": 30094,
+        "symbol": "RELIANCE.NS",
+        "bars": 247,
+        "source": "Yahoo Finance",
+        "asOf": "2026-11-03"
+      },
+      {
+        "path": "/api/market?op=chart&symbol=HDFCBANK&range=1y",
+        "status": 200,
+        "bytes": 30389,
+        "symbol": "HDFCBANK.NS",
+        "bars": 247,
+        "source": "Yahoo Finance",
+        "asOf": "2026-11-03"
+      }
+    ]
+  },
+  "pagespeed": {
+    "url": "https://pagespeed.web.dev/analysis/https-alphanova48-in/mmhuoztpg2?form_factor=mobile",
+    "checkedAtIST": "2026-11-05 06:34",
+    "location": "Google-selected lab location; no India selector available",
+    "mobile": {
+      "performance": 97,
+      "accessibility": 100,
+      "bestPractices": 100,
+      "seo": 100,
+      "fcpSeconds": 0.8,
+      "lcpSeconds": 0.8,
+      "tbtMs": 60,
+      "cls": 0.005,
+      "speedIndexSeconds": 4.5
+    },
+    "desktop": {
+      "performance": 96,
+      "accessibility": 100,
+      "bestPractices": 100,
+      "seo": 100,
+      "fcpSeconds": 0.2,
+      "lcpSeconds": 0.2,
+      "tbtMs": 10,
+      "cls": 0,
+      "speedIndexSeconds": 2.2
+    },
+    "historicalFieldData": {
+      "period": "previous 28 days",
+      "coreWebVitals": "failed",
+      "lcpSeconds": 4,
+      "inpMs": 382,
+      "cls": 0.05,
+      "note": "Historical field data does not measure only this new deployment."
+    },
+    "earlierReleaseAudit": {
+      "mobilePerformance": 82,
+      "mobileCLS": 0.319,
+      "desktopPerformance": 82,
+      "desktopCLS": 0.306
+    },
+    "api": "Direct API returned quota exceeded; public UI completed the audit."
+  },
+  "followup": {
+    "automationId": "verify-stock-charts-after-8am-ist",
+    "time": "2026-11-05 08:05 Asia/Kolkata",
+    "oneTimeIntent": true
+  },
+  "finalRefinements": [
+    "Stable first-paint typography and reserved workspace height",
+    "Retain the six-month cached view across a failed refresh"
+  ],
+  "followupTests": {
+    "passed": 15,
+    "failed": 0
+  },
+  "after8amCheck": {
+    "checkedAtIST": "2026-11-05 08:08:44",
+    "chartPageStatus": 200,
+    "results": [
+      {
+        "input": "RELIANCE",
+        "status": 200,
+        "normalizedSymbol": "RELIANCE.NS",
+        "candles": 248,
+        "source": "Yahoo Finance",
+        "fallback": false,
+        "asOf": "2026-11-04"
+      },
+      {
+        "input": "RELIANCE.NS",
+        "status": 200,
+        "normalizedSymbol": "RELIANCE.NS",
+        "candles": 248,
+        "source": "Yahoo Finance",
+        "fallback": false,
+        "asOf": "2026-11-04"
+      },
+      {
+        "input": "HDFCBANK",
+        "status": 200,
+        "normalizedSymbol": "HDFCBANK.NS",
+        "candles": 248,
+        "source": "Yahoo Finance",
+        "fallback": false,
+        "asOf": "2026-11-04"
+      }
+    ],
+    "conclusion": "Yahoo Finance is responding; latest daily candles now include 4 November. NSE fallback was not needed."
+  }
+}

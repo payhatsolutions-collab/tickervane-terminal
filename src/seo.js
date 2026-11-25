@@ -1,12 +1,12 @@
 // One source of truth for the HTML build and in-app navigation metadata.
 export const SITE_ORIGIN = 'https://alphanova48.in';
-export const SEO_UPDATED = '2026-10-12';
 export const WORKSPACE_SEO = {
   Today: {path:'/', title:'Alpha Nova | Indian Stock Market Overview & NSE Screener', heading:'Alpha Nova: Indian Stock Market Overview', description:'Explore Indian stock markets with Alpha Nova (AlphaNova). Track NSE share prices, screen Nifty 500 stocks, and research charts, delivery volume and news.'},
   Terminal: {path:'/charts', title:'Stock Charts, Technical Analysis & Trade Plans | Alpha Nova', heading:'Stock Charts & Technical Analysis', description:'Explore stock price charts, volume and technical indicators with Alpha Nova. Plan entries, stops and position sizes, then review research before trading.'},
   Forecast: {path:'/forecast', title:'Stock Price Forecast & Market Research | Alpha Nova', heading:'Stock Price Forecast', description:'Explore stock price forecasts with Alpha Nova using adjusted daily price history. Compare statistical projections with current prices for market research.'},
   Markets: {path:'/markets', title:'Indian & Global Stock Market Overview | Alpha Nova', heading:'Indian & Global Stock Markets', description:'Explore Indian and global markets with Alpha Nova. Compare stock prices, market indices, sector rotation and index valuations in one research workspace.'},
   Screener: {path:'/screener', title:'Nifty 500 Screener: Momentum & Delivery | Alpha Nova', heading:'Nifty 500 Stock Screener', description:'Filter Nifty 500 stocks by momentum, relative strength, volume and delivery in Alpha Nova. Apply presets, build filters, save screens and export results.'},
+  Fundamentals: {path:'/fundamentals', title:'Stock Fundamentals & Lodestar Analysis | Alpha Nova', heading:'Company Fundamentals & Lodestar Analysis', description:'Explore fundamentals with Lodestar in Alpha Nova. Review six research pillars, financial trends, analyst estimates and valuation with dated snapshots.'},
   Breakouts: {path:'/breakouts', title:'Breakout Stock Insights & Research | Alpha Nova', heading:'Breakout Stock Insights', description:'Explore confirmed 20-day stock breakouts with Alpha Nova research briefs, volume evidence, trend risks, watchlist tools and historical risk analytics.'},
   Analytics: {path:'/analytics', title:'Advanced Stock Analytics & Risk Metrics | Alpha Nova', heading:'Advanced Stock Analytics', description:'Compare market participation, sector concentration, historical drawdowns, volatility and stock sensitivity to Nifty 50 with Alpha Nova research tools.'},
   Delivery: {path:'/delivery', title:'NSE Stock Delivery Spikes & Volume Radar | Alpha Nova', heading:'NSE Delivery Volume & Percentage Analysis', description:'Compare NSE stock delivery percentages, delivered quantities and volume with recent averages. Explore delivery activity with Alpha Nova research tools.'},
@@ -21,8 +21,13 @@ export const WORKSPACE_SEO = {
 
 export const robotsForPage = seo => seo.noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large';
 
-export function updatePageMetadata(page, doc = document) {
-  const seo = WORKSPACE_SEO[page] || WORKSPACE_SEO.Today;
+export function updatePageMetadata(page, doc = document, stock = {}) {
+  const base = WORKSPACE_SEO[page] || WORKSPACE_SEO.Today;
+  // Keep the canonical identical to the initial HTML. Symbol/range parameters
+  // still drive the interactive chart; /stocks/:symbol has indexable research.
+  const seo = page === 'Terminal' && stock.symbol ? { ...base,
+    title: `${stock.name || stock.symbol} (${stock.symbol.replace(/\.NS$/, '')}) Chart & Delivery | Alpha Nova`,
+  } : base;
   const url = SITE_ORIGIN + seo.path;
   doc.title = seo.title;
   for (const [selector, value] of [
@@ -38,9 +43,11 @@ export function updatePageMetadata(page, doc = document) {
   for (const script of doc.querySelectorAll('script[type="application/ld+json"]')) {
     const schema = JSON.parse(script.textContent);
     for (const node of schema['@graph'] || []) {
-      if (node['@type'] === 'WebPage') Object.assign(node, {
-        '@id': url+'#webpage', url, name: seo.title, description: seo.description, dateModified: SEO_UPDATED,
-      });
+      if (node['@type'] === 'WebPage') {
+        Object.assign(node, { '@id': url+'#webpage', url, name: seo.title, description: seo.description });
+        // Navigation is not a content revision. Do not invent a modification date.
+        delete node.dateModified;
+      }
     }
     script.textContent = JSON.stringify(schema).replaceAll('<', '\\u003c');
   }

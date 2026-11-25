@@ -1,0 +1,28 @@
+.chart-scores { border-bottom: 1px solid var(--line); padding: 14px 18px 10px; }
+.chart-scores-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.chart-score { --score-color: var(--accent); padding: 14px 16px; border: 1px solid var(--line); border-radius: 9px; background: var(--bg); min-width: 0; }
+.chart-score-alphaNova { background: var(--theme-selected); border-color: var(--theme-accent-border); }
+.chart-score-strong { --score-color: var(--green); }
+.chart-score-weak { --score-color: var(--red); }
+.chart-score-unavailable { --score-color: var(--muted); }
+.chart-score-label { display: flex; gap: 7px; align-items: center; color: var(--muted); font-size: 11px; font-weight: 550; }
+.chart-score-label svg { flex-shrink: 0; }
+.chart-score-alphaNova .chart-score-label { color: var(--accent); }
+.chart-score-value { display: flex; align-items: baseline; gap: 6px; margin: 9px 0; }
+.chart-score-value strong { color: var(--score-color); font: 600 27px 'IBM Plex Mono', monospace; letter-spacing: -1px; }
+.chart-score-value>span { color: var(--muted); font-size: 11px; }
+.chart-score-meter { height: 3px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.chart-score-meter>span { display: block; height: 100%; background: var(--score-color); border-radius: inherit; }
+.chart-score small { display: block; margin-top: 8px; color: var(--muted); font-size: 10px; }
+.chart-scores-method { margin-top: 8px; color: var(--muted); font-size: 10px; }
+.chart-scores-method summary { cursor: pointer; width: fit-content; padding: 4px 0; }
+.chart-scores-method p { margin: 8px 0; max-width: 900px; line-height: 1.6; }
+@media (max-width: 600px) {
+  .chart-scores { padding: 10px; }
+  .chart-scores-grid { gap: 6px; }
+  .chart-score { padding: 10px 8px; }
+  .chart-score-label { font-size: 10px; align-items: flex-start; gap: 4px; }
+  .chart-score-label svg { display: none; }
+  .chart-score-value strong { font-size: 23px; }
+  .chart-score-value>span, .chart-score small { font-size: 10px; }
+}

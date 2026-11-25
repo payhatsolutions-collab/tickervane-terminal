@@ -6,6 +6,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { normalizeSymbol, stockResearchURL } from './symbols.js';
 import { WORKSPACE_SEO, updatePageMetadata } from "./seo.js";
 const News = lazy(() => import("./News.jsx"));
 import Navigation from "./Navigation.jsx";
@@ -14,7 +15,9 @@ import MarketOverview from "./MarketOverview.jsx";
 import MarketPulse from "./MarketPulse.jsx";
 import ConnectionStatus from "./ConnectionStatus.jsx";
 import { useMobileLayout } from "./viewport.js";
+import { InstallLink } from "./InstallApp.jsx";
 import SignupPrompt from "./SignupPrompt.jsx";
+import PushOffer from "./PushOffer.jsx";
 const Onboarding = lazy(() => import("./Onboarding.jsx"));
 const Watchlist = lazy(() => import("./Watchlist.jsx"));
 const SharedWatchlist = lazy(() => import("./WatchlistShare.jsx").then(module => ({ default: module.SharedWatchlist })));
@@ -26,13 +29,17 @@ import "./insights.css";
 import PersonalAlerts, { PersonalAlertMonitor } from './PersonalAlerts.jsx';
 const AdvancedAnalytics = lazy(() => import('./AdvancedAnalytics.jsx'));
 const BreakoutInsights = lazy(() => import('./BreakoutInsights.jsx'));
+const Fundamentals = lazy(() => import('./Fundamentals.jsx'));
 import { SpeedInsights } from "@vercel/speed-insights/react";
-import { PAGES, PAGE_LABELS, viewFromSearch, viewFromLocation, workspaceSearch, viewURL } from "./navigation.js";
+import { PAGES, PAGE_LABELS, PRO_CHECKOUT_PATH, viewFromSearch, viewFromLocation, workspaceSearch, viewURL } from "./navigation.js";
 import { exportCSV, sortRows } from "./ui";
 import { buildBackup, parseBackup } from "./backup";
+import { cleanPositions, cleanPriceAlerts, cleanDeliveryHistory } from './savedRecords.js';
+import { cleanSymbols } from './watchlistTools.js';
 import { presetFromSearch } from "./screens";
 import {
   Activity,
+  CandlestickChart,
   ArrowLeft,
   ArrowDownUp,
   ArrowUpRight,
@@ -70,8 +77,14 @@ import {
 const TradePlanner = lazy(() => import("./TradeDesk").then(module => ({ default: module.TradePlanner })));
 const TradeJournal = lazy(() => import("./TradeDesk").then(module => ({ default: module.TradeJournal })));
 const KeyLevels = lazy(() => import("./TradeDesk").then(module => ({ default: module.KeyLevels })));
-import { completedDailyBars, dailyLevels } from "./tradeMath";
+import { cleanJournalEntries, completedDailyBars, dailyLevels } from "./tradeMath";
 const Forecast = lazy(() => import("./Forecast"));
+const ProGate = lazy(() => import("./ProGate.jsx"));
+const ProRenewal = lazy(() => import("./ProGate.jsx").then(module => ({ default: module.ProRenewal })));
+import { useProAccess } from "./pro.js";
+import { PRO_EXAMPLE_SYMBOL, PRO_PAGES } from "../lib/proPlan.js";
+import ProExample from "./ProExample.jsx";
+import { proExample } from "./proExample.js";
 const SwingDesk = lazy(() => import("./SwingDesk"));
 import DeferredSection from "./DeferredSection.jsx";
 const DeliveryRadar = lazy(() => import("./DeliveryRadar"));
@@ -89,7 +102,6 @@ import {
   syncPush,
   pushAction,
   showLocal,
-  registerSW,
   pushSupported,
   isIOS,
   isStandalone,
@@ -109,6 +121,8 @@ import {
   short,
 } from "./data";
 import { signalSnapshot, marketRegime, nseSession } from "./marketMath";
+import ChartScores from "./ChartScores.jsx";
+import "./chart-workspace.css";
 const ranges = {
   "1D": "1d",
   "5D": "5d",
@@ -239,7 +253,11 @@ function Clock() {
 }
 export default function App() {
   const mobileLayout = useMobileLayout();
+  const accountButton = useRef(null);
+  const [accountAvailable, setAccountAvailable] = useState(false);
+  const openAccount = accountAvailable ? () => accountButton.current?.click() : undefined;
   const [navCollapsed, setNavCollapsed] = useSaved("an2-nav-collapsed", false);
+  const [chartNavCollapsed, setChartNavCollapsed] = useState(true);
   const [plannerOpen, setPlannerOpen] = useState(false);
   const incomingShareHash = useRef(location.hash);
   const [sharedWatchlist, setSharedWatchlist] = useState(() => readSharedWatchlist(location.hash));
@@ -283,8 +301,8 @@ export default function App() {
         return "Today";
       }
     }),
-    [symbol, setSymbol] = useSaved("an2-symbol", "RELIANCE.NS"),
-    [watch, setWatch] = useSaved("an2-watch", []);
+    [symbol, setSymbol] = useSaved("an2-symbol", viewFromLocation(location).symbol, value => viewFromLocation(location, { symbol: normalizeSymbol(value) }).symbol),
+    [watch, setWatch] = useSaved("an2-watch", [], cleanSymbols);
   useEffect(() => {
     recordVisit(existingVisitor);
     const revisit = () => { if (document.visibilityState === "visible") recordVisit(existingVisitor); };
@@ -298,7 +316,7 @@ export default function App() {
   });
   useEffect(() => { recordActivation(watchedStocks); }, [watch]);
   useEffect(() => { if (page === "Watchlist") growthEvent("watchlist_viewed", { stock_count: watch.length }); }, [page]);
-  const [journal, setJournal] = useSaved("an2-journal", []);
+  const [journal, setJournal] = useSaved("an2-journal", [], cleanJournalEntries);
   const [drafts, setDrafts] = useSaved("an2-trade-drafts", {});
   const draft = drafts[symbol] || {
     side: "long",
@@ -311,9 +329,9 @@ export default function App() {
     notes: "",
   };
   const setDraft = (d) => setDrafts((prev) => ({ ...prev, [symbol]: d }));
-  const [positions, setPositions] = useSaved("an2-positions", []),
-    [alerts, setAlerts] = useSaved("an2-alerts", []),
-    [range, setRange] = useSaved("an2-range", "6mo"),
+  const [positions, setPositions] = useSaved("an2-positions", [], cleanPositions),
+    [alerts, setAlerts] = useSaved("an2-alerts", [], cleanPriceAlerts),
+    [range, setRange] = useSaved("an2-range", viewFromLocation(location).range, value => viewFromLocation(location, { range: value }).range),
     [type, setType] = useSaved("an2-chart-type", "Candles"),
     [indicators, setIndicators] = useSaved("an2-indicators", [
       "Volume",
@@ -332,12 +350,19 @@ export default function App() {
     [form, setForm] = useState(null),
     [backupMsg, setBackupMsg] = useState(""),
     [backupErr, setBackupErr] = useState("");
+  useEffect(() => {
+    if (!focus) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = previousOverflow; };
+  }, [focus]);
   const [alertPrefs, setAlertPrefs] = useSaved("an2-alert-prefs", {
       browser: false,
     }),
     [deliveryHistory, setDeliveryHistory] = useSaved(
       "an2-delivery-history",
       [],
+      cleanDeliveryHistory,
     );
   const [personalRules, setPersonalRules] = useSaved("an2-personal-rules", []);
   const [personalEvents, setPersonalEvents] = useSaved("an2-personal-events", []);
@@ -347,12 +372,11 @@ export default function App() {
     [copied, setCopied] = useState(false);
   // Record deliberate navigation only, so hydration and background updates never add stops.
   const [backStack, setBackStack] = useState(() => window.history.state?.anBackStack || []);
-  const [screenerView, setScreenerView] = useState(() => ({
-    active:
-      window.history.state?.anView?.screenerView?.active || presetFromSearch(
-        typeof location === "undefined" ? "" : workspaceSearch(location),
-      ) || "momentum",
-  }));
+  const [screenerView, setScreenerView] = useState(() =>
+    window.history.state?.anView?.screenerView || {
+      active: presetFromSearch(workspaceSearch(location)) || "momentum",
+    }
+  );
   const currentView = () => ({
     page,
     symbol,
@@ -363,9 +387,23 @@ export default function App() {
     direction,
     screenerView,
   });
-  const navigate = (next) => {
-    const target = { ...currentView(), ...next };
-    if (target.page === page && target.symbol === symbol) return;
+  // The Pro paywall, when the reader has asked for it: a Pro button, or something beyond a
+  // workspace's free example. Until then a locked workspace shows that example.
+  const [gatePage, setGatePage] = useState(() => {
+    try {
+      return location.pathname.replace(/\/$/, "") === PRO_CHECKOUT_PATH || window.history.state?.anGate || new URLSearchParams(location.search).get("pro") === "1"
+        ? viewFromLocation(location).page : null;
+    } catch {
+      return null;
+    }
+  });
+  // `gate` opens the paywall on the destination instead of its free example.
+  const navigate = (next, { gate = false } = {}) => {
+    const target = { ...currentView(), ...next, symbol: normalizeSymbol(next.symbol || symbol) };
+    if (target.page === page && target.symbol === symbol) {
+      if (gate) openGate();
+      return;
+    }
     const stack = [...backStack, currentView()].slice(-50);
     window.history.replaceState(
       {
@@ -376,11 +414,12 @@ export default function App() {
       "",
     );
     window.history.pushState(
-      { anView: target, anBackStack: stack },
+      { anView: target, anBackStack: stack, ...(gate ? { anGate: "direct" } : {}) },
       "",
       viewURL(location.href, { ...target, screen: target.screenerView.active }, { share: false }),
     );
     setBackStack(stack);
+    setGatePage(gate ? target.page : null);
     applyPage(target.page);
     setSymbol(target.symbol);
     setFocus(false);
@@ -391,6 +430,45 @@ export default function App() {
     window.scrollTo?.({ top: 0, behavior: "instant" });
   };
   const setPage = (next) => navigate({ page: next });
+  const pro = useProAccess();
+  const proLocked = pro.locks(page);
+  // Breakout insights takes its free example from the session's screen, the feed that workspace reads.
+  const breakoutScreen = useFeed(proLocked && page === "Breakouts" ? "/api/market?op=screen" : null, refresh);
+  const example = proLocked ? proExample(page, symbol, breakoutScreen) : null;
+  // A reader whose payment is being checked stays on the paywall, which tells them not to pay again.
+  const paidCheckout = gatePage === "Breakouts" && page === gatePage && location.pathname.replace(/\/$/, "") === PRO_CHECKOUT_PATH;
+  const proGated = (proLocked && (gatePage === page || !!example.none || !!pro.pending)) || (paidCheckout && pro.trialActive);
+  const proPreview = proLocked && !proGated;
+  // When a trial or paid period ends on an open workspace, show the paywall rather than the example.
+  const hadPro = useRef(pro.active);
+  useEffect(() => {
+    if (hadPro.current && !pro.active && pro.locks(page)) setGatePage(page);
+    hadPro.current = pro.active;
+  }, [pro.active]);
+  // The stock a Pro workspace shows: the reader's own with access, the example without.
+  const proSymbol = proPreview ? example.symbol : symbol;
+  // Open the paywall over the current view. It gets its own history entry, so Back returns to the example.
+  function openGate() {
+    if (!pro.locks(page) || gatePage === page) return;
+    const state = { ...window.history.state, anView: currentView(), anBackStack: backStack };
+    window.history.replaceState(state, "");
+    window.history.pushState({ ...state, anGate: "over" }, "");
+    setGatePage(page);
+    window.scrollTo?.({ top: 0, behavior: "instant" });
+  }
+  const closeGate = () => {
+    if (window.history.state?.anGate === "over") return window.history.back();
+    window.history.replaceState({ ...window.history.state, anGate: undefined }, "");
+    setGatePage(null);
+    window.scrollTo?.({ top: 0, behavior: "instant" });
+  };
+  // A control beyond the free example: other underlyings, expiries, the full deal list.
+  const askPro = (item) => {
+    growthEvent("pro_example_locked", { page, item });
+    openGate();
+  };
+  // Choosing a stock in a Pro workspace: any but the free example opens the paywall for it.
+  const proSelect = (s) => navigate({ page, symbol: s }, { gate: proPreview && normalizeSymbol(s) !== example.symbol });
   const openGuide = () => {
     setOnboarding({ status: watchedStocks.length >= 1 ? "return" : "choose" });
     setGuideOpen(true);
@@ -414,6 +492,7 @@ export default function App() {
       const urlView = viewFromLocation(location, event.state?.anView);
       const view = { ...event.state?.anView, ...urlView };
       applyPage(view.page);
+      setGatePage(event.state?.anGate || location.pathname.replace(/\/$/, "") === PRO_CHECKOUT_PATH ? view.page : null);
       setSymbol(view.symbol);
       setRange(view.range);
       setGroup(view.group || "India");
@@ -465,11 +544,11 @@ export default function App() {
           ...(page === "Portfolio" ? positions.map((x) => x.symbol) : []),
           ...alerts.filter((x) => !x.triggered).map((x) => x.symbol),
           ...(["Today", "Terminal", "Watchlist"].includes(page) ? watch : []),
-          ...(page === "Markets" && marketMonitorReady ? groupSymbols : []),
+          ...(page === "Markets" && !proLocked && marketMonitorReady ? groupSymbols : []),
         ].filter((s) => s && !benchmarks.includes(s)),
       ),
     ],
-    [watch, symbol, page, groupSymbols, positions, alerts, form, marketMonitorReady],
+    [watch, symbol, page, groupSymbols, positions, alerts, form, marketMonitorReady, proLocked],
   );
   const benchmarkFeed = useQuotes(benchmarks, refresh);
   const instrumentFeed = useQuotes(symbols, refresh);
@@ -532,16 +611,15 @@ export default function App() {
     if (searchTarget === "position" || searchTarget === "alert") {
       setSymbol(s);
       setForm(searchTarget);
-    } else
-      navigate({
-        page:
-          searchTarget === "news"
-            ? "News"
-            : searchTarget === "forecast" || page === "Forecast"
-              ? "Forecast"
-              : "Terminal",
-        symbol: s,
-      });
+    } else {
+      const target = searchTarget === "news"
+        ? "News"
+        : searchTarget === "forecast" || page === "Forecast"
+          ? "Forecast"
+          : page === "Fundamentals" ? "Fundamentals" : "Terminal";
+      // Without Pro, a forecast for any ticker but the free example opens the paywall.
+      navigate({ page: target, symbol: s }, { gate: target === "Forecast" && pro.locks("Forecast") && normalizeSymbol(s) !== PRO_EXAMPLE_SYMBOL });
+    }
     setFocus(false);
     setFilter("");
     setSearchTarget(null);
@@ -597,12 +675,12 @@ export default function App() {
   }, []);
   useEffect(() => {
     try {
-      const next = viewURL(location.href, { ...currentView(), screen: screenerView.active }, { share: false });
+      const next = viewURL(location.href, { ...currentView(), screen: screenerView.active }, { share: false, paidCheckout: paidCheckout && (pro.loading || proGated) });
       const shareHash = page === "Watchlist" && sharedWatchlist ? incomingShareHash.current : "";
       window.history.replaceState({ ...window.history.state, anView: currentView() }, "", next + shareHash);
     } catch {}
-  }, [symbol, page, range, screenerView.active, sharedWatchlist]);
-  useEffect(() => { updatePageMetadata(page); }, [page]);
+  }, [symbol, page, range, screenerView, sharedWatchlist, paidCheckout, pro.loading, proGated]);
+  useEffect(() => { updatePageMetadata(page, document, { symbol, name: meta.name }); }, [page, symbol, meta.name]);
   useEffect(() => {
     const r = setInterval(() => {
       if (!document.hidden) setRefresh((x) => x + 1);
@@ -831,6 +909,8 @@ export default function App() {
         alerts: alertPrefs?.pushAlerts !== false,
         delivery: !!alertPrefs?.delivery,
         screens: alertPrefs?.screens !== false,
+        market: alertPrefs?.market !== false,
+        movers: alertPrefs?.movers !== false,
       },
       screens: savedScreens,
     }),
@@ -885,9 +965,6 @@ export default function App() {
       });
     }
   };
-  useEffect(() => {
-    registerSW();
-  }, []);
   useEffect(() => {
     if (!alertPrefs?.push) return;
     const t = setTimeout(() => {
@@ -1227,7 +1304,7 @@ export default function App() {
     setForm(null);
   }
   return (
-    <div className={`app ${navCollapsed ? "nav-collapsed" : ""} ${page === "Today" ? "research-home" : ""} ${page === "Delivery" ? "delivery-workspace" : ""} ${page === "Markets" ? "markets-workspace" : ""} ${focus ? "chart-focus" : ""}`}>
+    <div className={`app ${(page === "Terminal" ? chartNavCollapsed : navCollapsed) ? "nav-collapsed" : ""} ${page === "Today" ? "research-home" : ""} ${page === "Delivery" ? "delivery-workspace" : ""} ${page === "Markets" ? "markets-workspace" : ""} ${page === "Terminal" ? "charts-workspace" : ""} ${focus ? "chart-focus" : ""}`}>
       <SpeedInsights route={(WORKSPACE_SEO[page] || WORKSPACE_SEO.Today).path} />
       <a href="#main-content" className="skip-link">
         Skip to content
@@ -1258,7 +1335,9 @@ export default function App() {
           <span className="search-label-mobile">Search stocks</span>
           <kbd>⌘ K</kbd>
         </button>
-        {!mobileLayout && <SignupPrompt busy={guideOpen || showSearch || help || !!form} />}
+        <InstallLink className="button topbar-install" label="Install" source="header" />
+        <SignupPrompt compact={mobileLayout} busy={guideOpen || showSearch || help || !!form}
+          watch={watch} accountButtonRef={accountButton} onAccountAvailable={setAccountAvailable} onRestoreWatch={symbols => setWatch(current => mergeWatchlist(current, symbols).symbols)} />
         <div className="top-right">
           <MarketStatus />
           <button
@@ -1271,16 +1350,15 @@ export default function App() {
         </div>
       </header>
       <Navigation
-        mobile={mobileLayout}
-        collapsed={navCollapsed}
-        onToggleCollapsed={() => setNavCollapsed(value => !value)}
-        registration={mobileLayout ? <SignupPrompt busy={guideOpen || showSearch || help || !!form} /> : null}
+        collapsed={page === "Terminal" ? chartNavCollapsed : navCollapsed}
+        onToggleCollapsed={() => page === "Terminal" ? setChartNavCollapsed(value => !value) : setNavCollapsed(value => !value)}
         page={page}
         onPage={(name) => {
           setPage(name);
           setFilter("");
         }}
         watchCount={watch.length}
+        proPages={pro.lockedPages}
         alertCount={alerts.filter(a => !a.triggered).length}
         triggered={alerts.some((a) => a.triggered)}
         loading={quotesLoading}
@@ -1306,21 +1384,25 @@ export default function App() {
         {guideOpen && page === "Watchlist" && <Suspense fallback={<div className="loading" role="status">Loading guide…</div>}><Onboarding directoryVersion={directoryVersion} state={onboarding} onState={setOnboarding} watch={watchedStocks}
           onToggle={toggleWatch} onNavigate={navigate} onAlert={openWatchAlert}
           alerts={alerts} pushOn={!!alertPrefs?.push} /></Suspense>}
-        <div className="workspace-toolbar">
+        <div className={`workspace-toolbar ${page === "Fundamentals" ? "fund-page-toolbar" : ""}`} hidden={page === "Today" || page === "Terminal" || page === "Fundamentals" || proGated}>
           {previousView && <button className="icon-button workspace-back" onClick={goBack} aria-label={`Back to ${previousLabel}`} title={`Back to ${previousLabel}`}><ArrowLeft size={18} /></button>}
           <div className="workspace-heading"><span className="eyebrow">{page === "Today" ? "YOUR RESEARCH, CONNECTED" : "ALPHA NOVA WORKSPACE"}</span><h1>{PAGE_LABELS[page]}</h1><p>{page === "Today" ? "Market context. Clearer decisions." : page === "Watchlist" ? "Your companies. A clearer picture." : page === "Screener" ? "Find the stocks that fit your process." : page === "Terminal" ? "Explore the price. Build your thesis." : page === "Portfolio" ? "A complete view of what you hold." : page === "Alerts" ? "Follow the prices that matter to you." : page === "News" ? "Stay close to the stories behind the market." : "Turn market information into informed research."}</p></div>
-          {page === "Today" ? <MarketPulse quote={quotes['^NSEI']} loading={benchmarkFeed.loading} /> : <span className="feed-status"><i className={quotesLoading ? "pending" : quotesError ? "warning" : ""} />{quotesLoading ? "Updating prices" : quotesError ? "Partial data" : "Quotes may be delayed"}</span>}
+          <span className="feed-status"><i className={quotesLoading ? "pending" : quotesError ? "warning" : ""} />{quotesLoading ? "Updating prices" : quotesError ? "Partial data" : "Quotes may be delayed"}</span>
           {page === "Today" && <button className="button overview-refresh" onClick={() => setRefresh(x => x + 1)} aria-label="Refresh overview"><RefreshCw size={15} className={quotesLoading ? "spin" : ""} /><span>Refresh</span></button>}
           {page === "Terminal" && <button className="button" aria-expanded={plannerOpen} aria-controls="trade-planner" onClick={() => setPlannerOpen(value => !value)}><Target size={15} />{plannerOpen ? "Hide plan" : "Trade plan"}</button>}
         </div>
-        {page === "Today" && <MarketOverview quotes={quotes} loading={benchmarkFeed.loading} onOpen={openSymbol} onPage={setPage} onSearch={() => openSearch()} />}
         <Suspense fallback={<div className="loading">Loading workspace…</div>}>
           {quotesError && (
             <details className="feed-notice"><summary><Info size={14} /> Some market data is temporarily unavailable</summary><p>{quotesError} You can continue browsing your saved research.</p></details>
           )}
           {page === "Today" && (
             <SwingDesk
-              onInsight={s => navigate({ page: "Breakouts", symbol: s })}
+              access={pro}
+              onBreakoutExample={s => navigate({ page: "Breakouts", symbol: s })}
+              onPro={s => navigate({ page: "Breakouts", symbol: s }, { gate: true })}
+              pulse={Number.isFinite(quotes['^NSEI']?.change) ? <MarketPulse quote={quotes['^NSEI']} loading={benchmarkFeed.loading} /> : null}
+              below={<MarketOverview quotes={quotes} loading={benchmarkFeed.loading} onOpen={openSymbol} onPage={setPage} onSearch={() => openSearch()} />}
+              pushOffer={<PushOffer on={!!alertPrefs?.push} busy={pushBusy} onEnable={turnOnPush} />}
               refresh={refresh}
               onRefresh={() => setRefresh((x) => x + 1)}
               onOpen={openSymbol}
@@ -1337,15 +1419,22 @@ export default function App() {
           {page === "Terminal" && (
             <div className={`terminal-grid ${plannerOpen ? "planner-open" : "planner-closed"}`}>
               <section className="panel chart-panel">
-                <PanelTitle title="Price & technicals" tag="GP">
-                  <button
-                    className="icon-button"
-                    aria-label={focus ? "Exit chart focus" : "Expand chart"}
-                    onClick={() => setFocus(!focus)}
-                  >
-                    {focus ? <X size={15} /> : <Maximize2 size={15} />}
-                  </button>
-                </PanelTitle>
+                <div className="chart-workspace-heading">
+                  <div className="chart-workspace-title">
+                    {previousView && <button className="icon-button" onClick={goBack} aria-label={`Back to ${previousLabel}`} title={`Back to ${previousLabel}`}><ArrowLeft size={16} /></button>}
+                    <CandlestickChart size={18} /><h1>Chart studio</h1><span>PRICE & TECHNICALS</span>
+                  </div>
+                  <div className="chart-workspace-actions">
+                    <button className="button chart-plan-toggle" aria-label={plannerOpen ? "Hide plan" : "Trade plan"} aria-expanded={plannerOpen} aria-controls="trade-planner" onClick={() => { setFocus(false); setPlannerOpen(value => !value); }}><Target size={14} /><span>{plannerOpen ? "Hide plan" : "Trade plan"}</span></button>
+                    <button className={`button chart-save ${watch.includes(symbol) ? "starred" : ""}`} aria-pressed={watch.includes(symbol)} onClick={() => toggleWatch(symbol)}>
+                      <Star size={14} fill={watch.includes(symbol) ? "currentColor" : "none"} />{watch.includes(symbol) ? "Saved" : "Save stock"}
+                    </button>
+                    <button className="button" aria-label="Create alert" onClick={() => setForm("alert")}><Bell size={14} /><span>Create alert</span></button>
+                    <button className="icon-button" title={focus ? "Exit chart focus (Esc)" : "Expand chart"} aria-label={focus ? "Exit chart focus" : "Expand chart"} aria-pressed={focus} onClick={() => setFocus(!focus)}>
+                      {focus ? <X size={16} /> : <Maximize2 size={16} />}
+                    </button>
+                  </div>
+                </div>
                 <div className="security-header">
                   <div className="security-identity">
                     <span className="security-logo">
@@ -1381,6 +1470,164 @@ export default function App() {
                     </span>
                   </div>
                 </div>
+                <div className="chart-workbench">
+                  <div className="chart-main">
+                  <div className="chart-toolbar">
+                    <div className="segments" role="group" aria-label="Chart time range">
+                      {Object.entries(ranges).map(([label, v]) => (
+                        <button
+                          key={v}
+                          aria-pressed={range === v}
+                          className={range === v ? "active" : ""}
+                          onClick={() => setRange(v)}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="chart-tools">
+                      <select
+                        aria-label="Chart type"
+                        value={type}
+                        onChange={(e) => setType(e.target.value)}
+                      >
+                        <option>Candles</option>
+                        <option>Area</option>
+                      </select>
+                      <button
+                        className="icon-button"
+                        title="Reset chart view"
+                        aria-label="Reset chart view"
+                        onClick={() => setReset((x) => x + 1)}
+                      >
+                        <RefreshCw size={13} />
+                      </button>
+                      <button
+                        className="icon-button"
+                        title="Export chart data"
+                        aria-label="Export chart data"
+                        disabled={!bars.length}
+                        onClick={() =>
+                          exportCSV(
+                            [
+                              ["Time", "Open", "High", "Low", "Close", "Volume"],
+                              ...bars.map((b) => [
+                                typeof b.time === "number"
+                                  ? new Date(b.time * 1000).toISOString()
+                                  : b.time,
+                                b.open,
+                                b.high,
+                                b.low,
+                                b.close,
+                                b.volume,
+                              ]),
+                            ],
+                            `${short(symbol)}-${range}.csv`,
+                          )
+                        }
+                      >
+                        <Download size={14} />
+                      </button>
+                      <button
+                        className="icon-button"
+                        title="Copy link to this view"
+                        aria-label="Copy link to this view"
+                        onClick={copyLink}
+                      >
+                        {copied ? <Check size={14} /> : <Share2 size={14} />}
+                      </button>
+                    </div>
+                  </div>
+                  <details className="indicator-menu"><summary><SlidersHorizontal size={14} /> Indicators <span className="indicator-count">{indicators.length}</span><span className="indicator-active-list">{indicators.join(" · ") || "Price only"}</span></summary><div className="indicator-toolbar">
+                    {[
+                      "Volume",
+                      "EMA 20",
+                      "EMA 50",
+                      "Bollinger",
+                      "RSI 14",
+                      "VWAP",
+                      "Key levels",
+                    ].map((i) => (
+                      <button
+                        key={i}
+                        className={indicators.includes(i) ? "enabled" : ""}
+                        aria-pressed={indicators.includes(i)}
+                        disabled={i === "VWAP" && !["1d", "5d"].includes(range)}
+                        title={
+                          i === "VWAP"
+                            ? "Session VWAP · 1D and 5D ranges"
+                            : i === "Key levels"
+                              ? "Prior H/L, pivot, R1, S1 and plan lines"
+                              : undefined
+                        }
+                        onClick={() =>
+                          setIndicators(
+                            indicators.includes(i)
+                              ? indicators.filter((x) => x !== i)
+                              : [...indicators, i],
+                          )
+                        }
+                      >
+                        {indicators.includes(i) && <span />}
+                        {i}
+                      </button>
+                    ))}
+                  </div>
+                  </details>
+                  <div className="chart-area">
+                    {history.loading && !history.data ? (
+                      <Empty
+                        title="Loading market history"
+                        description={`${meta.name} · ${range.toUpperCase()}`}
+                      />
+                    ) : history.error && !history.data ? (
+                      <Empty
+                        title="Price history unavailable"
+                        description={history.error}
+                      >
+                        <button
+                          className="button"
+                          onClick={() => setRefresh((x) => x + 1)}
+                        >
+                          Retry data
+                        </button>
+                      </Empty>
+                    ) : (
+                        <Suspense
+                          fallback={<div className="loading">Loading chart…</div>}
+                        >
+                          <ResearchChart
+                            key={symbol}
+                            symbol={symbol}
+                            saved={watch.includes(symbol)}
+                            onSave={() => toggleWatch(symbol)}
+                            bars={bars}
+                            levels={
+                              indicators.includes("Key levels") ? levels : null
+                            }
+                            plan={draft}
+                            type={type}
+                            indicators={indicators}
+                            range={range}
+                            reset={reset}
+                          />
+                        </Suspense>
+                    )}
+                  </div>
+                  <div className="chart-caption">
+                    {stockResearchURL(symbol) && <a href={stockResearchURL(symbol)}>Public stock profile</a>}
+                    <span>
+                      {history.data?.source || "Yahoo Finance"} · {dataStamp(quote)} · quotes may be delayed
+                      {history.data?.fallback ? ` · ${history.data.source} · partial history: ${history.data.bars?.length} daily sessions through ${history.data.asOf || history.data.bars?.at(-1)?.time}` : history.error ? " · last cached data" : ""}
+                    </span>
+                    <button onClick={() => setForm("alert")}>
+                      <Bell size={12} /> Set alert
+                    </button>
+                  </div>
+                  <div className="chart-interaction-hint"><span>{type === "Candles" ? <><i className="candle-key candle-up" /> Up candle <i className="candle-key candle-down" /> Down candle</> : <><i className="candle-key candle-up" /> Closing price</>}</span><span>Drag to pan · Scroll to zoom · 1–8 to change range</span></div>
+                  </div>
+                <aside className="chart-insights" aria-label="Chart research insights">
+                  <div className="chart-insights-heading"><span className="insights-kicker">THE BIG PICTURE</span><h3>Research lens <Activity size={15} /></h3><p>Daily signals. Deeper conviction.</p></div>
                 <div
                   className="regime-strip"
                   role="status"
@@ -1389,157 +1636,19 @@ export default function App() {
                   <span className="regime-label">REGIME</span>
                   <strong className={regime.tone}>{regime.label}</strong>
                 </div>
-                <div className="chart-toolbar">
-                  <div className="segments">
-                    {Object.entries(ranges).map(([label, v]) => (
-                      <button
-                        key={v}
-                        aria-pressed={range === v}
-                        className={range === v ? "active" : ""}
-                        onClick={() => setRange(v)}
-                      >
-                        {label}
-                      </button>
-                    ))}
+                <ChartScores
+                  signal={signal}
+                  fund={fund}
+                  dailyLoading={daily.loading}
+                  fundLoading={fundFeed.loading}
+                  dailyError={daily.error}
+                  fundError={fundFeed.error}
+                />
+                  <div className="chart-trend-summary">
+                    <div><span>DAILY TREND</span><strong className={signal.verdict === "Bullish" ? "positive" : signal.verdict === "Bearish" ? "negative" : "muted"}>{signal.rules.length ? signal.verdict : "Awaiting data"}</strong></div>
+                    <div className="chart-trend-steps" aria-hidden="true">{Array.from({ length: 5 }, (_, i) => <i key={i} className={signal.rules[i] ? signal.rules[i].bias > 0 ? "up" : signal.rules[i].bias < 0 ? "down" : "neutral" : ""} />)}</div>
+                    <p>{signal.rules.length ? `${signal.rules.filter(rule => rule.bias > 0).length} of ${signal.rules.length} daily signals are bullish` : "Daily history is needed to assess the trend"}</p>
                   </div>
-                  <div className="chart-tools">
-                    <select
-                      aria-label="Chart type"
-                      value={type}
-                      onChange={(e) => setType(e.target.value)}
-                    >
-                      <option>Candles</option>
-                      <option>Area</option>
-                    </select>
-                    <button
-                      className="icon-button"
-                      title="Reset chart view"
-                      aria-label="Reset chart view"
-                      onClick={() => setReset((x) => x + 1)}
-                    >
-                      <RefreshCw size={13} />
-                    </button>
-                    <button
-                      className="icon-button"
-                      title="Export chart data"
-                      aria-label="Export chart data"
-                      disabled={!bars.length}
-                      onClick={() =>
-                        exportCSV(
-                          [
-                            ["Time", "Open", "High", "Low", "Close", "Volume"],
-                            ...bars.map((b) => [
-                              typeof b.time === "number"
-                                ? new Date(b.time * 1000).toISOString()
-                                : b.time,
-                              b.open,
-                              b.high,
-                              b.low,
-                              b.close,
-                              b.volume,
-                            ]),
-                          ],
-                          `${short(symbol)}-${range}.csv`,
-                        )
-                      }
-                    >
-                      <Download size={14} />
-                    </button>
-                    <button
-                      className="icon-button"
-                      title="Copy link to this view"
-                      aria-label="Copy link to this view"
-                      onClick={copyLink}
-                    >
-                      {copied ? <Check size={14} /> : <Share2 size={14} />}
-                    </button>
-                  </div>
-                </div>
-                <details className="indicator-menu"><summary>Indicators · {indicators.length} active</summary><div className="indicator-toolbar">
-                  {[
-                    "Volume",
-                    "EMA 20",
-                    "EMA 50",
-                    "Bollinger",
-                    "RSI 14",
-                    "VWAP",
-                    "Key levels",
-                  ].map((i) => (
-                    <button
-                      key={i}
-                      className={indicators.includes(i) ? "enabled" : ""}
-                      aria-pressed={indicators.includes(i)}
-                      disabled={i === "VWAP" && !["1d", "5d"].includes(range)}
-                      title={
-                        i === "VWAP"
-                          ? "Session VWAP · 1D and 5D ranges"
-                          : i === "Key levels"
-                            ? "Prior H/L, pivot, R1, S1 and plan lines"
-                            : undefined
-                      }
-                      onClick={() =>
-                        setIndicators(
-                          indicators.includes(i)
-                            ? indicators.filter((x) => x !== i)
-                            : [...indicators, i],
-                        )
-                      }
-                    >
-                      {indicators.includes(i) && <span />}
-                      {i}
-                    </button>
-                  ))}
-                </div>
-                </details>
-                <div className="chart-area">
-                  {history.loading && !history.data ? (
-                    <Empty
-                      title="Loading market history"
-                      description={`${meta.name} · ${range.toUpperCase()}`}
-                    />
-                  ) : history.error && !history.data ? (
-                    <Empty
-                      title="Price history unavailable"
-                      description={history.error}
-                    >
-                      <button
-                        className="button"
-                        onClick={() => setRefresh((x) => x + 1)}
-                      >
-                        Retry data
-                      </button>
-                    </Empty>
-                  ) : (
-                      <Suspense
-                        fallback={<div className="loading">Loading chart…</div>}
-                      >
-                        <ResearchChart
-                          key={symbol}
-                          symbol={symbol}
-                          saved={watch.includes(symbol)}
-                          onSave={() => toggleWatch(symbol)}
-                          bars={bars}
-                          levels={
-                            indicators.includes("Key levels") ? levels : null
-                          }
-                          plan={draft}
-                          type={type}
-                          indicators={indicators}
-                          range={range}
-                          reset={reset}
-                        />
-                      </Suspense>
-                  )}
-                </div>
-                <div className="chart-caption">
-                  <span>
-                    Yahoo Finance · {dataStamp(quote)} · quotes may be delayed
-                    {history.error ? " · last cached data" : ""}
-                  </span>
-                  <button onClick={() => setForm("alert")}>
-                    <Bell size={12} /> Set alert
-                  </button>
-                </div>
                 <details className="compact-details">
                   <summary>Daily levels & pivots</summary>
                   <Suspense fallback={<div className="loading" role="status">Loading daily levels…</div>}><KeyLevels
@@ -1561,6 +1670,9 @@ export default function App() {
                     </div>
                   ))}
                 </div>
+                  <div className="chart-insights-note"><ShieldCheck size={13} /><span>Research signals, not recommendations.<br />Based on available market data.</span></div>
+                </aside>
+                </div>
               </section>
               <ResearchCharts
                 isNSE={isNS}
@@ -1571,6 +1683,7 @@ export default function App() {
               />
               <section className="panel company-panel">
                 <PanelTitle title="Company insights" tag="FA">
+                  <button className="button" onClick={() => navigate({ page: "Fundamentals", symbol })}>Lodestar fundamentals <ArrowUpRight size={14} /></button>
                   <button
                     className={`icon-button ${watch.includes(symbol) ? "starred" : ""}`}
                     aria-label={`${watch.includes(symbol) ? "Remove" : "Add"} ${short(symbol)} ${watch.includes(symbol) ? "from" : "to"} watchlist`}
@@ -2021,20 +2134,29 @@ export default function App() {
               </section>
             </div>
           )}
-          {page === "Forecast" && (
+          {proGated && (pro.loading ? <div className="loading" role="status">Checking your access…</div> :
+            <ProGate key={page} paidCheckout={paidCheckout} page={page} access={pro} symbol={symbol} refresh={refresh}
+              onExample={!proLocked || example?.none || pro.pending ? undefined : closeGate}
+              onUnlock={() => notify("Pro is unlocked. Your research is ready.")} />)}
+          {/* Without Pro, each of these workspaces shows one live example; asking for more opens the paywall. */}
+          {proPreview && example.ready && <ProExample page={page} access={pro} example={example.symbol} requested={example.requested} onUnlock={openGate} />}
+          {!proGated && !proLocked && pro.active && pro.renewable && PRO_PAGES.includes(page) && <ProRenewal page={page} access={pro} />}
+          {page === "Forecast" && !proGated && (
             <Forecast
-              key={symbol}
-              symbol={symbol}
+              key={proSymbol}
+              symbol={proSymbol}
               refresh={refresh}
               onRefresh={() => setRefresh((x) => x + 1)}
               onSymbol={choose}
             />
           )}
-          {page === "Analytics" && <AdvancedAnalytics symbol={symbol} refresh={refresh} onRefresh={() => setRefresh(x => x + 1)} onSelect={s => navigate({ page: "Analytics", symbol: s })} watch={watch} />}
-          {page === "Breakouts" && <BreakoutInsights symbol={symbol} refresh={refresh} onRefresh={() => setRefresh(x => x + 1)} onSelect={s => navigate({ page: "Breakouts", symbol: s })} onOpen={openSymbol} onAlert={openWatchAlert} watch={watch} toggleWatch={toggleWatch} />}
+          {page === "Analytics" && !proGated && <AdvancedAnalytics symbol={proSymbol} refresh={refresh} onRefresh={() => setRefresh(x => x + 1)} onSelect={proSelect} watch={watch} preview={proPreview} />}
+          {page === "Breakouts" && !proGated && <BreakoutInsights symbol={proSymbol} refresh={refresh} onRefresh={() => setRefresh(x => x + 1)} onSelect={proSelect} onOpen={openSymbol} onAlert={openWatchAlert} watch={watch} toggleWatch={toggleWatch} preview={proPreview} />}
+          {page === "Fundamentals" && !proLocked && <Fundamentals symbol={symbol} refresh={refresh} onSelect={s => navigate({ page: "Fundamentals", symbol: s })} onOpen={openSymbol} watch={watch} toggleWatch={toggleWatch} />}
           {page === "Screener" && (
             <div className="screener-workspace">
               <Screener
+                onFundamentals={s => navigate({ page: "Fundamentals", symbol: s })}
                 onInsight={s => navigate({ page: "Breakouts", symbol: s })}
                 onAnalytics={() => setPage("Analytics")}
                 view={screenerView}
@@ -2074,31 +2196,36 @@ export default function App() {
               />
             </div>
           )}
-          {page === "Markets" && (
+          {page === "Markets" && !proLocked && (
             <Suspense fallback={<div className="loading market-pulse-pending" role="status">Loading market pulse…</div>}><Pulse onOpen={openSymbol} refresh={refresh} quotes={benchmarkFeed.quotes} loading={benchmarkFeed.loading} /></Suspense>
           )}
-          {page === "Markets" && (
+          {page === "Markets" && !proLocked && (
             <DeferredSection className="deferred-rotation" label="Sector rotation" minHeight={500}><Suspense fallback={<div className="loading" role="status">Loading sector rotation…</div>}><Rotation onOpen={openSymbol} refresh={refresh} /></Suspense></DeferredSection>
           )}
-          {page === "FnO" && (
+          {page === "FnO" && !proGated && (
             <FnO
+              key={proPreview ? "example" : "full"}
               symbol={symbol}
               onOpen={openSymbol}
               refresh={refresh}
               onRefresh={() => setRefresh((x) => x + 1)}
               watch={watch}
+              preview={proPreview}
+              onLocked={askPro}
             />
           )}
-          {page === "Flows" && (
+          {page === "Flows" && !proGated && (
             <Flows
               onOpen={openSymbol}
               refresh={refresh}
               onRefresh={() => setRefresh((x) => x + 1)}
               watch={watch}
               toggleWatch={toggleWatch}
+              preview={proPreview}
+              onLocked={askPro}
             />
           )}
-          {page === "Markets" && (
+          {page === "Markets" && !proLocked && (
             <DeferredSection label="Cross-asset monitor" minHeight={500} onReveal={() => setMarketMonitorReady(true)}>
             <section className="panel market-panel">
               <PanelTitle title="Cross-asset monitor" tag="WEI">
@@ -2407,7 +2534,7 @@ export default function App() {
           {page === "Watchlist" && sharedWatchlist && <SharedWatchlist key={incomingShareHash.current} shared={sharedWatchlist} watch={watch} onImport={importSharedWatchlist} onDismiss={() => setSharedWatchlist(null)} onNavigate={navigate} />}
           {page === "Watchlist" && <Watchlist watch={watch} quotes={quotes} refresh={refresh} onNavigate={navigate}
             onToggle={toggleWatch} onSearch={() => openSearch()} onAlert={openWatchAlert}
-            onGuide={openGuide} onCopy={copyLink} alerts={alerts} />}
+            onGuide={openGuide} onCopy={copyLink} onAccount={openAccount} alerts={alerts} />}
           <PersonalAlertMonitor rules={personalRules} setRules={setPersonalRules} setEvents={setPersonalEvents} watch={watch} refresh={refresh} notify={notify} />
           {page === "Alerts" && (
             <>
@@ -2433,12 +2560,12 @@ export default function App() {
                       </strong>
                       <span className="muted small">
                         {alertPrefs?.push
-                          ? "Evening checks: 19:30–20:30 and 21:30–22:30 IST. In-tab price checks every 30 sec."
+                          ? "About hourly from 09:30 to 15:30 IST, plus evening digests. In-tab price checks every 30 sec."
                           : !pushSupported() && isIOS() && !isStandalone()
                             ? "On iPhone/iPad: tap Share → Add to Home Screen, open Alpha Nova from the Home Screen, then enable push here."
                             : !pushSupported()
                               ? "This browser does not support Web Push."
-                              : "Two evening checks · price alerts checked every 30 sec while open."}
+                              : "About hourly during market hours · price alerts checked every 30 sec while open."}
                       </span>
                     </div>
                     <div className="push-actions">
@@ -2493,6 +2620,26 @@ export default function App() {
                       <label className="check">
                         <input
                           type="checkbox"
+                          checked={alertPrefs?.market !== false}
+                          onChange={(e) =>
+                            setPushPref("market", e.target.checked)
+                          }
+                        />{" "}
+                        Market-hours updates (Nifty open and ±1% moves)
+                      </label>
+                      <label className="check">
+                        <input
+                          type="checkbox"
+                          checked={alertPrefs?.movers !== false}
+                          onChange={(e) =>
+                            setPushPref("movers", e.target.checked)
+                          }
+                        />{" "}
+                        Watchlist stocks moving 3% or more
+                      </label>
+                      <label className="check">
+                        <input
+                          type="checkbox"
                           checked={!!alertPrefs?.delivery}
                           onChange={(e) =>
                             setPushPref("delivery", e.target.checked)
@@ -2515,10 +2662,13 @@ export default function App() {
                   <details className="inline-details">
                     <summary>Alert timing & limitations</summary>
                     <p className="push-note muted small">
-                      Two weekday evening checks: 19:30–20:30 and 21:30–22:30
-                      IST. Active tabs check every 30 seconds. Delayed quotes can
-                      miss brief price touches; alerts are not stop-loss orders.
-                      Delivery and saved-screen digests run after NSE publishes.
+                      Six weekday checks during market hours, each somewhere in
+                      the hours starting 09:30, 10:30, 11:30, 12:30, 13:30 and
+                      14:30 IST, plus two evening checks (19:30–20:30 and
+                      21:30–22:30 IST). Active tabs check every 30 seconds.
+                      Delayed quotes can miss brief price touches; alerts are not
+                      stop-loss orders. Delivery and saved-screen digests run
+                      after NSE publishes.
                     </p>
                   </details>
                 </div>
@@ -2730,6 +2880,7 @@ export default function App() {
         <span>Market data may be delayed · Research only</span>
         <a href="/stock-prices.html">Stock prices</a>
         <a href="/stock-market-app.html">Stock market app</a>
+        <a href="/stocks/">Stock research</a>
         <a href="/about.html">About & data sources</a>
         <a href="/privacy.html">Privacy</a>
         <a

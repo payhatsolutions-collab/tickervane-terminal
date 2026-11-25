@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-14",
+  "status": "deployed-and-promoted",
+  "project": "alphanova2",
+  "deploymentUrl": "https://alphanova2-fo4wvreq5-wdcre.vercel.app",
+  "scope": "Smoother Pro checkout: Google sign-in inside the paywall, per-account QR with INR 300 and payment note pre-filled, phone Pay button (upi:// link), PNG save, plain-QR fallback, payment note in the admin viewer. See docs/PRO-UNLOCK.md.",
+  "verification": {
+    "fullRepositoryTests": 436,
+    "local": "Desktop and 375px mobile: inline Google button fits its column; signed-in mock shows pre-filled QR and note; phone Pay button carries the upi:// link; PNG save and plain-QR fallback work; no horizontal overflow.",
+    "qrDecode": "Generated QR decodes to the exact upi://pay link (jsQR).",
+    "staged": "Signed-out status has no UPI link or note; signed-out claim 401; /, /forecast, /pricing.html, /pro/upi-qr.png 200; ProGate chunk served without the payee UPI ID.",
+    "notVerified": "Real Google sign-in and a real UPI payment through the pre-filled link on a phone; whether the payment note appears in the Kotak statement.",
+    "live": "After promotion: alphanova48.in serves ProGate-B9AGuNdq.js with the plain-QR fallback; signed-out status has no UPI link; signed-out claim 401; pricing page shows the phone-button step; /forecast and /pro/upi-qr.png 200."
+  },
+  "deploymentId": "dpl_DVmpi3jnfNas8DwvwRVTR9hDN1Uo",
+  "productionUrl": "https://alphanova48.in",
+  "rollback": {
+    "deploymentId": "dpl_8a4tWmydLmApdGVvn1DqHorYxdMt",
+    "deploymentUrl": "https://alphanova2-e770khpdm-wdcre.vercel.app",
+    "command": "vercel promote https://alphanova2-e770khpdm-wdcre.vercel.app --yes"
+  }
+}

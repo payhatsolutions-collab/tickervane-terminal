@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lodestar — fundamental verdicts</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%2307090d'/%3E%3Cpath d='M12 3c.6 5.2 3.8 8.4 9 9-5.2.6-8.4 3.8-9 9-.6-5.2-3.8-8.4-9-9 5.2-.6 8.4-3.8 9-9z' fill='%23e9c98b'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./lodestar.css">
+<meta name="robots" content="noindex, follow">
+</head>
+<body data-view="landing" data-verdict="none">
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="top" id="top">
+  <button class="brand" id="home" aria-label="Lodestar home">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c.8 7 5 11.2 12 12-7 .8-11.200 5-12 12-.8-7-5-11.200-12-12 7-.8 11.200-5 12-12z"/></svg>
+    <span>Lodestar</span>
+  </button>
+  <div class="search" id="s-top">
+    <form autocomplete="off"><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.600-3.600"/></svg>
+      <input type="text" aria-label="Ticker or company" placeholder="Another ticker…" spellcheck="false" autocapitalize="off" autocorrect="off" enterkeyhint="search">
+      <button class="go" type="submit">Analyse</button></form>
+    <div class="suggest" hidden></div>
+  </div>
+  <div class="src">Yahoo Finance · delayed</div>
+</header>
+
+<main>
+  <section id="landing">
+    <div class="eyebrow rise"><b>✦</b>&nbsp; Fundamental analysis, read to a verdict</div>
+    <h1 class="rise">Know what<br>you <em>own.</em></h1>
+    <p class="lede rise">Type a ticker. Lodestar reads five years of sales, margins, EPS and return on equity, lays them against what analysts expect next and what the market is charging — and commits to a call.</p>
+    <div class="search big rise" id="s-main">
+      <form autocomplete="off"><svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.600-3.600"/></svg>
+        <input type="text" aria-label="Ticker or company" placeholder="RELIANCE, TCS, AAPL — or a company name" spellcheck="false" autocapitalize="off" autocorrect="off" enterkeyhint="search" autofocus>
+        <button class="go" type="submit">Analyse <span aria-hidden="true">→</span></button></form>
+      <div class="suggest" hidden></div>
+    </div>
+    <div class="chips rise" id="chips"></div>
+    <p class="cover rise" id="cover" hidden></p>
+    <div class="trio rise">
+      <div><b>Six pillars</b><span>Sales, margins, EPS, return on equity, forward estimates and valuation — each scored 0–100 on stated hurdles.</span></div>
+      <div><b>Forward, not just backward</b><span>Consensus EPS for the next two years, which way estimates are being revised, and where targets sit.</span></div>
+      <div><b>A call you can audit</b><span>Buy, hold or sell — with every number, weight and guard-rail that produced it on the page.</span></div>
+    </div>
+  </section>
+
+  <section id="loading" hidden>
+    <div class="orbit"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c.8 7 5 11.2 12 12-7 .8-11.200 5-12 12-.8-7-5-11.200-12-12 7-.8 11.200-5 12-12z"/></svg></div>
+    <div class="t" id="ld-t">Reading the numbers</div>
+    <div class="s" id="ld-s"></div>
+  </section>
+
+  <section id="error" hidden>
+    <div class="eyebrow">No verdict</div>
+    <div class="t">That one didn't resolve.</div>
+    <p id="err-msg"></p>
+    <div class="chips" id="err-chips"></div>
+  </section>
+
+  <section id="report" hidden></section>
+</main>
+<footer id="foot" hidden>
+  Lodestar is a rules-based screen built on Yahoo Finance data, which is delayed and sometimes wrong. The call is the output of fixed scoring hurdles that have not been backtested — it is a structured second opinion, not investment advice. Check the filings before you act.
+</footer>
+<div id="tip" role="status"></div>
+
+<script type="module" src="./lodestar.js"></script>
+</body>
+</html>

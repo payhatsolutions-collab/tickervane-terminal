@@ -1,5 +1,13 @@
 # Alpha Nova Terminal
 
+## ChatGPT plugin (2026-11-12)
+
+AlphaNova is available through a separate public, read-only MCP server at `https://alphanova-chatgpt.vercel.app/api/mcp`. Ten tools cover instrument search, quotes, history, fundamentals, published Lodestar research, news, stock screens, delivery, market breadth and institutional flows. Add it as a custom MCP server in ChatGPT Plugins with **No authentication**. Browser-local portfolios and brokerage execution are outside this integration. Connection, local testing, packaging and isolated deployment: [ChatGPT plugin](docs/CHATGPT-PLUGIN.md).
+
+## Company fundamentals (2026-11-10)
+
+The Fundamentals workspace embeds Lodestar's original interface and six-pillar company research into Alpha Nova: scores, annual/quarterly financials, bull/bear evidence, risk flags, analyst estimates and valuation. It combines dated published assessments with on-demand analysis using the original Lodestar engine across the company directory, falling back to available statements when source data is insufficient, and links directly from Charts & plan, Screener and Watchlist. The compact mobile tray is Top Setups, Charts, Markets, Fundamentals and More. Delivery radar remains available under More. Coverage, caching, limitations and verification: [Fundamentals](docs/FUNDAMENTALS.md).
+
 A personal research terminal for Indian and global markets. Built with React, Vite and TradingView Lightweight Charts. Market data comes from public Yahoo Finance endpoints; Indian news falls back to Google News RSS.
 
 ## Features
@@ -61,7 +69,8 @@ Three Node serverless functions (`api/market.js`, `api/push.js`, `api/signup.js`
 
 - **Market data**: Yahoo chart/spark endpoints, NSE's security-wise delivery bhavcopy (`sec_bhavdata_full_DDMMYYYY.csv`, last 21 sessions) and the official Nifty 500 list. Everything is cached per instance and at the edge (quotes 5 min, screener 15 min, delivery 30 min with 6 h stale-while-revalidate), reducing repeated upstream work. Cache hits still count toward CDN requests and transfer; cold-instance latency depends on upstream availability.
 - **Push storage**: one private Vercel Blob file per subscribed device (`push/subs/<sha256(endpoint)>.json`) holding the subscription, alerts, watchlist, saved screens and a short delivery log. Endpoints are restricted to real browser push services; updates require the subscription's auth secret.
-- **Free registration**: an optional name/email registration opens from the header. After two minutes of visible-tab use, the header entry is subtly highlighted without opening a modal. Names and emails are stored privately under `signups/` in the existing Blob store; only the welcome name and registration time are remembered in the browser. This is unverified registration, not account authentication or cross-device research sync. See `docs/FREE-SIGNUP.md` and `/privacy.html`.
+- **Google sign-in**: Google’s button in the desktop and mobile header verifies your identity on the server and keeps a seven-day, revocable session in a secure HttpOnly cookie. Google accounts and sessions are stored privately in Vercel Blob. Local research is not synced. Configure `GOOGLE_CLIENT_ID` and server-only `AUTH_SESSION_SECRET`; see `docs/FREE-SIGNUP.md`.
+- **Free registration fallback**: an optional name/email registration opens from the header. After two minutes of visible-tab use, the header entry is subtly highlighted without opening a modal. Names and emails are stored privately under `signups/` in the existing Blob store; only the welcome name and registration time are remembered in the browser. This is unverified registration, not account authentication or cross-device research sync. See `docs/FREE-SIGNUP.md` and `/privacy.html`.
 - **Scheduling**: two weekday cron jobs at 14:00 and 16:00 UTC (19:30–20:30 and 21:30–22:30 IST execution windows on Hobby), authenticated with `CRON_SECRET`. Closed-app price checks and daily digests run in these evening windows; active tabs continue checking prices every five minutes. Browser subscription sync runs on preference changes and entry to Alerts, not every market refresh.
 - **Env vars** (already set on the project): `BLOB_READ_WRITE_TOKEN` (from the linked `alphanova-push` store), `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `CRON_SECRET`; optional `VAPID_SUBJECT`. Without them push reports "not configured" and everything else keeps working.
 
@@ -237,3 +246,18 @@ Published and verified on [alphanova48.in](https://alphanova48.in): deployment `
 ## Personalized research tools (2026-11-01)
 
 Added personalized session alerts, advanced market and stock analytics, and breakout stock insight pages. These reuse existing market feeds and run calculations in the browser. Personalized rules require the app to be open; existing evening push remains separate. Setup, data definitions, free-plan limits and verification: [Personal research tools](docs/PERSONAL-RESEARCH.md).
+
+## Finishing layer and compact phone layout (2026-11-11)
+
+`src/finish.css` loads last and refines the ink / parchment / gold theme: deeper canvas with a quiet ambient glow, lit panel edges, glass top bar and tab bar, gradient gold primary buttons, direction-tinted market cards and consistent focus rings. Its rules are prefixed `#root .app` so they outrank the older layers without `!important`; new visual rules belong there. All text below 10px across `src/*.css` was raised to a 10px floor. The chart canvas, grid and crosshair now use the same surfaces as the app; candle colours are unchanged.
+
+Phone layout (≤760px): 50px top bar, 30px index strip, 56px tab bar, 21px page titles and 10–12px gutters. The overview hero is 163px (was 337px), setup rows 83px (was 127px), delivery cards about 240px (was 301px), and the chart starts about 90px higher. The Screener's Fundamentals link no longer overlaps the symbol, and the double bottom gap under the footer is gone. The embedded Lodestar and Nifty Edge surfaces keep their own styling.
+
+Deployed and promoted `https://alphanova2-89ltq7rzv-wdcre.vercel.app` (`dpl_D5kSPRdomo23V8T6ozVKkVeAxXWV`). 411 tests and the local bundle build passed; the staged build's routes and quotes API were checked before promotion, and the live phone layout was checked on `alphanova48.in`. Release record: `docs/finish-layer-deployment-2026-11-11.json`. Rollback: `vercel promote https://alphanova2-dsbr9jwif-wdcre.vercel.app --yes`.
+
+## Market-hours push and Google One Tap (2026-11-23)
+
+- **Market-hours push**: six weekday cron jobs (`0 4`–`0 9` UTC) run the existing `/api/push?op=cron` roughly hourly, each somewhere inside the hours starting 09:30–14:30 IST (Hobby triggers a daily job anywhere within its hour). Each run checks price alerts, then `lib/pushMarket.js` decides: one market update per day (Nifty 50, Bank Nifty, India VIX, watchlist breadth), Nifty crossing ±1/2/3% for the first time that day, and watchlist NSE/BSE stocks crossing ±3/6/10% (grouped into one push). Nothing is sent when the Nifty quote is not stamped today in IST, which covers exchange holidays. Delivery and saved-screen digests still run only in the two evening slots. New device preferences `market` and `movers` default to on; Alerts has a toggle for each.
+- **Home-page opt-in**: a "Market alerts on your phone" card below the setups asks for notification permission only when tapped. It hides when push is on, unsupported (including iPhone Safari outside the installed app), blocked, or dismissed (14 days).
+- **Google One Tap**: offered once per visit after the reader's first tap, key press or wheel scroll (1.5 s pause) or after 15 seconds, using FedCM and the same nonce-checked sign-in endpoint as the header button. It waits while any dialog is open, is skipped in in-app browsers, and is not offered again in a visit after the account dialog is opened.
+- Blob usage: every cron run lists `push/subs/` and reads each subscription, and writes back only devices that received a push. Eight weekday runs instead of two multiply list/read operations by four; revisit the schedule (or move subscriptions to a database) as subscribers grow.

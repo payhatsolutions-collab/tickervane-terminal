@@ -1,0 +1,90 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "alphanova",
+  "version": "1.0.0",
+  "description": "Research Indian and global markets with AlphaNova quotes, fundamentals, news, stock screens, delivery data and institutional flows.",
+  "author": { "name": "AlphaNova", "url": "https://alphanova48.in" },
+  "homepage": "https://alphanova48.in",
+  "keywords": ["markets", "stocks", "india", "research"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "AlphaNova",
+        "shortDescription": "Stock market research",
+        "longDescription": "Search companies, compare available quotes, inspect price history and fundamentals, find dated news, screen Nifty 500 stocks and review NSE delivery and institutional flows. Public research only; no brokerage execution or access to browser-local portfolios.",
+        "developerName": "AlphaNova",
+        "category": "Productivity",
+        "capabilities": ["Read"],
+        "websiteURL": "https://alphanova48.in",
+        "supportURL": "https://alphanova48.in/about.html#founder-title",
+        "privacyPolicyURL": "https://alphanova48.in/privacy.html",
+        "logo": "./assets/icon.png",
+        "composerIcon": "./assets/icon.png",
+        "brandColor": "#C6A15B",
+        "defaultPrompt": [
+          "Use AlphaNova to compare Reliance and TCS with source dates.",
+          "Find Nifty 500 stocks meeting AlphaNova’s 20-day breakout screen.",
+          "Summarize the latest available Indian market breadth and institutional flows."
+        ]
+      },
+      "review": {
+        "commerce": false,
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Resolve an NSE listing and compare quotes across currencies",
+              "prompt": "Use AlphaNova to find Reliance Industries on NSE and compare its latest available quote with AAPL. Include the currency and quote time for each.",
+              "tools_triggered": "search_instruments, get_quotes",
+              "expected_behavior": "Resolve Reliance Industries to RELIANCE.NS and present available quotes with their original currencies, quote times, and delay indicators."
+            },
+            {
+              "description": "Read a bounded slice of daily price history and report delivery data",
+              "prompt": "Use AlphaNova to show the five latest daily OHLCV bars from the one-month range for RELIANCE.NS and its latest available NSE delivery figures.",
+              "tools_triggered": "get_price_history, get_delivery",
+              "expected_behavior": "Show up to five bars with dates and currency, identify any truncation, and report available delivery quantity and percentage with the delivery session date."
+            },
+            {
+              "description": "Distinguish reported fundamentals from published company research",
+              "prompt": "Use AlphaNova to summarize reported fundamentals and the latest published Lodestar assessment for RELIANCE.NS. Include the dates and identify missing values.",
+              "tools_triggered": "get_fundamentals, get_company_research",
+              "expected_behavior": "Identify the periods and sources of available financials and the date of the published assessment. Preserve missing values and summarize the recorded evidence and risks."
+            },
+            {
+              "description": "Summarize Nifty 500 breadth and NSE institutional activity",
+              "prompt": "Use AlphaNova to summarize the latest available Nifty 500 market breadth and NSE institutional flows. Give the date of each dataset.",
+              "tools_triggered": "get_market_overview, get_institutional_flows",
+              "expected_behavior": "Report available breadth, coverage, FII/DII activity and participant positioning with their respective source dates. Surface any partial source failures."
+            },
+            {
+              "description": "Run a Nifty 500 screen and retrieve source-linked company headlines",
+              "prompt": "Use AlphaNova to show up to two results from the Nifty 500 20-day breakout screen and separately list the two latest available headlines for RELIANCE.NS.",
+              "tools_triggered": "screen_stocks, get_news",
+              "expected_behavior": "Report the preset, session date, match count and up to two screen rows. Present any returned headlines with their publication dates and original links."
+            }
+          ],
+          "negative": [
+            {
+              "description": "The read-only server cannot submit or confirm brokerage orders",
+              "prompt": "Use AlphaNova to place a market order for 100 shares of RELIANCE.NS in my brokerage account.",
+              "expected_behavior": "Explain that AlphaNova cannot access brokerage accounts or place orders. Make no claim that an order was placed."
+            },
+            {
+              "description": "The server cannot access browser-local portfolio data",
+              "prompt": "Use AlphaNova to open the holdings I saved in the AlphaNova website and list their quantities and cost basis.",
+              "expected_behavior": "Explain that the holdings are stored in the user's browser and ask the user to provide the relevant records if they want an analysis."
+            },
+            {
+              "description": "The on-demand Lodestar scoring engine is outside plugin scope",
+              "prompt": "Use AlphaNova to generate a brand-new on-demand Lodestar score for AAPL, without using any existing published assessment.",
+              "expected_behavior": "Explain that the plugin can retrieve existing published assessments where available. Do not fabricate a new Lodestar score."
+            }
+          ]
+        }
+      },
+      "publication": {
+        "countries": [],
+        "release_notes": "Initial release with ten read-only market research tools and a bundled research workflow."
+      }
+    }
+  }
+}

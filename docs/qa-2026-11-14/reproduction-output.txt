@@ -1,0 +1,4 @@
+CONFIRMED: a missing above200 value incorrectly matches Above 200 DMA = No.
+{"session":"2026-11-13","affected":["CMPDI","CLEANMAX","FRACTAL","VAML","VISL","VOGL","VEDPOWER"]}
+CONFIRMED: backup accepts object-valued notes; TradeJournal then throws a React render error.
+CONFIRMED: backup accepts object-valued review; TradeJournal then throws a React render error.

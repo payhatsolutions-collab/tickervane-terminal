@@ -22,22 +22,31 @@
       <div class="heading-actions"><span class="local-badge"><i></i> Local only</span><button id="refresh" class="button primary">↻ <span>Refresh data</span></button></div>
     </header>
     <section class="stats" aria-label="Registration summary">
-      <article><p>Total registrations</p><strong id="total">—</strong><span>Names and emails collected</span></article>
+      <article><p>Total registrations</p><strong id="total">—</strong><span>Google accounts + email registrations</span></article>
       <article><p>New in the last 7 days</p><strong id="recent">—</strong><span>Based on signup date</span></article>
       <article><p>Latest signup</p><strong id="latest" class="date-stat">—</strong><span id="latest-caption">Waiting for data</span></article>
     </section>
     <div id="message" class="message" role="status" hidden></div>
+    <section class="directory pro-directory" aria-labelledby="pro-title">
+      <div class="directory-main">
+        <div class="toolbar"><div><h2 id="pro-title">Pro payments <span id="pro-count">—</span></h2><p id="pro-updated">Readers unlock instantly with a UPI reference. Match the reference or the payment note against your Kotak statement.</p></div></div>
+        <div id="pro-message" class="message" role="status" hidden></div>
+        <div class="table-wrap"><table><thead><tr><th>Name</th><th>Email address</th><th>UPI reference</th><th>Payment note</th><th>Submitted</th><th>Access until</th><th>Status</th><th>Review</th></tr></thead><tbody id="pro-rows"></tbody></table></div>
+        <div id="pro-empty" class="empty"><span aria-hidden="true">◎</span><h3>Loading Pro payments</h3><p>Connecting to your payment records.</p></div>
+        <div class="table-footer"><span id="pro-shown">—</span><span>₹300 for 30 days · mark paid or revoke</span></div>
+      </div>
+    </section>
     <section class="directory">
       <div class="directory-main">
         <div class="toolbar"><div><h2>Registered users <span id="result-count">—</span></h2><p id="updated">Connecting to registration data…</p></div><button id="export" class="button" disabled>↓ Export CSV</button></div>
         <div class="filters"><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Search by name or email" aria-label="Search by name or email" /></label><label class="sort"><span class="sr-only">Sort users</span><select id="sort"><option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="name">Name A–Z</option></select></label></div>
         <div class="table-wrap"><table><thead><tr><th>Name</th><th>Email address</th><th>Signed up</th><th>Email status</th><th><span class="sr-only">Details</span></th></tr></thead><tbody id="users"></tbody></table></div>
         <div id="empty" class="empty"><span aria-hidden="true">◎</span><h3>Loading your users</h3><p>Connecting to your registration data.</p></div>
-        <div class="table-footer"><span id="shown">—</span><span>Read-only access</span></div>
+        <div class="table-footer"><span id="shown">—</span><span>Registrations are read-only</span></div>
       </div>
       <aside id="details" class="details" aria-label="User details"><div class="details-placeholder"><span aria-hidden="true">↗</span><h2>A closer look</h2><p>Select a user to see their registration details.</p></div></aside>
     </section>
-    <footer><span class="local-dot"></span><p>Registration data only. Watchlists, holdings and journals stay on each user’s device and aren’t linked to signup.</p></footer>
+    <footer><span class="local-dot"></span><p>Google accounts and legacy email registrations are counted separately, even when their email matches. Holdings and journals stay on each user’s device.</p></footer>
   </main>
 </body>
 </html>

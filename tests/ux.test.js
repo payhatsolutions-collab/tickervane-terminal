@@ -13,7 +13,7 @@ import { serializeCSV } from "../src/csv.js";
 import { sortRows } from "../src/table.js";
 
 test("navigation exposes every workspace exactly once with readable labels", () => {
-  assert.equal(PAGES.length, 15);
+  assert.equal(PAGES.length, 16);
   assert.equal(new Set(PAGES).size, PAGES.length);
   assert.deepEqual(
     NAV_GROUPS.flatMap((group) => group.pages),
@@ -102,7 +102,7 @@ test("clean workspace navigation and shared URLs resolve every page without losi
     assert.deepEqual(viewFromLocation(shared), view);
     const clean = new URL(viewURL(shared.href, view, { share: false }), shared.origin);
     assert.equal(clean.pathname, workspaceURL(page));
-    assert.equal(clean.search, ["Breakouts", "Analytics"].includes(page) ? "?symbol=TCS.NS" : "");
+    assert.equal(clean.search, ["Terminal", "Forecast", "News"].includes(page) ? "?symbol=TCS.NS&range=1y" : ["Breakouts", "Analytics", "Fundamentals"].includes(page) ? "?symbol=TCS.NS" : "");
     assert.deepEqual(viewFromLocation(clean, view), view, "Back button restores history state");
   }
   assert.equal(viewFromLocation(new URL("https://alphanova48.in/charts?page=Today")).page, "Terminal");

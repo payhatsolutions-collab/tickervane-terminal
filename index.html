@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover,interactive-widget=resizes-content" />
     <meta name="theme-color" content="#0b1016" />
-    <script src="/theme-init.js"></script>
+    <script>try{const t=JSON.parse(localStorage.getItem("an2-theme"))==="light"?"light":"dark";document.documentElement.dataset.theme=t;document.querySelector('meta[name="theme-color"]').content=t==="light"?"#f5f7f8":"#0c1116"}catch{}</script>
     <title>Alpha Nova | Indian Stock Market Overview &amp; NSE Screener</title>
     <meta name="description" content="Explore Indian stock markets with Alpha Nova (AlphaNova). Track NSE share prices, screen Nifty 500 stocks, and research charts, delivery volume and news." />
     <link rel="canonical" href="https://alphanova48.in/" />
@@ -14,19 +14,53 @@
     <meta property="og:title" content="Alpha Nova | Indian Stock Market Overview &amp; NSE Screener" />
     <meta property="og:description" content="Explore Indian stock markets with Alpha Nova (AlphaNova). Track NSE share prices, screen Nifty 500 stocks, and research charts, delivery volume and news." />
     <meta property="og:url" content="https://alphanova48.in/" />
-    <meta property="og:image" content="https://alphanova48.in/icon-512.png" />
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:image" content="https://alphanova48.in/icon-512.png" />
-    <meta property="og:image:alt" content="Alpha Nova stock market app logo" />
+    <meta property="og:image" content="https://alphanova48.in/share/overview.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://alphanova48.in/share/overview.png" />
+    <meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Alpha Nova Indian stock market research" />
     <meta property="og:locale" content="en_IN" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta name="twitter:title" content="Alpha Nova | Indian Stock Market Overview &amp; NSE Screener" />
     <meta name="twitter:description" content="Explore Indian stock markets with Alpha Nova (AlphaNova). Track NSE share prices, screen Nifty 500 stocks, and research charts, delivery volume and news." />
     <link rel="icon" type="image/png" href="/icon-192.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;450;500;550;600;650;700;750&display=swap" />
-    <link rel="stylesheet" href="/seo.css" />
+    <link rel="stylesheet" href="/seo.css" media="print" data-deferred-style />
+    <script defer src="/deferred-styles.js"></script>
+    <style>html,body{margin:0;background:#0b1016;color:#e6ebf2;font-family:Arial,sans-serif}.app>main{min-height:100svh}#root>.seo-fallback{padding:48px max(24px,calc((100vw - 1100px)/2));min-height:100svh;box-sizing:border-box;font:16px/1.5 system-ui,sans-serif}#root>.seo-fallback *{box-sizing:border-box;font-family:system-ui,sans-serif}#root>.seo-fallback h1{font-size:clamp(30px,5vw,48px);font-weight:700;line-height:1.12;letter-spacing:normal;max-width:850px;margin:0 0 20px}#root>.seo-fallback p{font-size:16px;max-width:720px;line-height:1.75;margin:16px 0;color:#b5c1cf}#root>.seo-fallback nav,#root>.seo-fallback a{font-size:16px;line-height:1.75;letter-spacing:normal}#root>.seo-fallback a{color:#a9c4ff;text-decoration:underline}html[data-theme="light"],html[data-theme="light"] body{background:#f5f7f8;color:#17202a}</style>
+    <style>@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url(/fonts/inter-0.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/ibm-plex-mono-0.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/fonts/ibm-plex-mono-1.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(/fonts/ibm-plex-mono-2.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
+    <script src="/install-prompt.js"></script>
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -64,7 +98,7 @@
         "Local watchlists and holdings",
         "Price alerts"
       ],
-      "image": "https://alphanova48.in/icon-512.png",
+      "image": "https://alphanova48.in/share/overview.png",
       "alternateName": [
         "Alpha Nova Terminal",
         "AlphaNova"
@@ -93,15 +127,15 @@
       },
       "inLanguage": "en-IN",
       "about": {
-        "@id": "https://yash-sarda.abhishek-sarda997030.chatgpt.site/#person"
+        "@id": "https://alphanova48.in/about.html#founder"
       },
       "dateModified": "2026-10-12"
     },
     {
       "@type": "Person",
-      "@id": "https://yash-sarda.abhishek-sarda997030.chatgpt.site/#person",
+      "@id": "https://alphanova48.in/about.html#founder",
       "name": "Yash Sarda",
-      "url": "https://yash-sarda.abhishek-sarda997030.chatgpt.site/",
+      "url": "https://alphanova48.in/about.html",
       "jobTitle": "Founder of AlphaNova",
       "sameAs": [
         "https://www.linkedin.com/in/yashsarda31/"
@@ -126,15 +160,15 @@
         <h2 id="overview-title">Alpha Nova: stock prices, charts and market research</h2>
         <p>Alpha Nova, also written as AlphaNova, is a free browser-based stock market research app for Indian and global markets. It brings historical price charts, technical indicators, company headlines, a Nifty 500 screener and an NSE delivery radar into one workspace.</p>
         <div class="site-overview-grid">
-          <article><h3>Indian stock prices and charts</h3><p>Search NSE stocks by company or symbol. Review the latest available quote, historical charts and volume before adding a company to your watchlist.</p><a href="/stock-prices.html">Explore stock prices and charts</a></article>
+          <article><h3>Indian stock prices and charts</h3><p>Search NSE stocks by company or symbol. Review the latest available quote, historical charts and volume before adding a company to your watchlist.</p><a href="/stocks/">Explore individual stock research</a></article>
           <article><h3>A stock market app for your browser</h3><p>Use Alpha Nova on desktop or mobile, with watchlists, price alerts and a trade journal. Add it to your home screen for quick access.</p><a href="/stock-market-app.html">Explore the stock market app</a></article>
           <article><h3>Nifty 500 stock screener</h3><p>Filter the index by momentum, relative strength, moving averages, volume and delivery. Save screens and export results.</p><a href="/stock-screener.html">How the screener works</a></article>
           <article><h3>NSE delivery radar</h3><p>Compare delivered quantity and delivery percentage with each stock’s recent history to investigate unusual activity.</p><a href="/delivery-radar.html">How delivery radar works</a></article>
           <article><h3>Stock screener guides</h3><p>Explore exact rules and worked examples for delivery accumulation, volume, breakouts, relative strength and trend screens.</p><a href="/screens.html">Browse the screener guides</a></article>
           <article><h3>Charts and watchlists</h3><p>Inspect historical price bars, common technical indicators and company news. Track watchlists and holdings on your device.</p><a href="/about.html">About Alpha Nova and its data</a></article>
         </div>
-        <p>AlphaNova was founded by <a href="https://yash-sarda.abhishek-sarda997030.chatgpt.site/">Yash Sarda</a>, based in Kolkata. <a href="/about.html#founder-title">Meet the founder and explore his work</a>.</p>
-        <p><a href="/methodology.html">Calculation methodology</a> · <a href="/pricing.html">Free access and limits</a></p>
+        <p>AlphaNova was founded by <a href="https://alphanova48.in/about.html">Yash Sarda</a>, based in Kolkata. <a href="/about.html#founder-title">Meet the founder and explore his work</a>.</p>
+        <p><a href="/methodology.html">Calculation methodology</a> · <a href="/pricing.html">Compare Free and Pro</a></p>
         <p class="site-overview-note">Market data can be delayed or unavailable. Signals and screens are research tools, not investment advice. Broker handoffs require you to review and confirm any order with your broker.</p>
       </div>
     </details>

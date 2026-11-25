@@ -30,3 +30,22 @@
   .signup-entry { font-size: 10px; padding: 7px 8px; gap: 5px; }
   .signup-entry span { max-width: 78px; }
 }
+
+#root .app .google-account-entry { min-height: 44px; justify-content: center; white-space: nowrap; }
+.google-button-slot { min-height: 44px; max-width: 100%; }
+.google-button-slot:empty { display: none; }
+.google-button-busy { pointer-events: none; opacity: .55; }
+.google-account-email { overflow-wrap: anywhere; font-size: 14px; margin-bottom: 18px; }
+.account-intro { margin: 0 0 14px; line-height: 1.5; color: var(--muted); }
+.account-benefits { list-style: none; display: grid; gap: 2px; margin: 0 0 14px; padding: 6px 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--theme-subtle); }
+.account-benefits li { display: flex; align-items: flex-start; gap: 11px; padding: 10px 0; }
+.account-benefits li + li { border-top: 1px solid var(--line); }
+.account-benefits svg { flex-shrink: 0; box-sizing: content-box; margin-top: 1px; padding: 3px; border-radius: 50%; background: color-mix(in srgb, var(--green) 18%, transparent); color: var(--green); }
+.account-benefits strong { display: block; font-size: 13.5px; font-weight: 600; }
+.account-benefits span { display: block; margin-top: 2px; font-size: 12px; line-height: 1.45; color: var(--muted); }
+.signup-dialog > .google-button-slot { display: flex; justify-content: center; margin: 4px 0 12px; }
+.account-backup { margin: 0 0 14px; padding: 14px; border-radius: 12px; border: 1px solid var(--line); }
+.account-backup h3 { font-size: 14px; margin: 0; }
+.account-backup-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.account-backup-actions .button { min-height: 40px; }
+.account-backup-confirm { margin-top: 10px; }

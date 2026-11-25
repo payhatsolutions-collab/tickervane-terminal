@@ -5,6 +5,11 @@ export const stockSources = [
 ];
 
 const symbolPattern = /^[A-Z0-9][A-Z0-9&-]{0,24}$/;
+export function publicStockSymbols(names, screenRows, deliveryRows) {
+  const symbols = [...Object.keys(names), ...screenRows.map(r => r.symbol), ...deliveryRows.map(r => r.symbol)];
+  return [...new Set(symbols.filter(symbol => typeof symbol === 'string' && symbolPattern.test(symbol) && !/-RE\d*$/.test(symbol)))].sort();
+}
+
 export function validStock(stock) {
   return stock && typeof stock.symbol === 'string' && symbolPattern.test(stock.symbol)
     && !/-RE\d*$/.test(stock.symbol)
@@ -32,7 +37,7 @@ function csvRows(text) {
   return rows;
 }
 
-export function parseStockCSV(text) {
+export function parseStockCSV(text, { listingDetails = false } = {}) {
   const [header = [], ...rows] = csvRows(text);
   const columns = Object.fromEntries(header.map((name, i) => [name.toUpperCase().replaceAll('_', ' ').trim(), i]));
   if (!['SYMBOL', 'NAME OF COMPANY', 'SERIES'].every(key => key in columns)) {
@@ -43,8 +48,9 @@ export function parseStockCSV(text) {
     name: row[columns['NAME OF COMPANY']]?.replace(/\s+(Limited|Ltd\.?)$/i, '').trim(),
     sector: 'Others',
     series: row[columns.SERIES],
+    ...(listingDetails && { isin: row[columns['ISIN NUMBER']], listed: row[columns['DATE OF LISTING']] }),
   })).filter(stock => ['EQ', 'BE', 'BZ', 'SM', 'ST', 'SZ'].includes(stock.series) && validStock(stock));
-  return [...new Map(stocks.map(({ series, ...stock }) => [stock.symbol, stock])).values()];
+  return [...new Map(stocks.map(({ series, ...stock }) => [stock.symbol, listingDetails ? { ...stock, series } : stock])).values()];
 }
 
 export function mergeStockLists(existing, ...lists) {

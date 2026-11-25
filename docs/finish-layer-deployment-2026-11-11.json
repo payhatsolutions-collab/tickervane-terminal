@@ -1,0 +1,18 @@
+{
+  "status": "promoted and live browser verified",
+  "deployment": "https://alphanova2-89ltq7rzv-wdcre.vercel.app",
+  "deploymentId": "dpl_D5kSPRdomo23V8T6ozVKkVeAxXWV",
+  "production": "https://alphanova48.in/",
+  "previousProduction": "https://alphanova2-dsbr9jwif-wdcre.vercel.app",
+  "bundle": { "js": "index-CYfBaynK.js", "css": "index-CSyUnTF3.css" },
+  "checks": {
+    "javascriptTests": 411,
+    "localBundleBuild": "passed",
+    "hostedBuild": "passed",
+    "stagedRoutes": { "/": 200, "/screener": 200, "/charts": 200, "/delivery": 200, "/fundamentals": 200, "/lodestar/index.html": 200 },
+    "stagedQuotesApi": "returned NIFTY 50 quote",
+    "livePhone375": { "topBar": 50, "tabBar": 57, "overviewHero": 163, "overviewPageHeight": 2066, "horizontalOverflow": false, "chartCanvasTop": 433, "consoleErrors": 0 },
+    "notChecked": ["real iOS / Android devices", "light theme on the live site (checked locally only)", "tablet widths beyond a CSS review"]
+  },
+  "rollback": "vercel promote https://alphanova2-dsbr9jwif-wdcre.vercel.app --yes"
+}

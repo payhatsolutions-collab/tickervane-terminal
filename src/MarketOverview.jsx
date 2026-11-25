@@ -12,8 +12,8 @@ function MiniTrend({ values }) {
   const points = (values || []).filter(Number.isFinite);
   if (points.length < 2) return null;
   const low = Math.min(...points), spread = Math.max(...points) - low || 1;
-  return <svg className="market-mini-trend" viewBox="0 0 100 36" aria-hidden="true">
-    <polyline points={points.map((value, i) => `${i / (points.length - 1) * 100},${32 - (value - low) / spread * 28}`).join(" ")} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" strokeLinecap="round" />
+  return <svg className="market-mini-trend" viewBox="0 0 100 36" preserveAspectRatio="none" aria-hidden="true">
+    <polyline points={points.map((value, i) => `${i / (points.length - 1) * 100},${32 - (value - low) / spread * 28}`).join(" ")} fill="none" stroke="currentColor" strokeWidth="1.8" vectorEffect="non-scaling-stroke" strokeLinejoin="round" strokeLinecap="round" />
   </svg>;
 }
 

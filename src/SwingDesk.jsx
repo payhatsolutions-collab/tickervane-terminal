@@ -1,7 +1,6 @@
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import {
   ArrowRight,
-  Bell,
   ShieldCheck,
   BookOpen,
   Star,
@@ -9,33 +8,33 @@ import {
   CloudOff,
 } from "lucide-react";
 import { useFeed, useQuotes } from "./hooks";
+import { AppTrialStrip, BreakoutOffer } from "./SetupOffer.jsx";
 import LatestQuote from "./LatestQuote.jsx";
-import { PRESETS, runScreen } from "./screens";
+import { PRESETS } from "./screens";
 import { journalStats } from "./tradeMath";
-import { fmt, short } from "./data";
+import { fmt } from "./data";
 import { growthEvent } from "./growth.js";
 import { useMobileLayout } from "./viewport.js";
 
-import WatchlistBrief from "./WatchlistBrief.jsx";
 import ResearchBrief, { WorkspaceSummary } from "./ResearchBrief.jsx";
 
 const playbooks = [
   {
     id: "breakout20",
-    title: "Breakouts",
+    title: "Top breakout buys",
     evidence: (row) => `20-day high · ${fmt(row.volRatio, 1)}× volume`,
     check:
       "Confirm the breakout on the daily chart and define your invalidation.",
   },
   {
     id: "pullback",
-    title: "Pullbacks",
+    title: "Top pullback buys",
     evidence: (row) => `Above 200 DMA · RSI ${fmt(row.rsi, 0)}`,
     check: "Check for price stabilization and define your invalidation.",
   },
   {
     id: "accumulation",
-    title: "Delivery",
+    title: "Top delivery buys",
     evidence: (row) =>
       `${fmt(row.delivRatio, 1)}× delivery · ${fmt(row.delivPct, 0)}% delivered`,
     check:
@@ -43,11 +42,56 @@ const playbooks = [
   },
 ];
 
+function SetupLevels({ levels }) {
+  const price = value => Number.isFinite(value) ? `₹${fmt(value)}` : "—";
+  return (
+    <dl className="setup-levels" aria-label="Daily setup levels in rupees">
+      <div><dt title="Pivot (buy point)">Pivot</dt><dd>{price(levels?.pivot)}</dd></div>
+      <div><dt>Target</dt><dd>{price(levels?.target)}</dd></div>
+      <div><dt><abbr title="Stop-loss">SL</abbr></dt><dd>{price(levels?.stop)}</dd></div>
+    </dl>
+  );
+}
+
+function CompanyLogo({ symbol }) {
+  const [unavailable, setUnavailable] = useState(false);
+  return (
+    <span className="setup-company-logo" aria-hidden="true">
+      {unavailable ? symbol.slice(0, 2) : (
+        <img
+          src={`https://assets-netstorage.groww.in/stock-assets/logos2/${encodeURIComponent(symbol)}.png`}
+          alt="" width="28" height="28" decoding="async" referrerPolicy="no-referrer"
+          onError={() => setUnavailable(true)}
+        />
+      )}
+    </span>
+  );
+}
+
+function setupDistance(price, levels) {
+  const { target, stop } = levels || {};
+  if (![price, target, stop].every(value => Number.isFinite(value) && value > 0) || target <= stop) return null;
+
+  // Compare at the same paise precision as the prices displayed on the card.
+  const quoted = Math.round(price * 100);
+  const toTarget = Math.round(target * 100) - quoted;
+  const toStop = quoted - Math.round(stop * 100);
+  const rupees = paise => `₹${fmt(Math.abs(paise) / 100, paise % 100 === 0 ? 0 : 2)}`;
+  if (toTarget <= 0) {
+    const position = toTarget === 0 ? "at the target" : `${rupees(toTarget)} above the target`;
+    return `At ${rupees(quoted)}, the price is ${position} and the stop is ${rupees(toStop)} away.`;
+  }
+  if (toStop <= 0) {
+    const position = toStop === 0 ? "at the stop" : `${rupees(toStop)} below the stop`;
+    return `At ${rupees(quoted)}, the price is ${position} and the target is ${rupees(toTarget)} away.`;
+  }
+  return `At ${rupees(quoted)}, the target is ${rupees(toTarget)} away and the stop is ${rupees(toStop)} away.`;
+}
+
 export default function SwingDesk({
   refresh,
   onRefresh,
   onOpen,
-  onInsight,
   onPage,
   onSearch,
   watch,
@@ -56,29 +100,23 @@ export default function SwingDesk({
   quotes,
   alerts,
   recent = [],
+  access,
+  onPro,
+  onBreakoutExample,
+  pulse,
+  below,
+  pushOffer,
 }) {
-  const { data, loading, error } = useFeed("/api/market?op=screen", refresh);
+  const { data, loading, error } = useFeed("/api/market?op=overview", refresh);
   const mobile = useMobileLayout();
-  const [section, setSection] = useState("setups");
   const [selected, setSelected] = useState("breakout20");
   const playbook = playbooks.find((item) => item.id === selected);
-  const lists = useMemo(
-    () =>
-      Object.fromEntries(
-        playbooks.map((item) => [
-          item.id,
-          runScreen(
-            data?.rows || [],
-            PRESETS.find((preset) => preset.id === item.id),
-          ).sort((a, b) => (b.turnoverCr || 0) - (a.turnoverCr || 0)),
-        ]),
-      ),
-    [data],
-  );
+  const lists = useMemo(() => Object.fromEntries(playbooks.map(item =>
+    [item.id, data?.setups?.[item.id]?.rows || []])), [data]);
   const rows = lists[selected];
   // Setups use daily metrics; prices use the refreshing quote feed, including
   // candidates outside the user's watchlist.
-  const setupSymbols = mobile && section !== "setups" ? [] : rows.slice(0, 6).map(row => row.symbol + ".NS");
+  const setupSymbols = rows.slice(0, 6).map(row => row.symbol + ".NS");
   const setupQuotes = useQuotes(setupSymbols, refresh);
   const trades = journal.filter(
     (trade) =>
@@ -94,25 +132,26 @@ export default function SwingDesk({
     (sum, trade) => sum + (Number(trade.plannedRisk) || 0),
     0,
   );
+  const showPerformance = trades.length > 0 && !mobile;
   return (
     <div className="swing-desk">
-      {!watch.length && <div className="overview-welcome"><Star size={14} /> Build your personal watchlist. <button className="link" onClick={onSearch}>Add a stock</button></div>}
-      <div className="overview-tabs" role="group" aria-label="Overview sections">{["setups", "watchlist", "alerts"].map(name => <button key={name} aria-pressed={section === name} onClick={() => setSection(name)}>{name === "setups" ? "Setups" : name === "watchlist" ? "Watchlist" : `Alerts${alerts.some(a => a.triggered) ? " •" : ""}`}</button>)}</div>
-      <div className="desk-columns">
-        <section className="panel desk-opportunities" id="desk-opportunities" hidden={mobile && section !== "setups"}>
-          <div className="panel-title">
+      {/* The setups lead the home page and carry the Pro offer. Watchlist and alerts live on their own pages. */}
+      <AppTrialStrip access={access} onStart={() => onPro?.(lists.breakout20[0] ? lists.breakout20[0].symbol + ".NS" : undefined)} />
+      <div className={`desk-columns${showPerformance ? "" : " desk-columns-solo"}`}>
+        <section className="panel desk-opportunities setup-hero" id="desk-opportunities">
+          <header className="setup-hero-head">
             <div>
-              <span className="panel-tag">NIFTY 500</span>
-              <h2>Setup watch</h2>
+              <span className="setup-hero-kicker"><span /> NIFTY 500 · DAILY SETUPS</span>
+              <h1>Setup watch</h1>
+              <p>Find your next stock to research.</p>
             </div>
-            <button
-              className="icon-button"
-              aria-label="Refresh setups"
-              onClick={onRefresh}
-            >
-              <RefreshCw size={16} className={loading ? "spin" : ""} />
-            </button>
-          </div>
+            <div className="setup-hero-side">
+              {pulse}
+              <button className="icon-button" aria-label="Refresh setups" onClick={onRefresh}>
+                <RefreshCw size={16} className={loading ? "spin" : ""} />
+              </button>
+            </div>
+          </header>
           <div className="desk-playbooks" aria-label="Setup filters">
             {playbooks.map((item) => (
               <button
@@ -123,7 +162,7 @@ export default function SwingDesk({
               >
                 <strong>
                   {item.title}
-                  <span>{data ? lists[item.id].length : "—"}</span>
+                  <span>{data ? data.setups[item.id].count : "—"}</span>
                 </strong>
               </button>
             ))}
@@ -133,6 +172,10 @@ export default function SwingDesk({
             <p>
               {PRESETS.find((preset) => preset.id === selected).note}{" "}
               {playbook.check}
+            </p>
+            <p>
+              {selected === "breakout20" ? "The pivot (buy point) is the prior 20-session high." : "The pivot (buy point) is the setup session’s high."}{" "}
+              The stop-loss is one average daily true range (14 sessions) below the pivot. The target is twice that distance above it.
             </p>
           </details>
           {error && (
@@ -151,6 +194,7 @@ export default function SwingDesk({
                   <span className="skeleton-line" /><p><span className="skeleton-line skeleton-short" /></p>
                 </div></div>
                 <span className="desk-evidence"><span className="skeleton-line" /></span>
+                <SetupLevels />
                 <div className="desk-candidate-bottom"><span>LTP<b>—</b></span>
                   <span className="button skeleton-button">View chart</span>
                 </div>
@@ -177,12 +221,15 @@ export default function SwingDesk({
             </div>
           ) : (
             <div className="desk-candidates">
-              {rows.slice(0, 6).map((row) => {
+              {rows.slice(0, 6).map((row, index) => {
                 const symbol = row.symbol + ".NS";
+                const quote = setupQuotes.quotes[symbol] || quotes[symbol];
+                const distance = setupDistance(quote?.price, row.levels);
                 return (
-                  <article key={symbol}>
+                  <Fragment key={symbol}>
+                  <article>
                     <div className="desk-candidate-top">
-                      <span className="stock-monogram" aria-hidden="true">{row.symbol.slice(0, 2)}</span>
+                      <CompanyLogo symbol={row.symbol} />
                       <div>
                         <button className="link" onClick={() => onOpen(symbol)}>
                           {row.symbol}
@@ -206,16 +253,21 @@ export default function SwingDesk({
                     <span className="desk-evidence">
                       {playbook.evidence(row)}
                     </span>
+                    <SetupLevels levels={row.levels} />
+                    {distance && <p className="setup-distance">{distance}</p>}
                     <div className="desk-candidate-bottom">
                       <span className="desk-ltp">
-                        <small>LTP · INR</small><LatestQuote quote={setupQuotes.quotes[symbol] || quotes[symbol]} />
+                        <small>LTP · INR</small><LatestQuote quote={quote} />
                       </span>
-                      <button className="button" onClick={() => selected === "breakout20" && onInsight ? onInsight(symbol) : onOpen(symbol)}>
-                        {selected === "breakout20" && onInsight ? "Read insight" : "View chart"}
+                      <button className="button" onClick={() => onOpen(symbol)}>
+                        View chart
                         <ArrowRight size={13} />
                       </button>
                     </div>
                   </article>
+                  {index === 0 && selected === "breakout20" && <BreakoutOffer access={access}
+                    stock={row} count={data.setups.breakout20.count} onExample={onBreakoutExample} />}
+                  </Fragment>
                 );
               })}
             </div>
@@ -223,7 +275,7 @@ export default function SwingDesk({
           <div className="panel-foot desk-source">
             <span>
               {data
-                ? `Session ${data.date || "unavailable"} · ${data.rows?.length || 0} stocks`
+                ? `Session ${data.date || "unavailable"} · ${data.metrics?.total ?? "—"} stocks`
                 : "Daily market data"}
               <br />
               Setups: daily data · LTP: 30 sec refresh, may be delayed
@@ -234,15 +286,8 @@ export default function SwingDesk({
             </button>
           </div>
         </section>
-        <aside className="desk-sidebar" hidden={mobile && section === "setups"}>
-          <div hidden={mobile && section !== "watchlist"}>
-            {watch.length ? <WatchlistBrief overview watch={watch} quotes={quotes} alerts={alerts} onOpen={onOpen} onPage={onPage} /> : <section className="panel overview-empty"><h2>Your watchlist</h2><p>Star stocks to follow them here.</p><button className="button" onClick={onSearch}>Find a stock</button></section>}
-          </div>
-          <section className="panel overview-alerts" hidden={mobile && section !== "alerts"}>
-            <div className="panel-title"><h2><Bell size={15} /> Price alerts</h2><button className="link" onClick={() => onPage("Alerts")}>Manage</button></div>
-            {alerts.some(a => a.triggered) ? <div className="overview-alert-list">{alerts.filter(a => a.triggered).slice(0, 4).map(a => <button key={a.id} onClick={() => onOpen(a.symbol)}><strong>{short(a.symbol)}</strong><span>{a.condition} {fmt(a.price)}</span><ArrowRight size={14} /></button>)}</div> : <p className="watch-empty">{alerts.length ? `${alerts.length} active alerts · none triggered` : "No alerts yet. Set a price to follow."}</p>}
-          </section>
-          {trades.length > 0 && <section className="panel desk-performance" hidden={mobile}>
+        {showPerformance && <aside className="desk-sidebar">
+          <section className="panel desk-performance">
             <div className="panel-title">
               <div>
                 <BookOpen size={16} />
@@ -291,9 +336,11 @@ export default function SwingDesk({
                 </p>
               </details>
             </div>
-          </section>}
-        </aside>
+          </section>
+        </aside>}
       </div>
+      {pushOffer}
+      {below}
       <WorkspaceSummary watch={watch} alerts={alerts} journal={journal} onPage={onPage} />
       <ResearchBrief data={data} loading={loading} error={error} onPage={onPage} onRefresh={onRefresh} recent={recent} onOpen={onOpen} onSearch={onSearch} />
       <div className="overview-note">

@@ -33,7 +33,7 @@ const groups = (query, extra = {}) => commandGroups({ query, instruments: [], ca
 test('workspace aliases make keyboard search useful for tasks and product names', () => {
   assert.equal(groups('  backup ')[0].items[0].page, 'Portfolio');
   assert.equal(groups('options')[0].items[0].page, 'FnO');
-  assert.equal(groups('nifty edge')[0].items[0].page, 'FnO');
+  assert.deepEqual(groups('nifty edge'), []);
   assert.equal(groups('alerts')[0].items[0].page, 'Alerts');
   assert.deepEqual(groups('not a real result'), []);
 });

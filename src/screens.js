@@ -47,7 +47,10 @@ export function presetFromSearch(search = '') {
 export function matches(row, when = []) {
   for (const [key, op, value] of when) {
     const v = row?.[key];
-    if (op === 'is') { if (!!v !== !!value) return false; continue; }
+    if (op === 'is') {
+      if (typeof v !== 'boolean' || v !== value) return false;
+      continue;
+    }
     if (!Number.isFinite(v) || !Number.isFinite(value)) return false;
     if (op === 'min' && v < value) return false;
     if (op === 'max' && v > value) return false;

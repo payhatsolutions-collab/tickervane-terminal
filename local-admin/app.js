@@ -27,10 +27,10 @@ function detail(user) {
   panel.replaceChildren(avatar, node('h2', user.name), node('p', user.email, 'detail-email'), status);
   const list = node('dl', undefined, 'detail-list');
   for (const [label, value] of [
-    ['Signed up', date(user.createdAt, true)], ['Signup method', user.source === 'free-signup' ? 'Free name & email registration' : user.source],
+    ['Signed up', date(user.createdAt, true)], ['Signup method', user.source === 'google' ? 'Google account' : 'Free name & email registration'],
     ['Registration notice', user.noticeVersion || 'Not recorded'], ['Marketing subscription', 'Not included in signup'], ['Record ID', user.id],
   ]) list.append(node('dt', label), node('dd', value));
-  panel.append(list, node('p', 'Names and emails are self-reported. Registration does not verify identity or give access to a user’s portfolio.', 'detail-note'));
+  panel.append(list, node('p', user.source === 'google' ? 'Google verifies this account’s email. Holdings and journals remain on the user’s device.' : 'Names and emails are self-reported. This registration does not verify identity or give access to a user’s portfolio.', 'detail-note'));
   for (const row of $('users').children) row.classList.toggle('selected', row.dataset.id === selected);
 }
 function render() {
@@ -110,7 +110,70 @@ $('export').addEventListener('click', () => {
   const link = node('a'); link.href = url; link.download = `alphanova-users-${new Date().toISOString().slice(0, 10)}.csv`;
   link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
+// Pro payments: one row per submitted UPI reference, newest first.
+const proLabels = { unverified: 'To check', held: 'Held · no access', verified: 'Paid', rejected: 'Rejected' };
+function proMessage(text, error = false) {
+  $('pro-message').textContent = text;
+  $('pro-message').className = `message${error ? ' error' : ''}`;
+  $('pro-message').hidden = !text;
+}
+async function review(account, action, question) {
+  if (question && !confirm(question)) return;
+  proMessage('');
+  try {
+    const response = await fetch('/api/pro/review', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: account.id, action }), signal: AbortSignal.timeout(30_000) });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Couldn’t save the review.');
+  } catch (error) { proMessage(error.name === 'TimeoutError' ? 'Saving took too long. Please try again.' : error.message, true); }
+  await loadPro();
+}
+async function loadPro() {
+  try {
+    const response = await fetch('/api/pro', { signal: AbortSignal.timeout(60_000) });
+    const data = await response.json();
+    if (!response.ok || !Array.isArray(data.accounts)) throw new Error(data.error || 'Couldn’t load Pro payments.');
+    const rows = data.accounts.flatMap(account => account.payments.map((payment, index) => ({ account, payment, latest: index === account.payments.length - 1 })))
+      .sort((a, b) => (Date.parse(b.payment.claimedAt) || 0) - (Date.parse(a.payment.claimedAt) || 0));
+    const body = document.createDocumentFragment();
+    for (const { account, payment, latest } of rows) {
+      const row = node('tr');
+      const name = node('td'); const identity = node('div', undefined, 'user-cell');
+      identity.append(node('span', initials(account.name || '?'), 'avatar'), node('span', account.name, 'name-text')); name.append(identity);
+      const email = node('td', account.email, 'email-cell'); email.title = account.email;
+      const utr = node('td', payment.utr, 'utr-cell');
+      if (!payment.dateMatch) { utr.append(node('span', 'Unusual', 'status flag')); utr.title = 'This reference does not carry a recent UPI timestamp, so it was held instead of unlocking. Check it carefully.'; }
+      const state = account.status === 'revoked' && payment.status !== 'verified' ? 'rejected' : payment.status;
+      const status = node('td'); status.append(node('span', proLabels[state] || state, `status${state === 'verified' ? ' verified' : state === 'rejected' || state === 'held' ? ' flag' : ''}`));
+      const actions = node('td', undefined, 'review-cell');
+      const button = (label, action, question) => { const b = node('button', label, 'view-button'); b.addEventListener('click', () => review(account, action, question)); actions.append(b); };
+      if (payment.status === 'held' && account.status !== 'revoked') {
+        button('Approve', 'verify');
+        button('Reject', 'reject', `Reject reference ${payment.utr} for ${account.name}? They can enter a different one.`);
+      } else if (latest) {
+        if (account.status === 'revoked') { button('Restore', 'verify'); button('Allow retry', 'unpause'); }
+        else {
+          if (account.status === 'unverified') button('Mark paid', 'verify');
+          button('Revoke', 'revoke', `Remove Pro access for ${account.name} (${account.email})?`);
+        }
+      }
+      row.append(name, email, utr, node('td', payment.note || account.note || '—', 'utr-cell'), node('td', date(payment.claimedAt, true)), node('td', account.status === 'revoked' ? 'Removed' : account.expiresAt > Date.now() ? date(new Date(account.expiresAt).toISOString()) : payment.status === 'held' ? 'After approval' : 'No access'), status, actions);
+      body.append(row);
+    }
+    $('pro-rows').replaceChildren(body);
+    const pending = rows.filter(row => ['unverified', 'held'].includes(row.payment.status) && row.account.status !== 'revoked').length;
+    $('pro-count').textContent = pending ? `${pending} to check` : String(rows.length);
+    $('pro-shown').textContent = `${rows.length} payment${rows.length === 1 ? '' : 's'} from ${data.accounts.length} account${data.accounts.length === 1 ? '' : 's'}`;
+    $('pro-updated').textContent = `Updated ${date(data.updatedAt, true)}. Match the reference or the payment note against your Kotak statement.`;
+    $('pro-empty').hidden = !!rows.length;
+    if (!rows.length) $('pro-empty').replaceChildren(node('span', '◎'), node('h3', 'No Pro payments yet'), node('p', 'When a reader pays and enters a UPI reference, it appears here for you to check.'));
+    if (data.unavailable) proMessage(`${data.unavailable} payment record${data.unavailable === 1 ? '' : 's'} could not be loaded. Use Refresh data to retry.`);
+  } catch (error) {
+    proMessage(error.name === 'TimeoutError' ? 'Loading took too long. Please try Refresh again.' : error.message, true);
+    $('pro-empty').replaceChildren(node('span', '↻'), node('h3', 'Unable to load Pro payments'), node('p', 'Use Refresh data to try again.'));
+  }
+}
 $('search').addEventListener('input', render);
 $('sort').addEventListener('change', render);
-$('refresh').addEventListener('click', () => load(true));
+$('refresh').addEventListener('click', () => { load(true); loadPro(); });
 load();
+loadPro();

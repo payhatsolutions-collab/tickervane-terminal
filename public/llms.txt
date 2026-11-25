@@ -1,6 +1,6 @@
 # Alpha Nova
 
-> Alpha Nova (also written AlphaNova) is a free browser-based research app for Indian and global markets. Canonical website: https://alphanova48.in/
+> Alpha Nova (also written AlphaNova) is a browser-based research app for Indian and global markets. Core tools are free; an optional Pro tier is paid. Canonical website: https://alphanova48.in/
 
 Alpha Nova is also known as AlphaNova Terminal. Personal research is stored on the device; use Portfolio backup and restore to move it between browsers or websites.
 
@@ -9,14 +9,15 @@ The public guides explain the same rules used in the interactive product. Market
 ## Founder
 
 AlphaNova was founded by Yash Sarda, based in Kolkata.
-- [Yash Sarda — professional bio](https://yash-sarda.abhishek-sarda997030.chatgpt.site/)
+- [Yash Sarda — professional bio](https://alphanova48.in/about.html)
 - [Yash Sarda — LinkedIn](https://www.linkedin.com/in/yashsarda31/)
 
 ## Product and data
 
+- [Public NSE stock directory](https://alphanova48.in/stocks/)
 - [About and data sources](https://alphanova48.in/about.html)
 - [Stock market app](https://alphanova48.in/stock-market-app.html)
-- [Pricing](https://alphanova48.in/pricing.html): INR 0; current features and limitations.
+- [Pricing](https://alphanova48.in/pricing.html): core tools INR 0; a 30-minute free trial of Alpha Nova Pro; paid Pro INR 300 per 30 days; current features and limitations.
 - [Pricing in Markdown](https://alphanova48.in/pricing.md)
 - [Calculation methodology](https://alphanova48.in/methodology.html)
 - [Nifty 500 screener](https://alphanova48.in/stock-screener.html)

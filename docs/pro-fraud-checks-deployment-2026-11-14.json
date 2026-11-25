@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-14",
+  "status": "deployed-and-promoted",
+  "project": "alphanova2",
+  "deploymentId": "dpl_D6ZbyjYD122XoFNA1e1pGG8TCCwf",
+  "deploymentUrl": "https://alphanova2-30kdwamky-wdcre.vercel.app",
+  "productionUrl": "https://alphanova48.in",
+  "scope": "Fraud checks on UPI references: obvious fakes refused (repeats, 1-2 digits, counting runs of 10+); references without a fresh YDDDHH timestamp (72h window) or with 7-9 digit runs held with no access until operator approval; held references can be corrected by the reader; Approve/Reject in the admin viewer. See docs/PRO-UNLOCK.md.",
+  "rollback": {
+    "deploymentId": "dpl_DVmpi3jnfNas8DwvwRVTR9hDN1Uo",
+    "deploymentUrl": "https://alphanova2-fo4wvreq5-wdcre.vercel.app",
+    "command": "vercel promote https://alphanova2-fo4wvreq5-wdcre.vercel.app --yes"
+  },
+  "verification": {
+    "fullRepositoryTests": 439,
+    "local": "Held notice and fake-reference refusal checked in the paywall with a mocked API.",
+    "live": "alphanova48.in serves the new ProGate chunk; status includes pending; pricing page shows the manual-match wording; /forecast 200.",
+    "notVerified": "Signed-in claims on production (fake, held, instant) and the admin Approve/Reject buttons against live storage."
+  }
+}

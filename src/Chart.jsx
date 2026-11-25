@@ -33,38 +33,39 @@ export default function Chart({
     const chart = createChart(el.current, {
       autoSize: true,
       layout: {
-        background: { color: "#111820" },
-        textColor: "#8391a5",
+        background: { color: "#0e120f" },
+        textColor: "#8f998f",
         fontFamily: "IBM Plex Mono, ui-monospace, monospace",
-        fontSize: 12,
+        fontSize: 10,
         attributionLogo: true,
       },
       grid: {
-        vertLines: { color: "#1c2632" },
-        horzLines: { color: "#1c2632" },
+        vertLines: { color: "#ffffff00" },
+        horzLines: { color: "#1a201b" },
       },
       rightPriceScale: {
-        borderColor: "#1d3342",
-        scaleMargins: { top: 0.12, bottom: 0.24 },
+        borderColor: "#262d27",
+        scaleMargins: { top: 0.10, bottom: 0.22 },
       },
       timeScale: {
-        borderColor: "#1d3342",
+        rightOffset: 8,
+        borderColor: "#262d27",
         timeVisible: ["1d", "5d"].includes(range),
       },
       crosshair: {
         mode: 0,
-        vertLine: { color: "#81aaff", labelBackgroundColor: "#0e3a47" },
-        horzLine: { color: "#81aaff", labelBackgroundColor: "#0e3a47" },
+        vertLine: { color: "#dfc38b99", labelBackgroundColor: "#3a301a" },
+        horzLine: { color: "#dfc38b99", labelBackgroundColor: "#3a301a" },
       },
     });
     const series = chart.addSeries(
       type === "Candles" ? CandlestickSeries : AreaSeries,
       type === "Candles"
         ? {
-            upColor: "#37d4a5",
-            downColor: "#f07480",
-            wickUpColor: "#37d4a5",
-            wickDownColor: "#f07480",
+            upColor: "#6b9dff",
+            downColor: "#e7b65a",
+            wickUpColor: "#6b9dff",
+            wickDownColor: "#e7b65a",
             borderVisible: false,
           }
         : {
@@ -152,7 +153,7 @@ export default function Chart({
         ),
       );
     };
-    if (indicators.includes("EMA 20")) line(ema(closes, 20), "#81aaff");
+    if (indicators.includes("EMA 20")) line(ema(closes, 20), "#7dcebd");
     if (indicators.includes("EMA 50")) line(ema(closes, 50), "#b4a1ff");
     if (indicators.includes("Bollinger")) {
       const b = bollinger(closes);
@@ -181,7 +182,7 @@ export default function Chart({
         bars.map((b) => ({
           time: b.time,
           value: b.volume,
-          color: b.close >= b.open ? "#37d4a536" : "#f0748036",
+          color: b.close >= b.open ? "#6b9dff45" : "#e7b65a40",
         })),
       );
     }
@@ -199,7 +200,7 @@ export default function Chart({
       );
       s.createPriceLine({
         price: 70,
-        color: "#f07480",
+        color: "#e7b65a",
         lineWidth: 1,
         lineStyle: 2,
         axisLabelVisible: true,
@@ -207,7 +208,7 @@ export default function Chart({
       });
       s.createPriceLine({
         price: 30,
-        color: "#37d4a5",
+        color: "#6b9dff",
         lineWidth: 1,
         lineStyle: 2,
         axisLabelVisible: true,
@@ -244,29 +245,31 @@ export default function Chart({
     const chart = chartRef.current;
     if (!chart) return;
     const light = theme === "light";
-    const accent = light ? "#245ec9" : "#81aaff";
-    const line = light ? "#e4eaf2" : "#1c2632";
-    const border = light ? "#d5deea" : "#1d3342";
+    // Chart chrome follows the ink / parchment surfaces; candles keep their blue / amber pair.
+    const accent = light ? "#306bd8" : "#81aaff";
+    const cross = light ? "#87633299" : "#dfc38b99";
+    const line = light ? "#f0eee4" : "#1a201b";
+    const border = light ? "#e2dfd1" : "#262d27";
     chart.applyOptions({
       layout: {
-        background: { color: light ? "#ffffff" : "#111820" },
-        textColor: light ? "#56677e" : "#8391a5",
+        background: { color: light ? "#fffefb" : "#0e120f" },
+        textColor: light ? "#68746a" : "#8f998f",
       },
-      grid: { vertLines: { color: line }, horzLines: { color: line } },
+      grid: { vertLines: { visible: false }, horzLines: { color: line } },
       rightPriceScale: { borderColor: border },
       timeScale: { borderColor: border },
       crosshair: {
-        vertLine: { color: accent, labelBackgroundColor: light ? "#245ec9" : "#0e3a47" },
-        horzLine: { color: accent, labelBackgroundColor: light ? "#245ec9" : "#0e3a47" },
+        vertLine: { color: cross, labelBackgroundColor: light ? "#876332" : "#3a301a" },
+        horzLine: { color: cross, labelBackgroundColor: light ? "#876332" : "#3a301a" },
       },
     });
     seriesRef.current?.applyOptions(
       type === "Candles"
         ? {
-            upColor: light ? "#147653" : "#37d4a5",
-            downColor: light ? "#bb354b" : "#f07480",
-            wickUpColor: light ? "#147653" : "#37d4a5",
-            wickDownColor: light ? "#bb354b" : "#f07480",
+            upColor: light ? "#306bd8" : "#6b9dff",
+            downColor: light ? "#a77318" : "#e7b65a",
+            wickUpColor: light ? "#306bd8" : "#6b9dff",
+            wickDownColor: light ? "#a77318" : "#e7b65a",
           }
         : { lineColor: accent, topColor: `${accent}30`, bottomColor: `${accent}00` },
     );

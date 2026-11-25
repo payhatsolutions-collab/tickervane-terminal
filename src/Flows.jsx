@@ -3,21 +3,24 @@ import { Download, Info, ChevronRight, RefreshCw, Star } from 'lucide-react';
 import { useFeed } from './hooks';
 import { fmt, compact } from './data';
 import { Empty, PanelTitle, SortTh, exportCSV, sortRows, tone } from './ui';
+import { ProMore, ProPill } from './ProExample.jsx';
+import { PRO_EXAMPLE_DEALS } from '../lib/proPlan.js';
 
 // Institutional flows: FII/DII cash (NSE API, best-effort), participant-wise
 // derivatives positioning and bulk/block deals (NSE archives).
+// Without Pro (`preview`) the page is the free example: cash flows and the session's largest deals.
 const dateLabel = d => d ? new Date(d + 'T12:00:00Z').toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
 const cr = v => Number.isFinite(v) ? `${v >= 0 ? '+' : '−'}₹${fmt(Math.abs(v), 0)} Cr` : '—';
 const signed = v => Number.isFinite(v) ? `${v >= 0 ? '+' : '−'}${compact(Math.abs(v))}` : '—';
 
-function CashFlows({ data, loading, error }) {
+function CashFlows({ data, loading, error, preview }) {
   const cash = data?.cash;
   const total = cash ? cash.fii.net + cash.dii.net : null;
   const card = (label, x) => <div className={`radar-card ${tone(x?.net)}`}><span>{label}</span><strong>{cr(x?.net)}</strong><small>{x ? `Buy ₹${fmt(x.buy, 0)} Cr · Sell ₹${fmt(x.sell, 0)} Cr` : ''}</small></div>;
   return <div className="flow-block">
     <h3>Cash market <small className="muted">{cash?.date ? `provisional · ${dateLabel(cash.date)}` : ''}</small></h3>
     {loading && !data ? <div className="loading">Loading FII/DII flows…</div>
-      : !cash ? <p className="notice">{data?.cashError || error || 'FII/DII cash data is unavailable.'} NSE publishes it at <a href="https://www.nseindia.com/reports/fii-dii" target="_blank" rel="noreferrer">nseindia.com/reports/fii-dii</a>. Derivatives positioning below comes from the NSE archive.</p>
+      : !cash ? <p className="notice">{data?.cashError || error || 'FII/DII cash data is unavailable.'} NSE publishes it at <a href="https://www.nseindia.com/reports/fii-dii" target="_blank" rel="noreferrer">nseindia.com/reports/fii-dii</a>.{preview ? '' : ' Derivatives positioning below comes from the NSE archive.'}</p>
       : <div className="radar-summary flow-cards">{card('FII / FPI net', cash.fii)}{card('DII net', cash.dii)}<div className={`radar-card ${tone(total)}`}><span>Combined</span><strong>{cr(total)}</strong><small>{Math.sign(cash.fii.net) !== Math.sign(cash.dii.net) ? 'FIIs and DIIs on opposite sides' : 'Both on the same side'}</small></div></div>}
   </div>;
 }
@@ -43,7 +46,8 @@ function Positioning({ data }) {
   </div>;
 }
 
-function Deals({ onOpen, refresh, watch, toggleWatch }) {
+// `preview`: only the session's largest deals, with no filters, watchlist matches or export.
+function Deals({ onOpen, refresh, watch, toggleWatch, preview, onLocked }) {
   const { data, loading, error } = useFeed('/api/market?op=deals', refresh);
   const [kind, setKind] = useState('All');
   const [side, setSide] = useState('All');
@@ -51,20 +55,24 @@ function Deals({ onOpen, refresh, watch, toggleWatch }) {
   const [sort, setSort] = useState(['valueCr', -1]);
   const [limit, setLimit] = useState(50);
   const watchSet = useMemo(() => new Set((watch || []).filter(s => s.endsWith('.NS')).map(s => s.slice(0, -3))), [watch]);
-  const rows = useMemo(() => { const needle = q.trim().toUpperCase(); return sortRows((data?.rows || []).filter(r => (kind === 'All' || r.kind === kind) && (side === 'All' || r.side === side.toUpperCase()) && (!needle || r.symbol.includes(needle) || r.client.toUpperCase().includes(needle) || r.name.toUpperCase().includes(needle))), sort); }, [data, kind, side, q, sort]);
-  const hits = (data?.rows || []).filter(r => watchSet.has(r.symbol));
+  const rows = useMemo(() => {
+    if (preview) return sortRows(sortRows(data?.rows || [], ['valueCr', -1]).slice(0, PRO_EXAMPLE_DEALS), sort);
+    const needle = q.trim().toUpperCase(); return sortRows((data?.rows || []).filter(r => (kind === 'All' || r.kind === kind) && (side === 'All' || r.side === side.toUpperCase()) && (!needle || r.symbol.includes(needle) || r.client.toUpperCase().includes(needle) || r.name.toUpperCase().includes(needle))), sort);
+  }, [data, kind, side, q, sort, preview]);
+  const total = data?.rows?.length || 0;
+  const hits = preview ? [] : (data?.rows || []).filter(r => watchSet.has(r.symbol));
   const buy = rows.filter(r => r.side === 'BUY').reduce((t, r) => t + r.valueCr, 0), sell = rows.filter(r => r.side === 'SELL').reduce((t, r) => t + r.valueCr, 0);
   return <section className="panel deals-panel">
     <PanelTitle title="Bulk & block deals" tag="DEAL"><span className="muted small radar-date">{data?.date ? dateLabel(data.date) : ''}</span>
-      <button className="button" disabled={!rows.length} onClick={() => exportCSV([['Date', 'Type', 'Symbol', 'Security', 'Client', 'Side', 'Quantity', 'Price', 'Value ₹ Cr'], ...rows.map(r => [r.date, r.kind, r.symbol, r.name, r.client, r.side, r.qty, r.price, r.valueCr])], `nse-deals-${data?.date || ''}.csv`)}><Download size={14} /> Export</button>
+      <button className="button" disabled={!rows.length} onClick={() => preview ? onLocked('export') : exportCSV([['Date', 'Type', 'Symbol', 'Security', 'Client', 'Side', 'Quantity', 'Price', 'Value ₹ Cr'], ...rows.map(r => [r.date, r.kind, r.symbol, r.name, r.client, r.side, r.qty, r.price, r.valueCr])], `nse-deals-${data?.date || ''}.csv`)}><Download size={14} /> Export{preview && <ProPill />}</button>
     </PanelTitle>
     {hits.length > 0 && <div className="radar-watch"><Star size={13} /> <strong>Your watchlist:</strong> {[...new Set(hits.map(r => r.symbol))].slice(0, 8).map(s => <button key={s} className="link" onClick={() => onOpen(s + '.NS')}>{s}</button>)}</div>}
-    <div className="screen-filters radar-filters">
+    {preview ? rows.length > 0 && <p className="pro-example-note">The {rows.length === 1 ? 'largest deal' : `${rows.length} largest deals`} by value, of {total} reported for this session.</p> : <div className="screen-filters radar-filters">
       {['All', 'Block', 'Bulk'].map(k => <button key={k} className={kind === k ? 'active' : ''} onClick={() => setKind(k)}>{k}</button>)}
       <select aria-label="Side" value={side} onChange={e => setSide(e.target.value)}>{['All', 'Buy', 'Sell'].map(s => <option key={s}>{s}</option>)}</select>
       <input aria-label="Filter deals" placeholder="Filter symbol or client…" value={q} onChange={e => setQ(e.target.value)} />
       <span className="muted small">{rows.length ? `Buys ₹${fmt(buy, 0)} Cr · sells ₹${fmt(sell, 0)} Cr` : ''}</span>
-    </div>
+    </div>}
     {loading && !data ? <div className="loading">Loading NSE deal files…</div>
       : error && !data ? <Empty title="Deals unavailable" description={error} />
       : !rows.length ? <Empty title="No deals match" description={data?.rows?.length ? 'Clear the filters to see every deal.' : 'NSE has not published deals for the latest session yet.'} />
@@ -86,21 +94,31 @@ function Deals({ onOpen, refresh, watch, toggleWatch }) {
         <td><button className={`icon-button ${w ? 'starred' : ''}`} aria-label={`${w ? 'Remove' : 'Add'} ${r.symbol} ${w ? 'from' : 'to'} watchlist`} onClick={() => toggleWatch(r.symbol + '.NS')}><Star size={14} fill={w ? 'currentColor' : 'none'} /></button></td>
       </tr>; })}</tbody></table>
         {rows.length > limit && <div className="more-row"><button className="button" onClick={() => setLimit(l => l + 100)}>Show more ({rows.length - limit} left)</button></div>}
+        {preview && total > rows.length && <div className="more-row"><button className="button" onClick={() => onLocked('deals')}>See all {total} deals<ProPill /></button></div>}
       </div>}
     <div className="panel-foot">Bulk deals: one client trading over 0.5% of a company’s shares in a session. Block deals: single trades of ₹10 Cr+ in the block window. {data?.partial ? 'One deal file failed to load. ' : ''}Source: NSE bulk & block deal files, latest session only.</div>
   </section>;
 }
 
-export default function Flows({ onOpen, refresh, onRefresh, watch, toggleWatch }) {
+const PRO_MORE = [
+  'Derivatives positioning by participant: FII, DII, proprietary and client',
+  'Every bulk and block deal of the session, with type, side and client filters',
+  'Deals in your watchlist stocks, picked out for you',
+  'CSV export',
+];
+
+// `preview`: the reader has no Pro access. Locked controls call `onLocked`, which opens the paywall.
+export default function Flows({ onOpen, refresh, onRefresh, watch, toggleWatch, preview = false, onLocked }) {
   const flows = useFeed('/api/market?op=flows', refresh);
   return <>
     <section className="panel flows-panel">
       <PanelTitle title="Institutional flows" tag="FLOW"><button className="icon-button" aria-label="Refresh flows" title="Refresh" onClick={onRefresh}><RefreshCw size={14} className={flows.loading ? 'spin' : ''} /></button></PanelTitle>
-      {flows.loading && !flows.data ? <div className="loading">Loading FII/DII flows and participant OI…</div> : flows.error && !flows.data ? <Empty title="Flow data unavailable" description={flows.error}><button className="button" onClick={onRefresh}>Retry</button></Empty> : <>
-        <CashFlows data={flows.data} loading={flows.loading} error={flows.error} />
-        <Positioning data={flows.data} />
+      {flows.loading && !flows.data ? <div className="loading">{preview ? 'Loading FII/DII flows…' : 'Loading FII/DII flows and participant OI…'}</div> : flows.error && !flows.data ? <Empty title="Flow data unavailable" description={flows.error}><button className="button" onClick={onRefresh}>Retry</button></Empty> : <>
+        <CashFlows data={flows.data} loading={flows.loading} error={flows.error} preview={preview} />
+        {!preview && <Positioning data={flows.data} />}
       </>}
     </section>
-    <Deals onOpen={onOpen} refresh={refresh} watch={watch} toggleWatch={toggleWatch} />
+    <Deals onOpen={onOpen} refresh={refresh} watch={watch} toggleWatch={toggleWatch} preview={preview} onLocked={onLocked} />
+    {preview && <ProMore items={PRO_MORE} onUnlock={() => onLocked('more')} />}
   </>;
 }

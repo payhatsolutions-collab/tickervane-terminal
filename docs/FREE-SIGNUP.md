@@ -1,10 +1,24 @@
-# Free registration
+# Google sign-in and free registration
 
-The app offers a dismissible name/email registration after 120 seconds in a visible tab. The clock is invisible, persists across reloads in the same tab and pauses in hidden tabs. Open dialogs, text-entry fields and the watchlist guide defer the prompt. The header also provides an immediate signup button.
+When Google sign-in is not configured, the app offers an optional name/email registration. After 120 seconds in a visible tab, the header entry is highlighted without automatically opening a dialog. The clock is invisible, persists across reloads in the same tab and pauses in hidden tabs. Open dialogs, text-entry fields and the watchlist guide defer the prompt. The header also provides an immediate signup button.
 
 A dismissal suppresses automatic prompts for seven days. A successful signup stores only a welcome name and registration timestamp locally and suppresses future prompts on that browser. Storage failures fall back to in-memory behavior. Clearing site data or using a different browser resets this recognition.
 
-This is voluntary registration, not authentication. Names and emails are unverified. It does not unlock protected data, identify an existing account, sync holdings or upload portfolio/journal records. The interface deliberately uses “Sign up” rather than claiming a secure login. No Google credentials, passwords or mail delivery service are required.
+This is voluntary registration, not authentication. Names and emails are unverified. It does not unlock protected data, identify an existing account, sync holdings or upload portfolio/journal records. The interface deliberately uses “Sign up” rather than claiming a secure login. The legacy form does not require Google credentials, passwords or mail delivery.
+
+## Google sign-in
+
+When configured, the header shows a labeled Sign up free button on mobile and desktop for signed-out readers; it supports both new and returning Google accounts. It opens an account dialog containing Google's own themed sign-in button. The paywall also offers Google's button. Returning users can use Google's one-click account selection where supported; Google may still require account selection or first-use consent. No automatic sign-in prompt interrupts research.
+
+`GOOGLE_CLIENT_ID` is the public web client ID authorized for `https://alphanova48.in`. `AUTH_SESSION_SECRET` is a separate random server-only secret of at least 32 characters, used to sign ten-minute browser challenges. The OAuth client secret is not used or shipped. Development may use local `.env.local`; localhost must also be authorized in Google Cloud to complete a real local sign-in.
+
+`GET /api/auth?op=session` returns configuration and the current session's name/email with `private, no-store`. `GET ...?op=challenge` issues a signed HttpOnly challenge cookie and a nonce. `POST ...?op=google` accepts JSON from explicit site origins, verifies the nonce and Google's signature, issuer, audience and expiry with `google-auth-library`, and requires a verified email claim. Identity is keyed by Google's `sub`, never linked through the unverified name/email form. The Google JWT is not persisted.
+
+Private Blob records: `auth/accounts/google-<sha256(sub)>.json` stores first registration; `auth/sessions/<sha256(random-token)>.json` stores the verified profile and seven-day expiry. The random bearer token is stored only in a Secure, HttpOnly, SameSite=Lax, host-only cookie. Session reads bypass the Blob CDN cache. Logout deletes the server session and clears cookies; expired sessions are rejected and removed when encountered. Expired records whose cookies have already disappeared may remain in private storage until operator cleanup. Account records persist until operator deletion. The local registration viewer includes both verified `auth/accounts/` Google accounts and legacy `signups/` registrations. It keeps records separate even when their emails match.
+
+Signing in uploads no research. A signed-in reader can explicitly save one watchlist backup in private Blob storage at `auth/watchlists/google-<sha256(sub)>.json`, restore its symbols without replacing their local watchlist, or delete the account backup. Only symbols and the backup timestamp are stored. Changes are not synced automatically; portfolios, journals and push subscriptions are outside the account backup. No private information is included in analytics events. Signing out leaves local research intact. Clearing site data also clears the login cookie. API failures fail closed; legacy local welcome names never establish an authenticated session.
+
+Verification: `node --test tests/google-auth.test.js tests/signup.test.js`, full suite, Vite build, live button rendering on desktop/mobile, then a real Google sign-in and sign-out. Only production origin is authorized by the supplied Google client, so preview origins cannot complete a Google login without a separate Google configuration.
 
 ## Storage and operation
 

@@ -7,7 +7,8 @@ import { Empty, PanelTitle, SortTh, exportCSV, sortRows, tone } from './ui';
 
 import { optionFreshness } from './optionSignal.js';
 import './fno.css';
-import NiftyEdge from './NiftyEdge.jsx';
+import { ProMore, ProPill } from './ProExample.jsx';
+import { PRO_EXAMPLE_UNDERLYING } from '../lib/proPlan.js';
 
 // Live NSE option chain; the broad futures scanner is explicitly end-of-day.
 const INDEX_YAHOO = { NIFTY: '^NSEI', BANKNIFTY: '^NSEBANK', FINNIFTY: 'NIFTY_FIN_SERVICE.NS' };
@@ -36,17 +37,27 @@ function useDerivativeRefresh() {
   return { tick, setTick, auto, setAuto, now };
 }
 
-function OptionChain({ symbol, onOpen, refresh, onRefresh }) {
-  const [u, setU] = useSaved('an2-fno-symbol', 'NIFTY');
+// `preview`: the reader has no Pro access. The chain stays on the free example (one underlying at its
+// nearest expiry); another underlying, another expiry and the export call `onLocked` instead.
+function OptionChain({ symbol, onOpen, refresh, onRefresh, preview, onLocked }) {
+  const [saved, setU] = useSaved('an2-fno-symbol', 'NIFTY');
+  const u = preview ? PRO_EXAMPLE_UNDERLYING : saved;
   const [expiry, setExpiry] = useState('');
   const [width, setWidth] = useState(12);
   const [known, setKnown] = useState([]);
   const { tick, setTick, auto, setAuto, now } = useDerivativeRefresh();
   const { data, loading, error } = useFeed(`/api/market?op=options&symbol=${encodeURIComponent(u)}${expiry ? `&expiry=${expiry}` : ''}`, `${refresh}:${tick}`);
   useEffect(() => { if (data?.symbols?.length) setKnown(data.symbols); }, [data]);
-  const pick = s => { setU(s); setExpiry(''); };
+  const pick = s => {
+    if (preview) { if (s !== u) onLocked('underlying'); return; }
+    setU(s); setExpiry('');
+  };
   const current = fromTerminal(symbol);
   const d = data && data.symbol === u && (!expiry || data.expiry === expiry) ? data : null;
+  const pickExpiry = value => {
+    if (preview) { if (value !== d?.expiry) onLocked('expiry'); return; }
+    setExpiry(value);
+  };
   const freshness = error ? 'unavailable' : optionFreshness(d?.asOf, now);
   const usable = d && ['live', 'snapshot'].includes(freshness);
   const signal = usable ? d.signal : null;
@@ -68,15 +79,15 @@ function OptionChain({ symbol, onOpen, refresh, onRefresh }) {
     <PanelTitle title="NSE option chain" tag="OPT">
       <span className={`fno-feed-status ${freshness === 'live' ? 'positive' : 'muted'}`}>{loading && !d ? 'Connecting to NSE' : freshness === 'live' ? '● Live NSE' : freshness === 'snapshot' ? 'Session snapshot' : freshness === 'stale' ? 'Stale data' : 'Feed unavailable'}</span>
       <button className="icon-button" aria-label="Refresh option chain" title="Refresh" onClick={retry}><RefreshCw size={14} className={loading ? 'spin' : ''} /></button>
-      <button className="button" disabled={!d} onClick={() => exportCSV([['Symbol', 'Expiry', 'NSE timestamp IST', 'Strike', 'CE OI', 'CE OI chg', 'CE LTP', 'CE volume', 'PE LTP', 'PE OI chg', 'PE OI', 'PE volume'], ...(d?.rows || []).map(r => [u, d.expiry, d.exchangeTimestamp, r.strike, cell(r.CE, 'oi'), cell(r.CE, 'chg'), cell(r.CE, 'close'), cell(r.CE, 'vol'), cell(r.PE, 'close'), cell(r.PE, 'chg'), cell(r.PE, 'oi'), cell(r.PE, 'vol')])], `option-chain-${u}-${d?.expiry || ''}.csv`)}><Download size={14} /> Export</button>
+      <button className="button" disabled={!d} onClick={() => preview ? onLocked('export') : exportCSV([['Symbol', 'Expiry', 'NSE timestamp IST', 'Strike', 'CE OI', 'CE OI chg', 'CE LTP', 'CE volume', 'PE LTP', 'PE OI chg', 'PE OI', 'PE volume'], ...(d?.rows || []).map(r => [u, d.expiry, d.exchangeTimestamp, r.strike, cell(r.CE, 'oi'), cell(r.CE, 'chg'), cell(r.CE, 'close'), cell(r.CE, 'vol'), cell(r.PE, 'close'), cell(r.PE, 'chg'), cell(r.PE, 'oi'), cell(r.PE, 'vol')])], `option-chain-${u}-${d?.expiry || ''}.csv`)}><Download size={14} /> Export{preview && <ProPill />}</button>
     </PanelTitle>
     <div className="screen-filters chain-filters">
-      {['NIFTY', 'BANKNIFTY', 'FINNIFTY', 'MIDCPNIFTY'].map(s => <button key={s} className={u === s ? 'active' : ''} onClick={() => pick(s)}>{s}</button>)}
-      <select aria-label="Underlying" value={u} onChange={e => pick(e.target.value)}>{([...new Set([u, ...known])]).map(s => <option key={s}>{s}</option>)}</select>
-      <select aria-label="Expiry" disabled={!d} value={d?.expiry || expiry} onChange={e => setExpiry(e.target.value)}>{(d?.expiries || []).map(x => <option key={x} value={x}>{dateLabel(x)}</option>)}</select>
+      {['NIFTY', 'BANKNIFTY', 'FINNIFTY', 'MIDCPNIFTY'].map(s => <button key={s} className={u === s ? 'active' : ''} onClick={() => pick(s)}>{s}{preview && s !== u && <ProPill />}</button>)}
+      <select aria-label={preview ? 'Underlying (others need Pro)' : 'Underlying'} value={u} onChange={e => pick(e.target.value)}>{([...new Set([u, ...known])]).map(s => <option key={s} value={s}>{s}{preview && s !== u ? ' · Pro' : ''}</option>)}</select>
+      <select aria-label={preview ? 'Expiry (others need Pro)' : 'Expiry'} disabled={!d} value={d?.expiry || expiry} onChange={e => pickExpiry(e.target.value)}>{(d?.expiries || []).map(x => <option key={x} value={x}>{dateLabel(x)}{preview && x !== d.expiry ? ' · Pro' : ''}</option>)}</select>
       <select aria-label="Strikes shown" value={width} onChange={e => setWidth(Number(e.target.value))}>{[[8, '±8 strikes'], [12, '±12 strikes'], [20, '±20 strikes'], [0, 'All strikes']].map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select>
       <button className={auto ? 'active' : ''} aria-pressed={auto} onClick={() => setAuto(v => !v)}>Auto-refresh {auto ? '30s' : 'off'}</button>
-      {current && current !== u && known.includes(current) && <button onClick={() => pick(current)}>Use {current}</button>}
+      {!preview && current && current !== u && known.includes(current) && <button onClick={() => pick(current)}>Use {current}</button>}
     </div>
     <div className={`fno-signal ${directionTone}`} aria-live="polite">
       <div className="fno-signal-heading"><span className="fno-eyebrow">{u} · {freshness === 'snapshot' ? 'Last-session positioning' : 'Positioning signal'}</span><h2><SignalIcon size={28} />{loading && !d ? 'Reading the chain…' : direction}</h2><p>{signal?.label === 'Range' ? 'Mixed or balanced positioning. No clear directional edge.' : signal?.label === 'Bullish' ? 'The option-chain factors lean to the upside.' : signal?.label === 'Bearish' ? 'The option-chain factors lean to the downside.' : 'A signal needs fresh, complete NSE data.'}</p></div>
@@ -186,17 +197,21 @@ function Buildup({ onOpen, refresh, watch }) {
   </section>;
 }
 
-export default function FnO({ symbol, onOpen, refresh, onRefresh, watch }) {
-  const [desk, setDesk] = useState('edge');
+const PRO_MORE = [
+  'Bank Nifty, Fin Nifty, Midcap Nifty and stock option chains, at every expiry',
+  'Live NSE futures contracts with open interest and basis',
+  'Futures OI build-up across F&O stocks, from the end-of-day file',
+  'CSV export',
+];
+
+// `preview`: the reader has no Pro access and sees the free example, the option chain for one
+// underlying at its nearest expiry. Everything else calls `onLocked`, which opens the paywall.
+export default function FnO({ symbol, onOpen, refresh, onRefresh, watch, preview = false, onLocked }) {
   return <>
-    <div className="screen-filters" role="group" aria-label="Futures and options desk">
-      <button className={desk === 'edge' ? 'active' : ''} aria-pressed={desk === 'edge'} onClick={() => setDesk('edge')}>NIFTY EDGE</button>
-      <button className={desk === 'chain' ? 'active' : ''} aria-pressed={desk === 'chain'} onClick={() => setDesk('chain')}>Option chain & futures</button>
-    </div>
-    {desk === 'edge' ? <NiftyEdge /> : <>
-    <OptionChain symbol={symbol} onOpen={onOpen} refresh={refresh} onRefresh={onRefresh} />
-    <LiveFutures refresh={refresh} />
-    <Buildup onOpen={onOpen} refresh={refresh} watch={watch} />
+    <OptionChain symbol={symbol} onOpen={onOpen} refresh={refresh} onRefresh={onRefresh} preview={preview} onLocked={onLocked} />
+    {preview ? <ProMore items={PRO_MORE} onUnlock={() => onLocked('more')} /> : <>
+      <LiveFutures refresh={refresh} />
+      <Buildup onOpen={onOpen} refresh={refresh} watch={watch} />
     </>}
   </>;
 }

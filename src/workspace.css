@@ -10,14 +10,15 @@
 .app .nav-bottom { margin-top: auto; }
 .app.nav-collapsed { --sidebar: 64px; }
 .app.nav-collapsed .desktop-nav { padding-inline: 8px; gap: 12px; }
-.app.nav-collapsed .nav-group { gap: 4px; }
-.app.nav-collapsed .nav-group + .nav-group { border-top: 1px solid var(--line); padding-top: 12px; }
-.app.nav-collapsed .nav-group-label, .app.nav-collapsed .desktop-nav a>span,
+/* Collapsed-rail rules stay inside the sidebar: the mobile menu sheet reuses these class names. */
+.app.nav-collapsed .desktop-nav .nav-group { gap: 4px; }
+.app.nav-collapsed .desktop-nav .nav-group + .nav-group { border-top: 1px solid var(--line); padding-top: 12px; }
+.app.nav-collapsed .desktop-nav .nav-group-label, .app.nav-collapsed .desktop-nav a>span,
 .app.nav-collapsed .nav-collapse span, .app.nav-collapsed .brand>span:last-child,
 .app.nav-collapsed .desktop-nav .theme-toggle>span, .app.nav-collapsed .nav-refresh>span { display: none; }
-.app.nav-collapsed .nav-group a, .app.nav-collapsed .nav-collapse, .app.nav-collapsed .theme-toggle { justify-content: center; padding: 8px; width: 46px; }
+.app.nav-collapsed .desktop-nav .nav-group a, .app.nav-collapsed .nav-collapse, .app.nav-collapsed .desktop-nav .theme-toggle { justify-content: center; padding: 8px; width: 46px; }
 .app.nav-collapsed .nav-refresh { justify-content: center; padding-inline: 0; }
-.app.nav-collapsed .alert-dot { position: absolute; right: 6px; top: 6px; }
+.app.nav-collapsed .desktop-nav .alert-dot { position: absolute; right: 6px; top: 6px; }
 .app .benchmark-strip { display: flex; overflow-x: auto; scrollbar-width: none; min-width: 0; height: 40px; }
 .app .benchmark-strip::-webkit-scrollbar { display: none; }
 .app .benchmark-strip>button { flex: 1 0 auto; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 0 12px; min-height: 40px; white-space: nowrap; }
@@ -55,7 +56,7 @@
 .app .overview-watch-list .number { margin-left: 0; font-size: 12px; min-width: 55px; text-align: right; }
 .overview-watch-counts { display: flex; gap: 12px; padding: 10px 14px; font-size: 12px; border-bottom: 1px solid var(--line); }
 .overview-watch-price { margin-left: auto; font: 11px 'IBM Plex Mono',monospace; text-align: right; }
-.overview-watch-price small { display: block; font: 9px Inter,sans-serif; color: var(--muted); margin-top: 3px; }
+.overview-watch-price small { display: block; font: 10px Inter,sans-serif; color: var(--muted); margin-top: 3px; }
 .overview-alerts h2 { display: flex; gap: 8px; align-items: center; }
 .overview-alert-list { padding: 0 14px; }
 .overview-alert-list button { display: flex; align-items: center; width: 100%; gap: 12px; min-height: 44px; border-top: 1px solid var(--line); font-size: 12px; }

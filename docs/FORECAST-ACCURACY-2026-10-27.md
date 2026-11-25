@@ -186,3 +186,32 @@ The existing markup and stylesheet are preserved. Live screenshot:
 `outputs/forecast-accuracy-2026-10-27/forecast-live.png`. Deployment details and
 rollback instructions are recorded in
 [`forecast-accuracy-deployment-2026-10-27.json`](forecast-accuracy-deployment-2026-10-27.json).
+
+## What the page shows (17 November 2026)
+
+The model, its candidates and its selection rules are unchanged from the assessment above, and
+`src/forecastModel.js` was not edited. Only the Forecast card changed.
+
+Because no candidate beat an unchanged price, the selected model is usually the random walk, so the
+single number the card used to show equalled the last close and read `+0.00% trend projection` for
+almost every ticker. Once each Pro workspace opened on a free example, every visitor saw that.
+
+The card now leads with what the model is measured to do well:
+
+- **Likely range**: the 80% band at the horizon, labelled "8 in 10 outcomes". Prices of 1,000 or more
+  are rounded to whole numbers in this headline only.
+- **Centre**: the median. When it is within 0.05% of the last close the card says "No clear direction";
+  otherwise it gives the change from the last close.
+- **Trend what-if**: where the price would be if the slope of the last 30 sessions carried on for the
+  horizon (`src/forecastScenario.js`, using the existing `trendDriftPerDay`, capped at 1% a session).
+  It is a scenario beside the forecast, never part of it. The card says so, and that extending the
+  trend tested less accurate than assuming no change. A flat trend shows "no trend to extend".
+- **This ticker's record**: how many of its own past evaluation forecasts finished inside their 80%
+  band, taken from `evaluation.count` and `evaluation.selected.coverage80`.
+
+The earlier trend overlay was removed because it changed the forecast itself (final-assessment error
+5.411 against 4.340). The what-if does not: the median, bands and samples still describe one
+distribution. The paywall's illustrative Forecast sample and the Pro copy in `lib/proCopy.js` were
+updated to describe a range with a what-if, replacing a projected price of +4.50%.
+
+Checks: `node --test tests/forecast.test.js tests/workspace-render.test.js`.

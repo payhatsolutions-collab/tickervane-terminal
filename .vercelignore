@@ -7,6 +7,7 @@ agents
 docs
 
 *.mp4
+finance-presenter-voice-sample.mp3
 reel*_gen.py
 
 *.docx
@@ -28,3 +29,10 @@ football-game
 __pycache__
 **/__pycache__/**
 *.pyc
+
+# Local research notes and release audit utilities are not application inputs.
+/*.md
+.scratch
+# Scratch research files; they otherwise ride along in the Python function bundles.
+tmp
+scripts/audit-site.mjs

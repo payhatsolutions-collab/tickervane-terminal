@@ -1,0 +1,106 @@
+{
+  "date": "2026-11-12",
+  "status": "deployed-and-verified",
+  "project": "alphanova-chatgpt",
+  "deploymentId": "dpl_38W6qcnjDpu6w2UYHNpiKNNpp5o7",
+  "deploymentUrl": "https://alphanova-chatgpt-ql1hapli0-wdcre.vercel.app",
+  "serverUrl": "https://alphanova-chatgpt.vercel.app/api/mcp",
+  "deploymentScope": "Isolated public research service; main AlphaNova website not redeployed.",
+  "authentication": "none; public read-only market data only",
+  "verification": {
+    "unitAndIntegrationTests": 11,
+    "fullRepositoryTests": 430,
+    "frontendBuild": "passed (npx vite build)",
+    "live": [
+      {
+        "endpoint": "https://alphanova-chatgpt.vercel.app/api/mcp",
+        "server": {
+          "name": "alphanova",
+          "version": "1.0.0"
+        },
+        "tools": [
+          "search_instruments",
+          "get_quotes",
+          "get_price_history",
+          "get_fundamentals",
+          "get_company_research",
+          "get_news",
+          "screen_stocks",
+          "get_delivery",
+          "get_market_overview",
+          "get_institutional_flows"
+        ]
+      },
+      {
+        "tool": "search_instruments",
+        "status": "ok",
+        "source": "NSE mainboard + SME",
+        "fetchedAt": "2026-11-12T09:17:15.075Z",
+        "stale": false,
+        "items": 2
+      },
+      {
+        "tool": "get_quotes",
+        "status": "ok",
+        "fetchedAt": "2026-11-12T12:39:29.460Z",
+        "items": 2,
+        "partialErrors": []
+      },
+      {
+        "tool": "get_price_history",
+        "status": "ok",
+        "source": "Yahoo Finance",
+        "fetchedAt": "2026-11-12T12:39:29.677Z",
+        "items": 5
+      },
+      {
+        "tool": "get_fundamentals",
+        "status": "ok",
+        "source": "Screener.in",
+        "fetchedAt": "2026-11-12T12:39:30.068Z"
+      },
+      {
+        "tool": "get_company_research",
+        "status": "ok"
+      },
+      {
+        "tool": "get_news",
+        "status": "ok",
+        "source": "Business Today · Upstox · marketscreener.com · CNBC TV18 · ad-hoc-news.de · Livemint · NDTV Profit · Business Standard · Univest",
+        "fetchedAt": "2026-11-12T12:39:31.882Z",
+        "items": 2
+      },
+      {
+        "tool": "screen_stocks",
+        "status": "ok",
+        "source": "Yahoo Finance (1Y daily closes) + NSE delivery bhavcopy",
+        "date": "2026-11-12",
+        "fetchedAt": "2026-11-12T12:35:30.184Z",
+        "items": 2
+      },
+      {
+        "tool": "get_delivery",
+        "status": "ok",
+        "source": "NSE security-wise delivery bhavcopy",
+        "fetchedAt": "2026-11-12T12:39:32.330Z"
+      },
+      {
+        "tool": "get_market_overview",
+        "status": "ok",
+        "source": "Yahoo Finance (1Y daily closes) + NSE delivery bhavcopy",
+        "date": "2026-11-12",
+        "fetchedAt": "2026-11-12T12:35:30.184Z"
+      },
+      {
+        "tool": "get_institutional_flows",
+        "status": "ok",
+        "fetchedAt": "2026-11-12T12:39:32.813Z",
+        "cashError": null,
+        "participantsError": null
+      }
+    ]
+  },
+  "chatgptInstallation": "Pending user login and custom MCP connection in ChatGPT. Available browser was signed out.",
+  "publicDirectoryListing": "Not submitted",
+  "gitIntegration": "Not connected; Vercel automatic GitHub linking failed, CLI source deployment succeeded."
+}

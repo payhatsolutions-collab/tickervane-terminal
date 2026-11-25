@@ -1,3 +1,7 @@
+import { normalizeSymbol } from '../src/symbols.js';
+import { lodestar } from '../lib/lodestar.js';
+import { buildOverview } from '../lib/overview.js';
+import { nseHistory } from '../lib/nseHistory.js';
 import { parseCompanyFinancials } from '../lib/companyFundamentals.js';
 import { liveOptions, liveFutures, FUTURES_GROUPS } from '../lib/nseOptions.js';
 import { stockDirectory } from '../src/stocks.js';
@@ -50,8 +54,9 @@ export function normalize(result, symbol, range, adjusted = false) {
   return {symbol,name:m.longName || m.shortName || symbol,currency:m.currency || 'USD',exchange:m.exchangeName,price,previous,change,marketTime:m.regularMarketTime,dayHigh:m.regularMarketDayHigh,dayLow:m.regularMarketDayLow,volume:m.regularMarketVolume,yearHigh:m.fiftyTwoWeekHigh,yearLow:m.fiftyTwoWeekLow,timezone:m.exchangeTimezoneName,delay:m.exchangeDataDelayedBy ?? null,bars:unique,source:'Yahoo Finance',fetchedAt:new Date().toISOString(),range,...(adjusted?{adjusted:true}:{}),...session};
 }
 export async function chart(symbol,range,adjusted=false,daily=false) {
+ symbol=normalizeSymbol(symbol);
  const key=`${symbol}:${range}${adjusted?':adjusted':''}${daily?':daily':''}`, old=cache.get(key);
- if(old && Date.now()-old.at<15000)return old.data;
+ if(old && Date.now()-old.at<(['1d','5d'].includes(range)?15000:300000))return old.data;
  if(chartRequests.has(key))return chartRequests.get(key);
  const request=fetchChart(symbol,range,adjusted,daily,key);
  chartRequests.set(key,request);
@@ -67,6 +72,16 @@ async function fetchChart(symbol,range,adjusted,daily,key) {
    if(cache.size>500)cache.delete(cache.keys().next().value);cache.set(key,{at:Date.now(),data});return data;
   }catch{}
  }
+ const old=cache.get(key);
+ // Never feed unadjusted NSE prices into adjusted forecast models.
+ if (!adjusted && symbol.endsWith('.NS')) {
+   try {
+     const data=await nseHistory(symbol,range);
+     cache.set(key,{at:Date.now(),data});
+     return data;
+   } catch {}
+ }
+ if(old?.data?.bars?.length) return {...old.data,stale:true,fallback:true};
  throw new Error(`Market data unavailable for ${symbol}. Try again shortly.`);
 }
 
@@ -456,7 +471,7 @@ export default async function handler(req,res){
    if(req.query.adjusted!=null && (!['0','1'].includes(String(req.query.adjusted)) || ['1d','5d'].includes(range)))return res.status(400).json({error:'Adjusted history requires a daily or weekly range'});
    if(req.query.daily!=null && (!['0','1'].includes(String(req.query.daily)) || ['1d','5d'].includes(range)))return res.status(400).json({error:'Daily history requires a daily or weekly range'});
    data=await chart(s,range,req.query.adjusted==='1',req.query.daily==='1');
-   cacheControl='public, max-age=0, s-maxage=15';
+   cacheControl=data.fallback?'public, max-age=0, s-maxage=60':['1d','5d'].includes(range)?'public, max-age=0, s-maxage=15':'public, max-age=60, s-maxage=300, stale-while-revalidate=3600';
   }else if(op==='quotes'){
    const symbols=[...new Set(String(req.query.symbols||'').toUpperCase().split(',').map(s=>s.trim()).filter(Boolean))];
    if(!symbols.length||symbols.length>16||!symbols.every(validSymbol))return res.status(400).json({error:'Supply 1–16 valid symbols'});
@@ -464,6 +479,11 @@ export default async function handler(req,res){
    if(!quotes.length){res.setHeader('Cache-Control','no-store');return res.status(503).json({error:'Market feed temporarily unavailable. Please retry.',errors});}
    cacheControl=errors.length?'no-store':'public, max-age=0, s-maxage=15';
    data={quotes,errors,fetchedAt:new Date().toISOString()};
+  }else if(op==='lodestar'){
+   const s=String(req.query.symbol||'').trim().toUpperCase();
+   if(s && !/^[A-Z0-9][A-Z0-9.&_-]{0,24}$/.test(s))return res.status(400).json({error:'Invalid company symbol'});
+   data=await lodestar(s);
+   cacheControl=data.stale?'no-store':'public, max-age=300, s-maxage=900, stale-while-revalidate=900';
   }else if(op==='fundamentals'){
    const s=String(req.query.symbol||'').trim().toUpperCase();if(!validSymbol(s))return res.status(400).json({error:'Invalid symbol'});
    try{data=await fundamentals(s);}catch(e){res.setHeader('Cache-Control','no-store');return res.status(503).json({error:e.message||'Fundamentals temporarily unavailable'});}
@@ -494,6 +514,9 @@ export default async function handler(req,res){
     const [sessions,universe]=await Promise.all([recentSessions(BASELINE+1),nifty500()]);
     data=buildRadar(sessions,universe,{minTurnoverCr});
    }
+  }else if(op==='overview'){
+   cacheControl='public, max-age=300, s-maxage=900, stale-while-revalidate=3600';
+   data=buildOverview(await buildScreen());
   }else if(op==='screen'){
    cacheControl='public, max-age=300, s-maxage=900, stale-while-revalidate=3600';
    data=await buildScreen();

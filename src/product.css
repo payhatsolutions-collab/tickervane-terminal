@@ -28,14 +28,14 @@ body { line-height: 1.5; }
 .app .brand-mark { width: 34px; height: 36px; border-radius: 9px; background: var(--accent); color: var(--bg); overflow: hidden; position: relative; }
 .brand-mark img { width: 68px; height: 68px; max-width: none; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-45%); object-fit: cover; }
 .brand-mark svg { width: 26px; height: 26px; }
-.app .brand small { font-size: 7px; letter-spacing: 1.9px; margin-top: 3px; color: var(--muted); font-weight: 550; }
+.app .brand small { font-size: 10px; letter-spacing: 1.9px; margin-top: 3px; color: var(--muted); font-weight: 550; }
 .app .global-search { height: 40px; max-width: 480px; background: var(--bg); border-color: var(--line); font-size: 12px; border-radius: 10px; }
 .app .global-search:hover { border-color: var(--theme-accent-border); }
 .app .top-right { gap: 15px; }
 .app .desktop-nav { top: 64px; padding: 14px 12px; gap: 18px; background: var(--panel); }
 .app .nav-collapse { font-size: 11px; color: var(--muted); padding: 6px 12px; min-height: 32px; }
 .app .nav-group { gap: 4px; }
-.app .nav-group-label { font-size: 9px; letter-spacing: 1.5px; padding-bottom: 6px; }
+.app .nav-group-label { font-size: 10px; letter-spacing: 1.5px; padding-bottom: 6px; }
 .app .nav-group a { min-height: 40px; border-radius: 7px; font-size: 12px; padding: 8px 12px; }
 .app .nav-group a.active { background: var(--theme-selected); border-color: transparent; color: var(--accent); font-weight: 600; }
 .app .nav-group a.active::after { content: ''; margin-left: auto; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
@@ -49,7 +49,7 @@ body { line-height: 1.5; }
 .app.research-home main { padding-top: 20px; }
 .workspace-toolbar { min-height: 66px; margin-bottom: 18px; align-items: center; gap: 14px; }
 .app .workspace-heading { display: block; margin: 0 auto 0 0; min-width: 0; }
-.eyebrow { display: block; font-size: 9px; font-weight: 650; letter-spacing: 1.5px; color: var(--accent); }
+.eyebrow { display: block; font-size: 10px; font-weight: 650; letter-spacing: 1.5px; color: var(--accent); }
 .workspace-heading h1 { font-size: clamp(27px, 2.5vw, 34px); font-weight: 600; line-height: 1.3; letter-spacing: -1px; margin: 4px 0; }
 .workspace-heading p { font-size: 13px; color: var(--muted); }
 .workspace-toolbar .feed-status { font-size: 10px; color: var(--muted); white-space: nowrap; }
@@ -59,7 +59,7 @@ body { line-height: 1.5; }
 .app .panel { border-radius: 14px; border: 1px solid var(--line); background: var(--panel); box-shadow: var(--soft-shadow); overflow: clip; }
 .app .panel-title { padding: 16px 18px; min-height: 59px; border-bottom: 1px solid var(--line); }
 .app .panel-title h2 { font-size: 15px; letter-spacing: -.2px; }
-.app .panel-tag { color: var(--muted); border: 1px solid var(--line); background: var(--bg); font-size: 8px; letter-spacing: .7px; border-radius: 5px; padding: 3px 5px; }
+.app .panel-tag { color: var(--muted); border: 1px solid var(--line); background: var(--bg); font-size: 10px; letter-spacing: .7px; border-radius: 5px; padding: 3px 5px; }
 .app .panel-foot { color: var(--muted); background: transparent; }
 .app .link { color: var(--accent); }
 .app .icon-button { border-radius: 8px; }
@@ -68,10 +68,10 @@ body { line-height: 1.5; }
 .app .empty>svg { color: var(--muted); margin-bottom: 12px; }
 .app .empty p { max-width: 360px; margin: 10px auto 18px; font-size: 12px; line-height: 1.8; }
 .app .empty .button { margin-inline: auto; }
-.app footer { color: var(--muted); padding: 20px 30px; border-color: var(--line); font-size: 9px; }
+.app footer { color: var(--muted); padding: 20px 30px; border-color: var(--line); font-size: 10px; }
 .market-overview { display: grid; gap: 10px; margin-bottom: 18px; }
 .snapshot-caption { display: flex; justify-content: space-between; color: var(--muted); gap: 10px; }
-.snapshot-caption span { font-size: 9px; }
+.snapshot-caption span { font-size: 10px; }
 .snapshot-caption span:first-child { letter-spacing: 1.1px; font-weight: 600; }
 .market-snapshot { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 12px; }
 .market-snapshot-card { position: relative; overflow: hidden; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; min-height: 130px; box-shadow: var(--soft-shadow); }
@@ -81,7 +81,7 @@ body { line-height: 1.5; }
 .market-card-value { display: block; font: 550 27px/1.5 Inter, sans-serif; font-variant-numeric: tabular-nums; letter-spacing: -.6px; color: var(--text); margin: 7px 0 3px; position: relative; z-index: 1; }
 .market-card-bottom { display: flex; align-items: center; flex-wrap: wrap; gap: 5px 8px; }
 .market-card-change { display: inline-flex; align-items: center; gap: 2px; font: 500 10px 'IBM Plex Mono',monospace; }
-.market-card-label { font-size: 9px; color: var(--muted); }
+.market-card-label { font-size: 10px; color: var(--muted); }
 .market-card-trend { position: absolute; right: 16px; top: 53px; width: 64px; opacity: .7; }
 .market-mini-trend { width: 100%; height: 32px; }
 .snapshot-placeholder { opacity: .45; }
@@ -102,7 +102,7 @@ body { line-height: 1.5; }
 .app .desk-playbooks>button { border-radius: 7px; border: 1px solid var(--line); background: transparent; padding: 8px 10px; }
 .app .desk-playbooks>button.active { background: var(--theme-selected); border-color: var(--theme-accent-border); color: var(--accent); }
 .app .desk-playbooks>button strong { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 550; }
-.app .desk-playbooks>button span { background: var(--theme-subtle); color: var(--muted); margin: 0; border-radius: 4px; padding: 1px 5px; font-size: 9px; }
+.app .desk-playbooks>button span { background: var(--theme-subtle); color: var(--muted); margin: 0; border-radius: 4px; padding: 1px 5px; font-size: 10px; }
 .app .setup-rules { margin: 0 18px 10px; }
 .app .setup-rules summary { font-size: 11px; color: var(--muted); }
 .app .desk-candidates { padding: 0 18px; }
@@ -120,13 +120,12 @@ body { line-height: 1.5; }
 .app .overview-welcome { border-radius: 9px; background: var(--theme-selected); border-color: transparent; font-size: 12px; padding: 12px 16px; }
 .install-app { display: flex; align-items: center; gap: 10px; padding: 12px 10px; width: 100%; border: 1px solid var(--line); border-radius: 9px; text-align: left; color: var(--text); margin-bottom: 10px; }
 .install-app>svg { color: var(--accent); }
-.install-app>svg:last-child { margin-left: auto; }
 .install-app span { font-size: 11px; font-weight: 550; }
-.install-app small { display: block; color: var(--muted); font-size: 9px; font-weight: 400; margin-top: 3px; }
+.install-app small { display: block; color: var(--muted); font-size: 10px; font-weight: 400; margin-top: 3px; }
 .install-app:hover { background: var(--theme-selected); }
 .app-installed { display: flex; gap: 8px; align-items: center; color: var(--muted); font-size: 11px; padding: 10px; }
-.app.nav-collapsed .install-app { justify-content: center; padding: 10px 4px; }
-.app.nav-collapsed .install-app span,.app.nav-collapsed .install-app>svg:last-child,.app.nav-collapsed .app-installed span { display: none; }
+.app.nav-collapsed .desktop-nav .install-app { justify-content: center; padding: 10px 4px; }
+.app.nav-collapsed .desktop-nav .install-app span { display: none; }
 .app.nav-collapsed .desktop-nav a.active::after { display: none; }
 .app .dialog { color: var(--text); background: var(--panel); border: 1px solid var(--line); box-shadow: 0 24px 100px #0006; }
 .app .dialog::backdrop { background: #06111899; backdrop-filter: blur(4px); }
@@ -210,18 +209,18 @@ body { line-height: 1.5; }
   .app .desk-evidence { font-size: 10px; }
   .app .desk-candidate-bottom b { font-size: 13px; }
   .app .desk-candidate-bottom .button { min-height: 44px; font-size: 10px; padding: 8px 10px; }
-  .app .desk-source { padding: 12px 14px; font-size: 9px; }
+  .app .desk-source { padding: 12px 14px; font-size: 10px; }
   .app .empty { padding: 28px 18px; }
   .app .empty p { font-size: 11px; }
   .app .overview-watch-list>button { min-height: 62px; }
   .app .overview-watch .panel-foot { padding: 12px 18px; }
-  .app .overview-note { align-items: flex-start; font-size: 9px; line-height: 1.7; }
+  .app .overview-note { align-items: flex-start; font-size: 10px; line-height: 1.7; }
   .app .overview-note svg { margin-top: 2px; }
   .feed-notice { font-size: 10px; margin-top: -4px; margin-bottom: 12px; }
   .feed-notice summary { min-height: 44px; gap: 6px; }
   .feed-notice summary::after { display: none; }
   .app .mobile-nav { min-height: calc(72px + env(safe-area-inset-bottom)); padding: 7px 12px calc(7px + env(safe-area-inset-bottom)); background: var(--panel); border-top: 1px solid var(--line); box-shadow: 0 -4px 20px #00000008; }
-  .app .mobile-nav>:is(a,button) { min-height: 56px; color: var(--muted); font-size: 9px; gap: 5px; border-radius: 10px; }
+  .app .mobile-nav>:is(a,button) { min-height: 56px; color: var(--muted); font-size: 10px; gap: 5px; border-radius: 10px; }
   .app .mobile-nav>:is(a,button).active { background: var(--theme-selected); color: var(--accent); font-weight: 600; }
   .app .mobile-nav svg { width: 20px; height: 20px; stroke-width: 1.8; }
   .app .mobile-nav .active svg { stroke-width: 2.2; }
@@ -279,7 +278,7 @@ body { line-height: 1.5; }
   .app .screen-preset-toolbar label { flex: 1; width: auto; min-width: 0; font-size: 0; gap: 0; }
   .app .screen-preset-toolbar select { font-size: 13px; padding: 8px; width: 100%; }
   .app .screen-secondary-actions { flex-basis: 100%; }
-  .app .screen-freshness { font-size: 9px; padding-top: 4px; margin: 0; }
+  .app .screen-freshness { font-size: 10px; padding-top: 4px; margin: 0; }
   .app .screen-filters { padding: 6px 12px; }
   .app .screen-filters>select,.app .screen-filters>input { font-size: 13px; padding: 8px; }
   .app .screen-chart-toolbar { padding-top: 4px; padding-bottom: 6px; }
@@ -312,14 +311,14 @@ body { line-height: 1.5; }
   .app .compact-watchlist .saved-watchlist-actions { grid-column: 2; grid-row: 2; justify-content: flex-end; gap: 4px; }
   .app .compact-watchlist .saved-watchlist-actions .button { font-size: 10px; padding: 8px; }
   .app .compact-watchlist .saved-watchlist-stock>span { font-size: 10px; margin-top: 3px; }
-  .app .compact-watchlist .watch-signal-date { font-size: 9px; }
+  .app .compact-watchlist .watch-signal-date { font-size: 10px; }
 }
 .app .desk-ltp { display:grid; gap:3px; text-align:right; }
-.app .desk-ltp>small { font-size:9px; color:var(--muted); }
+.app .desk-ltp>small { font-size:10px; color:var(--muted); }
 .app .desk-ltp>span { font:500 13px 'IBM Plex Mono',monospace; color:var(--text); }
-.app .desk-ltp>span>small { font-size:9px; }
+.app .desk-ltp>span>small { font-size:10px; }
 @media(max-width:760px) {
   .app .desk-candidate-bottom { gap:6px; }
   .app .desk-ltp>span { font-size:12px; }
-  .app .desk-ltp>span>small { font-size:8px; }
+  .app .desk-ltp>span>small { font-size:10px; }
 }

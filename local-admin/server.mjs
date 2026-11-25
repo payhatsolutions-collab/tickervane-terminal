@@ -3,12 +3,15 @@ import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { spawn } from 'node:child_process';
-import { list, get } from '@vercel/blob';
+import { list, get, put } from '@vercel/blob';
+import { blobOptions, readJson } from '../lib/authStore.js';
+import { reviewRecord } from '../lib/pro.js';
+import { loadRegistrations } from './registrations.mjs';
 
 const folder = dirname(fileURLToPath(import.meta.url));
 const root = resolve(folder, '..');
 try { process.loadEnvFile(resolve(root, '.env.local')); } catch { /* Existing environment may provide storage access. */ }
-const port = 5188;
+const port = Number(process.env.USERS_PORT) || 5188;
 const address = `http://127.0.0.1:${port}`;
 const hosts = new Set([`127.0.0.1:${port}`, `localhost:${port}`]);
 const origins = new Set([address, `http://localhost:${port}`]);
@@ -26,36 +29,39 @@ function json(response, status, data) {
   response.end(JSON.stringify(data));
 }
 
-async function registrations() {
-  const paths = [];
+const registrations = () => loadRegistrations({ list, get });
+
+// Pro access claimed with a UPI reference. Access is instant, so these are reviewed afterwards.
+const proPath = id => `pro/accounts/google-${id}.json`;
+async function proPayments() {
+  const ids = [];
   let cursor;
   do {
-    const page = await list({ prefix: 'signups/', limit: 1000, cursor });
-    paths.push(...page.blobs.filter(blob => /^signups\/[a-f0-9]{64}\.json$/.test(blob.pathname)).map(blob => blob.pathname));
+    const page = await list({ prefix: 'pro/accounts/', limit: 1000, cursor });
+    ids.push(...page.blobs.map(blob => /^pro\/accounts\/google-([a-f0-9]{64})\.json$/.exec(blob.pathname)?.[1]).filter(Boolean));
     cursor = page.hasMore ? page.cursor : undefined;
   } while (cursor);
-  const users = [];
+  const text = (value, max) => typeof value === 'string' ? value.slice(0, max) : '';
+  const accounts = [];
   let unavailable = 0;
-  for (let i = 0; i < paths.length; i += 8) {
-    await Promise.all(paths.slice(i, i + 8).map(async path => {
+  for (let i = 0; i < ids.length; i += 8) {
+    await Promise.all(ids.slice(i, i + 8).map(async id => {
       try {
-        const result = await get(path, { access: 'private', useCache: false });
-        if (!result || result.statusCode !== 200) throw new Error('Unavailable record');
-        const value = JSON.parse(await new Response(result.stream).text());
-        if (typeof value.name !== 'string' || typeof value.email !== 'string') throw new Error('Invalid record');
-        users.push({
-          id: path.slice('signups/'.length, -5),
-          name: value.name.slice(0, 80), email: value.email.slice(0, 254),
-          createdAt: typeof value.createdAt === 'string' ? value.createdAt : null,
-          emailVerified: value.emailVerified === true,
-          noticeVersion: typeof value.noticeVersion === 'string' ? value.noticeVersion.slice(0, 40) : null,
-          source: typeof value.source === 'string' ? value.source.slice(0, 80) : 'free-signup',
-        });
+        const value = await readJson(proPath(id));
+        if (!value || !Array.isArray(value.payments)) throw new Error('Invalid record');
+        accounts.push({ id, name: text(value.name, 80), email: text(value.email, 254), note: text(value.note, 12), status: text(value.status, 20),
+          expiresAt: Number.isFinite(value.expiresAt) ? value.expiresAt : 0,
+          payments: value.payments.map(payment => ({ utr: text(payment.utr, 12), note: text(payment.note, 12), amount: Number(payment.amount) || 0, claimedAt: text(payment.claimedAt, 40),
+            periodEnd: Number.isFinite(payment.periodEnd) ? payment.periodEnd : 0, dateMatch: payment.dateMatch === true, status: text(payment.status, 20) })) });
       } catch { unavailable++; }
     }));
   }
-  users.sort((a, b) => (Date.parse(b.createdAt) || 0) - (Date.parse(a.createdAt) || 0));
-  return { users, unavailable, updatedAt: new Date().toISOString() };
+  return { accounts, unavailable, updatedAt: new Date().toISOString() };
+}
+async function requestJson(req) {
+  let raw = '';
+  for await (const chunk of req) { raw += chunk; if (raw.length > 2000) throw new Error('Too large'); }
+  return JSON.parse(raw);
 }
 
 const server = http.createServer(async (req, res) => {
@@ -72,9 +78,28 @@ const server = http.createServer(async (req, res) => {
       (req.headers['sec-fetch-site'] && !['same-origin', 'none'].includes(req.headers['sec-fetch-site']))) {
     return json(res, 403, { error: 'Open this viewer directly on this computer.' });
   }
-  if (req.method !== 'GET') { res.setHeader('Allow', 'GET'); return json(res, 405, { error: 'Read-only viewer.' }); }
   const url = new URL(req.url, address);
+  const storage = !!(process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID);
+  // The only write this viewer makes: recording your review of a Pro payment.
+  if (req.method === 'POST' && url.pathname === '/api/pro/review') {
+    if (!origins.has(req.headers.origin) || !/^application\/json(?:;|$)/i.test(req.headers['content-type'] || '')) return json(res, 403, { error: 'Open this viewer directly on this computer.' });
+    if (!storage) return json(res, 503, { error: 'Storage is not connected.' });
+    try {
+      const { id, action } = await requestJson(req);
+      if (!/^[a-f0-9]{64}$/.test(id || '')) return json(res, 400, { error: 'Unknown account.' });
+      const record = await readJson(proPath(id));
+      const next = record && reviewRecord(record, action);
+      if (!next) return json(res, 400, { error: 'That change is not available for this account.' });
+      await put(proPath(id), JSON.stringify(next), { ...blobOptions, allowOverwrite: true });
+      return json(res, 200, { ok: true });
+    } catch { return json(res, 503, { error: 'Couldn’t save the review. Check your connection and try again.' }); }
+  }
+  if (req.method !== 'GET') { res.setHeader('Allow', 'GET'); return json(res, 405, { error: 'Only Pro payment reviews can be changed here.' }); }
   try {
+    if (url.pathname === '/api/pro') {
+      if (!storage) return json(res, 503, { error: 'Storage is not connected. Restore the project’s local storage configuration, then restart this viewer.' });
+      return json(res, 200, await proPayments());
+    }
     if (url.pathname === '/api/users') {
       if (!(process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID)) {
         return json(res, 503, { error: 'Registration storage is not connected. Restore the project’s local storage configuration, then restart this viewer.' });
@@ -104,6 +129,6 @@ server.on('error', error => {
   process.exitCode = 1;
 });
 server.listen(port, '127.0.0.1', () => {
-  console.log(`AlphaNova users: ${address}\nLocal to this computer · read-only · no password\nKeep this process open while using the viewer.`);
+  console.log(`AlphaNova users: ${address}\nLocal to this computer · no password\nKeep this process open while using the viewer.`);
   if (process.argv.includes('--open')) openBrowser();
 });

@@ -54,7 +54,7 @@ export default function Onboarding({ state, onState, watch, onToggle, onNavigate
           <>Follow the moves<br /><span>that matter to you.</span></>}</h2>
         <p>{step === "welcome" ? "Start with one stock you want to follow. Save it now, revisit its chart tomorrow, and choose when to hear about a price move." :
           step === "choose" ? "Tap the star to save a stock. Pick from these examples or search for your own. Each chart opens as a shareable view." :
-          step === "return" ? "Your stocks are in Watchlist under Personal. On mobile, tap Watchlist in the bottom bar. Bookmark the view and come back to see what changed." :
+          step === "return" ? "Your stocks are in Watchlist under Personal. On mobile, tap More in the bottom bar, then Watchlist. Bookmark the view and come back to see what changed." :
           "Pick a saved stock and set a price above or below which you want an alert. You choose the target; notifications are optional."}</p>
         <p className="first-visit-note">Saved in this browser. Example stocks are for learning, not recommendations.</p>
         {step === "welcome" && <button className="button primary" onClick={() => advance("choose")}>Build my watchlist <ChevronRight size={16} /></button>}

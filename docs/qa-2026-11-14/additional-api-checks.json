@@ -1,0 +1,86 @@
+{
+  "origin": "https://alphanova48.in",
+  "checkedAt": "2026-11-14T08:20:03.566Z",
+  "rows": [
+    {
+      "path": "/api/market?op=unknown",
+      "status": 400,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/api/market?op=chart&symbol=INVALID%2F%2F&range=1y",
+      "status": 400,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/api/market?op=chart&symbol=TCS.NS&range=invalid",
+      "status": 400,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/api/lodestar?symbol=..%2Fsecret",
+      "status": 422,
+      "contentType": "application/json"
+    },
+    {
+      "path": "/api/auth?op=session",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/stocks/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/install",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8"
+    }
+  ],
+  "screenDate": "2026-11-13",
+  "missingTrendRows": [
+    {
+      "symbol": "CMPDI",
+      "above200": null,
+      "golden": null,
+      "trendTemplate": null
+    },
+    {
+      "symbol": "CLEANMAX",
+      "above200": null,
+      "golden": null,
+      "trendTemplate": null
+    },
+    {
+      "symbol": "FRACTAL",
+      "above200": null,
+      "golden": null,
+      "trendTemplate": null
+    },
+    {
+      "symbol": "VAML",
+      "above200": null,
+      "golden": null,
+      "trendTemplate": null
+    },
+    {
+      "symbol": "VISL",
+      "above200": null,
+      "golden": null,
+      "trendTemplate": null
+    },
+    {
+      "symbol": "VOGL",
+      "above200": null,
+      "golden": null,
+      "trendTemplate": null
+    },
+    {
+      "symbol": "VEDPOWER",
+      "above200": null,
+      "golden": null,
+      "trendTemplate": null
+    }
+  ]
+}

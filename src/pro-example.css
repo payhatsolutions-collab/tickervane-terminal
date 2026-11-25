@@ -1,0 +1,48 @@
+/* A locked Pro workspace opens on one live example. This strip sits above it. */
+.pro-example {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px 18px;
+  margin: 4px 0 16px;
+  padding: 12px 14px 12px 16px;
+  border: 1px solid color-mix(in srgb, var(--accent) 34%, var(--line));
+  border-radius: 14px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 11%, transparent), color-mix(in srgb, var(--accent) 3%, transparent));
+}
+.pro-example-copy { min-width: 0; }
+.pro-example-eyebrow { display: inline-flex; align-items: center; gap: 6px; }
+.pro-example p { margin: 5px 0 0; font-size: 13px; line-height: 1.5; color: var(--muted); }
+.pro-example p strong { color: var(--text); font-weight: 600; }
+#root .app .pro-example .pro-example-cta { min-height: 44px; font-size: 13px; white-space: nowrap; }
+
+/* Marks a control that opens the paywall. */
+.pro-pill {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 5px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  color: var(--accent);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .8px;
+  line-height: 1.4;
+  vertical-align: middle;
+}
+
+.pro-more { display: grid; gap: 12px; justify-items: start; padding: 16px 18px; margin: 0 0 16px; }
+.pro-more ul { list-style: none; display: grid; gap: 8px; margin: 0; padding: 0; font-size: 13px; line-height: 1.45; }
+.pro-more li { display: flex; align-items: flex-start; gap: 9px; }
+.pro-more li svg { flex-shrink: 0; margin-top: 3px; color: var(--accent); }
+#root .app .pro-more .button { min-height: 40px; }
+.pro-example-note { margin: 0; padding: 11px 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+
+.pro-gate .pro-gate-example { min-height: 36px; margin-top: 12px; font-size: 13px; }
+
+@media (max-width: 760px) {
+  .pro-example { grid-template-columns: minmax(0, 1fr); padding: 12px; }
+  #root .app .pro-example .pro-example-cta { width: 100%; justify-content: center; min-height: 46px; font-size: 14px; }
+  .pro-more { padding: 14px; }
+  #root .app .pro-more .button { width: 100%; justify-content: center; min-height: 44px; }
+}

@@ -1,0 +1,229 @@
+/* Chart studio: scoped to Charts so other workspaces keep their own density. */
+.charts-workspace {
+  --studio-canvas: #080d14;
+  --studio-surface: #0e1520;
+  --studio-border: #202c3d;
+  --studio-blue: #6b9dff;
+  --studio-amber: #e7b65a;
+}
+:root[data-theme="light"] .charts-workspace {
+  --studio-canvas: #ffffff;
+  --studio-surface: #f6f8fc;
+  --studio-border: #dce3ee;
+  --studio-blue: #306bd8;
+  --studio-amber: #a77318;
+}
+.app.charts-workspace main { padding: 12px 14px 28px; }
+.app.charts-workspace .workspace-toolbar { margin-bottom: 16px; }
+.app.charts-workspace .workspace-heading .eyebrow { display: none; }
+.app.charts-workspace .workspace-heading h1 { font-size: 20px; }
+.app.charts-workspace .workspace-heading p { font-size: 11px; }
+.app.charts-workspace .terminal-grid { gap: 18px; }
+.app.charts-workspace .chart-panel { border-color: var(--studio-border); border-radius: 14px; background: var(--studio-canvas); box-shadow: 0 16px 60px #0000001a; }
+.chart-workspace-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 52px; padding: 8px 18px; border-bottom: 1px solid var(--studio-border); background: var(--studio-surface); }
+.chart-workspace-title, .chart-workspace-actions { display: flex; align-items: center; gap: 10px; }
+.chart-workspace-title>svg { color: var(--studio-blue); }
+.chart-workspace-title h1 { font-size: 12px; font-weight: 600; letter-spacing: -.15px; }
+.chart-workspace-title>span { margin-left: 8px; padding-left: 16px; border-left: 1px solid var(--studio-border); font: 10px 'IBM Plex Mono', monospace; letter-spacing: 1.3px; color: var(--muted); }
+.chart-workspace-actions .button { min-height: 30px; padding: 5px 10px; border-color: var(--studio-border); background: transparent; font-size: 10px; }
+.chart-workspace-actions .chart-save { color: var(--studio-blue); }
+.app.charts-workspace .security-header { padding: 12px 20px; min-height: 82px; border-bottom: 1px solid var(--studio-border); background: linear-gradient(110deg, color-mix(in srgb, var(--studio-blue) 6%, var(--studio-canvas)), var(--studio-canvas) 60%); }
+.app.charts-workspace .security-logo { display: grid; width: 42px; height: 42px; border-radius: 12px; border: 1px solid color-mix(in srgb, var(--studio-blue) 30%, var(--studio-border)); background: color-mix(in srgb, var(--studio-blue) 12%, var(--studio-canvas)); color: var(--studio-blue); font-size: 14px; }
+.charts-workspace .symbol-picker { font-size: 19px; letter-spacing: -.6px; }
+.charts-workspace .symbol-picker>svg { color: var(--muted); }
+.charts-workspace .security-identity p { font-size: 11px; margin-top: 6px; }
+.app.charts-workspace .security-price>strong { font-size: 29px; letter-spacing: -1px; font-weight: 500; }
+.charts-workspace .security-price>strong small { font-size: 10px; margin-left: 9px; letter-spacing: .5px; }
+.charts-workspace .security-price>span { font-size: 11px; margin-top: 5px; }
+.chart-workbench { display: grid; grid-template-columns: minmax(0, 1fr) 244px; }
+.chart-main { min-width: 0; }
+.app.charts-workspace .chart-toolbar { border-top: 0; border-color: var(--studio-border); padding: 9px 14px; min-height: 52px; gap: 8px; }
+.app.charts-workspace .chart-toolbar>.segments { width: auto; display: flex; gap: 3px; padding: 3px; border-radius: 7px; background: var(--studio-surface); }
+.app.charts-workspace .chart-toolbar .segments button { min-height: 29px; padding: 5px 9px; font: 10px 'IBM Plex Mono', monospace; border: 0; border-radius: 5px; color: var(--muted); background: transparent; }
+.app.charts-workspace .chart-toolbar .segments button.active { background: color-mix(in srgb, var(--studio-blue) 18%, var(--studio-surface)); color: var(--studio-blue); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--studio-blue) 18%, transparent); }
+.app.charts-workspace .chart-tools { width: auto; gap: 4px; }
+.charts-workspace .chart-tools select { height: 31px; padding: 4px 8px; border-color: var(--studio-border); background: var(--studio-surface); font-size: 10px; }
+.app.charts-workspace .chart-tools .icon-button { width: 30px; height: 30px; }
+.charts-workspace .indicator-menu { border-color: var(--studio-border); }
+.app.charts-workspace .indicator-menu>summary { display: flex; align-items: center; gap: 8px; padding: 10px 18px; min-height: 40px; font-size: 10px; list-style: none; }
+.charts-workspace .indicator-menu>summary::-webkit-details-marker { display: none; }
+.charts-workspace .indicator-menu>summary::after { content: '+'; font-size: 16px; margin-left: auto; }
+.charts-workspace .indicator-menu[open]>summary::after { content: '−'; }
+.charts-workspace .indicator-count { display: grid; place-items: center; width: 18px; height: 18px; border-radius: 5px; font: 10px 'IBM Plex Mono', monospace; background: var(--studio-surface); color: var(--studio-blue); }
+.charts-workspace .indicator-active-list { border-left: 1px solid var(--studio-border); padding-left: 12px; margin-left: 4px; font-size: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.app.charts-workspace .indicator-toolbar { padding: 0 16px 12px; gap: 6px; }
+.charts-workspace .indicator-toolbar button { border-radius: 5px; font-size: 10px; }
+.app.charts-workspace .chart-area { min-height: 440px; background: var(--studio-canvas); }
+.app.charts-workspace .chart-canvas { height: clamp(400px, calc(100dvh - 410px), 800px); min-height: 400px; }
+.charts-workspace .ohlc { padding: 14px 18px 8px; min-height: 38px; gap: 8px 14px; font-size: 10px; }
+.charts-workspace .ohlc b { color: var(--text); }
+.charts-workspace .ohlc>span:first-child { color: var(--studio-blue); }
+.charts-workspace .chart-caption { padding: 10px 16px; font-size: 10px; border-color: var(--studio-border); }
+.charts-workspace .chart-caption>a { color: var(--studio-blue); font-size: 10px; }
+.charts-workspace .chart-caption>span { font-size: 10px; }
+.charts-workspace .chart-caption>button { font-size: 10px; }
+.chart-interaction-hint { display: flex; justify-content: space-between; gap: 8px; padding: 9px 16px 12px; color: var(--muted); }
+.chart-interaction-hint>span { display: flex; align-items: center; gap: 6px; font-size: 10px; }
+.candle-key { height: 8px; width: 5px; display: inline-block; border-radius: 1px; }
+.candle-up { background: var(--studio-blue); }
+.candle-down { background: var(--studio-amber); margin-left: 8px; }
+.chart-insights { min-width: 0; border-left: 1px solid var(--studio-border); background: var(--studio-surface); }
+.chart-insights-heading { padding: 20px 18px 16px; }
+.insights-kicker { font: 10px 'IBM Plex Mono', monospace; letter-spacing: 1.7px; color: var(--studio-blue); }
+.chart-insights-heading h3 { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 17px; font-weight: 500; letter-spacing: -.5px; }
+.chart-insights-heading h3>svg { color: var(--studio-blue); }
+.chart-insights-heading p { margin-top: 6px; color: var(--muted); font-size: 10px; }
+.app.charts-workspace .chart-insights .regime-strip { margin: 0 16px 14px; padding: 9px 10px; background: var(--studio-canvas); border: 1px solid var(--studio-border); border-radius: 6px; gap: 6px; }
+.charts-workspace .regime-label { font: 10px 'IBM Plex Mono', monospace; letter-spacing: 1px; color: var(--muted); }
+.app.charts-workspace .regime-strip strong { font-size: 10px; }
+.chart-insights .chart-scores { padding: 0 16px 14px; border-color: var(--studio-border); }
+.chart-insights .chart-scores-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+.chart-insights .chart-score { padding: 12px 10px; background: var(--studio-canvas); border-color: var(--studio-border); border-radius: 8px; }
+.chart-insights .chart-score-alphaNova { grid-column: 1 / -1; padding: 14px; background: linear-gradient(125deg, color-mix(in srgb, var(--studio-blue) 10%, var(--studio-surface)), var(--studio-canvas)); border-color: color-mix(in srgb, var(--studio-blue) 28%, var(--studio-border)); }
+.chart-insights .chart-score-label { font-size: 10px; gap: 5px; }
+.chart-insights .chart-score-label svg { width: 12px; height: 12px; }
+.chart-insights .chart-score:not(.chart-score-alphaNova) .chart-score-label svg { display: none; }
+.chart-insights .chart-score-value { margin: 8px 0; }
+.chart-insights .chart-score-value strong { font-size: 24px; font-weight: 500; }
+.chart-insights .chart-score-alphaNova .chart-score-value strong { font-size: 38px; letter-spacing: -2px; }
+.chart-insights .chart-score-value>span { font-size: 10px; }
+.chart-insights .chart-score small { font-size: 10px; line-height: 1.6; }
+.chart-insights .chart-score-meter { height: 4px; }
+.chart-insights .chart-scores-method { font-size: 10px; margin-top: 8px; line-height: 1.6; }
+.chart-insights .chart-scores-method summary { padding: 5px 0; }
+.chart-insights .chart-scores-method p { font-size: 10px; }
+.chart-trend-summary { padding: 16px; border-bottom: 1px solid var(--studio-border); }
+.chart-trend-summary>div:first-child { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.chart-trend-summary>div>span { font: 10px 'IBM Plex Mono', monospace; color: var(--muted); letter-spacing: 1px; }
+.chart-trend-summary strong { font-size: 10px; font-weight: 500; }
+.chart-trend-steps { display: flex; gap: 4px; margin-top: 12px; }
+.chart-trend-steps i { flex: 1; height: 4px; border-radius: 2px; background: var(--studio-border); }
+.chart-trend-steps .up { background: var(--green); }
+.chart-trend-steps .down { background: var(--red); }
+.chart-trend-steps .neutral { background: var(--studio-amber); }
+.chart-trend-summary p { color: var(--muted); font-size: 10px; margin-top: 8px; line-height: 1.6; }
+.chart-insights .compact-details { border-color: var(--studio-border); }
+.chart-insights .compact-details>summary { padding: 12px 16px; font-size: 10px; }
+.chart-insights .level-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.app.charts-workspace .chart-insights .quote-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 12px; padding: 16px; border-color: var(--studio-border); }
+.chart-insights .quote-stats>div { padding: 0; border: 0; }
+.chart-insights .quote-stats span { font-size: 10px; }
+.chart-insights .quote-stats strong { font-size: 11px; margin-top: 6px; }
+.chart-insights-note { display: flex; align-items: flex-start; gap: 7px; padding: 0 16px 16px; color: var(--muted); }
+.chart-insights-note>span { font-size: 10px; line-height: 1.7; }
+.app.charts-workspace.chart-focus .chart-panel { position: fixed; inset: 10px; z-index: 40; overflow-y: auto; border-radius: 12px; box-shadow: 0 0 0 12px var(--bg); }
+.app.charts-workspace.chart-focus .chart-canvas { height: calc(100dvh - 285px); min-height: 330px; }
+/* Give the plot priority when the separate trade planner is open. */
+.charts-workspace .planner-open .chart-workbench { grid-template-columns: minmax(0, 1fr); }
+.charts-workspace .planner-open .chart-insights { display: grid; grid-template-columns: 1fr 1fr; border-left: 0; border-top: 1px solid var(--studio-border); padding-top: 14px; }
+.charts-workspace .planner-open .chart-insights-heading { display: none; }
+.charts-workspace .planner-open .chart-insights .chart-scores { grid-column: 1; grid-row: 1 / 5; border-bottom: 0; }
+@media (max-width: 1200px) {
+  .chart-workbench { grid-template-columns: minmax(0, 1fr) 218px; }
+  .chart-workspace-title>span { display: none; }
+  .app.charts-workspace .chart-toolbar { padding-inline: 10px; }
+  .app.charts-workspace .chart-toolbar .segments button { padding-inline: 7px; }
+  .chart-interaction-hint>span:last-child { display: none; }
+}
+@media (max-width: 1000px) {
+  .chart-workbench { grid-template-columns: minmax(0, 1fr); }
+  .chart-insights { display: grid; grid-template-columns: 1fr 1fr; border-left: 0; border-top: 1px solid var(--studio-border); padding-top: 16px; }
+  .chart-insights-heading { grid-column: 1; padding-top: 0; }
+  .chart-insights .regime-strip { grid-column: 1; }
+  .chart-insights .chart-scores { grid-column: 2; grid-row: 1 / 5; border-bottom: 0; }
+  .chart-insights .chart-trend-summary, .chart-insights .compact-details, .chart-insights .quote-stats, .chart-insights-note { grid-column: 1; }
+  .app.charts-workspace .chart-canvas { height: 450px; }
+}
+@media (max-width: 760px) {
+  .app.charts-workspace main { padding: 10px 10px 24px; }
+  .app.charts-workspace .workspace-toolbar { margin-bottom: 10px; }
+  .app.charts-workspace .workspace-heading p { display: none; }
+  .app.charts-workspace .chart-panel { border-radius: 10px; }
+  .chart-workspace-heading { padding: 7px 10px; }
+  .chart-workspace-title { gap: 6px; }
+  .chart-workspace-title h1 { font-size: 11px; }
+  .chart-workspace-actions { gap: 4px; }
+  .chart-workspace-actions .button { min-height: 36px; padding-inline: 8px; }
+  .chart-workspace-actions .button>span { display: none; }
+  .chart-workspace-actions .icon-button { width: 36px; height: 36px; }
+  .app.charts-workspace .security-header { padding: 16px 12px; gap: 8px; min-height: 86px; }
+  .app.charts-workspace .security-logo { display: none; }
+  .charts-workspace .symbol-picker { font-size: 17px; }
+  .charts-workspace .security-identity p { font-size: 10px; max-width: 160px; }
+  .app.charts-workspace .security-price>strong { font-size: 23px; white-space: nowrap; }
+  .charts-workspace .security-price>strong small { font-size: 10px; margin-left: 5px; }
+  .charts-workspace .security-price>span { font-size: 10px; }
+  .app.charts-workspace .chart-toolbar { gap: 6px; padding: 7px 10px; }
+  .app.charts-workspace .chart-toolbar>.segments { width: 100%; flex-wrap: nowrap; justify-content: space-between; gap: 1px; }
+  .app.charts-workspace .chart-toolbar .segments button { min-height: 36px; padding: 5px 8px; }
+  .app.charts-workspace .chart-tools { width: 100%; gap: 8px; }
+  .app.charts-workspace .chart-tools .icon-button { width: 36px; height: 36px; }
+  .charts-workspace .chart-tools select { min-height: 36px; margin-right: auto; font-size: 12px; }
+  .app.charts-workspace .indicator-menu>summary { min-height: 44px; padding-inline: 12px; }
+  .app.charts-workspace .indicator-toolbar button { min-height: 36px; }
+  .charts-workspace .ohlc { padding: 12px; gap: 8px 12px; }
+  .charts-workspace .ohlc>span { font-size: 10px; }
+  .charts-workspace .ohlc>span:first-child { width: 100%; }
+  .app.charts-workspace .chart-canvas { height: 410px; min-height: 330px; }
+  .charts-workspace .chart-caption { padding: 10px 12px; }
+  .app.charts-workspace.chart-focus .chart-panel { inset: 4px; }
+  .app.charts-workspace.chart-focus .chart-canvas { height: calc(100dvh - 350px); min-height: 300px; }
+  .chart-insights .chart-scores { padding-inline: 10px; }
+  .chart-insights .chart-score-label { font-size: 10px; }
+  .chart-insights .chart-score-value>span { font-size: 10px; }
+  .chart-insights .chart-score { padding-inline: 8px; }
+  .chart-insights .chart-score-alphaNova { padding: 12px; }
+  .chart-insights-heading, .chart-trend-summary { padding-left: 12px; padding-right: 12px; }
+  .chart-insights-heading h3 { font-size: 16px; }
+  .chart-insights-heading p { font-size: 10px; line-height: 1.5; }
+  .app.charts-workspace .chart-insights .regime-strip { margin-inline: 12px; }
+}
+
+/* Compact application chrome on the chart route. */
+.app.charts-workspace .topbar { height: 52px; }
+.app.charts-workspace .desktop-nav { top: 52px; }
+.app.charts-workspace .benchmark-strip { height: 34px; }
+.app.charts-workspace .benchmark-strip>button { min-height: 34px; }
+.app.charts-workspace .chart-workspace-actions .button { background: transparent; border-color: var(--studio-border); }
+.app.charts-workspace .chart-workspace-actions .chart-save { color: var(--studio-blue); }
+.app.charts-workspace .chart-workspace-actions .chart-plan-toggle[aria-expanded=true] { color: var(--studio-blue); background: color-mix(in srgb, var(--studio-blue) 10%, transparent); }
+.app.charts-workspace .chart-workspace-title h1 { margin: 0; line-height: 1.4; font-size: 12px; letter-spacing: -.15px; }
+.chart-insights .pivot-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.chart-insights .level-caption { flex-wrap: wrap; gap: 6px; }
+.chart-insights .level-caption span { font-size: 10px; }
+.chart-insights .key-levels { padding: 12px; }
+@media (max-width: 760px) {
+  .app.charts-workspace .topbar { height: 56px; }
+  .app.charts-workspace .chart-workspace-title h1 { font-size: 11px; white-space: nowrap; }
+  .app.charts-workspace .chart-workspace-actions .button { min-height: 36px; }
+  .app.charts-workspace .chart-workspace-actions .icon-button { min-width: 36px; min-height: 36px; }
+  .app.charts-workspace .chart-workspace-title>.icon-button { min-width: 28px; width: 28px; }
+  .chart-workspace-title>svg { display: none; }
+  .chart-workspace-actions .chart-save { font-size: 0; gap: 0; }
+  .chart-workspace-actions .chart-save>svg { width: 16px; height: 16px; }
+}
+
+@media (min-width: 761px) {
+  .app.charts-workspace .chart-workspace-heading { min-height: 44px; padding-block: 5px; }
+  .app.charts-workspace .security-header { min-height: 76px; padding-block: 10px; }
+  .app.charts-workspace .chart-toolbar { min-height: 46px; padding-block: 6px; }
+  .app.charts-workspace .indicator-menu>summary { min-height: 36px; padding-block: 7px; }
+  .app.charts-workspace .ohlc { min-height: 32px; padding-top: 10px; padding-bottom: 6px; }
+}
+@media (min-width: 1001px) {
+  .app.charts-workspace.chart-focus .chart-panel { display: flex; flex-direction: column; overflow: hidden; }
+  .app.charts-workspace.chart-focus .chart-workspace-heading,
+  .app.charts-workspace.chart-focus .security-header { flex-shrink: 0; }
+  .app.charts-workspace.chart-focus .chart-workbench { flex: 1; min-height: 0; }
+  .app.charts-workspace.chart-focus .chart-main { display: flex; flex-direction: column; min-height: 0; overflow-y: auto; }
+  .app.charts-workspace.chart-focus .chart-area { display: flex; flex-direction: column; flex: 1; min-height: 250px; }
+  .app.charts-workspace.chart-focus .chart-canvas { flex: 1; min-height: 210px; height: auto; }
+  .app.charts-workspace.chart-focus .chart-insights { overflow-y: auto; scrollbar-width: thin; }
+}
+.chart-insights .chart-score-label>span { font-size: inherit; }
+@media (max-width: 360px) {
+  .chart-insights, .charts-workspace .planner-open .chart-insights { display: block; }
+  .chart-insights .chart-scores { padding: 0 12px 16px; }
+  .chart-insights .chart-score-label { font-size: 10px; }
+  .chart-insights-heading { padding-top: 0; }
+}

@@ -5,12 +5,15 @@ import { growthEvent } from './growth.js';
 import { SIGNUP_NOTICE_VERSION } from '../lib/signup.js';
 import { SIGNUP_COOLDOWN, SIGNUP_KEYS, advanceSignupClock, readSignupValue, saveSignupValue, shouldPromptSignup, signupClock, signupProfile } from './signupState.js';
 import './signup.css';
+import { load } from './hooks.js';
+import GoogleAccount, { authRequest } from './GoogleAccount.jsx';
 
 const local = () => { try { return window.localStorage; } catch { return null; } };
 const session = () => { try { return window.sessionStorage; } catch { return null; } };
 const editing = () => document.activeElement?.matches('input, textarea, select, [contenteditable="true"]');
 
-export default function SignupPrompt({ busy = false }) {
+export default function SignupPrompt({ busy = false, compact = false, watch, onRestoreWatch, accountButtonRef, onAccountAvailable }) {
+  const [google, setGoogle] = useState(undefined);
   const [available, setAvailable] = useState(false);
   const [profile, setProfile] = useState(() => signupProfile(readSignupValue(local(), SIGNUP_KEYS.profile)));
   const [open, setOpen] = useState(false);
@@ -26,16 +29,18 @@ export default function SignupPrompt({ busy = false }) {
   const inFlight = useRef(false);
   const clock = useRef(signupClock(readSignupValue(session(), SIGNUP_KEYS.clock)));
   const current = useRef({ busy, profile, open, available });
-  current.current = { busy, profile, open, available };
+  current.current = { busy, profile, open, available: available && !google?.configured };
 
   useEffect(() => {
     const controller = new AbortController();
-    fetch('/api/signup?op=status', { signal: controller.signal })
-      .then(response => response.ok ? response.json() : null)
+    authRequest('session').then(data => { if (!controller.signal.aborted) setGoogle(data); }).catch(() => { if (!controller.signal.aborted) setGoogle(null); });
+    load('/api/signup?op=status')
       .then(data => { if (!controller.signal.aborted) setAvailable(data?.configured === true); })
       .catch(() => {});
     return () => { controller.abort(); request.current?.abort(); };
   }, []);
+
+  useEffect(() => { onAccountAvailable?.(google?.configured === true); }, [google, onAccountAvailable]);
 
   useEffect(() => {
     let last = performance.now();
@@ -132,6 +137,8 @@ export default function SignupPrompt({ busy = false }) {
     }
   }
 
+  if (google === undefined) return null;
+  if (google?.configured) return <GoogleAccount initial={google} compact={compact} watch={watch} onRestoreWatch={onRestoreWatch} accountButtonRef={accountButtonRef} />;
   if (!available && !profile) return null;
   return <>
     <button className={`button signup-entry${suggested && !profile ? ' signup-entry-suggested' : ''}`} title={profile ? 'View your registration' : 'Optional free registration · your research is already saved in this browser'} onClick={() => {
@@ -163,7 +170,7 @@ export default function SignupPrompt({ busy = false }) {
         <div className="signup-emblem"><UserRound size={27} /></div>
         <p className="signup-kicker">MAKE YOURSELF AT HOME</p>
         <h2 id="signup-title">Make yourself at home.<br /><span>Register for free.</span></h2>
-        <p id="signup-description">Register with your name and email for a personal welcome on this browser. All research tools are already free to use, and registration is optional.</p>
+        <p id="signup-description">Register with your name and email for a personal welcome on this browser. The core research tools are already free to use, and registration is optional.</p>
         <form onSubmit={submit} className="signup-form">
           <label htmlFor="signup-name">Your name</label>
           <input ref={nameInput} id="signup-name" name="name" autoComplete="name" maxLength={80} required value={name} onChange={event => setName(event.target.value)} placeholder="Your name" />

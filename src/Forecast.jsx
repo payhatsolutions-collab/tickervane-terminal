@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, Search } from "lucide-react";
 import { useFeed } from "./hooks";
-import { directory, fmt, search, short } from "./data";
+import { directory, search, short } from "./data";
 import { completedForecastBars } from "./forecastHistory";
+import { trendScenario } from "./forecastScenario";
+import ForecastAnswer from "./ForecastAnswer.jsx";
 
-// One question, one answer: type a ticker, get the projected price in
-// 10 trading sessions (~2 weeks). No charts, no tables, no fine print.
+// One question, one answer: type a ticker, get the price range the tested
+// model expects in 10 trading sessions (~2 weeks). No charts, no tables.
 const HORIZON = 10;
 
 function resolveSymbol(input, suggestions) {
@@ -66,6 +68,7 @@ export default function Forecast({ symbol, refresh, onRefresh, onSymbol }) {
 
   const pick = (next) => {
     setOpen(false);
+    if (next) setQuery(short(next));
     if (next && next !== symbol) onSymbol(next);
   };
   const submit = (event) => {
@@ -77,8 +80,7 @@ export default function Forecast({ symbol, refresh, onRefresh, onSymbol }) {
   const result = forecast?.result ?? null;
   const point = result?.points.at(-1);
   const lastClose = result?.lastClose ?? bars.at(-1)?.close ?? data?.price ?? null;
-  const change = point && lastClose ? (point.close / lastClose - 1) * 100 : null;
-  const direction = change == null ? "" : change > 0.05 ? " ▲" : change < -0.05 ? " ▼" : " ·";
+  const whatIf = useMemo(() => trendScenario(bars, HORIZON), [bars]);
   const loadError = !data ? feed.error : null;
 
   return (
@@ -92,7 +94,7 @@ export default function Forecast({ symbol, refresh, onRefresh, onSymbol }) {
             role="combobox"
             aria-expanded={open && suggestions.length > 0}
             aria-controls="fore-suggest"
-            aria-activedescendant={`fore-opt-${active}`}
+            aria-activedescendant={open && suggestions[active] ? `fore-opt-${active}` : undefined}
             autoComplete="off"
             spellCheck={false}
             placeholder="RELIANCE, NVDA, BTC-USD…"
@@ -107,7 +109,7 @@ export default function Forecast({ symbol, refresh, onRefresh, onSymbol }) {
               if (e.key === "ArrowDown") {
                 e.preventDefault();
                 setOpen(true);
-                setActive((i) => Math.min(i + 1, suggestions.length - 1));
+                setActive((i) => Math.max(0, Math.min(i + 1, suggestions.length - 1)));
               } else if (e.key === "ArrowUp") {
                 e.preventDefault();
                 setActive((i) => Math.max(i - 1, 0));
@@ -140,10 +142,8 @@ export default function Forecast({ symbol, refresh, onRefresh, onSymbol }) {
                     type="button"
                     tabIndex={-1}
                     onMouseMove={() => setActive(i)}
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      pick(s.symbol);
-                    }}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => pick(s.symbol)}
                   >
                     <strong>{short(s.symbol)}</strong>
                     <span>{s.name}</span>
@@ -155,22 +155,16 @@ export default function Forecast({ symbol, refresh, onRefresh, onSymbol }) {
         </div>
       </form>
       <div className="fore-out">
-        {point ? (
-          <div aria-live="polite">
-            <p className="fore-kicker">
-              {name} · {point.date} · in {HORIZON} sessions{direction}
-            </p>
-            <strong className="fore-number">
-              {fmt(point.close)} <small>{data.currency}</small>
-            </strong>
-            <p className="fore-sub">
-              Last {fmt(lastClose)} ·{" "}
-              <span className={change >= 0 ? "positive" : "negative"}>
-                {change == null ? "—" : `${change >= 0 ? "+" : ""}${fmt(change, 2)}%`}
-              </span>{" "}
-              trend projection · experimental
-            </p>
-          </div>
+        {point && lastClose ? (
+          <ForecastAnswer
+            name={name}
+            point={point}
+            lastClose={lastClose}
+            currency={data.currency}
+            whatIf={whatIf}
+            evaluation={result.evaluation}
+            horizon={HORIZON}
+          />
         ) : forecast?.error || loadError ? (
           <div>
             <p className="fore-error" role="alert">

@@ -21,7 +21,7 @@ function WatchlistRow({ symbol, quote, range, refresh, onNavigate, onToggle, onA
   const signalTone = signal.verdict === "Bullish" ? "positive" : signal.verdict === "Bearish" ? "negative" : "muted";
   const SignalIcon = signal.verdict === "Bullish" ? TrendingUp : signal.verdict === "Bearish" ? TrendingDown : Minus;
   return <article ref={host}>
-    <div className="saved-watchlist-stock"><ViewLink page="Terminal" symbol={symbol} onNavigate={onNavigate}>{short(symbol)}</ViewLink><span>{directory.get(symbol)?.name || symbol}</span></div>
+    <div className="saved-watchlist-stock"><ViewLink page="Terminal" symbol={symbol} onNavigate={onNavigate}>{short(symbol)}</ViewLink><span>{directory.get(symbol)?.name || symbol}</span><ViewLink page="Fundamentals" symbol={symbol} onNavigate={onNavigate}>Fundamentals ↗</ViewLink></div>
     <div className="saved-watchlist-price"><strong>{fmt(quote?.price)} <small>{quote?.currency || ""}</small></strong><span className={tone(quote?.change)}>{pct(quote?.change)} <small>today</small></span></div>
     <div className="saved-watchlist-signal" aria-busy={feed.loading}>
       {available ? <details>
@@ -37,7 +37,7 @@ function WatchlistRow({ symbol, quote, range, refresh, onNavigate, onToggle, onA
   </article>;
 }
 
-export default function Watchlist({ watch, quotes, refresh = 0, onNavigate, onToggle, onSearch, onAlert, onGuide, onCopy, alerts }) {
+export default function Watchlist({ watch, quotes, refresh = 0, onNavigate, onToggle, onSearch, onAlert, onGuide, onCopy, onAccount, alerts }) {
   const [range, setRange] = useState("1M");
   const [showCharts, setShowCharts] = useSaved("an2-watchlist-charts", false);
   const [query, setQuery] = useState("");
@@ -45,7 +45,7 @@ export default function Watchlist({ watch, quotes, refresh = 0, onNavigate, onTo
   const visible = filterWatchlist(watch, quotes, directory, query, order);
   return <section className={`panel saved-watchlist ${showCharts ? "with-watch-charts" : "compact-watchlist"}`}>
     <div className="saved-watchlist-head"><div><h2><Star size={18} /> Your saved stocks</h2><p>{watch.length} / 40 instruments · Saved on this device.</p></div>
-      <div><WatchlistShare watch={watch} /><button className="button primary" onClick={onSearch}><Plus size={15} /> Add stock</button></div></div>
+      <div>{onAccount && <button className="button" onClick={onAccount}>Watchlist backup</button>}<WatchlistShare watch={watch} /><button className="button primary" onClick={onSearch}><Plus size={15} /> Add stock</button></div></div>
     {watch.length ? <>
       <details className="watchlist-pulse-details"><summary>Session summary <ChevronDown size={14} /></summary><WatchlistBrief compact watch={watch} quotes={quotes} alerts={alerts} onOpen={symbol => onNavigate({ page: "Terminal", symbol })} onPage={page => onNavigate({ page })} /></details>
       <div className="watchlist-controls"><label className="watchlist-filter"><Search size={16} /><input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Find in your watchlist" aria-label="Find in your watchlist" /></label><label className="watchlist-sort">Sort<select value={order} onChange={event => setOrder(event.target.value)}><option value="saved">Saved order</option><option value="movers">Biggest moves</option><option value="gainers">Top gainers</option><option value="decliners">Top decliners</option><option value="name">Name A–Z</option></select></label><span className="watchlist-results" role="status">{visible.length} of {watch.length}</span></div>

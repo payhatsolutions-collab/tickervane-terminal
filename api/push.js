@@ -1,13 +1,15 @@
-// Web Push for price alerts, the daily Delivery Radar digest and saved-screen
-// matches — built for Vercel Hobby: one private Blob file per device, VAPID keys in
-// env, and daily-slot cron jobs (Hobby allows each job once per day, so vercel.json
-// schedules one per hour). No database, no paid add-ons.
+// Web Push for price alerts, market-hours updates, the daily Delivery Radar digest
+// and saved-screen matches — built for Vercel Hobby: one private Blob file per
+// device, VAPID keys in env, and daily-slot cron jobs (Hobby allows each job once
+// per day, so vercel.json schedules one per hour: six during market hours, two in
+// the evening). No database, no paid add-ons.
 import webpush from 'web-push';
 import { put, get, list, del } from '@vercel/blob';
 import { createHash, timingSafeEqual } from 'node:crypto';
 import { chart, validSymbol } from './market.js';
 import { recentSessions, nifty500, buildRadar, buildScreen, deliveryStats, istDate, BASELINE } from '../lib/nse.js';
 import { cleanScreen, runScreen } from '../src/screens.js';
+import { marketPhase, marketSymbols, marketNotifications } from '../lib/pushMarket.js';
 
 const PREFIX = 'push/subs/';
 const SUBJECT = process.env.VAPID_SUBJECT || 'mailto:contact@alphanova48.in';
@@ -43,7 +45,7 @@ function cleanBody(b) {
   return {
     alerts: cleanAlerts(b.alerts),
     watch: (Array.isArray(b.watch) ? b.watch : []).filter(s => typeof s === 'string' && validSymbol(s)).slice(0, 40),
-    prefs: { alerts: b.prefs?.alerts !== false, delivery: !!b.prefs?.delivery, screens: b.prefs?.screens !== false },
+    prefs: { alerts: b.prefs?.alerts !== false, delivery: !!b.prefs?.delivery, screens: b.prefs?.screens !== false, market: b.prefs?.market !== false, movers: b.prefs?.movers !== false },
     screens: (Array.isArray(b.screens) ? b.screens : []).map(cleanScreen).filter(Boolean).slice(0, 5),
   };
 }
@@ -87,7 +89,7 @@ async function quotesFor(symbols) {
   const quotes = {};
   const list = [...new Set(symbols)];
   for (let i = 0; i < list.length; i += 6) {
-    await Promise.all(list.slice(i, i + 6).map(async s => { try { const d = await chart(s, '5d'); quotes[s] = { price: d.price, marketTime: d.marketTime }; } catch { /* skip */ } }));
+    await Promise.all(list.slice(i, i + 6).map(async s => { try { const d = await chart(s, '5d'); quotes[s] = { price: d.price, change: d.change, marketTime: d.marketTime }; } catch { /* skip */ } }));
   }
   return quotes;
 }
@@ -164,10 +166,33 @@ async function allSubs() {
   return subs;
 }
 
-async function cron() {
+/** One market-hours run for every device: Nifty updates and watchlist movers. */
+async function marketPushes(subs, quotes, now) {
+  const touched = new Set();
+  let sent = 0;
+  for (const sub of subs) {
+    if (sub.gone) continue;
+    const { notes, state } = marketNotifications({ prefs: sub.prefs, watch: sub.watch, state: sub.market, quotes, now });
+    if (!notes.length) continue;
+    for (const note of notes) {
+      const result = await send(sub, note);
+      if (result === 'gone') { sub.gone = true; break; }
+      if (result === 'sent') sent++;
+    }
+    sub.market = state;
+    touched.add(sub);
+  }
+  return { touched, sent };
+}
+
+async function cron(now = Date.now()) {
   const subs = await allSubs();
   if (!subs.length) return { subs: 0 };
-  const quotes = await quotesFor(subs.flatMap(s => s.prefs?.alerts === false ? [] : s.alerts.filter(a => !a.triggered).map(a => a.symbol)));
+  const phase = marketPhase(now);
+  const alertSymbols = subs.flatMap(s => s.prefs?.alerts === false ? [] : s.alerts.filter(a => !a.triggered).map(a => a.symbol));
+  const extra = phase === 'market' ? marketSymbols(subs) : [];
+  // Watchlist symbols are capped in marketSymbols(); alert symbols stay uncapped as before.
+  const quotes = await quotesFor([...extra, ...alertSymbols]);
   const dirty = new Set();
   let fired = 0;
   for (const sub of subs) {
@@ -176,12 +201,19 @@ async function cron() {
     if (r.gone) sub.gone = true;
     if (r.changed) dirty.add(sub);
   }
-  let digestErr = null;
-  try { for (const s of (await digests(subs.filter(s => !s.gone))) || []) dirty.add(s); } catch (e) { digestErr = e.message; }
+  let digestErr = null, market = 0;
+  if (phase === 'market') {
+    const result = await marketPushes(subs, quotes, now);
+    for (const s of result.touched) dirty.add(s);
+    market = result.sent;
+  } else {
+    // NSE publishes the delivery file after the close, so digests only run in the evening slots.
+    try { for (const s of (await digests(subs.filter(s => !s.gone))) || []) dirty.add(s); } catch (e) { digestErr = e.message; }
+  }
   let removed = 0;
   for (const sub of subs) if (sub.gone) { await remove(sub.id); removed++; dirty.delete(sub); }
   await Promise.all([...dirty].map(save));
-  return { subs: subs.length, symbols: Object.keys(quotes).length, fired, removed, saved: dirty.size, digestErr };
+  return { phase, subs: subs.length, symbols: Object.keys(quotes).length, fired, market, removed, saved: dirty.size, digestErr };
 }
 
 async function readBody(req) {
@@ -217,7 +249,7 @@ export default async function handler(req, res) {
     if (op === 'subscribe') {
       const clean = cleanBody(body);
       const sub = { ...(owned ? stored : {}), id, subscription: { endpoint: subscription.endpoint, keys: { p256dh: subscription.keys.p256dh, auth: subscription.keys.auth } }, ...clean, alerts: mergeAlerts(clean.alerts, owned ? stored.alerts : []), created: owned ? stored.created : new Date().toISOString() };
-      if (!owned) { const r = await send(sub, { title: 'Alpha Nova push is on', body: 'Price alerts, the delivery digest and saved screens will reach this device even when the app is closed.', tag: 'welcome', url: '/?page=Alerts', log: { kind: 'system' } }); if (r === 'gone') return res.status(410).json({ error: 'The browser rejected this subscription. Try enabling again.' }); }
+      if (!owned) { const r = await send(sub, { title: 'Alpha Nova push is on', body: 'Price alerts, market-hours updates (about hourly, 9:30–3:30 IST) and your evening digests will reach this device even when the app is closed.', tag: 'welcome', url: '/?page=Alerts', log: { kind: 'system' } }); if (r === 'gone') return res.status(410).json({ error: 'The browser rejected this subscription. Try enabling again.' }); }
       await save(sub);
       return res.status(200).json({ ok: true, alerts: sub.alerts, log: sub.log || [] });
     }
